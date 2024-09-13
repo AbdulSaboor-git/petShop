@@ -24,16 +24,16 @@ export default function HomePage() {
       if (width < 450) {
         setSlidesToShow(1);
         setCenterMode(true);
-      } else if (width < 600) {
+      } else if (width < 550) {
         setSlidesToShow(2);
         setCenterMode(false);
-      } else if (width < 800) {
+      } else if (width < 750) {
         setSlidesToShow(3);
         setCenterMode(false);
-      } else if (width < 1000) {
+      } else if (width < 950) {
         setSlidesToShow(4);
         setCenterMode(false);
-      } else if (width < 1200) {
+      } else if (width < 1150) {
         setSlidesToShow(5);
         setCenterMode(false);
       } else {
@@ -118,36 +118,6 @@ export default function HomePage() {
 
   ];
 
-  const router = useRouter();
-
-  function homeClick() {
-    router.push("/home");
-  }
-  function shopClick() {
-    router.push("/shop");
-  }
-  function contactClick() {
-    router.push("/contact");
-  }
-  function aboutClick() {
-    router.push("/about-us");
-  }
-
-
-
-
-  const Buttons = [
-    { btn_name: "Home", icon: <MdHome size={18} />, clickEvent: homeClick },
-    { btn_name: "Shop", icon: <MdShop size={18} />, clickEvent: shopClick },
-    { btn_name: "Contact", icon: <MdPhone size={18} />, clickEvent: contactClick },
-    { btn_name: "About Us", icon: <MdInfo size={18} />, clickEvent: aboutClick },
-  ];
-
-  const contact = {
-    phone: "(+92) 321 855 9574",
-    email: "petshop@gmail.com",
-  };
-
   const settings = {
     dots: true,
     infinite: true,
@@ -192,7 +162,7 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center gap-10">
-      <Header Buttons={Buttons} contact={contact} />
+      <Header />
       <div className=" flex flex-col gap-20 max-w-[1400px] w-full px-4">
         <Slider {...settings}>
           {items.map((item, index) => (
@@ -335,7 +305,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </div>
   );

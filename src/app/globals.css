@@ -175,11 +175,11 @@ input {
 @media screen and (min-width: 450px) {
  
   .slick-center {
-    transform: scale(1); /* No scaling */
+    transform: scale(1); 
   }
 
   .slick-slide:not(.slick-center) {
-    transform: scale(1); /* No scaling */
+    transform: scale(1); 
   }
 }
 
@@ -191,6 +191,12 @@ input {
 .slick-next {
   opacity: 0;
   }
+
+  .slick-prev:hover, 
+.slick-next:hover {
+  color: #00000000; 
+  opacity: 0; 
+}
 }
 
 @keyframes spin {

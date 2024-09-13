@@ -10,20 +10,20 @@ export default function ProductCard({ item }) {
             sx={{
                 cursor: "pointer",
                 maxWidth: 220,
-                minWidth: 170,
+                minWidth: 160,
                 borderRadius: 5,
                 boxShadow: 3,
                 overflow: "hidden",
                 transform: "scale(1)",
                 transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                 "&:hover": {
-                    transform: "scale(1.03)",
                     boxShadow: 6,
                 },
                 mx: 1.2,
                 mt: 2,
                 mb: 3,
             }}
+            className="sm:hover:scale-105"
         >
             <Box sx={{
                 position: "relative",
@@ -58,20 +58,17 @@ export default function ProductCard({ item }) {
                 <p className="text-xs font-bold text-orange-600 truncate">{name}</p>
                 <div className="flex justify-between items-center">
                     <div className="flex gap-2 items-end">
-                        <div className="flex gap-1 items-end  font-mono">
-                            <div className="text-xs pb-1.5">PKR</div>
-                            <div className="p-0 font-extrabold text-[22px] ">{item.price}</div>
+                        <div className="flex  gap-1 items-end  font-mono">
+                            <div className="text-[10px] pb-1.5">PKR</div>
+                            <div className="p-0 font-extrabold text-[19px] ">{item.price}</div>
                         </div>
-                        {item.discounted_price && <div className="text-xs pb-1.5 text-gray-500 line-through" >
+                        {item.discounted_price && <div className="text-[10px] pb-1.5 text-gray-500 line-through" >
                             PKR {item.discounted_price}
                         </div>}
                     </div>
 
 
-                    {/* <IconButton edge="end" aria-label="fav"
-                        className="text-white text-base bg-[#ff8c00] hover:bg-[#e47e00] transition-all duration-300 z-50">
-                        <MdFavoriteBorder />
-                    </IconButton> */}
+
                 </div>
                 <Button className="bg-orange-500 hover:bg-orange-600 text-sm text-white rounded-full flex gap-3 mt-4">
                     Add to Cart <FaCartPlus />

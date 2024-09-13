@@ -2,16 +2,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaEnvelope, FaHeart, FaPhone, FaShoppingCart, FaUser } from "react-icons/fa";
 import { } from "react-icons/si";
-import { MdAccountCircle, MdClose, MdDashboard, MdFavorite, MdFavoriteBorder, MdMenu, MdSettings, MdStar, MdStarHalf, MdStars, MdTrolley } from "react-icons/md";
+import { MdAccountCircle, MdClose, MdDashboard, MdFavorite, MdFavoriteBorder, MdHome, MdInfo, MdMenu, MdPhone, MdSettings, MdShop, MdStar, MdStarHalf, MdStars, MdTrolley } from "react-icons/md";
 import { RiHeart2Line, RiHeartLine, RiHeartsLine } from "react-icons/ri";
 import Image from "next/image";
 import { AppBar, Button, IconButton } from "@mui/material";
 import { Menu } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 export default function Header({
-  user,
-  Buttons,
-  contact
+  user
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const logedIn = false;
@@ -24,6 +23,36 @@ export default function Header({
     "https://lh3.googleusercontent.com/pw/AP1GczM2cnSQPHG8oKKskeSFKCFjs3z_NG31Tt4bQPqb4Fp-Qdteh0m-84BjSvDgQTkscceDPu1eD1Rs2OxUSd0InRuqnowixs1x8kqSVIcu_7BbkBi4XFK13ZqIeq56OxPw0bzq0hoUgYtTHteuYB1cTI-K=w883-h883-s-no-gm";
 
 
+
+  const contact = {
+    phone: "(+92) 321 855 9574",
+    email: "petshop@gmail.com",
+  };
+
+  const router = useRouter();
+
+  function homeClick() {
+    router.push("/home");
+  }
+  function shopClick() {
+    router.push("/shop");
+  }
+  function contactClick() {
+    router.push("/contact");
+  }
+  function aboutClick() {
+    router.push("/about-us");
+  }
+
+
+
+
+  const Buttons = [
+    { btn_name: "Home", icon: <MdHome size={18} />, clickEvent: homeClick },
+    { btn_name: "Shop", icon: <MdShop size={18} />, clickEvent: shopClick },
+    { btn_name: "Contact", icon: <MdPhone size={18} />, clickEvent: contactClick },
+    { btn_name: "About Us", icon: <MdInfo size={18} />, clickEvent: aboutClick },
+  ];
 
   const openSidebar = () => {
     setIsOpen(true);
