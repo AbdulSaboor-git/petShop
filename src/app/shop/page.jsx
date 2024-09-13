@@ -13,6 +13,7 @@ import { Button, buttonBaseClasses } from "@mui/material";
 import LoginForm from "@/components/loginForm";
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
+import ProductCardAlt from "@/components/productCardAlt";
 
 export default function HomePage() {
 
@@ -88,12 +89,32 @@ export default function HomePage() {
 
 
   return (
-    <div className="flex min-h-screen flex-col items-center gap-10">
+    <div className="flex flex-col gap-10 items-center ">
       <Header />
-      <div className=" flex flex-col gap-20 max-w-[1400px] w-full px-4">
-
-
-
+      <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-4">
+        <div className="flex gap-10">
+          <div className=" h-screen w-[27%] p-5 md:pr-10 border-r border-[#000] hidden md:block">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-5">
+                <h1 className="text-lg font-bold">Filter by Categories</h1>
+                <div className="flex flex-col gap-2">
+                  {categories.map((categ, i) => (
+                    <div key={i}>
+                      <Button variant="outlined" className="rounded-full w-full">
+                        {categ.name}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid  h-fit grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5">
+            {items.map((item, i) => (
+              <ProductCardAlt key={i} item={item} />
+            ))}
+          </div>
+        </div>
       </div>
       <Footer />
     </div>

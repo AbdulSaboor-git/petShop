@@ -16,10 +16,10 @@ export default function Footer() {
 
 
   return (
-    <div className="flex flex-col items-center p-6">
+    <div className="flex w-full flex-col items-center p-6">
       <div className="flex flex-col justify-center w-full max-w-[1200px]">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end w-full py-4 px-6">
-          <div className="flex flex-col items-center justify-center  pb-8 md:pb-3">
+          <div className="flex flex-col items-center justify-center pb-8 md:pb-3">
             <img src={logoLink} alt="logo" className="h-[50px] md:h-[70px]" />
 
           </div>

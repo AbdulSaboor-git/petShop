@@ -3,14 +3,14 @@ import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton } fro
 import { MdDiscount, MdFavorite, MdFavoriteBorder, MdShoppingCart } from "react-icons/md";
 import { FaCartPlus, FaSalesforce } from "react-icons/fa";
 
-export default function ProductCard({ item }) {
+export default function ProductCardAlt({ item }) {
     const name = item.name.toUpperCase();
     return (
         <Card
             sx={{
                 cursor: "pointer",
-                maxWidth: 220,
-                minWidth: 160,
+                maxWidth: 200,
+                minWidth: 150,
                 borderRadius: 5,
                 boxShadow: 3,
                 overflow: "hidden",
@@ -19,11 +19,9 @@ export default function ProductCard({ item }) {
                 "&:hover": {
                     boxShadow: 6,
                 },
-                mx: 1.2,
-                mt: 2,
-                mb: 3,
+
             }}
-            className="sm:hover:scale-105 sm:min-w-[200px]"
+            className=" lg:min-w-[175px]"
         >
             <Box sx={{
                 position: "relative",
@@ -76,9 +74,9 @@ export default function ProductCard({ item }) {
 
 
                 </div>
-                <Button className="bg-orange-500 hover:bg-orange-600 text-sm text-white rounded-full flex gap-3 mt-4">
+                {/* <Button className="bg-orange-500 hover:bg-orange-600 text-sm text-white rounded-full flex gap-3 mt-4">
                     Add to Cart <FaCartPlus />
-                </Button>
+                </Button> */}
             </div>
         </Card>
     );
