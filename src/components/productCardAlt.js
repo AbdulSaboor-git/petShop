@@ -21,7 +21,7 @@ export default function ProductCardAlt({ item }) {
                 },
 
             }}
-            className=" lg:min-w-[175px]"
+            className=" lg:min-w-[160px] lg:mb-[-12px]"
         >
             <Box sx={{
                 position: "relative",

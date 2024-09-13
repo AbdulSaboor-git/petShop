@@ -93,8 +93,161 @@ export default function HomePage() {
       price: 2000,
       discounted_price: 10000,
     },
-
+    {
+      name: "Woodlands House",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/1.png",
+      price: 2000,
+    },
+    {
+      name: "Wooden House",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/OIP.jpeg",
+      price: 2000,
+      discounted_price: 3000,
+    },
+    {
+      name: "House 3",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/OIP.jpeg",
+      price: 2000,
+    },
+    {
+      name: "House 4",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/OIP.jpeg",
+      shortDesc: "Best House in world",
+      price: 2000,
+    },
+    {
+      name: "House 5",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/OIP.jpeg",
+      shortDesc: "Best House in world",
+      price: 2000,
+    },
+    {
+      name: "House 6",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/1.png",
+      shortDesc: "Best House in world",
+      price: 2000,
+      discounted_price: 10000,
+    },
+    {
+      name: "Woodlands House",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/1.png",
+      price: 2000,
+    },
+    {
+      name: "Wooden House",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/OIP.jpeg",
+      price: 2000,
+      discounted_price: 3000,
+    },
+    {
+      name: "House 3",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/OIP.jpeg",
+      price: 2000,
+    },
+    {
+      name: "House 4",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/OIP.jpeg",
+      shortDesc: "Best House in world",
+      price: 2000,
+    },
+    {
+      name: "House 5",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/OIP.jpeg",
+      shortDesc: "Best House in world",
+      price: 2000,
+    },
+    {
+      name: "House 6",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/1.png",
+      shortDesc: "Best House in world",
+      price: 2000,
+      discounted_price: 10000,
+    },
+    {
+      name: "Woodlands House",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/1.png",
+      price: 2000,
+    },
+    {
+      name: "Wooden House",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/OIP.jpeg",
+      price: 2000,
+      discounted_price: 3000,
+    },
+    {
+      name: "House 3",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      shortDesc: "Best House in world",
+      img: "/OIP.jpeg",
+      price: 2000,
+    },
+    {
+      name: "House 4",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/OIP.jpeg",
+      shortDesc: "Best House in world",
+      price: 2000,
+    },
+    {
+      name: "House 5",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/OIP.jpeg",
+      shortDesc: "Best House in world",
+      price: 2000,
+    },
+    {
+      name: "House 6",
+      desc: "Whether you have a hamster, guinea pig or gerbil, this house makes a great place to hide, sleep and play, plus allows for plenty of gnawing from your furry friend too!",
+      img: "/1.png",
+      shortDesc: "Best House in world",
+      price: 2000,
+      discounted_price: 10000,
+    },
   ];
+
+  const [randomItems, setRandomItems] = useState([]);
+
+  useEffect(() => {
+    function getRandomIndices(count, max) {
+      const randomIndices = new Set();
+      while (randomIndices.size < count) {
+        const randomIndex = Math.floor(Math.random() * max); // Random number between 0 and max-1
+        randomIndices.add(randomIndex); // Ensures unique random numbers
+      }
+      return Array.from(randomIndices); // Convert set to array
+    }
+
+    function getRandomItemsFromIndices(items, count = 5) {
+      const randomIndices = getRandomIndices(count, items.length);
+      return randomIndices.map(index => items[index]);
+    }
+
+    // Generate the 5 random items and update the state
+    const selectedItems = getRandomItemsFromIndices(items, 5);
+    setRandomItems(selectedItems);
+  }, []);
 
   const discountedItems = items.filter((item) => (item.discounted_price))
 
@@ -166,7 +319,7 @@ export default function HomePage() {
         <Header />
         <div className=" flex flex-col gap-20 max-w-[1400px] w-full px-4">
           <Slider {...settings}>
-            {items.map((item, index) => (
+            {randomItems.map((item, index) => (
               <div key={index}>
                 <div className="flex flex-col md:flex-row bg-amber-100 p-8 items-center gap-5 md:gap-10">
                   <div className="flex-1 flex flex-col gap-6">
