@@ -202,24 +202,23 @@ export default function Header({
                         </div>
                         {btn.name}
                       </IconButton>
-
                     ))
                   }
                 </div>
               </div>
 
             </div>
-
-            <div className="flex items-center gap-10">
-              <Image
-                src={logoLink}
-                alt={"logo"}
-                width={550}
-                height={550}
-                quality={100}
-                className={`w-auto h-[70px] md:h-[50px] transition-all ease-in-out "
+            <Image
+              src={logoLink}
+              alt={"logo"}
+              width={550}
+              height={550}
+              quality={100}
+              className={`w-auto h-[70px] md:h-[50px] transition-all ease-in-out "
                   `}
-              />
+            />
+            <div className="flex items-center gap-10">
+
               <div className="hidden md:flex gap-3 text-sm">
                 {
                   Buttons.map((btn, i) => (
