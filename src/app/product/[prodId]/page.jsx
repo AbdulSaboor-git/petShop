@@ -82,7 +82,7 @@ export default function ItemPage({ params }) {
                                         <p >
                                             PKR {item?.discountedPrice}
                                         </p>
-                                        <p className="text-[16px] md:text-[20px] font-semibold line-through text-gray-500">
+                                        <p className="text-[16px] md:text-[20px]  line-through text-gray-500">
                                             PKR {item?.price}
                                         </p>
 
@@ -97,7 +97,7 @@ export default function ItemPage({ params }) {
                                     Buy Now
                                 </button>
                                 <button
-                                    className="flex  items-center justify-center gap-2 bg-gray-100 border border-orange-600 text-orange-600 py-2 px-4 rounded-full w-full mt-2 text-base md:text-lg hover:bg-orange-500 hover:border-orange-500 hover:text-white"
+                                    className="flex  items-center justify-center gap-2 border border-orange-600 text-orange-600 py-2 px-4 rounded-full w-full mt-2 text-base md:text-lg hover:bg-orange-500 hover:border-orange-500 hover:text-white"
                                 >
 
                                     Add to Wishlist

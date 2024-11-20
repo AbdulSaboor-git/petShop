@@ -527,14 +527,14 @@ export default function HomePage() {
                       </p>
                     </div>
                     <div className="flex flex-col w-full sm:flex-row  gap-2 sm:gap-3.5 items-center justify-start">
-                      <button variant="contained" className="bg-orange-500 flex gap-2 text-base items-center  w-full sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full"
+                      <button className="bg-orange-500 flex gap-2 text-base items-center justify-center w-full sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full"
                         onClick={() => {
                           router.push(`/product/${item.id}`);
                         }
                         }>
                         View <MdArrowForward size={20} />
                       </button>
-                      <button variant="contained" className="bg-orange-500 w-full text-base sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full" >
+                      <button className="bg-orange-500 w-full text-base sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full" >
                         Buy
                       </button>
                     </div>
