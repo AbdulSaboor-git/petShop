@@ -7,10 +7,7 @@ import Image from "next/image"; // Next.js Image component for better image opti
 import Header from "@/components/header";
 import { FaCartPlus, FaHeart, FaShieldAlt, FaShieldVirus, FaShoppingCart } from "react-icons/fa";
 import CountdownTimer from "@/components/timer";
-import { RiHealthBookFill } from "react-icons/ri";
-import { ArrowForward, ArrowForwardIos, Forward10, Settings, ViewAgenda, ViewList } from "@mui/icons-material";
-import { Button, buttonBaseClasses } from "@mui/material";
-import LoginForm from "@/components/loginForm";
+
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
 
@@ -530,16 +527,16 @@ export default function HomePage() {
                       </p>
                     </div>
                     <div className="flex flex-col w-full sm:flex-row  gap-2 sm:gap-3.5 items-center justify-start">
-                      <Button variant="contained" className="flex gap-2 text-base items-center  w-full sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full"
+                      <button variant="contained" className="bg-orange-500 flex gap-2 text-base items-center  w-full sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full"
                         onClick={() => {
                           router.push(`/product/${item.id}`);
                         }
                         }>
                         View <MdArrowForward size={20} />
-                      </Button>
-                      <Button variant="contained" className=" w-full text-base sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full" >
+                      </button>
+                      <button variant="contained" className="bg-orange-500 w-full text-base sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full" >
                         Buy
-                      </Button>
+                      </button>
                     </div>
                   </div>
                   <div className="">
@@ -575,9 +572,9 @@ export default function HomePage() {
               Hurry Up! Sale Ending In:
             </div>
             <CountdownTimer />
-            <Button variant="contained" className="text-base md:text-xl w-fit px-6 py-3 hover:bg-orange-600 text-white rounded-lg" >
+            <button variant="contained" className="bg-orange-500 text-base md:text-xl w-fit px-6 py-3 hover:bg-orange-600 text-white rounded-lg" >
               Shop Now
-            </Button>
+            </button>
           </div>
 
 
@@ -600,9 +597,9 @@ export default function HomePage() {
                       </h2>
 
                       <div>
-                        <Button variant="outlined" className=" text-xs border-2 border-white text-white py-1 px-2.5 hover:bg-white hover:text-black rounded-md">
+                        <button variant="outlined" className=" text-xs border-2 border-white text-white py-1 px-2.5 hover:bg-white hover:text-black rounded-md">
                           VIEW MORE
-                        </Button>
+                        </button>
                       </div>
                     </div>
                   </div>

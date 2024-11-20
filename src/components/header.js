@@ -3,9 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaEnvelope, FaHeart, FaPhone, FaShoppingCart, FaUser } from "react-icons/fa";
 import { } from "react-icons/si";
 import { MdAccountCircle, MdClose, MdDashboard, MdFavorite, MdFavoriteBorder, MdHome, MdInfo, MdMenu, MdPhone, MdSettings, MdShop, MdStar, MdStarHalf, MdStars, MdTrolley } from "react-icons/md";
-import { RiHeart2Line, RiHeartLine, RiHeartsLine } from "react-icons/ri";
 import Image from "next/image";
-import { AppBar, Button, IconButton } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
@@ -109,23 +107,23 @@ export default function Header({
             <div
               className={`absolute left-4 mt-5 md:hidden`}
             >
-              <IconButton edge="start" aria-label="menu"
+              <button edge="start" aria-label="menu"
                 onClick={openSidebar}
                 className="text-[var(--btn-icons)] hover:text-[var(--btn-icons-sec)]">
                 <Menu></Menu>
-              </IconButton>
+              </button>
             </div>
             <div
               className={`z-20 md:hidden fixed h-full top-0 left-[-10px] w-[230px] rounded-e-[30px] sidebar bg-[var(--background-prim)] text-[var(--text-prim)] border-r  border-gray-300 transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-[240px]"
                 }`}
               style={{ boxShadow: "0 0 20px -5px #404040" }}
             >
-              <IconButton
+              <button
                 onClick={closeSidebar}
                 className="absolute top-4 right-4 text-[var(--text-sec)]"
               >
                 <MdClose style={{ fontSize: "1rem" }} />
-              </IconButton>
+              </button>
 
               <div className="flex flex-col items-start py-6">
                 <div
@@ -144,7 +142,7 @@ export default function Header({
                   <div className="flex flex-col pt-8">
                     {Buttons.map(
                       (btn, index) =>
-                        <Button
+                        <button
                           onClick={btn.clickEvent}
                           className={`w-full justify-start hover:bg-[var(--text-alt-2)]  text-[var(--text-prim)] ${btn.btn_name === "Logout" &&
                             "text-[#fc6060] font-semibold"
@@ -157,7 +155,7 @@ export default function Header({
                             </div>
                             {btn.btn_name}
                           </div>
-                        </Button>
+                        </button>
 
                     )}
                   </div>
@@ -196,12 +194,12 @@ export default function Header({
                 <div className="flex gap-3 md:gap-6 flex-wrap items-center justify-center">
                   {
                     topBtns.map((btn, i) => (
-                      <IconButton edge='start' key={i} className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] ">
+                      <button key={i} className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] ">
                         <div className="mb-0.5">
                           {btn.icon}
                         </div>
                         {btn.name}
-                      </IconButton>
+                      </button>
                     ))
                   }
                 </div>
@@ -222,12 +220,12 @@ export default function Header({
               <div className="hidden md:flex gap-3 text-sm">
                 {
                   Buttons.map((btn, i) => (
-                    <Button key={i}
-                      className=" py-1.5 px-5 rounded-full border border-solid border-[var(--btn-bg-sec] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
+                    <button key={i}
+                      className=" py-1.5 px-5 rounded-full border border-solid border-[#9e6e3b] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
                       onClick={btn.clickEvent}
                     >
                       {btn.btn_name}
-                    </Button>
+                    </button>
                   ))
                 }
               </div>
