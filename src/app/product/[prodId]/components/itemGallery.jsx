@@ -19,7 +19,7 @@ const ItemGallery = ({ item }) => {
                 {item.images.map((img, index) => (
                     <div
                         key={index}
-                        className={`border min-w-[90px] border-slate-300 p-1 cursor-pointer ${mainImage === img ? " border-gray-400 " : ""
+                        className={`border min-w-[90px] border-gray-300 p-1 cursor-pointer ${mainImage === img ? " border-gray-400 " : ""
                             }`}
                         onClick={() => setMainImage(img)}
                     >
