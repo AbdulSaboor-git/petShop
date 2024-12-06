@@ -41,6 +41,15 @@ export default function Header({
   function aboutClick() {
     router.push("/about-us");
   }
+  function wishlistClick() {
+    router.push("/wishlist");
+  }
+  function loginClick() {
+  }
+  function adminDBClick() {
+  }
+  function accountClick() {
+  }
 
 
 
@@ -64,30 +73,30 @@ export default function Header({
   const topBtns = [
     {
       name: "Wishlist",
-      icon: <MdFavorite />
-    },
-    {
-      name: "Cart",
-      icon: <FaShoppingCart size={11} />
+      icon: <MdFavorite />,
+      onClick: wishlistClick,
     },
   ]
 
   logedIn ? topBtns.push(
     {
       name: "My Account",
-      icon: <FaUser size={9.5} />
+      icon: <FaUser size={9.5} />,
+      onClick: accountClick,
     },
   ) :
     topBtns.push(
       {
         name: "Login",
-        icon: <FaUser size={9.5} />
+        icon: <FaUser size={9.5} />,
+        onClick: loginClick,
       },
     )
 
   isAdmin && topBtns.push({
     name: "Admin Dashboard",
-    icon: <MdDashboard />
+    icon: <MdDashboard />,
+    onClick: adminDBClick,
   })
 
 
@@ -194,7 +203,8 @@ export default function Header({
                 <div className="flex gap-3 md:gap-6 flex-wrap items-center justify-center">
                   {
                     topBtns.map((btn, i) => (
-                      <button key={i} className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] ">
+                      <button key={i} className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
+                        onClick={btn.onClick}>
                         <div className="mb-0.5">
                           {btn.icon}
                         </div>

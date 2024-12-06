@@ -487,6 +487,7 @@ export default function HomePage() {
     touchThreshold: 20,
     centerMode: centerMode,
     centerPadding: '70px',
+    draggable: false,
     // autoplaySpeed: 5000,
   };
 
@@ -500,6 +501,7 @@ export default function HomePage() {
     autoplay: false,
     swipeToSlide: true,
     touchThreshold: 20,
+    draggable: false,
     centerMode: centerMode,
     centerPadding: '70px',
     // autoplaySpeed: 5000,
