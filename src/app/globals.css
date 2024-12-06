@@ -6,8 +6,8 @@
 
 
 :root {
-  --background-prim: #fff4ea;
-  --background-sec: #fff4ea;
+  --background-prim: #fff; 
+  --background-sec: #fff;  /* old: fff4ea*/
   --background-sec-transparent: #8b5e346a; /* Brownish transparency */
   --prod-card-border: #8b5e343b; /* Light brownish border */
   --text-prim: #3c3c3c;

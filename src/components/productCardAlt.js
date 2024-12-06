@@ -1,92 +1,69 @@
-import React from "react";
-import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton } from "@mui/material";
-import { MdDiscount, MdFavorite, MdFavoriteBorder, MdShoppingCart } from "react-icons/md";
-import { FaCartPlus, FaSalesforce } from "react-icons/fa";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { MdDiscount, MdCircle } from "react-icons/md";
 
 export default function ProductCardAlt({ item }) {
     const name = item.name.toUpperCase();
     const router = useRouter();
+    const [hover, setHover] = useState(false);
 
     function prodClick() {
         router.push(`/product/${item.id}`);
     }
+
     return (
         <div
             onClick={prodClick}
+            className="mb-2.5 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-transform duration-300 ease-in-out relative"
         >
+            {/* Product Image */}
+            <div className="relative w-full pt-[100%]">
+                <img
+                    src={item.img}
+                    alt={name}
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"
+                />
+            </div>
 
-            <Card
-                sx={{
-                    cursor: "pointer",
-                    maxWidth: 200,
-                    minWidth: 150,
-                    borderRadius: 5,
-                    boxShadow: 3,
-                    overflow: "hidden",
-                    transform: "scale(1)",
-                    transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                    "&:hover": {
-                        boxShadow: 6,
-                    },
+            <div className="flex flex-col gap-0.5 pl-1 pt-2 relative">
 
-                }}
-                className="mb-[-8px] lg:min-w-[160px] lg:mb-[-12px]"
-
-            >
-                <Box sx={{
-                    position: "relative",
-                    width: "100%",
-                    paddingTop: "100%",
-                }}>
-                    <CardMedia
-                        component="img"
-                        image={item.img}
-                        alt={name}
-                        sx={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            backgroundColor: "#fff",
-                            border: 0
-                        }}
-                    />
-                    <div className="absolute h-[50%] top-[51%] border-0 w-full z-20 bg-gradient-to-b from-transparent via-[#ffffff49] to-[#ffffff] from"></div>
-                    {
-                        item.isDiscounted &&
-                        <div className="flex gap-1 items-center absolute top-0 right-5 bg-[#f00] p-2 py-1 text-center text-xs font-bold rounded-b-lg text-white">
-                            SALE <MdDiscount />
+                <div className="text-xs font-normal flex gap-1 items-center truncate">
+                    {item.isDiscounted && (
+                        <div className="bg-red-600 text-white px-1 font-semibold flex gap-1 items-center">
+                            <span>Sale</span> <MdDiscount className="mt-[1.7px]" size={10} />
                         </div>
-                    }
-
-                    {/* <IconButton edge="end" aria-label="fav"
-                        className="absolute top-2 left-2 text-white text-lg bg-[#ff8c006f] hover:bg-[#ff8c00d6] transition-all duration-300 z-50">
-                        <MdFavoriteBorder />
-                    </IconButton> */}
-                </Box>
-
-
-                <div className="flex flex-col gap-1 p-4 pt-2 ">
-                    <p className="text-xs font-bold text-orange-600 truncate">{name}</p>
-                    <div className="flex justify-between items-center">
-                        <div className="flex gap-2 items-end">
-                            <div className="flex  gap-1 items-end  font-mono">
-                                <div className="text-[10px] pb-1.5">PKR</div>
-                                <div className="p-0 font-extrabold text-[19px] ">{item.isDiscounted ? item.discountedPrice : item.price}</div>
+                    )}
+                    {hover && (
+                        <div className="w-full flex justify-center absolute -top-8 left-0">
+                            <div
+                                className=" text-center text-xs  text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl"
+                            >
+                                {item.name}
                             </div>
-                            {item.isDiscounted && <div className="text-[10px] pb-1.5 text-gray-500 line-through" >
-                                PKR {item.price}
-                            </div>}
                         </div>
+                    )}
+                    <div className="truncate" onMouseEnter={() => setHover(true)}
+                        onMouseLeave={() => setHover(false)}>
+                        {name}
                     </div>
-                    {/* <Button className="bg-orange-500 hover:bg-orange-600 text-sm text-white rounded-full flex gap-3 mt-4">
-                        Add to Cart <FaCartPlus />
-                    </Button> */}
                 </div>
-            </Card>
+                {/* <p className="text-xs text-gray-400 flex gap-1 items-center "> <MdCircle />  {item.breed}</p> */}
+                <div className="flex justify-between items-center">
+                    <div className="flex gap-2 items-baseline">
+                        <div className="flex gap-1 items-baseline font-mono -mt-1.5">
+                            <div className="text-sm font-semibold">PKR</div>
+                            <div className="font-extrabold text-lg">
+                                {item.isDiscounted ? item.discountedPrice : item.price}
+                            </div>
+                        </div>
+                        {item.isDiscounted && (
+                            <div className="text-[12px] text-gray-500 line-through">
+                                PKR {item.price}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

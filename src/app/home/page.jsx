@@ -21,13 +21,13 @@ export default function HomePage() {
       if (width < 450) {
         setSlidesToShow(1);
         setCenterMode(true);
-      } else if (width < 550) {
+      } else if (width < 640) {
         setSlidesToShow(2);
         setCenterMode(false);
-      } else if (width < 900) {
+      } else if (width < 850) {
         setSlidesToShow(3);
         setCenterMode(false);
-      } else if (width < 1100) {
+      } else if (width < 1050) {
         setSlidesToShow(4);
         setCenterMode(false);
       } else if (width < 1300) {
@@ -412,19 +412,19 @@ export default function HomePage() {
 
   const categories = [
     {
-      name: "Misri",
+      name: "Hens",
       img: '/2.jpg'
     },
     {
-      name: "Asheel",
+      name: "Feed",
       img: '/1.jpg',
     },
     {
-      name: "Desi",
+      name: "Utensils",
       img: '/3.jpg',
     },
     {
-      name: "Shamo",
+      name: "Eggs",
       img: '/1.jpg',
     },
 
@@ -561,7 +561,7 @@ export default function HomePage() {
               On Sale
             </div>
             <div className="relative">
-              <Slider {...settings3} className="flex justify-normal">
+              <Slider {...settings3}>
                 {discountedItems.map((item, i) => (
                   <ProductCard key={i} item={item} />
                 ))}
@@ -625,7 +625,7 @@ export default function HomePage() {
               Best Selling
             </div>
             <div className="relative">
-              <Slider {...settings2} className="flex justify-normal">
+              <Slider {...settings2}>
                 {items.map((item, i) => (
                   <ProductCard key={i} item={item} />
                 ))}

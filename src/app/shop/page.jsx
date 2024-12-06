@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
-import { MdArrowBack, MdArrowForward, MdDiscount, MdHealthAndSafety, MdHome, MdInfo, MdPhone, MdShop } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Image from "next/image"; // Next.js Image component for better image optimization
 import Header from "@/components/header";
@@ -9,7 +8,6 @@ import { FaCartPlus, FaHeart, FaShieldAlt, FaShieldVirus, FaShoppingCart } from 
 import CountdownTimer from "@/components/timer";
 import { RiHealthBookFill } from "react-icons/ri";
 import { Settings } from "@mui/icons-material";
-import { Button, buttonBaseClasses } from "@mui/material";
 import LoginForm from "@/components/loginForm";
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
@@ -386,19 +384,39 @@ export default function HomePage() {
 
   const categories = [
     {
-      name: "Misri",
+      name: "Hens",
       img: '/2.jpg'
     },
     {
-      name: "Asheel",
+      name: "Feed",
       img: '/1.jpg',
     },
     {
-      name: "Desi",
+      name: "Utensils",
       img: '/3.jpg',
     },
     {
+      name: "Eggs",
+      img: '/1.jpg',
+    },
+
+  ];
+
+  const breed = [
+    {
       name: "Shamo",
+      img: '/2.jpg'
+    },
+    {
+      name: "Aseel",
+      img: '/1.jpg',
+    },
+    {
+      name: "Misri",
+      img: '/3.jpg',
+    },
+    {
+      name: "Cross Breeds",
       img: '/1.jpg',
     },
 
@@ -407,29 +425,41 @@ export default function HomePage() {
 
 
   return (
-    <div className="flex flex-col gap-10 items-center ">
+    <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header />
       <filterCard />
 
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-4">
-        <div className="flex gap-10">
-          <div className=" w-[27%] p-2 pr-6 lg:pr-10 border-r border-[#000] hidden md:block">
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-col gap-5">
-                <h1 className="text-lg font-bold text-center">Filter by Categories</h1>
+        <div className="flex gap-6">
+          <div className=" w-[27%] pr-6 border-r border-[#00000060] hidden lg:block">
+            <div className="flex flex-col gap-7">
+              <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
+                <h1 className="text-lg font-bold text-center p-2  text-[#9e6e3b] ">Filter by Categories</h1>
                 <div className="flex flex-col gap-2">
                   {categories.map((categ, i) => (
                     <div key={i}>
-                      <Button variant="outlined" className="rounded-full w-full">
+                      <button variant="outlined" className="rounded-full w-full border border-[#b98753] bg-[#b98753] text-white p-1.5">
                         {categ.name}
-                      </Button>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
+                <h1 className="text-lg font-bold text-center p-2  text-[#9e6e3b] ">Filter by Breed</h1>
+                <div className="flex flex-col gap-2">
+                  {breed.map((categ, i) => (
+                    <div key={i}>
+                      <button variant="outlined" className="rounded-full w-full border border-[#b98753] bg-[#b98753] text-white p-1.5">
+                        {categ.name}
+                      </button>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
           </div>
-          <div className="grid  h-fit grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div className="grid  h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2">
             {items.map((item, i) => (
               <ProductCardAlt key={i} item={item} />
             ))}
