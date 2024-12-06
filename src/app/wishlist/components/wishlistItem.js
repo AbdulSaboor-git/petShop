@@ -10,12 +10,12 @@ export default function WishListItem({ item }) {
     }
     return (
         <div className="flex border-2 pr-4 items-center">
-            <div className="w-32 cursor-pointer">
+            <div className=" w-fit max-w-32 cursor-pointer">
                 <img src={item.img} alt={item.name} onClick={itemClick} />
             </div>
             <div className="flex justify-start gap-4 w-full ">
-                <div className="flex flex-[3] text-sm md:text-base flex-col p-3">
-                    <div className=" font-bold text-slate-800 text-base md:text-lg">
+                <div className="flex flex-[3] flex-col p-3">
+                    <div className="font-bold text-slate-800 text-sm md:text-lg">
                         {item.name}
                     </div>
                     <div className="flex flex-col ">
@@ -27,7 +27,7 @@ export default function WishListItem({ item }) {
                         </p>
                     </div>
                 </div>
-                <button className="bg-orange-600 hover:bg-orange-700 self-center text-sm text-white p-4 rounded-2xl ">Proceed</button>
+                <button className="bg-orange-600 hover:bg-orange-700 self-center text-xs md:text-sm text-white p-3 rounded-2xl ">Proceed</button>
             </div>
         </div>
     )

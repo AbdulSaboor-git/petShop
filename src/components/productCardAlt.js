@@ -75,10 +75,10 @@ export default function ProductCardAlt({ item }) {
                         <div className="flex gap-2 items-end">
                             <div className="flex  gap-1 items-end  font-mono">
                                 <div className="text-[10px] pb-1.5">PKR</div>
-                                <div className="p-0 font-extrabold text-[19px] ">{item.price}</div>
+                                <div className="p-0 font-extrabold text-[19px] ">{item.isDiscounted ? item.discountedPrice : item.price}</div>
                             </div>
                             {item.isDiscounted && <div className="text-[10px] pb-1.5 text-gray-500 line-through" >
-                                PKR {item.discountedPrice}
+                                PKR {item.price}
                             </div>}
                         </div>
                     </div>
