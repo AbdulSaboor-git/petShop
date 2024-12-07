@@ -50,7 +50,7 @@ export default function ProductCardAlt({ item }) {
                 {/* <p className="text-xs text-gray-400 flex gap-1 items-center "> <MdCircle />  {item.breed}</p> */}
                 <div className="flex justify-between items-center">
                     <div className="flex gap-2 items-baseline">
-                        <div className="flex gap-1 items-baseline font-mono -mt-1.5">
+                        <div className="flex gap-1 items-baseline font-mono -mt-1">
                             <div className="text-sm font-semibold">PKR</div>
                             <div className="font-extrabold text-lg">
                                 {item.isDiscounted ? item.discountedPrice : item.price}
