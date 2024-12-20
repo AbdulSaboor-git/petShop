@@ -21,7 +21,7 @@ export default function Wishlist() {
         nature: "Gentle, hardy, good for egg production",
         specifications: "Large, glossy black feathers",
         type: "Egg-laying bird",
-        availability: "In Stock",
+        availability: false,
     },
     {
         id: 19,
@@ -39,7 +39,7 @@ export default function Wishlist() {
         nature: "Aggressive, hardy",
         specifications: "Feathers in vibrant colors, strong build",
         type: "Show and meat bird",
-        availability: "In Stock",
+        availability: true,
     },
     {
         id: 20,
@@ -57,7 +57,7 @@ export default function Wishlist() {
         nature: "Active, good foragers, lays white eggs",
         specifications: "Feathers are predominantly white, reliable",
         type: "Egg-laying bird",
-        availability: "In Stock",
+        availability: false,
     }];
     return (
         <div className="flex flex-col items-center gap-10">

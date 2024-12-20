@@ -19,55 +19,6 @@ model User {
   lastLogin      DateTime?
   profilePicture String?
   isActive       Boolean     @default(true)
-  Inventories    Inventory[]
-  Moderator      Moderator[]
 }
 
-model Inventory {
-  id             Int         @id @default(autoincrement())
-  name           String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  profilePicture String?
-  products       Product[]
-  categories     Category[]
-  moderators     Moderator[]
-  adminId        Int
-  admin          User        @relation(fields: [adminId], references: [id])
-}
 
-model Product {
-  id            Int       @id @default(autoincrement())
-  name          String
-  description   String?
-  purchasePrice Float
-  salePrice     Float
-  govtSalePrice Float?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  categoryId    Int
-  category      Category  @relation(fields: [categoryId], references: [id])
-  inventoryId   Int
-  inventory     Inventory @relation(fields: [inventoryId], references: [id])
-  tags          String?
-}
-
-model Category {
-  id          Int       @id @default(autoincrement())
-  name        String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  inventoryId Int
-  inventory   Inventory @relation(fields: [inventoryId], references: [id])
-  products    Product[]
-
-  @@unique([name, inventoryId]) // Composite unique constraint
-}
-
-model Moderator {
-  id          Int       @id @default(autoincrement())
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
-  inventoryId Int
-  inventory   Inventory @relation(fields: [inventoryId], references: [id])
-}
