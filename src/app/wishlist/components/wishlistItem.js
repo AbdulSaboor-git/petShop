@@ -11,18 +11,15 @@ export default function WishListItem({ item }) {
     }
     return (
         <div className={`flex pr-4 items-center ${!item.availability && 'opacity-60'}`}>
-            <div className={`w-fit max-w-16 md:max-w-32 cursor-pointer`}>
+            <div className={`w-fit max-w-[76px] md:max-w-32 cursor-pointer`}>
                 <img src={item.img} alt={item.name} onClick={() => itemClick(item.availability)} />
             </div>
             <div className="flex justify-start gap-4 w-full ">
                 <div className="flex flex-[3] flex-col p-3">
-                    <div className={`font-bold text-slate-800 text-sm md:text-lg '}`}>
+                    <div className={`font-bold text-slate-800 text-sm md:text-lg leading-tight line-clamp-2 '}`}>
                         {item.name}
                     </div>
                     <div className="flex flex-col text-xs md:text-base">
-                        <p>
-                            {item.breed}
-                        </p>
                         <p className="text-green-700">
                             {item.isDiscounted ? item.discountedPrice : item.price}{" PKR"}
                         </p>

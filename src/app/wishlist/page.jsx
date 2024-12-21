@@ -43,7 +43,7 @@ export default function Wishlist() {
     },
     {
         id: 20,
-        name: "Hamburg Chicken",
+        name: "Hamburg Chicken sdfsd sdg ds sdg s gd g",
         breed: "Hamburg",
         img: "/3.jpg",
         images: ["/1.jpg", "/3.jpg", "/2.jpg"],

@@ -1,13 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '~slick-carousel/slick/slick.css';
-@import '~slick-carousel/slick/slick-theme.css';
-
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
 :root {
-  --background-prim: #fff; 
-  --background-sec: #fff;  /* old: fff4ea*/
+  --background-prim: #fff;
+  --background-sec: #fff; /* old: fff4ea*/
   --background-sec-transparent: #8b5e346a; /* Brownish transparency */
   --prod-card-border: #8b5e343b; /* Light brownish border */
   --text-prim: #3c3c3c;
@@ -36,8 +35,6 @@
   --prod-card-details-border: #a0522d8a; /* Sienna brown border */
 }
 
-
-
 body {
   color: var(--text-prim); /* This applies Tailwind's text color */
   background: linear-gradient(
@@ -47,8 +44,8 @@ body {
   );
   background-attachment: fixed;
   user-select: none;
-  letter-spacing: 0.020rem;
-  font-family:Arial, Helvetica, sans-serif;
+  letter-spacing: 0.02rem;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 button {
@@ -139,7 +136,7 @@ input {
 }
 
 /* Position the arrows correctly */
-.slick-prev, 
+.slick-prev,
 .slick-next {
   color: black; /* Change arrow color to black */
   z-index: 10; /* Ensure arrows appear above the content */
@@ -148,7 +145,7 @@ input {
 }
 
 .slick-prev {
-  left: 0px; 
+  left: 0px;
 }
 
 .slick-next {
@@ -156,44 +153,42 @@ input {
 }
 
 /* Optional: Change arrow background */
-.slick-prev:before, 
+.slick-prev:before,
 .slick-next:before {
   color: black;
 }
 
 /* Optional: Hover effects for arrows */
-.slick-prev:hover, 
+.slick-prev:hover,
 .slick-next:hover {
   color: #000; /* Keep the hover color black */
   opacity: 1; /* Make it fully visible on hover */
 }
 
-
 @media screen and (min-width: 450px) {
- 
   .slick-center {
-    transform: scale(1); 
+    transform: scale(1);
   }
 
   .slick-slide:not(.slick-center) {
-    transform: scale(1); 
+    transform: scale(1);
   }
 }
 
 @media screen and (max-width: 450px) {
   .slick-prev {
-  opacity: 0;
-}
-
-.slick-next {
-  opacity: 0;
+    opacity: 0;
   }
 
-  .slick-prev:hover, 
-.slick-next:hover {
-  color: #00000000; 
-  opacity: 0; 
-}
+  .slick-next {
+    opacity: 0;
+  }
+
+  .slick-prev:hover,
+  .slick-next:hover {
+    color: #00000000;
+    opacity: 0;
+  }
 }
 
 @keyframes spin {
