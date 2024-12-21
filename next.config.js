@@ -1,5 +1,12 @@
 module.exports = {
     images: {
-        domains: ['lh3.googleusercontent.com'], // Add your external domain here
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'lh3.googleusercontent.com',
+                port: '',
+                pathname: '/**',
+            },
+        ],
     },
 };

@@ -25,7 +25,7 @@ export default function WishListItem({ item }) {
                         </p>
                     </div>
                 </div>
-                <button className={`bg-orange-600 hover:bg-orange-700 self-center text-xs md:text-base text-white p-2 px-3 md:p-3 rounded-2xl ${!item.availability && 'bg-red-700 hover:bg-red-700 cursor-not-allowed'}`}>{item.availability ? "Buy Now" : "Sold Out"}</button>
+                <button className={`bg-orange-600 hover:bg-orange-700 self-center text-xs md:text-base text-white p-2 px-3 md:p-3 md:px-4 rounded-2xl ${!item.availability && 'bg-red-700 hover:bg-red-700 cursor-not-allowed'}`}>{item.availability ? "Add to Cart" : "Sold Out"}</button>
             </div>
         </div>
     )

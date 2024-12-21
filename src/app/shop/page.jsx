@@ -12,7 +12,7 @@ import LoginForm from "@/components/loginForm";
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
-import filterCard from "./components/filterCard";
+import FilterCard from "./components/filterCard";
 
 export default function HomePage() {
 
@@ -433,24 +433,24 @@ export default function HomePage() {
         <div className="flex gap-6">
           <div className=" w-[27%] pr-6 border-r border-[#00000060] hidden lg:block">
             <div className="flex flex-col gap-7">
-              <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
-                <h1 className="text-lg font-bold text-center p-2  text-[#9e6e3b] ">Filter by Categories</h1>
+              <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
+                <h1 className="text-lg font-bold text-center p-2  text-orange-950 ">Filter by Categories</h1>
                 <div className="flex flex-col gap-2">
                   {categories.map((categ, i) => (
                     <div key={i}>
-                      <button variant="outlined" className="rounded-full w-full border border-[#b98753] bg-[#b98753] text-white p-1.5">
+                      <button variant="outlined" className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5">
                         {categ.name}
                       </button>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
-                <h1 className="text-lg font-bold text-center p-2  text-[#9e6e3b] ">Filter by Breed</h1>
+              <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
+                <h1 className="text-lg font-bold text-center p-2  text-orange-950 ">Filter by Breed</h1>
                 <div className="flex flex-col gap-2">
                   {breed.map((categ, i) => (
                     <div key={i}>
-                      <button variant="outlined" className="rounded-full w-full border border-[#b98753] bg-[#b98753] text-white p-1.5">
+                      <button variant="outlined" className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5">
                         {categ.name}
                       </button>
                     </div>

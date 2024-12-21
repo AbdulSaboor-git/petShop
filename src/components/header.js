@@ -11,8 +11,8 @@ export default function Header({
   user
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const logedIn = false;
-  const isAdmin = true;
+  const logedIn = true;
+  const role = "seller";
   const theme = true;
   const logoLink = theme
     ? "https://lh3.googleusercontent.com/pw/AP1GczN9HraQsHh0pJ0YoBThzcS0tY_-uk5zyQquRDFTVgpN6peh1An56u-fUREcdmwVRl0gE_E7MGnSXH_Zsj-fjMW8nIFHQ8lKIep5Xwi6TKKsPZa7kyQLrqofq3dw8994xfpRNfHIjbG257eM0pMU9f4U=w658-h263-s-no-gm"
@@ -48,7 +48,10 @@ export default function Header({
   }
   function adminDBClick() {
   }
+  function sellerDBClick() {
+  }
   function accountClick() {
+    router.push("/profile");
   }
 
 
@@ -93,10 +96,16 @@ export default function Header({
       },
     )
 
-  isAdmin && topBtns.push({
+  role=="admin" && topBtns.push({
     name: "Admin Dashboard",
     icon: <MdDashboard />,
     onClick: adminDBClick,
+  })
+ 
+  role=="seller" && topBtns.push({
+    name: "Seller Dashboard",
+    icon: <MdDashboard />,
+    onClick: sellerDBClick,
   })
 
 
@@ -189,7 +198,7 @@ export default function Header({
               <div className="flex gap-2 text-xs justify-center items-center w-full p-1.5 px-5 bg-orange-950 text-white">
                 <MdStar color="#ff0" size={15} /> Special Discounts!
               </div>
-              <div className="flex self-center gap-5 text-[11px] md:text-xs justify-center md:justify-between items-center w-full p-2 md:p-1 px-5 max-w-[1300px] text-white ">
+              <div className="flex self-center gap-5 text-[11px] md:text-xs justify-center md:justify-between items-center w-full p-2 md:p-1 md:px-4 max-w-[1300px] text-white ">
                 <div className="hidden md:flex items-center gap-6 font-medium text-[10px]">
                   <div className="flex gap-2 cursor-pointer items-center hover:text-[#fbe4bf]">
                     <FaPhone className="mb-0.5" />
