@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "@/components/header";
-import WishListItem from "./components/wishlistItem";
+import WishListItem from "./components/123";
 import Footer from "@/components/footer";
 import { FaHeart } from "react-icons/fa";
 
-export default function Wishlist() {
+export default function Profile() {
     const wishl = [{
         id: 18,
         name: "Orpington Chicken",
@@ -21,7 +21,7 @@ export default function Wishlist() {
         nature: "Gentle, hardy, good for egg production",
         specifications: "Large, glossy black feathers",
         type: "Egg-laying bird",
-        availability: true,
+        availability: false,
     },
     {
         id: 19,
@@ -39,7 +39,7 @@ export default function Wishlist() {
         nature: "Aggressive, hardy",
         specifications: "Feathers in vibrant colors, strong build",
         type: "Show and meat bird",
-        availability: false,
+        availability: true,
     },
     {
         id: 20,
@@ -63,7 +63,7 @@ export default function Wishlist() {
         <div className="flex flex-col items-center gap-10">
             <Header />
             <div className=" flex flex-col w-full max-w-[1400px] items-center px-4">
-                <div className="flex flex-col gap-4 w-full max-w-[900px]">
+                <div className="flex flex-col gap-4 w-full max-w-[1200px]">
                     <div className="flex gap-2 items-center">
                         WISHLIST
                         <FaHeart className="text-red-500" />
@@ -71,7 +71,7 @@ export default function Wishlist() {
                     {
                         wishl.map(
                             (item, i) => (
-                                <div key={i} className="border-2">
+                                <div key={i}>
                                     <WishListItem item={item} />
                                 </div>
                             )
