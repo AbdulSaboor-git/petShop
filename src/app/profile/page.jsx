@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import OrderObj from "./components/ordersObj";
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const router = useRouter();
-
+  const [ordersToShow, setOrdersToShow] = useState(2);
   const user = {
     id: 1,
     email: "abc@example.com",
@@ -138,7 +138,7 @@ export default function Profile() {
                   </div>
                 ))}
                 {wishlist.length === 0 && (
-                  <div className="text-gray-600 text-center">
+                  <div className="text-gray-600 text-center border-2 p-2">
                     Wishlist is empty
                   </div>
                 )}
@@ -146,7 +146,7 @@ export default function Profile() {
             </div>
             {wishlist.length > 2 && (
               <div
-                className="flex justify-center z-10 items-center p-1 -mt-10 bg-white"
+                className="flex justify-center z-10 items-center p-2 -mt-10 bg-white"
                 style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
               >
                 <button
@@ -162,24 +162,27 @@ export default function Profile() {
                 Past Purchases
               </h2>
               <div className="flex flex-col gap-4 w-full ">
-                {wishlist.map((purchase, i) => (
+                {wishlist.slice(0, ordersToShow).map((order, i) => (
                   <div key={i} className="border-2">
-                    <OrderObj item={purchase} />
+                    <OrderObj item={order} />
                   </div>
                 ))}
                 {wishlist.length === 0 && (
-                  <div className="text-gray-600 text-center">
+                  <div className="text-gray-600 text-center border-2 p-2">
                     No past purchases found
                   </div>
                 )}
               </div>
             </div>
-            {wishlist.length > 2 && (
+            {wishlist.length > 2 && wishlist.length > ordersToShow && (
               <div
-                className="flex justify-center z-10 items-center p-1 -mt-10 bg-white"
+                className="flex justify-center z-10 items-center p-2 -mt-10 bg-white"
                 style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
               >
-                <button className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center">
+                <button
+                  onClick={() => setOrdersToShow(ordersToShow + 2)}
+                  className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
+                >
                   View More
                 </button>
               </div>
