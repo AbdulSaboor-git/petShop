@@ -84,6 +84,149 @@ export default function Profile() {
     },
   ];
 
+  const orders = [
+    {
+      id: 19337,
+      date: new Date(),
+      total: 4600,
+      status: "Processing",
+      items: [
+        {
+          id: 18,
+          name: "Orpington Chicken",
+          breed: "Orpington",
+          img: "/3.jpg",
+          images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+          price: 2400,
+          discountedPrice: 2200,
+          isDiscounted: true,
+          weight: 2.7,
+          height: 300,
+          age: 1.5,
+          sex: "female",
+          nature: "Active, good foragers, lays white eggs",
+          specifications: "Feathers are predominantly white, reliable",
+          type: "Egg-laying bird",
+          availability: false,
+        },
+        {
+          id: 19,
+          name: "Indian Game Chicken",
+          breed: "Indian Game",
+          img: "/2.jpg",
+          images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+          price: 2700,
+          discountedPrice: 2500,
+          isDiscounted: true,
+          weight: 3.0,
+          height: 310,
+          age: 1.8,
+          sex: "male",
+          nature: "Aggressive, hardy",
+          specifications: "Feathers in vibrant colors, strong build",
+          type: "Show and meat bird",
+          availability: false,
+        },
+      ],
+    },
+    {
+      id: 43323,
+      date: new Date(),
+      total: 7100,
+      status: "Completed",
+      items: [
+        {
+          id: 18,
+          name: "Orpington Chicken",
+          breed: "Orpington",
+          img: "/3.jpg",
+          images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+          price: 2400,
+          discountedPrice: 2200,
+          isDiscounted: true,
+          weight: 2.7,
+          height: 300,
+          age: 1.5,
+          sex: "female",
+          nature: "Active, good foragers, lays white eggs",
+          specifications: "Feathers are predominantly white, reliable",
+          type: "Egg-laying bird",
+          availability: false,
+        },
+      ],
+    },
+    {
+      id: 4998,
+      date: new Date(),
+      total: 5100,
+      status: "Completed",
+      items: [
+        {
+          id: 18,
+          name: "Orpington Chicken",
+          breed: "Orpington",
+          img: "/3.jpg",
+          images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+          price: 2400,
+          discountedPrice: 2200,
+          isDiscounted: true,
+          weight: 2.7,
+          height: 300,
+          age: 1.5,
+          sex: "female",
+          nature: "Active, good foragers, lays white eggs",
+          specifications: "Feathers are predominantly white, reliable",
+          type: "Egg-laying bird",
+          availability: false,
+        },
+        {
+          id: 19,
+          name: "Indian Game Chicken",
+          breed: "Indian Game",
+          img: "/2.jpg",
+          images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+          price: 2700,
+          discountedPrice: 2500,
+          isDiscounted: true,
+          weight: 3.0,
+          height: 310,
+          age: 1.8,
+          sex: "male",
+          nature: "Aggressive, hardy",
+          specifications: "Feathers in vibrant colors, strong build",
+          type: "Show and meat bird",
+          availability: false,
+        },
+      ],
+    },
+    {
+      id: 4999,
+      date: new Date(),
+      total: 10300,
+      status: "Processing",
+      items: [
+        {
+          id: 18,
+          name: "Orpington Chicken",
+          breed: "Orpington",
+          img: "/3.jpg",
+          images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+          price: 2400,
+          discountedPrice: 2200,
+          isDiscounted: true,
+          weight: 2.7,
+          height: 300,
+          age: 1.5,
+          sex: "female",
+          nature: "Active, good foragers, lays white eggs",
+          specifications: "Feathers are predominantly white, reliable",
+          type: "Egg-laying bird",
+          availability: false,
+        },
+      ],
+    },
+  ];
+
   function wishlistClick() {
     router.push("/wishlist");
   }
@@ -133,7 +276,7 @@ export default function Profile() {
               <h2 className="text-base md:text-lg font-semibold">Wishlist</h2>
               <div className="flex flex-col gap-4 w-full">
                 {wishlist.map((item, i) => (
-                  <div key={i} className="border-2">
+                  <div key={i} className="">
                     <WishListItem item={item} />
                   </div>
                 ))}
@@ -146,12 +289,12 @@ export default function Profile() {
             </div>
             {wishlist.length > 2 && (
               <div
-                className="flex justify-center z-10 items-center p-2 -mt-10 -mx-3 bg-white"
+                className="z-30 flex justify-center items-center p-2 -mt-10 -mx-3 bg-white"
                 style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
               >
                 <button
                   onClick={wishlistClick}
-                  className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
+                  className=" text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
                 >
                   View All
                 </button>
@@ -159,28 +302,28 @@ export default function Profile() {
             )}
             <div className="flex flex-col gap-4  ">
               <h2 className="text-base md:text-lg font-semibold">
-                Past Purchases
+                Previous Orders
               </h2>
               <div className="flex flex-col gap-4 w-full ">
-                {wishlist.slice(0, ordersToShow).map((order, i) => (
-                  <div key={i} className="border-2">
-                    <OrderObj item={order} />
+                {orders.slice(0, ordersToShow).map((order, i) => (
+                  <div key={i} className="">
+                    <OrderObj order={order} />
                   </div>
                 ))}
-                {wishlist.length === 0 && (
+                {orders.length === 0 && (
                   <div className="text-gray-600 text-center border-2 p-2">
                     No past purchases found
                   </div>
                 )}
               </div>
             </div>
-            {wishlist.length > 2 && wishlist.length > ordersToShow && (
+            {orders.length > 2 && orders.length > ordersToShow && (
               <div
                 className="flex justify-center z-10 items-center p-2 -mt-10 -mx-2 bg-white"
                 style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
               >
                 <button
-                  onClick={() => setOrdersToShow(ordersToShow + 2)}
+                  onClick={() => setOrdersToShow(ordersToShow + 1)}
                   className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
                 >
                   View More
