@@ -146,7 +146,7 @@ export default function Profile() {
             </div>
             {wishlist.length > 2 && (
               <div
-                className="flex justify-center z-10 items-center p-2 -mt-10 bg-white"
+                className="flex justify-center z-10 items-center p-2 -mt-10 -mx-3 bg-white"
                 style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
               >
                 <button
@@ -176,7 +176,7 @@ export default function Profile() {
             </div>
             {wishlist.length > 2 && wishlist.length > ordersToShow && (
               <div
-                className="flex justify-center z-10 items-center p-2 -mt-10 bg-white"
+                className="flex justify-center z-10 items-center p-2 -mt-10 -mx-2 bg-white"
                 style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
               >
                 <button
