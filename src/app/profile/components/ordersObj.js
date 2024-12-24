@@ -28,7 +28,7 @@ export default function OrderObj({ order }) {
               <MdCircle size={10} />
               <div
                 className={` transition-all duration-300 ${
-                  showItems ? "ml-0 opacity-100" : "-ml-10 opacity-0"
+                  showItems ? "ml-0 opacity-100" : "-ml-3 opacity-0"
                 }`}
               >
                 {order.status}
@@ -42,7 +42,9 @@ export default function OrderObj({ order }) {
       </div>
       <div
         className={`flex flex-col gap-2 mt-6 transition-all duration-300 ${
-          showItems ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          showItems
+            ? "mt-6 max-h-screen opacity-100"
+            : "-mt-6 max-h-0 opacity-0"
         } overflow-hidden`}
       >
         <h3 className="text-xs md:text-sm text-gray-700">
