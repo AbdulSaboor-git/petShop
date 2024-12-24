@@ -234,7 +234,7 @@ export default function Profile() {
   return (
     <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
-      <div className="flex flex-col w-full max-w-[1400px] items-center p-4">
+      <div className="flex flex-col w-full max-w-[1400px] items-center p-4 pt-0 md:pt-4">
         <div className="flex flex-col gap-8 w-full max-w-[1200px] items-center">
           <div className="flex flex-col justify-center items-center md:items-start md:flex-row md:gap-8 w-full ">
             <img

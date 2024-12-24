@@ -58,26 +58,31 @@ export default function OrderObj({ order }) {
         <h3 className="text-xs md:text-sm text-gray-700 mt-4 mb-1 font-bold">
           Items:
         </h3>
-        {order.items.map((item, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <img
-              src={item.img}
-              alt={item.name}
-              className="w-16 h-16 object-cover rounded-lg"
-            />
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-800">
-                {item.name}
-              </span>
-              <span className="text-sm text-slate-600">
-                Breed: {item.breed}
-              </span>
+        <div className="flex flex-col gap-2">
+          {order.items.map((item, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <img
+                src={item.img}
+                alt={item.name}
+                className=" w-14 md:w-16  object-cover rounded-lg"
+              />
+              <div className="flex flex-col">
+                <span className="text-xs md:text-sm font-semibold text-slate-800">
+                  {item.name}
+                </span>
+                <span className="text-xs md:text-sm text-slate-600">
+                  Breed: {item.breed}
+                </span>
+                <span className="text-xs md:text-sm text-slate-600">
+                  Price: {item.price} PKR
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <button
-        className="self-center mt-3 text-gray-500 w rounded-lg"
+        className="place-items-center w-full mt-3 text-gray-500 w rounded-lg"
         onClick={toggleItems}
       >
         <RiArrowDownSLine
