@@ -11,7 +11,12 @@ export default function OrderObj({ order }) {
   };
 
   return (
-    <div className="flex flex-col gap-1 p-4 pb-2 bg-white rounded-lg shadowshadow-[#0000002d] transition-all duration-300">
+    <div
+      className={`flex flex-col gap-1 p-4 pb-2 bg-white rounded-lg transition-all duration-300 cursor-pointer ${
+        showItems && "pointer-events-none cursor-context-menu"
+      }`}
+      onClick={toggleItems}
+    >
       <div className="flex flex-col gap-0.5 -mb-2 sm:mb-0 sm:flex-row sm:justify-between sm:items-center ">
         <div className="flex gap-2 items-center text-xs md:text-sm font-light text-slate-700">
           Order No: {order.id}{" "}
@@ -38,7 +43,7 @@ export default function OrderObj({ order }) {
         </div>
         <div className="text-xs md:text-sm text-slate-700">
           Total:{" "}
-          <span className="font-bold text-green-800">{order.total} PKR</span>
+          <span className="font-bold text-green-800">Rs. {order.total}</span>
         </div>
       </div>
       <div
@@ -73,10 +78,10 @@ export default function OrderObj({ order }) {
                 <span className="text-xs md:text-sm font-semibold text-slate-800 leading-tight line-clamp-2 ">
                   {item.name}
                 </span>
-                <span className="text-xs md:text-sm text-slate-600">
+                <span className="text-[11px] md:text-[13px] text-slate-600">
                   {item.breed}
                 </span>
-                <span className="text-xs md:text-sm text-green-600">
+                <span className="text-[11px] md:text-[13px] text-green-600">
                   Rs. {item.price}
                 </span>
               </div>
@@ -85,7 +90,7 @@ export default function OrderObj({ order }) {
         </div>
       </div>
       <button
-        className="place-items-center w-full mt-4 text-gray-500 w rounded-lg"
+        className="place-items-center w-full mt-4 text-gray-500 w rounded-lg pointer-events-auto"
         onClick={toggleItems}
       >
         <RiArrowDownSLine

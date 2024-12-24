@@ -13,7 +13,7 @@ export default function WishListItem({ item }) {
   return (
     <div
       className={`flex items-center relative bg-gray-100 border p-2 rounded-lg ${
-        !item.availability && "opacity-65 border-slate-300 "
+        !item.availability && "opacity-75 border-gray-300 "
       }`}
     >
       <div
