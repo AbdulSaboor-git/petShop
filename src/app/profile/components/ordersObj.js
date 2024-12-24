@@ -12,9 +12,9 @@ export default function OrderObj({ order }) {
 
   return (
     <div className="flex flex-col gap-1 p-4  bg-[#fff] rounded-lg shadowshadow-[#0000002d] transition-all duration-300">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col -mb-2 sm:mb-0 sm:flex-row sm:justify-between sm:items-center ">
         <div className="flex gap-2 items-center text-xs md:text-sm font-light text-slate-700">
-          Order Id: {order.id}{" "}
+          Order No: {order.id}{" "}
           <span
             className={`text-xs font-semibold transition-all duration-600 ${
               order.status === "Processing"
@@ -42,9 +42,7 @@ export default function OrderObj({ order }) {
       </div>
       <div
         className={`flex flex-col gap-2 mt-6 transition-all duration-300 ${
-          showItems
-            ? "mt-6 max-h-screen opacity-100"
-            : "-mt-6 max-h-0 opacity-0"
+          showItems ? "mt-6 max-h-screen opacity-100" : "mt-0 max-h-0 opacity-0"
         } overflow-hidden`}
       >
         <h3 className="text-xs md:text-sm text-gray-700">
