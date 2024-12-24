@@ -11,8 +11,8 @@ export default function WishListItem({ item }) {
   function addToCart() {}
   return (
     <div
-      className={`flex items-center relative border-t-2 border-gray-200 rounded-lg shadow-md shadow-gray-300 ${
-        !item.availability && "opacity-70"
+      className={`flex items-center bg-white relative border-t-2 border-gray-200 rounded-lg shadow-md shadow-[#0000002d] ${
+        !item.availability && "opacity-75"
       }`}
     >
       <div

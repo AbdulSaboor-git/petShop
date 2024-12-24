@@ -80,13 +80,13 @@ export default function Profile() {
       nature: "Active, good foragers, lays white eggs",
       specifications: "Feathers are predominantly white, reliable",
       type: "Egg-laying bird",
-      availability: false,
+      availability: true,
     },
   ];
 
   const orders = [
     {
-      id: 19337,
+      id: 49337,
       date: new Date(),
       total: 4600,
       status: "Processing",
@@ -156,7 +156,7 @@ export default function Profile() {
       ],
     },
     {
-      id: 4998,
+      id: 49986,
       date: new Date(),
       total: 5100,
       status: "Completed",
@@ -200,10 +200,10 @@ export default function Profile() {
       ],
     },
     {
-      id: 4999,
+      id: 49990,
       date: new Date(),
       total: 10300,
-      status: "Processing",
+      status: "Canceled",
       items: [
         {
           id: 18,
@@ -274,7 +274,7 @@ export default function Profile() {
           <div className="flex flex-col w-full max-w-[800px] gap-8">
             <div className="flex flex-col gap-4">
               <h2 className="text-base md:text-lg font-semibold">Wishlist</h2>
-              <div className="flex flex-col gap-4 w-full">
+              <div className="flex flex-col gap-2 w-full">
                 {wishlist.map((item, i) => (
                   <div key={i} className="">
                     <WishListItem item={item} />
@@ -286,25 +286,25 @@ export default function Profile() {
                   </div>
                 )}
               </div>
-            </div>
-            {wishlist.length > 2 && (
-              <div
-                className="z-30 flex justify-center items-center p-2 -mt-10 -mx-3 bg-white"
-                style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
-              >
-                <button
-                  onClick={wishlistClick}
-                  className=" text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
+              {wishlist.length > 2 && (
+                <div
+                  className="z-30 flex justify-center items-center p-1 -mx-3"
+                  // style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
                 >
-                  View All
-                </button>
-              </div>
-            )}
-            <div className="flex flex-col gap-4  ">
+                  <button
+                    onClick={wishlistClick}
+                    className=" text-xs md:text-sm bg-white text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
+                  >
+                    View All
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-4">
               <h2 className="text-base md:text-lg font-semibold">
                 Previous Orders
               </h2>
-              <div className="flex flex-col gap-4 w-full ">
+              <div className="flex flex-col p-1.5 gap-0.5 w-full rounded-lg bg-orange-400">
                 {orders.slice(0, ordersToShow).map((order, i) => (
                   <div key={i} className="">
                     <OrderObj order={order} />
@@ -316,20 +316,17 @@ export default function Profile() {
                   </div>
                 )}
               </div>
+              {orders.length > 2 && orders.length > ordersToShow && (
+                <div className="flex justify-center z-10 items-center p-1 -mx-2">
+                  <button
+                    onClick={() => setOrdersToShow(ordersToShow + 1)}
+                    className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
+                  >
+                    View More
+                  </button>
+                </div>
+              )}
             </div>
-            {orders.length > 2 && orders.length > ordersToShow && (
-              <div
-                className="flex justify-center z-10 items-center p-2 -mt-10 -mx-2 bg-white"
-                style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
-              >
-                <button
-                  onClick={() => setOrdersToShow(ordersToShow + 1)}
-                  className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
-                >
-                  View More
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

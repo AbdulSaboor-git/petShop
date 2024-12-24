@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { MdCircle } from "react-icons/md";
+import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 
 export default function OrderObj({ order }) {
   const [showItems, setShowItems] = useState(false);
@@ -9,58 +11,83 @@ export default function OrderObj({ order }) {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 border-t-2 bg-yellow-100  border-gray-200 rounded-lg shadow-md shadow-gray-300">
+    <div className="flex flex-col gap-1 p-4  bg-[#fff] rounded-lg shadowshadow-[#0000002d] transition-all duration-300">
       <div className="flex justify-between items-center">
-        <div className="text-base text-slate-800">Order ID: {order.id}</div>
-        <div className="text-sm text-slate-600">
-          Order Date: {new Date(order.date).toLocaleDateString()}
-        </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="text-lg font-semibold text-slate-800">
-          Total: {order.total} PKR
-        </div>
-        <div className={`text-sm`}>
-          Status:{" "}
+        <div className="flex gap-2 items-center text-xs md:text-sm font-light text-slate-700">
+          Order Id: {order.id}{" "}
           <span
-            className={`font-semibold ${
+            className={`text-xs font-semibold transition-all duration-600 ${
               order.status === "Processing"
-                ? "text-yellow-500"
-                : "text-green-500"
+                ? "text-yellow-500 animate-pulse"
+                : order.status === "Completed"
+                ? "text-green-500"
+                : "text-red-500"
             }`}
           >
-            {order.status}
-          </span>
-        </div>
-      </div>
-      <button
-        className="text-sm text-blue-500 hover:underline mt-2"
-        onClick={toggleItems}
-      >
-        {showItems ? "Hide Items" : "Show Items"}
-      </button>
-      {showItems && (
-        <div className="flex flex-col gap-2 mt-2">
-          <h3 className="text-md font-semibold text-slate-800">Items:</h3>
-          {order.items.map((item, index) => (
-            <div key={index} className="flex items-center gap-4">
-              <img
-                src={item.img}
-                alt={item.name}
-                className="w-16 h-16 object-cover rounded-lg"
-              />
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold text-slate-800">
-                  {item.name}
-                </span>
-                <span className="text-sm text-slate-600">
-                  Breed: {item.breed}
-                </span>
+            <div className="flex items-center gap-2">
+              <MdCircle size={10} />
+              <div
+                className={` transition-all duration-300 ${
+                  showItems ? "ml-0 opacity-100" : "-ml-10 opacity-0"
+                }`}
+              >
+                {order.status}
               </div>
             </div>
-          ))}
+          </span>
         </div>
-      )}
+        <div className="text-xs md:text-sm text-slate-700">
+          Total: <span className="font-bold">{order.total} PKR</span>
+        </div>
+      </div>
+      <div
+        className={`flex flex-col gap-2 mt-6 transition-all duration-300 ${
+          showItems ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        } overflow-hidden`}
+      >
+        <h3 className="text-xs md:text-sm text-gray-700">
+          Order Date: {new Date(order.date).toLocaleDateString()}
+        </h3>
+        <h3 className="text-xs md:text-sm text-gray-700">
+          Total Items: {order.items.length}
+        </h3>
+        <h3 className="text-sm text-gray-700">Items:</h3>
+        {order.items.map((item, index) => (
+          <div key={index} className="flex items-center gap-4">
+            <img
+              src={item.img}
+              alt={item.name}
+              className="w-16 h-16 object-cover rounded-lg"
+            />
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-slate-800">
+                {item.name}
+              </span>
+              <span className="text-sm text-slate-600">
+                Breed: {item.breed}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <button
+        className="self-center text-gray-500 px-1 -mb-2 w-fit rounded-lg"
+        onClick={toggleItems}
+      >
+        <RiArrowDownSLine
+          size={20}
+          className={` transition-all duration-300 ${
+            showItems ? " opacity-0 max-h-0" : "opacity-100"
+          }`}
+        />
+
+        <RiArrowUpSLine
+          size={20}
+          className={` transition-all duration-300  ${
+            showItems ? " opacity-100" : "opacity-0 max-h-0"
+          }`}
+        />
+      </button>
     </div>
   );
 }
