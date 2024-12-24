@@ -1,15 +1,36 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { FaEnvelope, FaHeart, FaPhone, FaShoppingCart, FaUser } from "react-icons/fa";
-import { } from "react-icons/si";
-import { MdAccountCircle, MdClose, MdDashboard, MdFavorite, MdFavoriteBorder, MdHome, MdInfo, MdMenu, MdPhone, MdSettings, MdShop, MdStar, MdStarHalf, MdStars, MdTrolley } from "react-icons/md";
+import {
+  FaEnvelope,
+  FaHeart,
+  FaPhone,
+  FaShoppingCart,
+  FaUser,
+} from "react-icons/fa";
+import { SiCarto } from "react-icons/si";
+import {
+  MdAccountCircle,
+  MdClose,
+  MdDashboard,
+  MdFavorite,
+  MdFavoriteBorder,
+  MdHome,
+  MdInfo,
+  MdMenu,
+  MdPhone,
+  MdSettings,
+  MdShop,
+  MdShoppingCart,
+  MdStar,
+  MdStarHalf,
+  MdStars,
+  MdTrolley,
+} from "react-icons/md";
 import Image from "next/image";
-import { Menu } from "@mui/icons-material";
+import { Menu, ShoppingCart } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
-export default function Header({
-  user
-}) {
+export default function Header({ user }) {
   const [isOpen, setIsOpen] = useState(false);
   const logedIn = true;
   const role = "seller";
@@ -19,8 +40,6 @@ export default function Header({
     : "https://lh3.googleusercontent.com/pw/AP1GczP9XQIrnoVRw2kYBcnVxH8YYxN-SykWCV3zqQKMNev0_k6-Avre4beasxj4GhyKMmQvBKxB4aixxiopYtbKylT2sZbS8Mds7hgD6pL6y1Pc2-ZS2aCOg4K2JWKuTX_Cz9RGVnD3yYEECkwl9j2E59TF=w1350-h540-s-no-gm";
   const defaultProfilePictureLink =
     "https://lh3.googleusercontent.com/pw/AP1GczM2cnSQPHG8oKKskeSFKCFjs3z_NG31Tt4bQPqb4Fp-Qdteh0m-84BjSvDgQTkscceDPu1eD1Rs2OxUSd0InRuqnowixs1x8kqSVIcu_7BbkBi4XFK13ZqIeq56OxPw0bzq0hoUgYtTHteuYB1cTI-K=w883-h883-s-no-gm";
-
-
 
   const contact = {
     phone: "(+92) 321 855 9574",
@@ -44,24 +63,29 @@ export default function Header({
   function wishlistClick() {
     router.push("/wishlist");
   }
-  function loginClick() {
+  function cartClick() {
+    router.push("/cart");
   }
-  function adminDBClick() {
-  }
-  function sellerDBClick() {
-  }
+  function loginClick() {}
+  function adminDBClick() {}
+  function sellerDBClick() {}
   function accountClick() {
     router.push("/profile");
   }
 
-
-
-
   const Buttons = [
     { btn_name: "Home", icon: <MdHome size={18} />, clickEvent: homeClick },
     { btn_name: "Shop", icon: <MdShop size={18} />, clickEvent: shopClick },
-    { btn_name: "Contact", icon: <MdPhone size={18} />, clickEvent: contactClick },
-    { btn_name: "About Us", icon: <MdInfo size={18} />, clickEvent: aboutClick },
+    {
+      btn_name: "Contact",
+      icon: <MdPhone size={18} />,
+      clickEvent: contactClick,
+    },
+    {
+      btn_name: "About Us",
+      icon: <MdInfo size={18} />,
+      clickEvent: aboutClick,
+    },
   ];
 
   const openSidebar = () => {
@@ -72,68 +96,70 @@ export default function Header({
     setIsOpen(false);
   };
 
-
   const topBtns = [
     {
       name: "Wishlist",
       icon: <MdFavorite />,
       onClick: wishlistClick,
     },
-  ]
-
-  logedIn ? topBtns.push(
     {
-      name: "My Account",
-      icon: <FaUser size={9.5} />,
-      onClick: accountClick,
+      name: "Cart",
+      icon: <MdShoppingCart />,
+      onClick: cartClick,
     },
-  ) :
-    topBtns.push(
-      {
+  ];
+
+  logedIn
+    ? topBtns.push({
+        name: "My Account",
+        icon: <FaUser size={9.5} />,
+        onClick: accountClick,
+      })
+    : topBtns.push({
         name: "Login",
         icon: <FaUser size={9.5} />,
         onClick: loginClick,
-      },
-    )
+      });
 
-  role=="admin" && topBtns.push({
-    name: "Admin Dashboard",
-    icon: <MdDashboard />,
-    onClick: adminDBClick,
-  })
- 
-  role=="seller" && topBtns.push({
-    name: "Seller Dashboard",
-    icon: <MdDashboard />,
-    onClick: sellerDBClick,
-  })
+  role == "admin" &&
+    topBtns.push({
+      name: "Admin Dashboard",
+      icon: <MdDashboard />,
+      onClick: adminDBClick,
+    });
 
-
-
-
+  role == "seller" &&
+    topBtns.push({
+      name: "Seller Dashboard",
+      icon: <MdDashboard />,
+      onClick: sellerDBClick,
+    });
 
   return (
     <div className="w-full">
       <div
         onClick={closeSidebar}
-        className={`md:hidden fixed h-screen w-full z-40  ${isOpen ? "translate-x-0" : "-translate-x-[100%]"
-          }`}
+        className={`md:hidden fixed h-screen w-full z-40  ${
+          isOpen ? "translate-x-0" : "-translate-x-[100%]"
+        }`}
       ></div>
       <div className="relative flex justify-center items-center z-50">
         {(user || Buttons) && (
           <div>
-            <div
-              className={`absolute left-4 mt-5 md:hidden`}
-            >
-              <button edge="start" aria-label="menu"
+            <div className={`absolute left-4 mt-5 md:hidden`}>
+              <button
+                edge="start"
+                aria-label="menu"
                 onClick={openSidebar}
-                className="text-[var(--btn-icons)] hover:text-[var(--btn-icons-sec)]">
+                className="text-[var(--btn-icons)] hover:text-[var(--btn-icons-sec)]"
+              >
                 <Menu></Menu>
               </button>
             </div>
             <div
-              className={`z-20 md:hidden fixed h-full top-0 left-[-10px] w-[230px] rounded-e-[30px] sidebar bg-[var(--background-prim)] text-[var(--text-prim)] border-r  border-gray-300 transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-[240px]"
-                }`}
+              className={`z-20 md:hidden fixed h-full top-0 left-[-10px] w-[230px] rounded-e-[30px] sidebar bg-[var(--background-prim)] text-[var(--text-prim)] border-r  border-gray-300 transition-transform duration-300 ease-in-out ${
+                isOpen ? "translate-x-0" : "-translate-x-[240px]"
+              }`}
               style={{ boxShadow: "0 0 20px -5px #404040" }}
             >
               <button
@@ -144,9 +170,7 @@ export default function Header({
               </button>
 
               <div className="flex flex-col items-start py-6">
-                <div
-                  className="cursor-pointer flex flex-col justify-center items-center  font-[500] text-[12px] gap-1 ml-6"
-                >
+                <div className="cursor-pointer flex flex-col justify-center items-center  font-[500] text-[12px] gap-1 ml-6">
                   <img
                     className="w-[60px] h-[60px] object-cover hover:scale-[1.03] transition-all rounded-full"
                     src={defaultProfilePictureLink}
@@ -158,24 +182,21 @@ export default function Header({
                 </div>
                 <div className="flex flex-col w-full">
                   <div className="flex flex-col pt-8">
-                    {Buttons.map(
-                      (btn, index) =>
-                        <button
-                          onClick={btn.clickEvent}
-                          className={`w-full justify-start hover:bg-[var(--text-alt-2)]  text-[var(--text-prim)] ${btn.btn_name === "Logout" &&
-                            "text-[#fc6060] font-semibold"
-                            } text-[11px] px-6 py-[10px]`}
-                          key={index}
-                        >
-                          <div className="flex gap-3 items-center ">
-                            <div className="mb-0.5">
-                              {btn.icon}
-                            </div>
-                            {btn.btn_name}
-                          </div>
-                        </button>
-
-                    )}
+                    {Buttons.map((btn, index) => (
+                      <button
+                        onClick={btn.clickEvent}
+                        className={`w-full justify-start hover:bg-[var(--text-alt-2)]  text-[var(--text-prim)] ${
+                          btn.btn_name === "Logout" &&
+                          "text-[#fc6060] font-semibold"
+                        } text-[11px] px-6 py-[10px]`}
+                        key={index}
+                      >
+                        <div className="flex gap-3 items-center ">
+                          <div className="mb-0.5">{btn.icon}</div>
+                          {btn.btn_name}
+                        </div>
+                      </button>
+                    ))}
                   </div>
                   <div className="flex flex-col absolute w-[190px] bottom-2 gap-1.5  ml-6">
                     <hr className="h-[1px] border-none bg-[#afafaf99]" />
@@ -210,20 +231,18 @@ export default function Header({
                   </div>
                 </div>
                 <div className="flex gap-3 md:gap-6 flex-wrap items-center justify-center">
-                  {
-                    topBtns.map((btn, i) => (
-                      <button key={i} className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
-                        onClick={btn.onClick}>
-                        <div className="mb-0.5">
-                          {btn.icon}
-                        </div>
-                        {btn.name}
-                      </button>
-                    ))
-                  }
+                  {topBtns.map((btn, i) => (
+                    <button
+                      key={i}
+                      className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
+                      onClick={btn.onClick}
+                    >
+                      <div className="mb-0.5">{btn.icon}</div>
+                      {btn.name}
+                    </button>
+                  ))}
                 </div>
               </div>
-
             </div>
             <Image
               src={logoLink}
@@ -235,18 +254,16 @@ export default function Header({
                   `}
             />
             <div className="flex items-center gap-10">
-
               <div className="hidden md:flex gap-3 text-sm">
-                {
-                  Buttons.map((btn, i) => (
-                    <button key={i}
-                      className=" py-1.5 px-5 rounded-full border border-solid border-[#9e6e3b] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
-                      onClick={btn.clickEvent}
-                    >
-                      {btn.btn_name}
-                    </button>
-                  ))
-                }
+                {Buttons.map((btn, i) => (
+                  <button
+                    key={i}
+                    className=" py-1.5 px-5 rounded-full border border-solid border-[#9e6e3b] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
+                    onClick={btn.clickEvent}
+                  >
+                    {btn.btn_name}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
