@@ -11,7 +11,7 @@ export default function OrderObj({ order }) {
   };
 
   return (
-    <div className="flex flex-col gap-1 p-4  bg-[#fff] rounded-lg shadowshadow-[#0000002d] transition-all duration-300">
+    <div className="flex flex-col gap-1 p-4 pb-1 bg-[#fff] rounded-lg shadowshadow-[#0000002d] transition-all duration-300">
       <div className="flex flex-col gap-0.5 -mb-2 sm:mb-0 sm:flex-row sm:justify-between sm:items-center ">
         <div className="flex gap-2 items-center text-xs md:text-sm font-light text-slate-700">
           Order No: {order.id}{" "}
@@ -27,7 +27,7 @@ export default function OrderObj({ order }) {
             <div className="flex items-center gap-2">
               <MdCircle size={10} />
               <div
-                className={` transition-all duration-300 ${
+                className={` transition-all duration-500 ${
                   showItems ? "ml-0 opacity-100" : "-ml-3 opacity-0"
                 }`}
               >
@@ -37,21 +37,25 @@ export default function OrderObj({ order }) {
           </span>
         </div>
         <div className="text-xs md:text-sm text-slate-700">
-          Total: <span className="font-bold">{order.total} PKR</span>
+          Total:{" "}
+          <span className="font-bold text-green-800">{order.total} PKR</span>
         </div>
       </div>
       <div
-        className={`flex flex-col gap-0.5 mt-6 transition-all duration-300 ${
+        className={`flex flex-col gap-0.5 mt-6 transition-all duration-500 ${
           showItems ? "mt-6 max-h-screen opacity-100" : "mt-0 max-h-0 opacity-0"
         } overflow-hidden`}
       >
         <h3 className="text-xs md:text-sm text-gray-700">
-          Order Date: {new Date(order.date).toLocaleDateString()}
+          <span className="font-bold"> Order Date:</span>{" "}
+          {new Date(order.date).toLocaleDateString()}
         </h3>
         <h3 className="text-xs md:text-sm text-gray-700">
-          Total Items: {order.items.length}
+          <span className="font-bold"> Total Items:</span> {order.items.length}
         </h3>
-        <h3 className="text-xs md:text-sm text-gray-700 mt-2 mb-1">Details:</h3>
+        <h3 className="text-xs md:text-sm text-gray-700 mt-4 mb-1 font-bold">
+          Items:
+        </h3>
         {order.items.map((item, index) => (
           <div key={index} className="flex items-center gap-4">
             <img
@@ -71,7 +75,7 @@ export default function OrderObj({ order }) {
         ))}
       </div>
       <button
-        className="self-center text-gray-500 px-1 -mb-2 w-fit rounded-lg"
+        className="self-center text-gray-500 w rounded-lg"
         onClick={toggleItems}
       >
         <RiArrowDownSLine
