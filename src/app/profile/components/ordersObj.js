@@ -62,7 +62,7 @@ export default function OrderObj({ order }) {
           {order.items.map((item, index) => (
             <div
               key={index}
-              className="flex items-center gap-4 bg-[#ececec] p-2 border border-[#e0e0e0] rounded-lg"
+              className="flex items-center gap-4 bg-gray-100 p-2 border rounded-lg"
             >
               <img
                 src={item.img}
@@ -74,10 +74,10 @@ export default function OrderObj({ order }) {
                   {item.name}
                 </span>
                 <span className="text-xs md:text-sm text-slate-600">
-                  Breed: {item.breed}
+                  {item.breed}
                 </span>
-                <span className="text-xs md:text-sm text-slate-600">
-                  Price: {item.price} PKR
+                <span className="text-xs md:text-sm text-green-600">
+                  Rs. {item.price}
                 </span>
               </div>
             </div>

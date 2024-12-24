@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { FaCartPlus } from "react-icons/fa";
 
 export default function WishListItem({ item }) {
   const router = useRouter();
@@ -11,8 +12,8 @@ export default function WishListItem({ item }) {
   function addToCart() {}
   return (
     <div
-      className={`flex items-center relative bg-gray-100 border border-slate-200 p-2 rounded-lg  shadow-[#0000002d] ${
-        !item.availability && "opacity-65 border-slate-300 shadow-[#00000050]"
+      className={`flex items-center relative bg-gray-100 border p-2 rounded-lg ${
+        !item.availability && "opacity-65 border-slate-300 "
       }`}
     >
       <div
@@ -42,7 +43,9 @@ export default function WishListItem({ item }) {
             "bg-red-700 hover:bg-red-700 cursor-not-allowed"
           }`}
         >
-          {item.availability ? "Add to Cart" : "Sold Out"}
+          <h1 className="flex items-center gap-2">
+            <span className="hidden md:block">Add to Cart</span> <FaCartPlus />
+          </h1>
         </button>
       </div>
     </div>
