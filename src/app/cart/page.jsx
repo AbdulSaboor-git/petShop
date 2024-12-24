@@ -59,38 +59,44 @@ export default function Cart() {
     console.log("Selected items for checkout:", selectedItems);
   };
 
+  const handleDeleteItem = () => {};
+
   const totalAmount = selectedItems.reduce((total, itemId) => {
     const item = cart_items.find((item) => item.id === itemId);
     return total + item.price;
   }, 0);
 
   return (
-    <div className="flex flex-col items-center gap-10 bg-gray-100 min-h-screen">
+    <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
-      <div className="flex flex-col w-full max-w-[1400px] items-center px-4 py-8">
-        <div className="flex flex-col gap-8 w-full max-w-[1200px] bg-white p-6 rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold text-center">Shopping Cart</h1>
-          <div className="flex flex-col gap-4">
-            {cart_items.map((item) => (
-              <CartItem
-                key={item.id}
-                item={item}
-                selectedItems={selectedItems}
-                handleSelectItem={handleSelectItem}
-              />
-            ))}
-          </div>
-          <div className="flex flex-col md:flex-row justify-between items-center p-4 bg-white shadow-lg shadow-red-500/50">
-            <div className="text-lg font-bold mb-4 md:mb-0">
-              Total: {totalAmount} PKR
+      <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
+        <h1 className="font-bold pl-1 ">My Cart ({cart_items.length})</h1>
+        <div className="flex flex-col gap-2">
+          {cart_items.map((item) => (
+            <CartItem
+              key={item.id}
+              item={item}
+              selectedItems={selectedItems}
+              handleSelectItem={handleSelectItem}
+              handleDeleteItem={handleDeleteItem}
+            />
+          ))}
+          {cart_items.length === 0 && (
+            <div className="text-xs md:text-sm  bg-white text-gray-400 text-center border-2 p-2">
+              Cart is empty
             </div>
-            <button
-              className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
-              onClick={handleCheckout}
-            >
-              Checkout
-            </button>
+          )}
+        </div>
+        <div className="flex flex-col w-full bg-red-100 md:flex-row justify-between items-center p-4 ">
+          <div className="text-lg font-bold mb-4 md:mb-0">
+            Total: {totalAmount} PKR
           </div>
+          <button
+            className="text-xs md:text-sm text-orange-500 border border-orange-500 px-3 py-1 rounded hover:bg-orange-500 hover:text-white flex gap-2 items-center justify-center"
+            onClick={handleCheckout}
+          >
+            Checkout
+          </button>
         </div>
       </div>
       <Footer />

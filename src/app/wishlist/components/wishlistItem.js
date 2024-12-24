@@ -11,32 +11,29 @@ export default function WishListItem({ item }) {
   function addToCart() {}
   return (
     <div
-      className={`flex items-center bg-white relative border-t-2 border-gray-200 rounded-lg shadow-md shadow-[#0000002d] ${
-        !item.availability && "opacity-75"
+      className={`flex items-center relative bg-gray-100 border border-slate-200 p-2 rounded-lg  shadow-[#0000002d] ${
+        !item.availability && "opacity-65 border-slate-300 shadow-[#00000050]"
       }`}
     >
       <div
-        className={`w-full absolute h-full bg-black cursor-pointer opacity-0 rounded-lg ${
-          !item.availability && "opacity-15 cursor-default"
+        className={`w-full left-0 absolute h-full bg-black cursor-pointer opacity-0 rounded-lg ${
+          !item.availability && "opacity-10 cursor-context-menu "
         }`}
         onClick={() => itemClick(item.availability)}
       ></div>
       <div className={`w-fit max-w-[76px] md:max-w-24 `}>
-        <img src={item.img} alt={item.name} className={`rounded-s-lg`} />
+        <img src={item.img} alt={item.name} className={`rounded-lg`} />
       </div>
       <div className="flex justify-between items-center gap-4 px-3 w-full ">
-        <div className="flex flex-col gap-1">
-          <div
-            className={`font-bold text-slate-800 text-sm md:text-base leading-tight line-clamp-2 '}`}
+        <div className="text-sm md:text-base flex flex-col ">
+          <h3
+            className="font-bold cursor-pointer leading-tight line-clamp-2 "
+            onClick={itemClick}
           >
             {item.name}
-          </div>
-          <div className="flex flex-col text-xs md:text-base">
-            <p className="text-green-700">
-              {item.isDiscounted ? item.discountedPrice : item.price}
-              {" PKR"}
-            </p>
-          </div>
+          </h3>
+          <p className="text-xs md:text-sm text-gray-600">{item.breed} </p>
+          <p className="text-xs md:text-sm text-green-600">Rs. {item.price} </p>
         </div>
         <button
           onClick={addToCart}

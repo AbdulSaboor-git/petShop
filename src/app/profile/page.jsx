@@ -300,7 +300,7 @@ export default function Profile() {
                 </div>
               ))}
               {wishlist.length === 0 && (
-                <div className="text-sm md:text-base bg-white text-gray-500 text-center border-2 p-2">
+                <div className="text-xs md:text-sm  bg-white text-gray-400 text-center border-2 p-2">
                   Wishlist is empty
                 </div>
               )}
@@ -321,16 +321,14 @@ export default function Profile() {
           </div>
           <div className="flex flex-col gap-4">
             <div className="px-1 flex justify-between items-center gap-4">
-              <h2 className="text-base md:text-lg font-semibold">
-                Your Orders
-              </h2>
+              <h2 className="text-base md:text-lg font-semibold">My Orders</h2>
               {orders.length > 0 && (
-                <h2 className="text-sm md:text-base text-gray-500">
+                <h2 className="text-xs md:text-sm  bg-white text-gray-400">
                   ({ordersToShow}/{orders.length})
                 </h2>
               )}
             </div>
-            <div className="flex flex-col p-1.5 gap-0.5 w-full rounded-lg bg-orange-400">
+            <div className="flex flex-col p-1.5 gap-0.5 w-full rounded-lg bg-gray-400">
               {orders.slice(0, ordersToShow).map((order, i) => (
                 <div key={i} className="">
                   <OrderObj order={order} />
