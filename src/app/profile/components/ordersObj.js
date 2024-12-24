@@ -82,7 +82,7 @@ export default function OrderObj({ order }) {
         </div>
       </div>
       <button
-        className="place-items-center w-full mt-3 text-gray-500 w rounded-lg"
+        className="place-items-center w-full mt-4 text-gray-500 w rounded-lg"
         onClick={toggleItems}
       >
         <RiArrowDownSLine

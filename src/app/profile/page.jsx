@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Profile() {
   const router = useRouter();
-  const [ordersToShow, setOrdersToShow] = useState(2);
+  const [ordersToShow, setOrdersToShow] = useState(3);
   const user = {
     id: 1,
     email: "abc@example.com",
@@ -28,6 +28,24 @@ export default function Profile() {
   };
 
   const wishlist = [
+    {
+      id: 18,
+      name: "Orpington Chicken",
+      breed: "Orpington",
+      img: "/3.jpg",
+      images: ["/1.jpg", "/3.jpg", "/2.jpg"],
+      price: 2400,
+      discountedPrice: 2200,
+      isDiscounted: true,
+      weight: 2.7,
+      height: 300,
+      age: 2.4,
+      sex: "female",
+      nature: "Gentle, hardy, good for egg production",
+      specifications: "Large, glossy black feathers",
+      type: "Egg-laying bird",
+      availability: true,
+    },
     {
       id: 18,
       name: "Orpington Chicken",
@@ -273,20 +291,22 @@ export default function Profile() {
           </div>
           <div className="flex flex-col w-full max-w-[800px] gap-8">
             <div className="flex flex-col gap-4">
-              <h2 className="text-base md:text-lg font-semibold">Wishlist</h2>
+              <h2 className="px-1 text-base md:text-lg font-semibold">
+                Wishlist
+              </h2>
               <div className="flex flex-col gap-2 w-full">
-                {wishlist.map((item, i) => (
+                {wishlist.slice(0, 3).map((item, i) => (
                   <div key={i} className="">
                     <WishListItem item={item} />
                   </div>
                 ))}
                 {wishlist.length === 0 && (
-                  <div className="text-gray-600 text-center border-2 p-2">
+                  <div className="text-sm md:text-base bg-white text-gray-500 text-center border-2 p-2">
                     Wishlist is empty
                   </div>
                 )}
               </div>
-              {wishlist.length > 2 && (
+              {wishlist.length > 3 && (
                 <div
                   className="z-30 flex justify-center items-center p-1 -mx-3"
                   // style={{ boxShadow: "0 -15px 25px 10px rgba(255, 255, 255)" }}
@@ -301,9 +321,16 @@ export default function Profile() {
               )}
             </div>
             <div className="flex flex-col gap-4">
-              <h2 className="text-base md:text-lg font-semibold">
-                Previous Orders
-              </h2>
+              <div className="px-1 flex justify-between items-center gap-4">
+                <h2 className="text-base md:text-lg font-semibold">
+                  Your Orders
+                </h2>
+                {orders.length > 0 && (
+                  <h2 className="text-sm md:text-base text-gray-500">
+                    ({ordersToShow}/{orders.length})
+                  </h2>
+                )}
+              </div>
               <div className="flex flex-col p-1.5 gap-0.5 w-full rounded-lg bg-orange-400">
                 {orders.slice(0, ordersToShow).map((order, i) => (
                   <div key={i} className="">
@@ -311,12 +338,12 @@ export default function Profile() {
                   </div>
                 ))}
                 {orders.length === 0 && (
-                  <div className="text-gray-600 text-center border-2 p-2">
-                    No past purchases found
+                  <div className="text-sm md:text-base bg-white rounded-lg text-gray-500 text-center  p-2">
+                    No Orders Yet
                   </div>
                 )}
               </div>
-              {orders.length > 2 && orders.length > ordersToShow && (
+              {orders.length > 3 && orders.length > ordersToShow && (
                 <div className="flex justify-center z-10 items-center p-1 -mx-2">
                   <button
                     onClick={() => setOrdersToShow(ordersToShow + 1)}
