@@ -42,7 +42,7 @@ export default function OrderObj({ order }) {
         </div>
       </div>
       <div
-        className={`flex flex-col gap-0.5 mt-6 transition-all duration-500 ${
+        className={`flex flex-col gap-0.5 transition-all duration-500 ${
           showItems
             ? "mt-6 max-h-screen opacity-100"
             : "-mt-3 max-h-0 opacity-0"
