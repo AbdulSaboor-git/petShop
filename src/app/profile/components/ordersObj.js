@@ -13,7 +13,7 @@ export default function OrderObj({ order }) {
   return (
     <div
       className={`flex flex-col gap-1 p-4 pb-2 bg-white rounded-lg transition-all duration-300 cursor-pointer ${
-        showItems && "pointer-events-none cursor-context-menu"
+        showItems && "pointer-events-none cursor-default"
       }`}
       onClick={toggleItems}
     >

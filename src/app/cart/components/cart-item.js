@@ -3,12 +3,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { FaTrashAlt } from "react-icons/fa";
 
-export default function CartItem({
-  item,
-  selectedItems,
-  handleSelectItem,
-  handleDeleteItem,
-}) {
+export default function CartItem({ item, selectedItems, handleSelectItem }) {
   const router = useRouter();
   function itemClick() {
     router.push(`/product/${item.id}`);
@@ -16,14 +11,14 @@ export default function CartItem({
   return (
     <div
       key={item.id}
-      className="flex justify-between items-center border p-3 rounded-lg bg-gray-100"
+      className="flex gap-2 justify-between items-center border p-3 px-5 rounded-lg bg-gray-100"
     >
       <div className="flex gap-4 items-center w-full">
         <input
           type="checkbox"
           checked={selectedItems.includes(item.id)}
           onChange={() => handleSelectItem(item.id)}
-          className="accent-orange-600 size-3 md:size-4 -mr-1"
+          className="accent-orange-600 size-3 md:size-4 "
         />
         <img
           src={item.img}
@@ -42,12 +37,12 @@ export default function CartItem({
           <p className="text-xs md:text-sm text-green-600">Rs. {item.price} </p>
         </div>
       </div>
-      <button
-        className="text-red-500 hover:text-red-600 h-fit"
+      {/* <button
+        className="text-sm md:text-base text-red-500 hover:text-red-600 h-fit"
         onClick={() => handleDeleteItem(item.id)}
       >
         <FaTrashAlt />
-      </button>
+      </button> */}
     </div>
   );
 }
