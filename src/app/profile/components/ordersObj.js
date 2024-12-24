@@ -12,7 +12,7 @@ export default function OrderObj({ order }) {
 
   return (
     <div className="flex flex-col gap-1 p-4  bg-[#fff] rounded-lg shadowshadow-[#0000002d] transition-all duration-300">
-      <div className="flex flex-col -mb-2 sm:mb-0 sm:flex-row sm:justify-between sm:items-center ">
+      <div className="flex flex-col gap-0.5 -mb-2 sm:mb-0 sm:flex-row sm:justify-between sm:items-center ">
         <div className="flex gap-2 items-center text-xs md:text-sm font-light text-slate-700">
           Order No: {order.id}{" "}
           <span
@@ -41,7 +41,7 @@ export default function OrderObj({ order }) {
         </div>
       </div>
       <div
-        className={`flex flex-col gap-2 mt-6 transition-all duration-300 ${
+        className={`flex flex-col gap-0.5 mt-6 transition-all duration-300 ${
           showItems ? "mt-6 max-h-screen opacity-100" : "mt-0 max-h-0 opacity-0"
         } overflow-hidden`}
       >
@@ -51,7 +51,7 @@ export default function OrderObj({ order }) {
         <h3 className="text-xs md:text-sm text-gray-700">
           Total Items: {order.items.length}
         </h3>
-        <h3 className="text-sm text-gray-700">Items:</h3>
+        <h3 className="text-xs md:text-sm text-gray-700 mt-2 mb-1">Details:</h3>
         {order.items.map((item, index) => (
           <div key={index} className="flex items-center gap-4">
             <img
