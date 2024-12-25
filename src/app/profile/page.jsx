@@ -107,7 +107,7 @@ export default function Profile() {
       id: 49337,
       date: new Date(),
       total: 4600,
-      status: "Processing",
+      status: "Canceled",
       items: [
         {
           id: 18,
@@ -177,7 +177,7 @@ export default function Profile() {
       id: 49986,
       date: new Date(),
       total: 5100,
-      status: "Completed",
+      status: "Processing",
       items: [
         {
           id: 18,

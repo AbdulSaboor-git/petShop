@@ -3,7 +3,12 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { FaTrashAlt } from "react-icons/fa";
 
-export default function CartItem({ item, selectedItems, handleSelectItem }) {
+export default function CartItem({
+  item,
+  selectedItems,
+  handleSelectItem,
+  handleDeleteItem,
+}) {
   const router = useRouter();
   function itemClick() {
     router.push(`/product/${item.id}`);
@@ -23,7 +28,7 @@ export default function CartItem({ item, selectedItems, handleSelectItem }) {
           checked={selectedItems.includes(item.id)}
           disabled={!item.availability}
           onChange={() => handleSelectItem(item.id)}
-          className="accent-orange-600 size-3 md:size-4 "
+          className="accent-orange-600 size-3 md:size-4"
         />
         <img
           src={item.img}
@@ -45,12 +50,15 @@ export default function CartItem({ item, selectedItems, handleSelectItem }) {
           <p className="text-xs md:text-sm text-green-600">Rs. {item.price} </p>
         </div>
       </div>
-      {/* <button
-        className="text-sm md:text-base text-red-500 hover:text-red-600 h-fit"
-        onClick={() => handleDeleteItem(item.id)}
-      >
-        <FaTrashAlt />
-      </button> */}
+      {!item.availability && (
+        <button
+          className={`z-30 items-center text-sm md:text-base  text-red-600 hover:text-red-700 cursor-pointer pointer-events-auto
+             `}
+          onClick={() => handleDeleteItem(item.id)}
+        >
+          <FaTrashAlt />{" "}
+        </button>
+      )}
     </div>
   );
 }

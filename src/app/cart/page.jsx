@@ -80,6 +80,8 @@ export default function Cart() {
     },
   ];
 
+  const new_cart_items = cart_items.filter((item) => item.availability);
+
   const handleSelectItem = (itemId) => {
     setSelectedItems((prevSelectedItems) =>
       prevSelectedItems.includes(itemId)
@@ -89,25 +91,25 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    selectedItems.length === cart_items.length
+    selectedItems.length === new_cart_items.length
       ? setSelectedAll(true)
       : setSelectedAll(false);
-  }, [cart_items, selectedItems]);
+  }, [new_cart_items, selectedItems]);
 
   const handleCheckout = () => {
     // Handle checkout logic here
     console.log("Selected items for checkout:", selectedItems);
   };
 
-  const handleDeleteItem = () => {};
+  const handleDeleteItem = (itemId) => {};
 
   const handleSelectAll = () => {
-    selectedItems.length != cart_items.length && setSelectedItems([]);
-    cart_items.map((item) => handleSelectItem(item.id));
+    selectedItems.length != new_cart_items.length && setSelectedItems([]);
+    new_cart_items.map((item) => handleSelectItem(item.id));
   };
 
   const totalAmount = selectedItems.reduce((total, itemId) => {
-    const item = cart_items.find((item) => item.id === itemId);
+    const item = new_cart_items.find((item) => item.id === itemId);
     return total + item.price;
   }, 0);
 
@@ -134,6 +136,7 @@ export default function Cart() {
               item={item}
               selectedItems={selectedItems}
               handleSelectItem={handleSelectItem}
+              handleDeleteItem={handleDeleteItem}
             />
           ))}
           {cart_items.length === 0 && (

@@ -68,7 +68,7 @@ export default function Wishlist() {
         <div className="flex flex-col gap-2 w-full max-w-[900px]">
           <div className="flex gap-2 items-center font-bold px-1">
             WISHLIST
-            <FaHeart className="text-red-500" />
+            {/* <FaHeart className="text-red-500" /> */}
           </div>
           {wishl.map((item, i) => (
             <div key={i} className="">

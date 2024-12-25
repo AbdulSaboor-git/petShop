@@ -1,15 +1,22 @@
 "use client";
+import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 
 export default function WishListItem({ item }) {
+  const [isFav, setIsFav] = React.useState(false);
   const router = useRouter();
   function itemClick() {
     router.push(`/product/${item.id}`);
   }
 
-  function addToCart() {}
+  const removeFav = () => {
+    setIsFav(!isFav);
+    //notify
+  };
+  const addToCart = () => {};
+
   return (
     <div
       className={`flex gap-2 justify-between items-center border p-2 rounded-lg bg-gray-100 ${
@@ -40,15 +47,10 @@ export default function WishListItem({ item }) {
           <p className="text-xs md:text-sm text-green-600">Rs. {item.price} </p>
         </div>
         <button
-          onClick={addToCart}
-          className={`z-20 min-w-fit bg-orange-600 hover:bg-orange-700 self-center text-xs md:text-sm text-white p-2 px-4 rounded-2xl ${
-            !item.availability &&
-            "bg-red-700 hover:bg-red-700 cursor-not-allowed"
-          }`}
+          onClick={removeFav}
+          className={`z-20 pointer-events-auto min-w-fit self-center text-xs md:text-sm text-red-500 p-2 px-4 rounded-2xl`}
         >
-          <h1 className="flex items-center gap-2">
-            <span className="hidden md:block">Add to Cart</span> <FaCartPlus />
-          </h1>
+          {!isFav ? <FavoriteOutlined /> : <FavoriteBorderOutlined />}
         </button>
       </div>
     </div>
