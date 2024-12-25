@@ -82,7 +82,7 @@ export default function Cart() {
       <Header />
       <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
         <div className="flex justify-between items-center">
-          <h1 className="font-bold pl-1 ">My Cart ({cart_items.length})</h1>
+          <h1 className="font-bold px-1 ">My Cart ({cart_items.length})</h1>
           <button
             className={`items-center text-sm md:text-base text-gray-500 cursor-default  ${
               selectedItems.length &&
