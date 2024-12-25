@@ -32,6 +32,9 @@ export default function CartItem({ item, selectedItems, handleSelectItem }) {
           onClick={itemClick}
         />
         <div className="text-sm md:text-base flex flex-col ">
+          {!item.availability && (
+            <p className="text-[10px] md:text-xs text-red-600">Unavailable</p>
+          )}
           <h3
             className="font-bold cursor-pointer leading-tight line-clamp-2 "
             onClick={itemClick}

@@ -27,6 +27,9 @@ export default function WishListItem({ item }) {
       </div>
       <div className="flex justify-between items-center gap-4 px-3 w-full ">
         <div className="text-sm md:text-base flex flex-col ">
+          {!item.availability && (
+            <p className="text-[10px] md:text-xs text-red-600">Unavailable</p>
+          )}
           <h3
             className="font-bold cursor-pointer leading-tight line-clamp-2 "
             onClick={itemClick}
