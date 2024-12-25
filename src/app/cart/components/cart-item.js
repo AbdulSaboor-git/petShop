@@ -11,12 +11,17 @@ export default function CartItem({ item, selectedItems, handleSelectItem }) {
   return (
     <div
       key={item.id}
-      className="flex gap-2 justify-between items-center border p-3 px-5 rounded-lg bg-gray-100"
+      className={`flex gap-2 justify-between items-center border p-3 px-5 rounded-lg bg-gray-100 ${
+        !item.availability
+          ? "bg-[#00000025] opacity-65 border-gray-300 pointer-events-none"
+          : "bg-white pointer-events-auto"
+      }`}
     >
       <div className="flex gap-4 items-center w-full">
         <input
           type="checkbox"
           checked={selectedItems.includes(item.id)}
+          disabled={!item.availability}
           onChange={() => handleSelectItem(item.id)}
           className="accent-orange-600 size-3 md:size-4 "
         />

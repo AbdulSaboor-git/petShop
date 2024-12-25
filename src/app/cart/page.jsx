@@ -28,7 +28,41 @@ export default function Cart() {
       availability: true,
     },
     {
-      id: 19,
+      id: 11,
+      name: "Indian Game Chicken",
+      breed: "Indian Game",
+      img: "/2.jpg",
+      price: 2200,
+      discountedPrice: 2000,
+      isDiscounted: true,
+      weight: 3.0,
+      height: 310,
+      age: 1.8,
+      sex: "male",
+      nature: "Aggressive, hardy",
+      specifications: "Feathers in vibrant colors, strong build",
+      type: "Show and meat bird",
+      availability: true,
+    },
+    {
+      id: 20,
+      name: "Indian Game Chicken",
+      breed: "Indian Game",
+      img: "/2.jpg",
+      price: 2200,
+      discountedPrice: 2000,
+      isDiscounted: true,
+      weight: 3.0,
+      height: 310,
+      age: 1.8,
+      sex: "male",
+      nature: "Aggressive, hardy",
+      specifications: "Feathers in vibrant colors, strong build",
+      type: "Show and meat bird",
+      availability: false,
+    },
+    {
+      id: 21,
       name: "Indian Game Chicken",
       breed: "Indian Game",
       img: "/2.jpg",
@@ -81,8 +115,8 @@ export default function Cart() {
     <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
       <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
-        <div className="flex justify-between items-center">
-          <h1 className="font-bold px-1 ">My Cart ({cart_items.length})</h1>
+        <div className="flex justify-between items-center px-1">
+          <h1 className="font-bold ">My Cart ({cart_items.length})</h1>
           <button
             className={`items-center text-sm md:text-base text-gray-500 cursor-default  ${
               selectedItems.length &&
@@ -110,9 +144,9 @@ export default function Cart() {
         </div>
         <div className="flex flex-col gap-2 border-t border-gray-300 mt-6 p-5">
           <div className="flex gap-2 w-full justify-between items-center">
-            <div className="flex gap-2 items-center text-sm">
+            <div className="flex gap-2 items-center text-[13px] md:text-sm">
               <input
-                className="accent-orange-600  size-3 md:size-4"
+                className="accent-orange-600 mb-0.5 size-3 md:size-4"
                 type="checkbox"
                 onClick={handleSelectAll}
                 checked={selectedAll ? true : false}
@@ -122,7 +156,7 @@ export default function Cart() {
             <div className="flex flex-col items-center gap-2">
               <div className=" text-sm md:text-base ">
                 Subtotal:{" "}
-                <span className="font-bold text-orange-500">
+                <span className="font-bold text-base md:text-lg text-orange-500">
                   Rs. {totalAmount}
                 </span>
               </div>

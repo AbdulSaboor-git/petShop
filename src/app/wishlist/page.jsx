@@ -66,7 +66,7 @@ export default function Wishlist() {
       <Header />
       <div className=" flex flex-col w-full max-w-[1400px] items-center px-4">
         <div className="flex flex-col gap-2 w-full max-w-[900px]">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center font-bold px-1">
             WISHLIST
             <FaHeart className="text-red-500" />
           </div>

@@ -5,25 +5,25 @@ import { FaCartPlus } from "react-icons/fa";
 
 export default function WishListItem({ item }) {
   const router = useRouter();
-  function itemClick(available) {
-    available && router.push(`/product/${item.id}`);
+  function itemClick() {
+    router.push(`/product/${item.id}`);
   }
 
   function addToCart() {}
   return (
     <div
-      className={`flex items-center relative bg-gray-100 border p-2 rounded-lg ${
-        !item.availability && "opacity-75 border-gray-300 "
+      className={`flex gap-2 justify-between items-center border p-2 rounded-lg bg-gray-100 ${
+        !item.availability
+          ? "bg-[#00000025] opacity-65 border-gray-300 pointer-events-none"
+          : "bg-white pointer-events-auto"
       }`}
     >
-      <div
-        className={`w-full left-0 absolute h-full bg-black cursor-pointer opacity-0 rounded-lg ${
-          !item.availability && "opacity-10 cursor-context-menu "
-        }`}
-        onClick={() => itemClick(item.availability)}
-      ></div>
-      <div className={`w-fit max-w-[76px] md:max-w-24 `}>
-        <img src={item.img} alt={item.name} className={`rounded-lg`} />
+      <div className={`w-fit max-w-[76px] md:max-w-24 `} onClick={itemClick}>
+        <img
+          src={item.img}
+          alt={item.name}
+          className={`rounded-lg cursor-pointer`}
+        />
       </div>
       <div className="flex justify-between items-center gap-4 px-3 w-full ">
         <div className="text-sm md:text-base flex flex-col ">
