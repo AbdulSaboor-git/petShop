@@ -102,7 +102,7 @@ export default function Cart() {
   const handleCheckout = () => {
     setCheckout(true);
     setTimeout(() => {
-      const offset = 30;
+      const offset = 0;
       const elementPosition =
         orderConfirmationRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -188,10 +188,19 @@ export default function Cart() {
           </button>
         </div>
       </div>
-      {checkout && (
+
+      <div
+        ref={orderConfirmationRef}
+        className={`flex items-center justify-center ${
+          checkout
+            ? "opacity-100 h-full py-5"
+            : "opacity-0 h-0 pointer-events-none"
+        } transition-all duration-500`}
+      >
         <div
-          ref={orderConfirmationRef}
-          className="flex flex-col mx-4 md:mx-10 text-xs md:text-sm w-fit gap-4 max-w-[400px] self-center p-5 py-10 rounded-xl border border-gray-300 border-dashed bg-white text-gray-700 text-center shadow-xl relative"
+          className={`flex flex-col mx-4 md:mx-10 text-xs md:text-sm w-fit gap-4 
+            max-w-[400px] self-center p-5 py-10 rounded-xl border border-gray-300 border-dashed
+             bg-gray-50 text-gray-700 text-center shadow-xl relative`}
         >
           <h2 className="text-base md:text-lg font-bold">Order Confirmation</h2>
 
@@ -239,7 +248,7 @@ export default function Cart() {
             Place Order
           </button>
         </div>
-      )}
+      </div>
       <Footer />
     </div>
   );
