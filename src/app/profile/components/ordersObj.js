@@ -20,21 +20,22 @@ export default function OrderObj({ order }) {
       <div className="flex flex-col gap-0.5 -mb-2 sm:mb-0 sm:flex-row sm:justify-between sm:items-center ">
         <div className="flex gap-2 items-center text-xs md:text-sm font-light text-slate-700">
           Order No: {order.id}{" "}
-          <span
-            className={`text-xs font-semibold ${
-              order.status === "Processing"
-                ? "text-yellow-500 animate-pulse"
-                : order.status === "Completed"
-                ? "text-green-500"
-                : "text-red-500"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <MdCircle size={10} />
+          <span>
+            <div
+              className={`text-xs text-white flex items-center rounded-full font-semibold transition-all duration-500 ${
+                order.status === "Processing"
+                  ? "bg-yellow-500 animate-pulse"
+                  : order.status === "Completed"
+                  ? "bg-green-500"
+                  : "bg-red-500"
+              }
+              ${showItems ? "px-2 w-full" : "w-2"}
+              `}
+            >
               <div
-                className={` transition-all duration-500 ${
-                  showItems ? "ml-0 opacity-100" : "-ml-3 opacity-0"
-                }`}
+                className={`${
+                  showItems ? "opacity-100" : "opacity-0"
+                } transition-all duration-500`}
               >
                 {order.status}
               </div>
