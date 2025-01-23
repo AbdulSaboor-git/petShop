@@ -25,7 +25,7 @@ model User {
 }
 
 model Item {
-  id              Int       @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   name            String
   breed           String?
   category        String
@@ -33,7 +33,7 @@ model Item {
   price           Int
   description     String?
   discountedPrice Int
-  isDiscounted    Boolean    @default(false)
+  isDiscounted    Boolean      @default(false)
   weight          Float?
   height          Float?
   age             Float?
@@ -41,17 +41,17 @@ model Item {
   nature          String?
   specifications  String?
   availability    Boolean
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-  orders          Order[]    @relation("OrderItems") // Many-to-many relationship
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  orders          OrderItem[]  // Back-reference to OrderItem
 }
 
 model Order {
   id             Int         @id @default(autoincrement())
   date           DateTime    @default(now())
-  items          Item[]      @relation("OrderItems") // Items in the order
+  items          OrderItem[] // Back-reference to OrderItem
   total          Int
-  status         OrderStatus @default(PENDING) // Enum for order status
+  status         OrderStatus @default(PENDING)
   seller         User        @relation(fields: [sellerId], references: [id]) // Associated seller
   sellerId       Int
   buyersName     String
@@ -59,6 +59,7 @@ model Order {
   buyersAddress  String
   buyersMessage  String
 }
+
 
 model OrderItem {
   id          Int      @id @default(autoincrement())
