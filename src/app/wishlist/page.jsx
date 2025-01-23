@@ -10,7 +10,6 @@ export default function Wishlist() {
       id: 18,
       name: "Orpington Chicken",
       breed: "Orpington",
-      img: "/3.jpg",
       images: ["/1.jpg", "/3.jpg", "/2.jpg"],
       price: 2400,
       discountedPrice: 2200,
