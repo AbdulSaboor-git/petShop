@@ -103,8 +103,8 @@ export default function Header({ user }) {
     //   onClick: wishlistClick,
     // },
     {
-      name: "Cart",
-      icon: <MdShoppingCart />,
+      name: "Favourites",
+      icon: <MdFavorite />,
       onClick: cartClick,
     },
   ];

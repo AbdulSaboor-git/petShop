@@ -37,14 +37,14 @@ export default function ItemPage({ params }) {
     <div className="flex flex-col items-center gap-10">
       <Header />
       <div className="flex flex-col gap-10 max-w-[1400px] w-full px-4">
-        <div className="flex flex-col justify-center md:flex-row w-full gap-4">
+        <div className="flex flex-col justify-start md:flex-row w-full gap-4">
           {/* Image Section */}
-          <div className="flex flex-col gap-2 md:gap-3 w-full md:w-2/3 md:max-w-[650px]">
+          <div className="flex flex-col gap-2 md:gap-3 w-full md:w-2/3 md:max-w-[600px]">
             <ItemGallery item={item} />
           </div>
 
           {/* Product Details Section */}
-          <div className="flex flex-col h-auto w-full md:w-1/3 md:px-4 gap-1 text-gray-700">
+          <div className="flex flex-col h-auto w-full md:w-2/3 md:max-w-1/3 md:px-4 gap-1 text-gray-700">
             <p className="text-green-600 text-sm md:text-base font-semibold mt-2 mx-0.5">
               {Math.round(100 - (item?.discountedPrice / item?.price) * 100)}%
               Discount
@@ -112,24 +112,24 @@ export default function ItemPage({ params }) {
               </ul>
             </div>
             <div className="flex flex-col gap-5">
-              <div className="text-[32px] md:text-[36px] text-orange-600">
+              <div className=" text-[32px] md:text-[36px] text-orange-600">
                 {!item?.isDiscounted && <p>Rs. {item?.price}</p>}
                 {item?.isDiscounted && (
-                  <div>
+                  <div className="flex flex-col md:flex-row md:gap-4 md:items-center">
                     <p>Rs. {item?.discountedPrice}</p>
-                    <p className="text-[16px] md:text-[20px]  line-through text-gray-500">
+                    <p className="text-[16px] md:text-[20px]  line-through  decoration-red-500 text-gray-500">
                       Rs. {item?.price}
                     </p>
                   </div>
                 )}
               </div>
 
-              <div>
+              <div className="flex flex-col md:flex-row md:gap-2">
                 <button className="bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-full w-full text-base md:text-lg">
-                  Buy Now
+                  Conatct Seller
                 </button>
-                <button className="flex  items-center justify-center gap-2 border border-orange-600 text-orange-600 py-2 px-4 rounded-full w-full mt-2 text-base md:text-lg hover:bg-orange-500 hover:border-orange-500 hover:text-white">
-                  Add to Wishlist
+                <button className="flex  items-center justify-center gap-2 border border-orange-600 text-orange-600 py-2 px-4 rounded-full w-full text-base md:text-lg hover:bg-orange-500 hover:border-orange-500 hover:text-white">
+                  Add to Favourites
                   <MdFavoriteBorder />
                 </button>
               </div>
