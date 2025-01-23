@@ -86,9 +86,9 @@ export default function ItemPage({ params }) {
                   <span className="font-normal text-slate-600">{item.sex}</span>
                 </p>
                 <p className="font-bold">
-                  Type:{" "}
+                  Specifications:{" "}
                   <span className="font-normal text-slate-600">
-                    {item.type}
+                    {item.specifications}
                   </span>
                 </p>
                 <p className="font-bold">

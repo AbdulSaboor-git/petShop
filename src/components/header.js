@@ -97,11 +97,11 @@ export default function Header({ user }) {
   };
 
   const topBtns = [
-    {
-      name: "Wishlist",
-      icon: <MdFavorite />,
-      onClick: wishlistClick,
-    },
+    // {
+    //   name: "Wishlist",
+    //   icon: <MdFavorite />,
+    //   onClick: wishlistClick,
+    // },
     {
       name: "Cart",
       icon: <MdShoppingCart />,
@@ -109,17 +109,17 @@ export default function Header({ user }) {
     },
   ];
 
-  logedIn
-    ? topBtns.push({
-        name: "My Account",
-        icon: <FaUser size={9.5} />,
-        onClick: accountClick,
-      })
-    : topBtns.push({
-        name: "Login",
-        icon: <FaUser size={9.5} />,
-        onClick: loginClick,
-      });
+  // logedIn
+  //   ? topBtns.push({
+  //       name: "My Account",
+  //       icon: <FaUser size={9.5} />,
+  //       onClick: accountClick,
+  //     })
+  //   : topBtns.push({
+  //       name: "Login",
+  //       icon: <FaUser size={9.5} />,
+  //       onClick: loginClick,
+  //     });
 
   role == "admin" &&
     topBtns.push({
