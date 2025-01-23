@@ -21,7 +21,7 @@ model User {
   profilePicture String?
   isActive       Boolean     @default(true)
   role           String?
-  orders         Order[]     
+  orders         Order[]     // Relationship with Order
 }
 
 model Item {
@@ -43,16 +43,16 @@ model Item {
   availability    Boolean
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-  orders          Order[]   @relation(references: [id])
+  orders          Order[]   // Relationship with Order
 }
 
 model Order {
   id              Int      @id @default(autoincrement())
   date            DateTime @default(now())
-  items           Item[]   @relation(references: [id]) 
+  items           Item[]   // Relationship with Item
   total           Int
   status          String
-  seller          User     @relation(fields: [sellerId], references: [id]) 
+  seller          User     @relation(fields: [sellerId], references: [id]) // Relationship with User
   sellerId        Int
   buyersName      String
   buyersPhoneNo   String
