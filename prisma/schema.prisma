@@ -21,11 +21,11 @@ model User {
   profilePicture String?
   isActive       Boolean     @default(true)
   role           String?
-  orders         Order[]     // Orders received by the seller
+  items          Item[]      // Items listed by the seller
 }
 
 model Item {
-  id              Int         @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   name            String
   breed           String?
   category        String
@@ -33,7 +33,7 @@ model Item {
   price           Int
   description     String?
   discountedPrice Int
-  isDiscounted    Boolean      @default(false)
+  isDiscounted    Boolean    @default(false)
   weight          Float?
   height          Float?
   age             Float?
@@ -41,42 +41,8 @@ model Item {
   nature          String?
   specifications  String?
   availability    Boolean
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  orders          OrderItem[]  // Back-reference to OrderItem
-}
-
-model Order {
-  id             Int         @id @default(autoincrement())
-  date           DateTime    @default(now())
-  items          OrderItem[] // Back-reference to OrderItem
-  total          Int
-  status         OrderStatus @default(PENDING)
-  seller         User        @relation(fields: [sellerId], references: [id]) // Associated seller
-  sellerId       Int
-  buyersName     String
-  buyersPhoneNo  String
-  buyersAddress  String
-  buyersMessage  String
-}
-
-
-model OrderItem {
-  id          Int      @id @default(autoincrement())
-  orderId     Int
-  itemId      Int
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  @@unique([orderId, itemId]) // Prevent duplicate item-order pairs
-  @@index([orderId])
-  @@index([itemId])
-}
-
-enum OrderStatus {
-  PENDING
-  CONFIRMED
-  SHIPPED
-  DELIVERED
-  CANCELLED
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  sellerId        Int
+  seller          User       @relation(fields: [sellerId], references: [id]) // Relation to User
 }
