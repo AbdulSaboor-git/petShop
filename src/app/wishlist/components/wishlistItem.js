@@ -27,7 +27,7 @@ export default function WishListItem({ item }) {
     >
       <div className={`w-fit max-w-[76px] md:max-w-24 `} onClick={itemClick}>
         <img
-          src={item.images[0]}
+          src={item.img}
           alt={item.name}
           className={`rounded-lg cursor-pointer`}
         />
