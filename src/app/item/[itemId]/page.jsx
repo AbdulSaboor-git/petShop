@@ -38,7 +38,7 @@ export default function ItemPage({ params }) {
   if (!item) return <div>Item not found</div>;
 
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="flex flex-col items-center md:gap-10">
       <Header />
       <div className="flex flex-col gap-10 max-w-[1200px] w-full px-4">
         <div className="flex flex-col justify-start md:flex-row w-full gap-4">
@@ -55,8 +55,8 @@ export default function ItemPage({ params }) {
             </p>
             <p className="text-2xl md:text-3xl font-bold ">{item?.name}</p>
 
-            <div className="bg-gray-100 p-2 rounded-2xl md:bg-transparent md:p-0">
-              <ul className="text-base md:text-lg my-3 mx-1">
+            <div className="bg-gray-100 p-3 rounded-2xl md:bg-transparent md:p-0">
+              <ul className="text-base md:text-lg mx-1">
                 <p className="font-bold">
                   Breed:{" "}
                   <span className="font-normal text-slate-600 ">
@@ -109,13 +109,22 @@ export default function ItemPage({ params }) {
                 </p>
               </ul>
             </div>
-            <div className="flex flex-col gap-5">
-              <div className=" text-[32px] md:text-[36px] text-orange-600">
-                {!item?.isDiscounted && <p>Rs. {item?.price}</p>}
+            <div className="flex flex-col ">
+              <div className="my-2 mx-1 text-[28px] md:text-[34px] font-bold text-orange-600">
+                {!item?.isDiscounted && (
+                  <p>
+                    {" "}
+                    <span className="text-[22px] md:text-[28px]"> Rs. </span>
+                    {item?.price}
+                  </p>
+                )}
                 {item?.isDiscounted && (
-                  <div className="flex flex-col md:flex-row md:gap-4 md:items-center">
-                    <p>Rs. {item?.discountedPrice}</p>
-                    <p className="text-[16px] md:text-[20px]  line-through  decoration-red-500 text-gray-500">
+                  <div className="flex flex-row gap-4 items-end">
+                    <p>
+                      <span className="text-[22px] md:text-[28px]"> Rs. </span>{" "}
+                      {item?.discountedPrice}
+                    </p>
+                    <p className="mb-1.5 text-[16px] md:text-[20px]  line-through  decoration-red-500 text-gray-500">
                       Rs. {item?.price}
                     </p>
                   </div>

@@ -45,10 +45,13 @@ const ItemGallery = ({ item }) => {
 
         <Slider {...settings} ref={sliderRef}>
           {item.images?.map((img, index) => (
-            <div key={index} className="w-full">
+            <div
+              key={index}
+              className="w-full bg-white rounded-xl overflow-hidden focus:outline-none"
+            >
               <img
                 src={img}
-                className="w-full aspect-square h-auto object-cover transition-all duration-300"
+                className="w-full bg-white aspect-square h-auto object-cover transition-all duration-300"
                 alt={`Main product ${index}`}
                 onLoad={handleImageLoad}
                 onError={handleImageError}
@@ -59,17 +62,17 @@ const ItemGallery = ({ item }) => {
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex gap-0.5 overflow-x-auto hidden_scroll_bar items-center justify-start">
+      <div className="flex gap-0.5 overflow-x-auto hidden_scroll_bar items-center">
         {item.images?.map((img, index) => (
           <div
             key={index}
-            className="min-w-[90px] cursor-pointer"
+            className="min-w-[90px] cursor-pointer "
             onClick={() => handleThumbnailClick(index)} // Handle click on thumbnail
           >
             <img
               draggable="false"
               src={img}
-              className="w-20 h-20 object-cover"
+              className="w-20 h-20 object-cover rounded-xl"
               alt={`Thumbnail ${index}`}
               onError={handleImageError}
             />
