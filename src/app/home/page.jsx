@@ -200,7 +200,7 @@ export default function HomePage() {
                       <button
                         className="bg-orange-500 flex gap-2 text-base items-center justify-center w-full sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full"
                         onClick={() => {
-                          router.push(`/product/${item.id}`);
+                          router.push(`/item/${item.id}`);
                         }}
                       >
                         View <MdArrowForward size={20} />
