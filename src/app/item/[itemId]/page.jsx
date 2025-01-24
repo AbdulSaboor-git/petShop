@@ -57,46 +57,62 @@ export default function ItemPage({ params }) {
 
             <div className="bg-gray-100 p-3 rounded-2xl md:bg-transparent md:p-0">
               <ul className="text-base md:text-lg mx-1">
-                <p className="font-bold">
-                  Breed:{" "}
-                  <span className="font-normal text-slate-600 ">
-                    {item.breed}
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Height:{" "}
-                  <span className="font-normal text-slate-600">
-                    {item.height} cm
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Weight:{" "}
-                  <span className="font-normal text-slate-600">
-                    {item.weight} kg
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Age:{" "}
-                  <span className="font-normal text-slate-600">
-                    {item.age} years
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Sex:{" "}
-                  <span className="font-normal text-slate-600">{item.sex}</span>
-                </p>
-                <p className="font-bold">
-                  Specifications:{" "}
-                  <span className="font-normal text-slate-600">
-                    {item.specifications}
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Nature:{" "}
-                  <span className="font-normal text-slate-600">
-                    {item.nature}
-                  </span>
-                </p>
+                {item.breed && (
+                  <p className="font-bold">
+                    Breed:{" "}
+                    <span className="font-normal text-slate-600 ">
+                      {item.breed}
+                    </span>
+                  </p>
+                )}
+                {item.height && (
+                  <p className="font-bold">
+                    Height:{" "}
+                    <span className="font-normal text-slate-600">
+                      {item.height} cm
+                    </span>
+                  </p>
+                )}
+                {item.weight && (
+                  <p className="font-bold">
+                    Weight:{" "}
+                    <span className="font-normal text-slate-600">
+                      {item.weight} g
+                    </span>
+                  </p>
+                )}
+                {item.age && (
+                  <p className="font-bold">
+                    Age:{" "}
+                    <span className="font-normal text-slate-600">
+                      {item.age} years
+                    </span>
+                  </p>
+                )}
+                {item.sex && (
+                  <p className="font-bold">
+                    Gender:{" "}
+                    <span className="font-normal text-slate-600">
+                      {item.sex}
+                    </span>
+                  </p>
+                )}
+                {item.specifications && (
+                  <p className="font-bold">
+                    Specifications:{" "}
+                    <span className="font-normal text-slate-600">
+                      {item.specifications}
+                    </span>
+                  </p>
+                )}
+                {item.nature && (
+                  <p className="font-bold">
+                    Nature:{" "}
+                    <span className="font-normal text-slate-600">
+                      {item.nature}
+                    </span>
+                  </p>
+                )}
                 <p className="font-bold">
                   Availability:{" "}
                   <span
