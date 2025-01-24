@@ -62,11 +62,11 @@ const ItemGallery = ({ item }) => {
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex gap-0.5 overflow-x-auto hidden_scroll_bar items-center">
+      <div className="flex gap-0.5 rounded-xl overflow-x-auto hidden_scroll_bar items-center">
         {item.images?.map((img, index) => (
           <div
             key={index}
-            className="min-w-[90px] cursor-pointer "
+            className="min-w-[90px] cursor-pointer"
             onClick={() => handleThumbnailClick(index)} // Handle click on thumbnail
           >
             <img
