@@ -46,7 +46,7 @@ const ItemGallery = ({ item }) => {
         <Slider
           {...settings}
           ref={sliderRef}
-          className="rounded-xl overflow-hidden bg-red-200 aspect-square "
+          className="rounded-xl overflow-hidden aspect-square "
         >
           {item.images?.map((img, index) => (
             <div

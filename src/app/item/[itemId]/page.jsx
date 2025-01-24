@@ -137,7 +137,7 @@ export default function ItemPage({ params }) {
                 </button>
                 <button className="flex  items-center justify-center gap-2 border border-orange-600 text-orange-600 py-2 px-4 rounded-full w-full text-base md:text-lg hover:bg-orange-500 hover:border-orange-500 hover:text-white">
                   Add to Favourites
-                  <MdFavoriteBorder />
+                  <MdFavoriteBorder size={16} />
                 </button>
               </div>
             </div>

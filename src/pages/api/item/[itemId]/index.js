@@ -35,7 +35,6 @@ async function handleGet(req, res, itemId) {
     if (!item) {
       return res.status(404).json({ message: "Itejm not found" });
     }
-    res.setHeader("Cache-Control", "no-store, max-age=0");
     return res.status(200).json(item);
   } catch (error) {
     console.error("Error fetching item:", error);

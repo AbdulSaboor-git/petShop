@@ -19,7 +19,7 @@ export default function ProductCardAlt({ item }) {
       {/* Product Image */}
       <div className="relative w-full pt-[100%]">
         <img
-          src={item.img}
+          src={item.images[0]}
           alt={name}
           className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"
         />
