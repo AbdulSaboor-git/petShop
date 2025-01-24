@@ -33,7 +33,7 @@ const ItemGallery = ({ item }) => {
   };
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-3 w-full">
       {/* Main Image Slider */}
       <div className="relative">
         {/* Show loading spinner or placeholder until image loads */}
@@ -43,7 +43,11 @@ const ItemGallery = ({ item }) => {
           </div>
         )}
 
-        <Slider {...settings} ref={sliderRef}>
+        <Slider
+          {...settings}
+          ref={sliderRef}
+          className="rounded-xl overflow-hidden bg-red-200 aspect-square "
+        >
           {item.images?.map((img, index) => (
             <div
               key={index}
@@ -62,7 +66,7 @@ const ItemGallery = ({ item }) => {
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex gap-0.5 rounded-xl overflow-x-auto hidden_scroll_bar items-center">
+      <div className="flex gap-0.5 overflow-x-auto hidden_scroll_bar items-center">
         {item.images?.map((img, index) => (
           <div
             key={index}
