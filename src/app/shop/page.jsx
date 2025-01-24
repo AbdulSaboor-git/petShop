@@ -52,7 +52,7 @@ export default function Shop() {
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header />
-      <FilterCard />
+      {/* <FilterCard /> */}
 
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-4">
         <div className="flex gap-6">
