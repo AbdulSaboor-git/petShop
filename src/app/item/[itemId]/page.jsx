@@ -13,6 +13,8 @@ export default function ItemPage({ params }) {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const defaultPic =
+    "https://api.openverse.org/v1/images/d2f28685-ee4d-4753-83b5-627e5bdb7a39/thumb/";
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -49,10 +51,12 @@ export default function ItemPage({ params }) {
 
           {/* Product Details Section */}
           <div className="flex flex-col h-auto w-full md:w-2/3 md:max-w-1/3 md:px-4 gap-1 text-gray-700">
-            <p className="text-green-600 text-sm md:text-base font-semibold mt-2 mx-0.5">
-              {Math.round(100 - (item?.discountedPrice / item?.price) * 100)}%
-              Discount
-            </p>
+            {item.isDiscounted && (
+              <p className="text-green-600 text-sm md:text-base font-semibold mt-2 mx-0.5">
+                {Math.round(100 - (item?.discountedPrice / item?.price) * 100)}%
+                Discount
+              </p>
+            )}
             <p className="text-2xl md:text-3xl font-bold ">{item?.name}</p>
 
             <div className="bg-gray-100 p-3 rounded-2xl md:bg-transparent md:p-0">
@@ -162,9 +166,13 @@ export default function ItemPage({ params }) {
         <div>{item.description}</div>
         <div className="w-full flex gap-3 items-center justify-start bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl">
           <img
-            src={item.seller.profilePicture}
+            src={
+              item.seller.profilePicture
+                ? item.seller.profilePicture
+                : defaultPic
+            }
             alt="seller img"
-            className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square"
+            className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
           />
           <div className="font-bold text-sm md:text-base ">
             {item.seller.firstName} {item.seller.lastName}

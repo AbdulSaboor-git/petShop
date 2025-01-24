@@ -4,13 +4,13 @@ import Slider from "react-slick";
 const ItemGallery = ({ item }) => {
   const [loading, setLoading] = useState(false);
   const sliderRef = useRef(null); // Ref to control the slick slider
-
+  const errorPic = "https://i.sstatic.net/5ykYD.png";
   const handleImageLoad = () => {
     setLoading(false);
   };
 
   const handleImageError = (e) => {
-    e.target.src = "/path/to/placeholder-image.jpg"; // Fallback to placeholder image
+    e.target.src = errorPic; // Fallback to placeholder image
   };
 
   const handleThumbnailClick = (index) => {
