@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import OrderObj from "./components/ordersObj";
-import WishListItem from "../wishlist/components/wishlistItem";
+import WishListItem from "../wishlist1414/components/wishlistItem";
 import { FaEdit, FaHeart } from "react-icons/fa";
 import { MdLocationOn, MdMail, MdMap, MdPhone } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -246,7 +246,7 @@ export default function Profile() {
   ];
 
   function wishlistClick() {
-    router.push("/wishlist");
+    // router.push("/wishlist");
   }
 
   return (

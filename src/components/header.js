@@ -63,8 +63,8 @@ export default function Header({ user }) {
   function wishlistClick() {
     router.push("/wishlist");
   }
-  function cartClick() {
-    router.push("/cart");
+  function favClick() {
+    router.push("/favourites");
   }
   function loginClick() {}
   function adminDBClick() {}
@@ -105,7 +105,7 @@ export default function Header({ user }) {
     {
       name: "Favourites",
       icon: <MdFavorite />,
-      onClick: cartClick,
+      onClick: favClick,
     },
   ];
 

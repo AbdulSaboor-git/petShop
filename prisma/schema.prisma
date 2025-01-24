@@ -8,7 +8,7 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model User {
+model user {
   id             Int         @id @default(autoincrement())
   email          String      @unique
   password       String
@@ -21,10 +21,10 @@ model User {
   profilePicture String?
   isActive       Boolean     @default(true)
   role           String?
-  items          Item[]      // Items listed by the seller
+  items          item[]      // Items listed by the seller
 }
 
-model Item {
+model item {
   id              Int       @id @default(autoincrement())
   name            String
   breed           String?
@@ -44,5 +44,5 @@ model Item {
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   sellerId        Int
-  seller          User       @relation(fields: [sellerId], references: [id]) // Relation to User
+  seller          user       @relation(fields: [sellerId], references: [id]) // Relation to User
 }

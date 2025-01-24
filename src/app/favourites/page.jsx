@@ -3,15 +3,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { FaTrashAlt } from "react-icons/fa";
-import CartItem from "./components/cart-item";
+import FavItem from "./components/fav-item";
 
-export default function Cart() {
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [selectedAll, setSelectedAll] = useState(false);
+export default function Favourites() {
+  const [selectedItem, setSelectedItem] = useState(null);
   const [checkout, setCheckout] = useState(false);
   const orderConfirmationRef = useRef(null);
 
-  const cart_items = [
+  const fav_items = [
     {
       id: 18,
       name: "Orpington Chicken",
@@ -82,22 +81,10 @@ export default function Cart() {
     },
   ];
 
-  const new_cart_items = cart_items.filter((item) => item.availability);
-
   const handleSelectItem = (itemId) => {
     setCheckout(false);
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.includes(itemId)
-        ? prevSelectedItems.filter((id) => id !== itemId)
-        : [...prevSelectedItems, itemId]
-    );
+    setSelectedItem((prev) => (prev === itemId ? null : itemId));
   };
-
-  useEffect(() => {
-    selectedItems.length === new_cart_items.length
-      ? setSelectedAll(true)
-      : setSelectedAll(false);
-  }, [new_cart_items, selectedItems]);
 
   const handleCheckout = () => {
     setCheckout(true);
@@ -113,26 +100,16 @@ export default function Cart() {
     }, 100);
   };
 
-  const handleDeleteItem = (itemId) => {};
+  const handleRemoveFav = (itemId) => {};
   const handlePlaceOrder = () => {};
-
-  const handleSelectAll = () => {
-    selectedItems.length != new_cart_items.length && setSelectedItems([]);
-    new_cart_items.map((item) => handleSelectItem(item.id));
-  };
-
-  const totalAmount = selectedItems.reduce((total, itemId) => {
-    const item = new_cart_items.find((item) => item.id === itemId);
-    return total + item.price;
-  }, 0);
 
   return (
     <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
       <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
         <div className="flex justify-between items-center px-1">
-          <h1 className="font-bold ">My Cart ({cart_items.length})</h1>
-          <button
+          <h1 className="font-bold ">My Favourites ({fav_items.length})</h1>
+          {/* <button
             className={`items-center text-sm md:text-base text-gray-500 cursor-default  ${
               selectedItems.length &&
               "text-red-500 cursor-pointer hover:text-red-600"
@@ -140,26 +117,26 @@ export default function Cart() {
             onClick={() => handleDeleteItem()}
           >
             <FaTrashAlt />{" "}
-          </button>
+          </button> */}
         </div>
         <div className="flex flex-col gap-2">
-          {cart_items.map((item) => (
-            <CartItem
+          {fav_items.map((item) => (
+            <FavItem
               key={item.id}
               item={item}
-              selectedItems={selectedItems}
               handleSelectItem={handleSelectItem}
-              handleDeleteItem={handleDeleteItem}
+              handleRemoveFav={handleRemoveFav}
+              isSelected={selectedItem === item.id}
             />
           ))}
-          {cart_items.length === 0 && (
+          {fav_items.length === 0 && (
             <div className="text-xs md:text-sm  bg-white text-gray-400 text-center border-2 p-2">
-              Cart is empty
+              Favourites List is empty
             </div>
           )}
         </div>
         <div className="flex flex-col gap-2 border-t border-gray-300 mt-6 p-5">
-          <div className="flex gap-2 w-full justify-between items-center">
+          {/* <div className="flex gap-2 w-full justify-between items-center">
             <div className="flex gap-2 items-center text-[13px] md:text-sm">
               <input
                 className="accent-orange-600 mb-0.5 size-3 md:size-4"
@@ -171,20 +148,20 @@ export default function Cart() {
             </div>
             <div className="flex flex-col items-center gap-2">
               <div className=" text-sm md:text-base ">
-                Subtotal:{" "}
+                Subtotal: {" "}
                 <span className="font-bold text-base md:text-lg text-orange-500">
                   Rs. {totalAmount}
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
           <button
-            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded hover:bg-orange-600 "
+            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded hover:bg-orange-600 disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500
+            "
             onClick={handleCheckout}
-            disabled={selectedItems.length === 0}
+            disabled={selectedItem === null}
           >
-            Checkout{" "}
-            {selectedItems.length != 0 && "(" + selectedItems.length + ")"}
+            Inquire from Seller
           </button>
         </div>
       </div>
@@ -204,11 +181,11 @@ export default function Cart() {
         >
           <h2 className="text-base md:text-lg font-bold">Order Confirmation</h2>
 
-          <div className="flex flex-col text-start font-semibold gap-1 py-2">
+          {/* <div className="flex flex-col text-start font-semibold gap-1 py-2">
             <h3 className="text-sm md:text-base font-bold px-2">Items:</h3>
             <div className="flex flex-col">
               {selectedItems.map((itemId) => {
-                const item = cart_items.find((item) => item.id === itemId);
+                const item = fav_items.find((item) => item.id === itemId);
                 return (
                   <div
                     key={item.id}
@@ -240,7 +217,8 @@ export default function Cart() {
               Please ensure that all the information provided is accurate. Once
               the order is placed, it cannot be modified or canceled.
             </p>
-          </div>
+          </div> */}
+          {selectedItem}
           <button
             className="bg-orange-500 text-white w-fit self-center px-4 py-1.5 rounded hover:bg-orange-600 mt-4"
             onClick={handlePlaceOrder}
