@@ -6,6 +6,7 @@ export default function ProductCardAlt({ item }) {
   const name = item.name.toUpperCase();
   const router = useRouter();
   const [hover, setHover] = useState(false);
+  const defaultPic = "https://i.sstatic.net/5ykYD.png";
 
   function prodClick() {
     router.push(`/item/${item.id}`);
@@ -19,7 +20,7 @@ export default function ProductCardAlt({ item }) {
       {/* Product Image */}
       <div className="relative w-full pt-[100%]">
         <img
-          src={item.images[0]}
+          src={item.images[0] || defaultPic}
           alt={name}
           draggable="false"
           className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"

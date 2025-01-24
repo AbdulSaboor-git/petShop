@@ -7,9 +7,10 @@ export default function ProductCard({ item }) {
   const name = item.name.toUpperCase();
   const router = useRouter();
   const [hover, setHover] = useState(false);
+  const defaultPic = "https://i.sstatic.net/5ykYD.png";
 
   function prodClick() {
-    router.push(`/product/${item.id}`);
+    router.push(`/item/${item.id}`);
   }
 
   return (
@@ -19,7 +20,7 @@ export default function ProductCard({ item }) {
     >
       <div className="relative w-full pt-[100%] ">
         <img
-          src={item.img}
+          src={item.images[0] || defaultPic}
           alt={name}
           className="absolute top-0 left-0 w-full h-full object-cover bg-white"
         />

@@ -14,7 +14,7 @@ export default function Shop() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch(`/api/items`); // Update API path if necessary
+        const response = await fetch(`/api/shopItems`); // Update API path if necessary
         if (!response.ok) {
           throw new Error("Failed to fetch items.");
         }
