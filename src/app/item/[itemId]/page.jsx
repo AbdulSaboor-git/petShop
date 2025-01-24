@@ -57,7 +57,7 @@ export default function ItemPage({ params }) {
                 Discount
               </p>
             )}
-            <p className="text-2xl md:text-3xl font-bold ">{item?.name}</p>
+            <p className="text-2xl mx-1 md:text-3xl font-bold ">{item?.name}</p>
 
             <div className="bg-gray-100 p-3 rounded-2xl md:bg-transparent md:p-0">
               <ul className="text-base md:text-lg mx-1">
