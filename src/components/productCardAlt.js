@@ -14,7 +14,7 @@ export default function ProductCardAlt({ item }) {
   return (
     <div
       onClick={prodClick}
-      className="mb-1 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-transform duration-300 ease-in-out relative bg-gray-50 rounded-xl"
+      className="mb-1 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-transform duration-300 ease-in-out relative rounded-xl"
     >
       {/* Product Image */}
       <div className="relative w-full pt-[100%]">
@@ -52,13 +52,13 @@ export default function ProductCardAlt({ item }) {
         <div className="flex justify-between items-center">
           <div className="flex gap-2 items-baseline">
             <div className="flex gap-1 items-baseline -mt-1">
-              <div className="text-sm font-semibold">Rs. </div>
-              <div className="font-extrabold text-lg font-mono ">
+              <div className="text-xs md:text-sm font-semibold">Rs. </div>
+              <div className="font-extrabold text-base md:text-lg  font-mono ">
                 {item.isDiscounted ? item.discountedPrice : item.price}
               </div>
             </div>
             {item.isDiscounted && (
-              <div className="text-[12px] text-gray-500 line-through">
+              <div className="text-[12px] text-gray-500 line-through ">
                 Rs. {item.price}
               </div>
             )}

@@ -96,7 +96,7 @@ export default function Shop() {
             </div>
           </div>
           {/* Items Section */}
-          <div className="grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2">
+          <div className="grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
             {items.map((item, i) => (
               <ProductCardAlt key={i} item={item} />
             ))}
