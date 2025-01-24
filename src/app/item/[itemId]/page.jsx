@@ -172,6 +172,7 @@ export default function ItemPage({ params }) {
                 : defaultPic
             }
             alt="seller img"
+            draggable="false"
             className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
           />
           <div className="font-bold text-sm md:text-base ">

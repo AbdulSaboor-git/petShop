@@ -14,13 +14,14 @@ export default function ProductCardAlt({ item }) {
   return (
     <div
       onClick={prodClick}
-      className="mb-2.5 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-transform duration-300 ease-in-out relative"
+      className="mb-1 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-transform duration-300 ease-in-out relative bg-gray-50 rounded-xl"
     >
       {/* Product Image */}
       <div className="relative w-full pt-[100%]">
         <img
           src={item.images[0]}
           alt={name}
+          draggable="false"
           className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"
         />
       </div>
