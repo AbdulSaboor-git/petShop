@@ -8,7 +8,7 @@ export default function ProductCardAlt({ item }) {
   const [hover, setHover] = useState(false);
 
   function prodClick() {
-    router.push(`/product/${item.id}`);
+    router.push(`/item/${item.id}`);
   }
 
   return (
