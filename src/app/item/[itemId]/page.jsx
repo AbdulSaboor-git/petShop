@@ -14,7 +14,7 @@ export default function ItemPage({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const defaultPic =
-    "https://api.openverse.org/v1/images/d2f28685-ee4d-4753-83b5-627e5bdb7a39/thumb/";
+    "https://lh3.googleusercontent.com/pw/AP1GczM2cnSQPHG8oKKskeSFKCFjs3z_NG31Tt4bQPqb4Fp-Qdteh0m-84BjSvDgQTkscceDPu1eD1Rs2OxUSd0InRuqnowixs1x8kqSVIcu_7BbkBi4XFK13ZqIeq56OxPw0bzq0hoUgYtTHteuYB1cTI-K=w883-h883-s-no-gm";
 
   useEffect(() => {
     const fetchItemData = async () => {
