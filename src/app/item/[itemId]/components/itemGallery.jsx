@@ -33,7 +33,7 @@ const ItemGallery = ({ item }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="flex flex-col gap-2 md:gap-3 w-full">
       {/* Main Image Slider */}
       <div className="relative">
         {/* Show loading spinner or placeholder until image loads */}
@@ -66,17 +66,17 @@ const ItemGallery = ({ item }) => {
       </div>
 
       {/* Thumbnail Images */}
-      <div className="flex gap-0.5 overflow-x-auto hidden_scroll_bar items-center">
+      <div className="flex gap-2 md:gap-3 overflow-x-auto hidden_scroll_bar items-center">
         {item.images?.map((img, index) => (
           <div
             key={index}
-            className="min-w-[90px] cursor-pointer"
+            className="min-w-[64px] cursor-pointer"
             onClick={() => handleThumbnailClick(index)} // Handle click on thumbnail
           >
             <img
               draggable="false"
               src={img}
-              className="w-20 h-20 object-cover rounded-xl"
+              className="w-16 md:w-[20] object-cover rounded-xl aspect-square"
               alt={`Thumbnail ${index}`}
               onError={handleImageError}
             />

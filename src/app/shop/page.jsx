@@ -45,63 +45,65 @@ export default function Shop() {
   const categories = ["All", "Hens", "Feed", "Utensils", "Eggs"];
   const breeds = ["Shamo", "Aseel", "Misri", "Cross Breeds"];
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-  if (items.length === 0) return <div>No items available.</div>;
-
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header />
       {/* <FilterCard /> */}
 
-      <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-4">
-        <div className="flex gap-6">
-          {/* Filters Section */}
-          <div className="w-[27%] pr-6 border-r border-[#00000060] hidden lg:block">
-            <div className="flex flex-col gap-7">
-              {/* Categories */}
-              <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
-                <h1 className="text-lg font-bold text-center p-2 text-orange-950">
-                  Filter by Categories
-                </h1>
-                <div className="flex flex-col gap-2">
-                  {categories.map((categ, i) => (
-                    <button
-                      key={i}
-                      onClick={() => filterByCategory(categ)}
-                      className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5"
-                    >
-                      {categ}
-                    </button>
-                  ))}
+      <div className="flex flex-col items-center max-w-[1400px] w-full px-4">
+        {loading ? (
+          <div>loading...</div>
+        ) : error ? (
+          <div>{error}</div>
+        ) : (
+          <div className="flex gap-6">
+            {/* Filters Section */}
+            <div className="w-[27%] pr-6 border-r border-[#00000060] hidden lg:block">
+              <div className="flex flex-col gap-7">
+                {/* Categories */}
+                <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
+                  <h1 className="text-lg font-bold text-center p-2 text-orange-950">
+                    Filter by Categories
+                  </h1>
+                  <div className="flex flex-col gap-2">
+                    {categories.map((categ, i) => (
+                      <button
+                        key={i}
+                        onClick={() => filterByCategory(categ)}
+                        className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5"
+                      >
+                        {categ}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              {/* Breeds */}
-              <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
-                <h1 className="text-lg font-bold text-center p-2 text-orange-950">
-                  Filter by Breed
-                </h1>
-                <div className="flex flex-col gap-2">
-                  {breeds.map((b, i) => (
-                    <button
-                      key={i}
-                      onClick={() => filterByBreed(b)}
-                      className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5"
-                    >
-                      {b}
-                    </button>
-                  ))}
+                {/* Breeds */}
+                <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
+                  <h1 className="text-lg font-bold text-center p-2 text-orange-950">
+                    Filter by Breed
+                  </h1>
+                  <div className="flex flex-col gap-2">
+                    {breeds.map((b, i) => (
+                      <button
+                        key={i}
+                        onClick={() => filterByBreed(b)}
+                        className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5"
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
+            {/* Items Section */}
+            <div className="grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
+              {items.map((item, i) => (
+                <ProductCardAlt key={i} item={item} />
+              ))}
+            </div>
           </div>
-          {/* Items Section */}
-          <div className="grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
-            {items.map((item, i) => (
-              <ProductCardAlt key={i} item={item} />
-            ))}
-          </div>
-        </div>
+        )}
       </div>
       <Footer />
     </div>
