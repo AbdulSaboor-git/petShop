@@ -65,6 +65,11 @@ export default function ItemPage({ params }) {
                   <p className="text-base md:text-xl font-bold ">
                     {item?.name}
                   </p>
+                  {item.breed && (
+                    <p className="text-slate-600 text-sm md:text-base">
+                      {item.breed}
+                    </p>
+                  )}
                   <div className=" text-lg md:text-2xl font-bold text-orange-600">
                     {!item?.isDiscounted && (
                       <p>
@@ -88,14 +93,6 @@ export default function ItemPage({ params }) {
                 </div>
                 <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
                   <ul className="text-sm md:text-base ">
-                    {item.breed && (
-                      <p className="font-bold">
-                        Breed:{" "}
-                        <span className="font-normal text-slate-600 ">
-                          {item.breed}
-                        </span>
-                      </p>
-                    )}
                     {item.height && (
                       <p className="font-bold">
                         Height:{" "}
