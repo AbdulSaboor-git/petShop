@@ -50,15 +50,37 @@ export default function ItemPage({ params }) {
           </div>
 
           {/* Product Details Section */}
-          <div className="flex flex-col h-auto w-full md:w-2/3 md:max-w-1/3 md:px-4 gap-1 text-gray-700">
+          <div className="flex flex-col h-auto  md:w-2/3 md:max-w-1/3 md:px-4 gap-2 text-gray-700">
             {item.isDiscounted && (
-              <p className="text-green-600 text-sm md:text-base font-semibold mt-2 mx-0.5">
+              <p className="text-green-600 text-xs md:text-sm font-semibold mx-1">
                 {Math.round(100 - (item?.discountedPrice / item?.price) * 100)}%
                 Discount
               </p>
             )}
-            <p className="text-2xl mx-1 md:text-3xl font-bold ">{item?.name}</p>
-
+            <div className="bg-gray-100 p-3 rounded-2xl md:bg-transparent md:p-0">
+              <p className="text-xl mx-1 md:text-2xl font-bold ">
+                {item?.name}
+              </p>
+              <div className="mx-1 text-xl md:text-2xl font-bold text-orange-600">
+                {!item?.isDiscounted && (
+                  <p>
+                    {" "}
+                    <span className=""> Rs. </span>
+                    {item?.price}
+                  </p>
+                )}
+                {item?.isDiscounted && (
+                  <div className="flex flex-row gap-4 items-baseline">
+                    <p>
+                      <span className=""> Rs. </span> {item?.discountedPrice}
+                    </p>
+                    <p className="font-normal text-sm md:text-base line-through  decoration-gray-400 text-gray-500">
+                      Rs. {item?.price}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="bg-gray-100 p-3 rounded-2xl md:bg-transparent md:p-0">
               <ul className="text-base md:text-lg mx-1">
                 {item.breed && (
@@ -129,37 +151,14 @@ export default function ItemPage({ params }) {
                 </p>
               </ul>
             </div>
-            <div className="flex flex-col ">
-              <div className="my-2 mx-1 text-[28px] md:text-[34px] font-bold text-orange-600">
-                {!item?.isDiscounted && (
-                  <p>
-                    {" "}
-                    <span className="text-[22px] md:text-[28px]"> Rs. </span>
-                    {item?.price}
-                  </p>
-                )}
-                {item?.isDiscounted && (
-                  <div className="flex flex-row gap-4 items-end">
-                    <p>
-                      <span className="text-[22px] md:text-[28px]"> Rs. </span>{" "}
-                      {item?.discountedPrice}
-                    </p>
-                    <p className="mb-1.5 text-[16px] md:text-[20px]  line-through  decoration-red-500 text-gray-500">
-                      Rs. {item?.price}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col md:flex-row gap-2">
-                <button className="bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-full w-full text-base md:text-lg">
-                  Conatct Seller
-                </button>
-                <button className="flex  items-center justify-center gap-2 border border-orange-600 text-orange-600 py-2 px-4 rounded-full w-full text-base md:text-lg hover:bg-orange-500 hover:border-orange-500 hover:text-white">
-                  Add to Favourites
-                  <MdFavoriteBorder size={16} />
-                </button>
-              </div>
+            <div className="fixed bottom-0 left-0 p-2 bg-white w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
+              <button className="bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full">
+                Conatct Seller
+              </button>
+              <button className="flex items-center justify-center gap-1 border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full  hover:bg-orange-500 hover:border-orange-500 hover:text-white">
+                Add to
+                <MdFavoriteBorder className="text-[16px] md:text-[18px] mt-0.5" />
+              </button>
             </div>
           </div>
         </div>
