@@ -44,7 +44,7 @@ export default function ItemPage({ params }) {
         ) : error ? (
           <div>{error}</div>
         ) : (
-          <div>
+          <div className="flex flex-col gap-10">
             <div className="flex flex-col justify-start md:flex-row w-full gap-4">
               {/* Image Section */}
               <div className="flex flex-col gap-2 md:gap-3 w-full md:w-2/3 md:max-w-[500px]">
@@ -156,7 +156,7 @@ export default function ItemPage({ params }) {
                     </p>
                   </ul>
                 </div>
-                <div className="fixed bottom-0 left-0 p-2 bg-white w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
+                <div className="fixed bottom-0 left-0 p-3 px-4 md:p-0 bg-white w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
                   <button className="bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full">
                     Conatct Seller
                   </button>
