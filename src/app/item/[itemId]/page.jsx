@@ -67,7 +67,7 @@ export default function ItemPage({ params }) {
                   </p>
                   {item.breed && (
                     <p className="text-slate-600 text-sm md:text-base">
-                      {item.breed}
+                      {item.breed.name}
                     </p>
                   )}
                   <div className=" text-lg md:text-2xl font-bold text-orange-600">

@@ -16,6 +16,7 @@ const handleGet = async (req, res) => {
   try {
     const categories = await prisma.category.findMany();
     const breeds = await prisma.breed.findMany();
+
     return res.status(200).json({ categories, breeds });
   } catch (error) {
     console.error(error);

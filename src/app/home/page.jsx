@@ -27,39 +27,26 @@ export default function HomePage() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        console.log("data");
         const response = await fetch(`/api/homeItems`); // Update API path if necessary
-        console.log("data");
-        if (!response.ok) {
-          throw new Error("Failed to fetch items.");
-        }
-        console.log("dq");
-        const items = await response.json();
-        setItems(items);
-        setAllItems(items); // Keep a backup of all items for filtering
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchCategories_Breeds = async () => {
-      try {
-        const response = await fetch(`/api/categories_breeds`); // Update API path if necessary
-        if (!response.ok) {
+        const response2 = await fetch(`/api/categories_breeds`); // Update API path if necessary
+        if (!response.ok || !response2.ok) {
           throw new Error("Failed to fetch data.");
         }
         const data = await response.json();
-        setCategories(data.categories);
-        setBreeds(data.breeds); // Keep a backup of all items for filtering
+        const data2 = await response2.json();
+
+        setItems(data.items);
+        setAllItems(data.items);
+        setCategories(data2.categories);
+        setBreeds(data2.breeds);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchItems();
-    fetchCategories_Breeds();
   }, []);
 
   useEffect(() => {
@@ -179,28 +166,38 @@ export default function HomePage() {
                             {item.name}
                           </h2>
                           <p className="text-base md:text-lg pt-4 mx-1">
-                            <p className="font-bold">
-                              Breed:{" "}
-                              <span className="font-normal">{item.breed}</span>
-                            </p>
-                            <p className="font-bold">
-                              Height:{" "}
-                              <span className="font-normal">
-                                {item.height} cm
-                              </span>
-                            </p>
-                            <p className="font-bold">
-                              Weight:{" "}
-                              <span className="font-normal">
-                                {item.weight} kg
-                              </span>
-                            </p>
-                            <p className="font-bold">
-                              Age:{" "}
-                              <span className="font-normal">
-                                {item.age} years
-                              </span>
-                            </p>
+                            {item.breed && (
+                              <p className="font-bold">
+                                Breed:{" "}
+                                <span className="font-normal">
+                                  {item.breed.name}
+                                </span>
+                              </p>
+                            )}
+                            {item.height && (
+                              <p className="font-bold">
+                                Height:{" "}
+                                <span className="font-normal">
+                                  {item.height} cm
+                                </span>
+                              </p>
+                            )}
+                            {item.weight && (
+                              <p className="font-bold">
+                                Weight:{" "}
+                                <span className="font-normal">
+                                  {item.weight} kg
+                                </span>
+                              </p>
+                            )}
+                            {item.age && (
+                              <p className="font-bold">
+                                Age:{" "}
+                                <span className="font-normal">
+                                  {item.age} years
+                                </span>
+                              </p>
+                            )}
                           </p>
                         </div>
                         <div className="flex flex-col w-full sm:flex-row  gap-2 sm:gap-3.5 items-center justify-start">

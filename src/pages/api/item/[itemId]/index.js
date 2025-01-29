@@ -29,11 +29,11 @@ async function handleGet(req, res, itemId) {
 
     const item = await prisma.item.findUnique({
       where: { id },
-      include: { seller: true }, // Include related seller data
+      include: { seller: true, category: true, breed: true },
     });
 
     if (!item) {
-      return res.status(404).json({ message: "Itejm not found" });
+      return res.status(404).json({ message: "Item not found" });
     }
     return res.status(200).json(item);
   } catch (error) {

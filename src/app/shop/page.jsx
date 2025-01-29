@@ -10,54 +10,44 @@ export default function Shop() {
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
   const [allItems, setAllItems] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch(`/api/shopItems`); // Update API path if necessary
-        if (!response.ok) {
-          throw new Error("Failed to fetch items.");
-        }
-        const items = await response.json();
-        setItems(items);
-        setAllItems(items); // Keep a backup of all items for filtering
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const fetchCategories_Breeds = async () => {
-      try {
-        const response = await fetch(`/api/categories_breeds`); // Update API path if necessary
-        if (!response.ok) {
+        const response = await fetch(`/api/homeItems`); // Update API path if necessary
+        const response2 = await fetch(`/api/categories_breeds`); // Update API path if necessary
+        if (!response.ok || !response2.ok) {
           throw new Error("Failed to fetch data.");
         }
         const data = await response.json();
-        setCategories(data.categories);
-        setBreeds(data.breeds); // Keep a backup of all items for filtering
+        const data2 = await response2.json();
+
+        setItems(data.items);
+        setAllItems(data.items);
+        setCategories(data2.categories);
+        setBreeds(data2.breeds);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchItems();
-    fetchCategories_Breeds();
   }, []);
 
   const filterByCategory = (category) => {
     if (category === "All") {
       setItems(allItems);
     } else {
-      setItems(allItems.filter((item) => item.category === category));
+      setItems(allItems.filter((item) => item.category.name === category));
     }
   };
 
   const filterByBreed = (breed) => {
-    setItems(allItems.filter((item) => item.breed === breed));
+    setItems(allItems.filter((item) => item.breed.name === breed));
   };
 
   return (
@@ -84,10 +74,10 @@ export default function Shop() {
                     {categories.map((categ, i) => (
                       <button
                         key={i}
-                        onClick={() => filterByCategory(categ)}
+                        onClick={() => filterByCategory(categ.name)}
                         className="rounded-full w-full border border-[#9e6e3b] bg-[#9e6e3b] text-white p-1.5"
                       >
-                        {categ}
+                        {categ.name}
                       </button>
                     ))}
                   </div>
@@ -98,13 +88,13 @@ export default function Shop() {
                     Filter by Breed
                   </h1>
                   <div className="flex flex-col gap-2">
-                    {breeds.map((b, i) => (
+                    {breeds.map((breed, i) => (
                       <button
                         key={i}
-                        onClick={() => filterByBreed(b)}
+                        onClick={() => filterByBreed(breed.name)}
                         className="rounded-full w-full border border-[#9e6e3b] bg-[#9e6e3b] text-white p-1.5"
                       >
-                        {b}
+                        {breed.name}
                       </button>
                     ))}
                   </div>

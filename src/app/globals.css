@@ -45,7 +45,6 @@ body {
     var(--background-prim) 90%
   );
   background-attachment: fixed;
-  user-select: none;
   letter-spacing: 0.02rem;
   font-family: Arial, Helvetica, sans-serif;
 }
