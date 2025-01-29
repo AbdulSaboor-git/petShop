@@ -24,6 +24,12 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const defaultPic = "https://i.sstatic.net/5ykYD.png";
 
+  function shopClick() {
+    router.push("/shop");
+  }
+  function itemClick(itemId) {
+    router.push(`/item/${itemId}`);
+  }
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -79,9 +85,9 @@ export default function HomePage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const mostValuedItems = items
+  const mostValuedItems = allItems
     .sort((a, b) => b.price - a.price) // Sort items in descending order by price
-    .slice(0, 5); // Get top 5 items
+    .slice(0, 3); // Get top 5 items
 
   // Select 5 random items or all items if less than 5
   useEffect(() => {
@@ -149,13 +155,13 @@ export default function HomePage() {
     <div>
       <div className="flex flex-col items-center gap-10">
         <Header />
-        <div className=" flex flex-col gap-20 max-w-[1400px] w-full px-4">
+        <div className="max-w-[1400px] w-full px-4">
           {loading ? (
             <div>loading...</div>
           ) : error ? (
             <div>{error}</div>
           ) : (
-            <div>
+            <div className="flex flex-col gap-20">
               <Slider {...settings}>
                 {randomItems.map((item, index) => (
                   <div key={index}>
@@ -203,9 +209,7 @@ export default function HomePage() {
                         <div className="flex flex-col w-full sm:flex-row  gap-2 sm:gap-3.5 items-center justify-start">
                           <button
                             className="bg-orange-500 flex gap-2 text-base items-center justify-center w-full sm:w-fit px-7 py-2 hover:bg-orange-600 text-white rounded-full"
-                            onClick={() => {
-                              router.push(`/item/${item.id}`);
-                            }}
+                            onClick={() => itemClick(item.id)}
                           >
                             View <MdArrowForward size={20} />
                           </button>
@@ -271,7 +275,7 @@ export default function HomePage() {
 
                           <div>
                             <button
-                              variant="outlined"
+                              onClick={shopClick}
                               className=" text-xs border-2 border-white text-white py-1 px-2.5 hover:bg-white hover:text-black rounded-md"
                             >
                               VIEW MORE

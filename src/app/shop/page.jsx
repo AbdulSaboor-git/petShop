@@ -42,12 +42,12 @@ export default function Shop() {
     if (category === "All") {
       setItems(allItems);
     } else {
-      setItems(allItems.filter((item) => item.category.name === category));
+      setItems(allItems.filter((item) => item.category?.name === category));
     }
   };
 
   const filterByBreed = (breed) => {
-    setItems(allItems.filter((item) => item.breed.name === breed));
+    setItems(allItems.filter((item) => item.breed?.name === breed));
   };
 
   return (
@@ -55,27 +55,27 @@ export default function Shop() {
       <Header />
       {/* <FilterCard /> */}
 
-      <div className="flex flex-col items-center max-w-[1400px] w-full px-4">
+      <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
         {loading ? (
           <div>loading...</div>
         ) : error ? (
           <div>{error}</div>
         ) : (
-          <div className="flex gap-6">
+          <div className="flex flex-col lg:flex-row gap-6">
             {/* Filters Section */}
-            <div className="w-[27%] pr-6 border-r border-[#00000060] hidden lg:block">
-              <div className="flex flex-col gap-7">
+            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full  lg:w-[27%]">
+              <div className="flex flex-col gap-4">
                 {/* Categories */}
-                <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
-                  <h1 className="text-lg font-bold text-center p-2 text-[#9e6e3b]">
+                <div className="flex flex-col gap-1 lg:gap-5  lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
+                  <h1 className="text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 ">
                     Filter by Categories
                   </h1>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-row lg:flex-col flex-wrap gap-2">
                     {categories.map((categ, i) => (
                       <button
                         key={i}
                         onClick={() => filterByCategory(categ.name)}
-                        className="rounded-full w-full border border-[#9e6e3b] bg-[#9e6e3b] text-white p-1.5"
+                        className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base bg-white lg:bg-[#9e6e3b] text-[#9e6e3b] lg:text-white p-1 px-4 hover:bg-[#9e6e3b] hover:text-white lg:hover:bg-[#7e562b] lg:hover:text-white"
                       >
                         {categ.name}
                       </button>
@@ -83,16 +83,16 @@ export default function Shop() {
                   </div>
                 </div>
                 {/* Breeds */}
-                <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
-                  <h1 className="text-lg font-bold text-center p-2 text-[#9e6e3b]">
+                <div className="flex flex-col gap-1 lg:gap-5  lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
+                  <h1 className="text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 ">
                     Filter by Breed
                   </h1>
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-row flex-wrap lg:flex-col gap-2 ">
                     {breeds.map((breed, i) => (
                       <button
                         key={i}
-                        onClick={() => filterByBreed(breed.name)}
-                        className="rounded-full w-full border border-[#9e6e3b] bg-[#9e6e3b] text-white p-1.5"
+                        onClick={() => filterByBreed(breed?.name)}
+                        className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base bg-white lg:bg-[#9e6e3b] text-[#9e6e3b] lg:text-white p-1 px-4 hover:bg-[#9e6e3b] hover:text-white lg:hover:bg-[#7e562b] lg:hover:text-white"
                       >
                         {breed.name}
                       </button>
