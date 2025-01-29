@@ -18,6 +18,8 @@ export default function HomePage() {
   const [randomItems, setRandomItems] = useState([]);
   const [items, setItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [breeds, setBreeds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const defaultPic = "https://i.sstatic.net/5ykYD.png";
@@ -32,9 +34,24 @@ export default function HomePage() {
           throw new Error("Failed to fetch items.");
         }
         console.log("dq");
+        const items = await response.json();
+        setItems(items);
+        setAllItems(items); // Keep a backup of all items for filtering
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchCategories_Breeds = async () => {
+      try {
+        const response = await fetch(`/api/categories_breeds`); // Update API path if necessary
+        if (!response.ok) {
+          throw new Error("Failed to fetch data.");
+        }
         const data = await response.json();
-        setItems(data.items);
-        setAllItems(data.items); // Keep a backup of all items for filtering
+        setCategories(data.categories);
+        setBreeds(data.breeds); // Keep a backup of all items for filtering
       } catch (err) {
         setError(err.message);
       } finally {
@@ -42,6 +59,7 @@ export default function HomePage() {
       }
     };
     fetchItems();
+    fetchCategories_Breeds();
   }, []);
 
   useEffect(() => {
@@ -73,25 +91,6 @@ export default function HomePage() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const categories = [
-    {
-      name: "Hens",
-      img: "/2.jpg",
-    },
-    {
-      name: "Feed",
-      img: "/1.jpg",
-    },
-    {
-      name: "Utensils",
-      img: "/3.jpg",
-    },
-    {
-      name: "Eggs",
-      img: "/1.jpg",
-    },
-  ];
 
   const mostValuedItems = items
     .sort((a, b) => b.price - a.price) // Sort items in descending order by price

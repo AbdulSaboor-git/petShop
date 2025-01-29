@@ -14,8 +14,9 @@ export default async function handler(req, res) {
 
 const handleGet = async (req, res) => {
   try {
-    const items = await prisma.item.findMany();
-    return res.status(200).json(items);
+    const categories = await prisma.category.findMany();
+    const breeds = await prisma.breed.findMany();
+    return res.status(200).json({ categories, breeds });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });

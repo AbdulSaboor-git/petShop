@@ -7,8 +7,10 @@ import FilterCard from "./components/filterCard";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [breeds, setBreeds] = useState([]);
   const [allItems, setAllItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -18,9 +20,24 @@ export default function Shop() {
         if (!response.ok) {
           throw new Error("Failed to fetch items.");
         }
+        const items = await response.json();
+        setItems(items);
+        setAllItems(items); // Keep a backup of all items for filtering
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchCategories_Breeds = async () => {
+      try {
+        const response = await fetch(`/api/categories_breeds`); // Update API path if necessary
+        if (!response.ok) {
+          throw new Error("Failed to fetch data.");
+        }
         const data = await response.json();
-        setItems(data.items);
-        setAllItems(data.items); // Keep a backup of all items for filtering
+        setCategories(data.categories);
+        setBreeds(data.breeds); // Keep a backup of all items for filtering
       } catch (err) {
         setError(err.message);
       } finally {
@@ -28,6 +45,7 @@ export default function Shop() {
       }
     };
     fetchItems();
+    fetchCategories_Breeds();
   }, []);
 
   const filterByCategory = (category) => {
@@ -41,9 +59,6 @@ export default function Shop() {
   const filterByBreed = (breed) => {
     setItems(allItems.filter((item) => item.breed === breed));
   };
-
-  const categories = ["All", "Hens", "Feed", "Utensils", "Eggs"];
-  const breeds = ["Shamo", "Aseel", "Misri", "Cross Breeds"];
 
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
@@ -61,8 +76,8 @@ export default function Shop() {
             <div className="w-[27%] pr-6 border-r border-[#00000060] hidden lg:block">
               <div className="flex flex-col gap-7">
                 {/* Categories */}
-                <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
-                  <h1 className="text-lg font-bold text-center p-2 text-orange-950">
+                <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
+                  <h1 className="text-lg font-bold text-center p-2 text-[#9e6e3b]">
                     Filter by Categories
                   </h1>
                   <div className="flex flex-col gap-2">
@@ -70,7 +85,7 @@ export default function Shop() {
                       <button
                         key={i}
                         onClick={() => filterByCategory(categ)}
-                        className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5"
+                        className="rounded-full w-full border border-[#9e6e3b] bg-[#9e6e3b] text-white p-1.5"
                       >
                         {categ}
                       </button>
@@ -78,8 +93,8 @@ export default function Shop() {
                   </div>
                 </div>
                 {/* Breeds */}
-                <div className="flex flex-col gap-5 border border-orange-950 p-3 pb-6 rounded-3xl text-white">
-                  <h1 className="text-lg font-bold text-center p-2 text-orange-950">
+                <div className="flex flex-col gap-5 border border-[#9e6e3b] p-3 pb-6 rounded-3xl text-white">
+                  <h1 className="text-lg font-bold text-center p-2 text-[#9e6e3b]">
                     Filter by Breed
                   </h1>
                   <div className="flex flex-col gap-2">
@@ -87,7 +102,7 @@ export default function Shop() {
                       <button
                         key={i}
                         onClick={() => filterByBreed(b)}
-                        className="rounded-full w-full border border-orange-950 bg-orange-950 text-white p-1.5"
+                        className="rounded-full w-full border border-[#9e6e3b] bg-[#9e6e3b] text-white p-1.5"
                       >
                         {b}
                       </button>
@@ -97,7 +112,12 @@ export default function Shop() {
               </div>
             </div>
             {/* Items Section */}
-            <div className="grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
+            <div
+              className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                !items.length &&
+                "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+              }`}
+            >
               {items.map((item, i) => (
                 <ProductCardAlt key={i} item={item} />
               ))}

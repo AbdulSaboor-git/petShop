@@ -68,7 +68,9 @@ export default function Header({ user }) {
   }
   function loginClick() {}
   function adminDBClick() {}
-  function sellerDBClick() {}
+  function sellerDBClick() {
+    router.push("/seller-dashboard");
+  }
   function accountClick() {
     router.push("/profile");
   }
