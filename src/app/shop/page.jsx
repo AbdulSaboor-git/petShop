@@ -53,8 +53,6 @@ export default function Shop() {
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header />
-      {/* <FilterCard /> */}
-
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
         {loading ? (
           <div>loading...</div>
