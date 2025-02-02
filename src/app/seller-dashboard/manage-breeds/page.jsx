@@ -14,7 +14,7 @@ export default function ManageBreedsPage() {
 
   const [name, setName] = useState("");
 
-  // ADDED: Basic validation – breed name must be at least 1 character.
+  // Basic form validation: breed name must be at least 1 character.
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedBreed !== null && name.trim().length >= 1;
 
@@ -59,7 +59,7 @@ export default function ManageBreedsPage() {
     fetchBreeds();
   }, []);
 
-  // ADDED: Fetch a single breed's data
+  // Fetch a single breed's data
   const fetchBreedData = async (breedId) => {
     try {
       const response = await fetch(`/api/breed/${breedId}`);
@@ -71,6 +71,7 @@ export default function ManageBreedsPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
+      alert(err.message);
     }
   };
 
@@ -80,39 +81,37 @@ export default function ManageBreedsPage() {
       <div className="w-full max-w-[1200px] px-4">
         {loading ? (
           <div>Loading...</div>
-        ) : error ? (
-          <div className="text-red-600">{error}</div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-2xl md:text-3xl font-semibold text-center">
-              Manage Breeds
+            <h1 className="text-xl md:2xl font-semibold text-center">
+              Seller Dashboard
             </h1>
-
-            {/* ADDED: Responsive container */}
+            <h1 className="font-semibold text-center">Manage Breeds</h1>
+            {/* Responsive container for side-by-side (desktop) or stacked (mobile) layout */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
-              <div className="flex flex-row md:flex-col gap-2 w-full md:w-fit border-b md:border-b-0 md:border-r border-gray-400 pb-4 md:pr-6 md:pb-0">
+              <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddBreed}
-                  className="p-2 px-4 rounded-xl border border-green-500 text-green-500 hover:bg-green-500 hover:text-white flex-1 text-center"
+                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Add Breed
+                  Add
                 </button>
                 <button
                   onClick={handleEditBreed}
-                  className="p-2 px-4 rounded-xl border border-green-500 text-green-500 hover:bg-green-500 hover:text-white flex-1 text-center"
+                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Edit Breed
+                  Edit
                 </button>
                 <button
                   onClick={handleDeleteBreed}
-                  className="p-2 px-4 rounded-xl border border-green-500 text-green-500 hover:bg-green-500 hover:text-white flex-1 text-center"
+                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Delete Breed
+                  Delete
                 </button>
               </div>
               <div className="w-full">
                 {addBreed && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Add Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
@@ -122,7 +121,7 @@ export default function ManageBreedsPage() {
                           alert("Please enter a valid breed name.");
                           return;
                         }
-                        // ADDED: Insert your add-breed submission logic here.
+                        // Insert your add-breed submission logic here.
                         console.log("Breed Added:", name);
                       }}
                     >
@@ -130,7 +129,7 @@ export default function ManageBreedsPage() {
                         <label className="mx-0.5">Breed Name</label>
                         <input
                           type="text"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-green-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           minLength={1}
                           maxLength={50}
@@ -139,7 +138,7 @@ export default function ManageBreedsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-green-500 text-green-500 hover:bg-green-500 hover:text-white"
+                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
                       >
                         Add Breed
                       </button>
@@ -147,24 +146,24 @@ export default function ManageBreedsPage() {
                   </div>
                 )}
                 {editBreed && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Edit Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={(e) => {
                         e.preventDefault();
                         if (!isEditFormValid) {
-                          alert("Select a breed and enter a valid name.");
+                          alert(error + " or enter a valid name.");
                           return;
                         }
-                        // ADDED: Insert your update-breed submission logic here.
+                        // Insert your update-breed submission logic here.
                         console.log("Breed Updated:", selectedBreed.id, name);
                       }}
                     >
                       <div>
                         <label className="mx-0.5">Select Breed</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-green-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -186,7 +185,7 @@ export default function ManageBreedsPage() {
                         <label className="mx-0.5">Breed Name</label>
                         <input
                           type="text"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-green-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           value={name}
                           minLength={1}
@@ -196,7 +195,7 @@ export default function ManageBreedsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-green-500 text-green-500 hover:bg-green-500 hover:text-white"
+                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
                       >
                         Update Breed
                       </button>
@@ -204,24 +203,24 @@ export default function ManageBreedsPage() {
                   </div>
                 )}
                 {deleteBreed && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Delete Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={(e) => {
                         e.preventDefault();
                         if (!selectedBreed) {
-                          alert("Select a breed to delete.");
+                          alert(error + " or select a breed to delete.");
                           return;
                         }
-                        // ADDED: Insert your deletion logic here.
+                        // Insert your deletion logic here.
                         console.log("Breed Deleted:", selectedBreed.id);
                       }}
                     >
                       <div>
                         <label className="mx-0.5">Select Breed</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-green-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -241,7 +240,6 @@ export default function ManageBreedsPage() {
                       </div>
                       <button
                         type="submit"
-                        disabled={!selectedBreed}
                         className="mt-4 p-2 px-4 rounded-xl border border-red-600 text-red-600 hover:bg-red-600 hover:text-white disabled:opacity-80"
                       >
                         Delete Breed

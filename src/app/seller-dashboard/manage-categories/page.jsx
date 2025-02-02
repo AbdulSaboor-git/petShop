@@ -14,7 +14,7 @@ export default function ManageCategoriesPage() {
 
   const [name, setName] = useState("");
 
-  // ADDED: Basic validation – category name must be at least 1 character.
+  // Basic form validation: category name must be at least 1 character.
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedCategory !== null && name.trim().length >= 1;
 
@@ -59,7 +59,7 @@ export default function ManageCategoriesPage() {
     fetchCategories();
   }, []);
 
-  // ADDED: Fetch a single category's data
+  // Fetch a single category's data
   const fetchCategoryData = async (categoryId) => {
     try {
       const response = await fetch(`/api/category/${categoryId}`);
@@ -84,35 +84,36 @@ export default function ManageCategoriesPage() {
           <div className="text-red-600">{error}</div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-2xl md:text-3xl font-semibold text-center">
-              Manage Categories
+            <h1 className="text-xl md:2xl font-semibold text-center">
+              Seller Dashboard
             </h1>
+            <h1 className="font-semibold text-center">Manage Categories</h1>
 
-            {/* ADDED: Responsive container for side-by-side (desktop) or stacked (mobile) layout */}
+            {/* ADDED: flex-col for mobile, flex-row for medium screens */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
-              <div className="flex flex-row md:flex-col gap-2 w-full md:w-fit border-b md:border-b-0 md:border-r border-gray-400 pb-4 md:pr-6 md:pb-0">
+              <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddCategory}
-                  className="p-2 px-4 rounded-xl border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white flex-1 text-center"
+                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Add Category
+                  Add
                 </button>
                 <button
                   onClick={handleEditCategory}
-                  className="p-2 px-4 rounded-xl border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white flex-1 text-center"
+                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Edit Category
+                  Edit
                 </button>
                 <button
                   onClick={handleDeleteCategory}
-                  className="p-2 px-4 rounded-xl border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white flex-1 text-center"
+                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Delete Category
+                  Delete
                 </button>
               </div>
               <div className="w-full">
                 {addCategory && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Add Category</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
@@ -122,7 +123,7 @@ export default function ManageCategoriesPage() {
                           alert("Please enter a valid category name.");
                           return;
                         }
-                        // ADDED: Insert your add-category submission logic here.
+                        // Insert your add-category submission logic here.
                         console.log("Category Added:", name);
                       }}
                     >
@@ -130,7 +131,7 @@ export default function ManageCategoriesPage() {
                         <label className="mx-0.5">Category Name</label>
                         <input
                           type="text"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-blue-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           minLength={1}
                           maxLength={50}
@@ -139,7 +140,7 @@ export default function ManageCategoriesPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
+                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
                       >
                         Add Category
                       </button>
@@ -147,7 +148,7 @@ export default function ManageCategoriesPage() {
                   </div>
                 )}
                 {editCategory && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Edit Category</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
@@ -157,7 +158,7 @@ export default function ManageCategoriesPage() {
                           alert("Select a category and enter a valid name.");
                           return;
                         }
-                        // ADDED: Insert your update-category submission logic here.
+                        // Insert your update-category submission logic here.
                         console.log(
                           "Category Updated:",
                           selectedCategory.id,
@@ -168,7 +169,7 @@ export default function ManageCategoriesPage() {
                       <div>
                         <label className="mx-0.5">Select Category</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-blue-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -190,7 +191,7 @@ export default function ManageCategoriesPage() {
                         <label className="mx-0.5">Category Name</label>
                         <input
                           type="text"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-blue-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           value={name}
                           minLength={1}
@@ -200,7 +201,7 @@ export default function ManageCategoriesPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white"
+                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
                       >
                         Update Category
                       </button>
@@ -208,7 +209,7 @@ export default function ManageCategoriesPage() {
                   </div>
                 )}
                 {deleteCategory && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">
                       Delete Category
                     </h3>
@@ -220,14 +221,14 @@ export default function ManageCategoriesPage() {
                           alert("Select a category to delete.");
                           return;
                         }
-                        // ADDED: Insert your deletion logic here.
+                        // Insert your deletion logic here.
                         console.log("Category Deleted:", selectedCategory.id);
                       }}
                     >
                       <div>
                         <label className="mx-0.5">Select Category</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-blue-500 w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
                           onChange={(e) => {
                             if (e.target.value) {

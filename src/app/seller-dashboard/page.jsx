@@ -44,7 +44,7 @@ export default function SellerDashboardMainPage() {
         // Update metrics state
         setMetrics({ totalProducts, totalCategories, totalBreeds });
 
-        // Fetch analytics data (optional)
+        // (Optional) Fetch analytics data
         // const responseAnalytics = await fetch(`/api/seller-analytics`);
         // if (responseAnalytics.ok) {
         //   const analyticsData = await responseAnalytics.json();
@@ -61,88 +61,113 @@ export default function SellerDashboardMainPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center md:gap-10">
+    <div className="flex flex-col items-center md:gap-10 min-h-screen">
       <Header />
       <div className="w-full max-w-[1200px] px-4 py-6">
         {loading ? (
-          <div>Loading...</div>
+          <div className="text-center text-base md:text-lg">Loading...</div>
         ) : error ? (
-          <div className="text-red-600">{error}</div>
+          <div className="text-red-600 text-center text-base md:text-lg">
+            {error}
+          </div>
         ) : (
-          <div className="flex flex-col gap-6">
-            <h1 className="text-3xl font-semibold text-center">
-              Seller Dashboard
-            </h1>
-            <h2 className="text-xl font-semibold text-center">
-              Manage Your Store
-            </h2>
+          <div className="flex flex-col gap-8 md:gap-4">
+            {/* Headings */}
+            <div className="flex flex-col gap-2">
+              <h1 className="text-xl md:2xl font-semibold text-center">
+                Seller Dashboard
+              </h1>
+              <h2 className="text-base md:text-lg font-semibold text-center">
+                Manage Your Store
+              </h2>
+            </div>
 
             {/* Metrics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-4 border rounded-xl shadow text-center">
-                <h2 className="text-xl font-bold">Total Products</h2>
-                <p className="text-3xl mt-2">{metrics.totalProducts}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+              <div className="p-4 border border-[#9e6e3b] rounded-xl shadow text-center">
+                <h2 className="text-base md:text-lg font-bold">
+                  Total Products
+                </h2>
+                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                  {metrics.totalProducts}
+                </p>
               </div>
-              <div className="p-4 border rounded-xl shadow text-center">
-                <h2 className="text-xl font-bold">Total Categories</h2>
-                <p className="text-3xl mt-2">{metrics.totalCategories}</p>
+              <div className="p-4 border border-[#9e6e3b] rounded-xl shadow text-center">
+                <h2 className="text-base md:text-lg font-bold">
+                  Total Categories
+                </h2>
+                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                  {metrics.totalCategories}
+                </p>
               </div>
-              <div className="p-4 border rounded-xl shadow text-center">
-                <h2 className="text-xl font-bold">Total Breeds</h2>
-                <p className="text-3xl mt-2">{metrics.totalBreeds}</p>
+              <div className="p-4 border border-[#9e6e3b] rounded-xl shadow text-center">
+                <h2 className="text-base md:text-lg font-bold">Total Breeds</h2>
+                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                  {metrics.totalBreeds}
+                </p>
               </div>
             </div>
 
             {/* Analytics Section */}
-            <div className="p-4 border rounded-xl shadow">
-              <h2 className="text-xl font-bold mb-2">Analytics</h2>
+            <div className="p-4 border border-[#9e6e3b] rounded-xl shadow">
+              <h2 className="text-base md:text-lg font-bold mb-4">Analytics</h2>
               {analytics ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm">
+                    <p className="text-xs md:text-sm">
                       <span className="font-semibold">Sales:</span>{" "}
                       {analytics.sales}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm">
+                    <p className="text-xs md:text-sm">
                       <span className="font-semibold">Visits:</span>{" "}
                       {analytics.visits}
                     </p>
                   </div>
-                  {/* Add more analytics metrics as needed */}
+                  {/* More analytics metrics as needed */}
                 </div>
               ) : (
-                <p className="text-sm">No analytics available.</p>
+                <p className="text-xs md:text-sm">No analytics available.</p>
               )}
             </div>
 
             {/* Navigation Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
               <button
                 onClick={() => router.push("/seller-dashboard/manage-products")}
-                className="block p-6 text-center border rounded-xl hover:bg-blue-500 hover:text-white transition"
+                className="block p-4 text-center border border-[#9e6e3b] rounded-xl text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white transition"
               >
-                <h3 className="text-2xl font-bold mb-2">Manage Products</h3>
-                <p className="text-sm">View, add, edit, and delete products.</p>
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  Manage Products
+                </h3>
+                <p className="text-xs md:text-sm">
+                  View, add, edit, and delete products.
+                </p>
               </button>
               <button
                 onClick={() =>
                   router.push("/seller-dashboard/manage-categories")
                 }
-                className="block p-6 text-center border rounded-xl hover:bg-blue-500 hover:text-white transition"
+                className="block p-4 text-center border border-[#9e6e3b] rounded-xl text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white transition"
               >
-                <h3 className="text-2xl font-bold mb-2">Manage Categories</h3>
-                <p className="text-sm">
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  Manage Categories
+                </h3>
+                <p className="text-xs md:text-sm">
                   View, add, edit, and delete categories.
                 </p>
               </button>
               <button
                 onClick={() => router.push("/seller-dashboard/manage-breeds")}
-                className="block p-6 text-center border rounded-xl hover:bg-blue-500 hover:text-white transition"
+                className="block p-4 text-center border border-[#9e6e3b] rounded-xl text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white transition"
               >
-                <h3 className="text-2xl font-bold mb-2">Manage Breeds</h3>
-                <p className="text-sm">View, add, edit, and delete breeds.</p>
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  Manage Breeds
+                </h3>
+                <p className="text-xs md:text-sm">
+                  View, add, edit, and delete breeds.
+                </p>
               </button>
             </div>
           </div>

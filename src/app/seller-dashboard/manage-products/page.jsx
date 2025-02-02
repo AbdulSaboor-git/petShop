@@ -138,41 +138,39 @@ export default function ManageProductsPage() {
           <div>{error}</div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-2xl md:3xl font-semibold text-center">
+            <h1 className="text-xl md:2xl font-semibold text-center">
               Seller Dashboard
             </h1>
-            <h1 className="text-xl font-semibold text-center">
-              Manage Products
-            </h1>
+            <h1 className="font-semibold text-center">Manage Products</h1>
 
             {/* ADDED: flex-col for mobile, flex-row for medium screens */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
-              <div className="flex flex-row md:flex-col gap-2 w-full md:w-fit border-b md:border-b-0 md:border-r border-[#00000060] pb-4 md:pr-6 md:pb-0">
+              <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddProduct}
                   className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Add Product
+                  Add
                 </button>
                 <button
                   onClick={handleEditProduct}
                   className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Edit Product
+                  Edit
                 </button>
                 <button
                   onClick={handleDeleteProduct}
                   className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
                 >
-                  Delete Product
+                  Delete
                 </button>
               </div>
               <div className="w-full">
                 {addProduct && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Add Product</h3>
                     <form
-                      className="flex flex-col gap-2.5 text-sm"
+                      className="flex flex-col gap-2.5 text-sm "
                       onSubmit={(e) => {
                         e.preventDefault();
                         // ADDED: Validate the form before submission
@@ -332,7 +330,7 @@ export default function ManageProductsPage() {
                   </div>
                 )}
                 {editProduct && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Edit Product</h3>
                     <form
                       className="flex flex-col gap-2.5 text-sm"
@@ -527,7 +525,7 @@ export default function ManageProductsPage() {
                   </div>
                 )}
                 {deleteProduct && (
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">
                       Delete Product
                     </h3>
