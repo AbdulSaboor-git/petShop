@@ -17,19 +17,19 @@ export default function FavItem({
   return (
     <div
       key={item.id}
-      className={`flex gap-2 justify-between items-center border p-3 px-5 rounded-lg bg-gray-100 ${
-        !item.availability
+      className={`flex gap-2 justify-between items-center border p-3 px-5 rounded-lg ${
+        !item.availability === "AVAILABLE"
           ? "bg-[#00000025] opacity-100 border-gray-200 pointer-events-none"
-          : "bg-white pointer-events-auto"
+          : " bg-gray-100 pointer-events-auto"
       }`}
     >
       <div
         className={`flex gap-4 items-center w-full
-        ${!item.availability && "opacity-65"}`}
+        ${!item.availability === "AVAILABLE" && "opacity-65"}`}
       >
         <input
           type="checkbox"
-          disabled={!item.availability}
+          disabled={!item.availability === "AVAILABLE"}
           checked={isSelected}
           onChange={() => handleSelectItem(item)}
           className="accent-orange-600 size-3 md:size-4"
@@ -41,7 +41,7 @@ export default function FavItem({
           onClick={itemClick}
         />
         <div className="text-sm md:text-base flex flex-col gap-[1px] items-start">
-          {!item.availability && (
+          {!item.availability === "AVAILABLE" && (
             <p className="text-[10px] md:text-xs text-red-600">Unavailable</p>
           )}
           <h3

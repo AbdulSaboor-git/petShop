@@ -5,19 +5,24 @@ export default function Order({ item }) {
   const generateOrderMessage = () => {
     if (!item) return "";
     const priceText = item.isDiscounted
-      ? `Discounted Price: Rs. ${item.discountedPrice} (Original: Rs. ${item.price})`
+      ? `Price: Rs. ${item.discountedPrice}`
       : `Price: Rs. ${item.price}`;
-    return `Hello ${item.seller.firstName + " " + item.seller.lastName},
 
-I am interested in placing an order for the following item:
+    // Construct a full URL to the product.
+    const productLink = `${window.location.origin}/item/${item.id}`;
 
-Item ID: ${item.id}
-Item: ${item.name}
-${priceText}
-Description: ${item.description.substring(0, 100)}...
-
+    return `Hello ${item.seller.firstName} ${item.seller.lastName},
+      
+I am interested in inquiring about the following item:
+      
+      Item ID: ${item.id}
+      Item Name: ${item.name}
+      ${priceText}
+      Description: ${item.description.substring(0, 100)}...
+      Product Link: ${productLink}
+      
 Please let me know the next steps to complete my order.
-
+      
 Thank you.`;
   };
 
@@ -48,7 +53,7 @@ Thank you.`;
       {item && (
         <div className="flex w-full flex-col text-xs md:text-sm gap-4 self-center p-5 py-10 rounded-xl border bg-gray-50 text-gray-700 text-center shadow-md">
           <h2 className="text-base md:text-lg font-bold">Order Inquiry</h2>
-          <div className="flex gap-4 items-center w-full bg-gray-100 p-4 rounded-lg md:min-w-[400px]">
+          <div className="flex gap-4 items-center w-full border bg-gray-100 p-4 rounded-lg md:min-w-[400px]">
             <img
               src={item.images[0]}
               alt={item.name}

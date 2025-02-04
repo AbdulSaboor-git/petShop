@@ -90,12 +90,6 @@ export default function Favourites() {
     localStorage.setItem("favorites", JSON.stringify(updatedIds));
   };
 
-  // Stub for placing an order/inquiry
-  const handlePlaceOrder = () => {
-    // Place your order logic here.
-    console.log("Order placed");
-  };
-
   return (
     <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
