@@ -24,9 +24,12 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const defaultPic = "https://i.sstatic.net/5ykYD.png";
 
-  function shopClick() {
-    router.push("/shop");
+  function shopClick(categFilter) {
+    categFilter
+      ? router.push(`/shop?category=${categFilter}`)
+      : router.push("/shop");
   }
+
   function itemClick(itemId) {
     router.push(`/item/${itemId}`);
   }
@@ -263,22 +266,24 @@ export default function HomePage() {
                 <div className="text-xl font-extrabold">Top Categories</div>
 
                 <div className="grid grid-cols-1 gap-1 md:grid-cols-2 p-4 justify-center">
-                  {categories.map((item, i) => (
+                  {categories.map((categ, i) => (
                     <div
                       key={i}
-                      className={`flex w-full h-auto p-8 gap-20 ${
-                        i === 0 || i === 3 ? "bg-[#9e6e3b]" : "bg-[#252525]"
+                      className={`flex w-full h-fit p-8 gap-20 ${
+                        i === 0 || i === 3 || i === 4 || i === 7 || i === 8
+                          ? "bg-[#9e6e3b]"
+                          : "bg-[#252525]"
                       } flex items-start justify-between overflow-hidden`}
                     >
                       <div className="flex-1">
                         <div className="absolute flex flex-col gap-2 justify-start flex-1">
                           <h2 className="text-white text-2xl font-extrabold">
-                            {item.name.toUpperCase()}
+                            {categ.name.toUpperCase()}
                           </h2>
 
                           <div>
                             <button
-                              onClick={shopClick}
+                              onClick={() => shopClick(categ.name)}
                               className=" text-xs border-2 border-white text-white py-1 px-2.5 hover:bg-white hover:text-black rounded-md"
                             >
                               VIEW MORE
@@ -287,13 +292,13 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      <img
+                      {/* <img
                         src={item.img}
                         alt={item.name}
                         width={500}
                         height={500}
                         className="flex-1 h-auto max-h-[180px] object-contain"
-                      />
+                      /> */}
                     </div>
                   ))}
                 </div>

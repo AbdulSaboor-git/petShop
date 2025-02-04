@@ -3,20 +3,37 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
-import { MdClose } from "react-icons/md";
+import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
+import { useSearchParams } from "next/navigation"; // New import for query params
 
 export default function Shop() {
   const [items, setItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
+  const [showBreeds, setShowBreeds] = useState(true);
+  const [ShowCategories, setShowCategories] = useState(true);
+  const [ShowMoreFilters, setShowMoreFilters] = useState(true);
 
   // Use arrays for filtering; "All" is the default selection.
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
   const [selectedBreeds, setSelectedBreeds] = useState(["All"]);
 
+  // Additional filters and sorting
+  const [onSale, setOnSale] = useState(false);
+  const [sortOption, setSortOption] = useState("default");
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const categoryParam = searchParams.get("category");
+    if (categoryParam) {
+      // If a category is passed in the query string, preselect it.
+      setSelectedCategories([categoryParam]);
+    }
+  }, [searchParams]);
 
   // Fetch items, categories, and breeds.
   useEffect(() => {
@@ -44,7 +61,7 @@ export default function Shop() {
     fetchData();
   }, []);
 
-  // Whenever the selected filters change, update the displayed items.
+  // Whenever the selected filters, onSale toggle, or sorting options change, update the displayed items.
   useEffect(() => {
     let filtered = allItems;
 
@@ -62,8 +79,23 @@ export default function Shop() {
       );
     }
 
+    // Filter by onSale flag if active.
+    if (onSale) {
+      filtered = filtered.filter((item) => item.isDiscounted);
+    }
+
+    // Sorting: Make a shallow copy before sorting.
+    filtered = [...filtered];
+    if (sortOption === "priceAsc") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortOption === "priceDesc") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortOption === "newest") {
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
     setItems(filtered);
-  }, [selectedCategories, selectedBreeds, allItems]);
+  }, [selectedCategories, selectedBreeds, allItems, onSale, sortOption]);
 
   // Handle category selection.
   const handleCategoryClick = (category) => {
@@ -90,12 +122,11 @@ export default function Shop() {
       newSelected = ["All"];
     }
 
-    // If the newly selected categories do not include "chicken" or "eggs" (case‐insensitive),
+    // If the newly selected categories do not include "Chicken" or "Eggs" (case‑sensitive in this case),
     // then reset the breed filter to "All" because breeds only apply to chicken/eggs.
-    const hasChickenOrEggs = newSelected.some((c) => {
-      c;
-      return c === "Chicken" || c === "Eggs";
-    });
+    const hasChickenOrEggs = newSelected.some(
+      (c) => c === "Chicken" || c === "Eggs"
+    );
     if (!hasChickenOrEggs) {
       setSelectedBreeds(["All"]);
     }
@@ -130,7 +161,7 @@ export default function Shop() {
 
   // Determine whether to show the breed filter.
   // We show it if either "All" is selected for categories OR if at least one selected
-  // category is either "chicken" or "eggs".
+  // category is either "Chicken" or "Eggs".
   const showBreedFilter =
     selectedCategories.includes("All") ||
     selectedCategories.some((c) => c === "Chicken" || c === "Eggs");
@@ -144,16 +175,34 @@ export default function Shop() {
         ) : error ? (
           <div>{error}</div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col lg:flex-row gap-6 transition-all duration-300">
             {/* Filters Section */}
-            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%]">
-              <div className="flex flex-col gap-4">
+            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-300">
+              <div className="flex flex-col gap-4 transition-all duration-300">
                 {/* Categories Filter */}
-                <div className="flex flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
-                  <h1 className="text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0">
+                <div className="flex cursor-pointer flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white transition-all duration-300">
+                  <div
+                    onClick={() =>
+                      ShowCategories
+                        ? setShowCategories(false)
+                        : setShowCategories(true)
+                    }
+                    className="flex items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                  >
                     Filter by Categories
-                  </h1>
-                  <div className="flex flex-row lg:flex-col flex-wrap gap-2">
+                    {ShowCategories ? (
+                      <MdArrowDropDown size={20} />
+                    ) : (
+                      <MdArrowDropUp size={20} />
+                    )}
+                  </div>
+                  <div
+                    className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                      !ShowCategories
+                        ? "h-0 opacity-0 pointer-events-none"
+                        : "h-full opacity-100 pointer-events-auto"
+                    }`}
+                  >
                     {/* "All" button */}
                     <button
                       onClick={() => handleCategoryClick("All")}
@@ -177,7 +226,7 @@ export default function Shop() {
                       >
                         <div className="relative">
                           {categ.name}
-                          <MdClose className="absolute text-white -right-5 top-[3px]  lg:hidden" />
+                          <MdClose className="absolute text-white -right-[18px]  top-[3px]  lg:hidden" />
                         </div>
                       </button>
                     ))}
@@ -187,10 +236,26 @@ export default function Shop() {
                 {/* Breeds Filter (only show if applicable) */}
                 {showBreedFilter && (
                   <div className="flex flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
-                    <h1 className="text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0">
-                      Filter by Breed
-                    </h1>
-                    <div className="flex flex-row flex-wrap lg:flex-col gap-2">
+                    <div
+                      onClick={() =>
+                        showBreeds ? setShowBreeds(false) : setShowBreeds(true)
+                      }
+                      className="flex cursor-pointer items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                    >
+                      Filter by Breeds
+                      {showBreeds ? (
+                        <MdArrowDropDown size={20} />
+                      ) : (
+                        <MdArrowDropUp size={20} />
+                      )}
+                    </div>
+                    <div
+                      className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                        !showBreeds
+                          ? "h-0 opacity-0 pointer-events-none"
+                          : "h-full opacity-100 pointer-events-auto"
+                      }`}
+                    >
                       {/* "All" button for breeds */}
                       <button
                         onClick={() => handleBreedClick("All")}
@@ -214,13 +279,65 @@ export default function Shop() {
                         >
                           <div className="relative">
                             {breed.name}
-                            <MdClose className="absolute text-white -right-5 top-[3px] lg:hidden" />
+                            <MdClose className="absolute text-white -right-[18px] top-[3px] lg:hidden" />
                           </div>
                         </button>
                       ))}
                     </div>
                   </div>
                 )}
+
+                {/* Additional Filters Section: On Sale and Sorting Options */}
+                <div className="flex cursor-pointer flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
+                  <div
+                    onClick={() =>
+                      ShowMoreFilters
+                        ? setShowMoreFilters(false)
+                        : setShowMoreFilters(true)
+                    }
+                    className="flex items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                  >
+                    More Filters
+                    {ShowMoreFilters ? (
+                      <MdArrowDropDown size={20} />
+                    ) : (
+                      <MdArrowDropUp size={20} />
+                    )}
+                  </div>
+                  <div
+                    className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                      !ShowMoreFilters
+                        ? "h-0 opacity-0 pointer-events-none"
+                        : "h-full opacity-100 pointer-events-auto"
+                    }`}
+                  >
+                    <button
+                      onClick={() => setOnSale((prev) => !prev)}
+                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                        onSale
+                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                      }`}
+                    >
+                      <div className="relative">
+                        On Sale
+                        <MdClose className="absolute text-white -right-[18px]  top-[3px] lg:hidden" />
+                      </div>{" "}
+                    </button>
+                  </div>
+                  <div className="flex flex-row gap-2 mt-2">
+                    <select
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value)}
+                      className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] p-1 px-4 text-xs lg:text-base text-[#9e562b] bg-white"
+                    >
+                      <option value="default">Default</option>
+                      <option value="priceAsc">Price: Low to High</option>
+                      <option value="priceDesc">Price: High to Low</option>
+                      <option value="newest">Newest</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 
