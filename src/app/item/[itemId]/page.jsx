@@ -192,7 +192,7 @@ export default function ItemPage({ params }) {
                   >
                     {favorites.includes(item.id) ? (
                       <div className="flex items-center justify-center gap-1">
-                        Fav{" "}
+                        Added to{" "}
                         <MdFavorite className="text-[16px] md:text-[18px]" />
                       </div>
                     ) : (

@@ -35,7 +35,7 @@ export default function FavItem({
           className="accent-orange-600 size-3 md:size-4"
         />
         <img
-          src={item.images[1]}
+          src={item.images[0]}
           alt={item.name}
           className="w-16 md:w-24 object-cover aspect-square rounded-lg cursor-pointer"
           onClick={itemClick}
