@@ -23,7 +23,7 @@ Thank you.`;
 
   // Handler for placing an order via WhatsApp.
   const handleWhatsappOrder = () => {
-    if (!item || !item.seller.phoneNo) return;
+    if (!item || !item.seller?.phoneNo) return;
     const message = generateOrderMessage();
     const phoneNumber = item.seller.phoneNo.replace(/\D/g, ""); // Remove non-digit characters
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -34,7 +34,7 @@ Thank you.`;
 
   // Handler for placing an order via Email.
   const handleEmailOrder = () => {
-    if (!item || !item.seller.email) return;
+    if (!item || !item.seller?.email) return;
     const message = generateOrderMessage();
     const subject = `Order Inquiry: ${item.name}`;
     const mailtoUrl = `mailto:${item.seller.email}?subject=${encodeURIComponent(
@@ -65,20 +65,20 @@ Thank you.`;
             </div>
           </div>
           <div className="flex flex-col md:flex-row gap-2 justify-center">
-            <h3 className="font-bold text-left">Place Order via</h3>
+            <h3 className="font-bold text-left">Inquire Order via</h3>
             <button
               onClick={handleWhatsappOrder}
               className="flex items-center gap-2 justify-center bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
             >
               WhatsApp
-              <MdWhatsapp />
+              <MdWhatsapp size={15} />
             </button>
             <button
               onClick={handleEmailOrder}
               className="flex items-center gap-2 justify-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
             >
               Email
-              <MdEmail />
+              <MdEmail size={15} />
             </button>
           </div>
         </div>

@@ -29,6 +29,7 @@ const handleGet = async (req, res) => {
       where: {
         id: { in: favIds },
       },
+      include: { seller: true, category: true, breed: true },
     });
 
     return res.status(200).json({ items });

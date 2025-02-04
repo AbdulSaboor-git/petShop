@@ -50,7 +50,9 @@ export default function FavItem({
           >
             {item.name}
           </h3>
-          <p className="text-xs md:text-sm text-gray-600">{item.breed} </p>
+          <p className="text-xs md:text-sm text-gray-600">
+            {item.breed?.name}{" "}
+          </p>
           <p className="text-xs md:text-sm text-green-600">
             {" "}
             Rs. {item.isDiscounted ? item.discountedPrice : item.price}{" "}
