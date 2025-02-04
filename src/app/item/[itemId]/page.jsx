@@ -22,7 +22,7 @@ export default function ItemPage({ params }) {
   const handleContactSeller = () => {
     setContactSeller(true);
     setTimeout(() => {
-      const offset = 0;
+      const offset = 20;
       const elementPosition = sendOrderRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
@@ -233,7 +233,7 @@ export default function ItemPage({ params }) {
             <div className="text-sm md:text-base">{item.description}</div>
             <div
               ref={sendOrderRef}
-              className="flex flex-col gap-2 w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl"
+              className="w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl"
             >
               <div className=" flex gap-3 items-center justify-start">
                 <img
@@ -253,11 +253,14 @@ export default function ItemPage({ params }) {
               <div
                 className={`flex items-center justify-center ${
                   contactSeller
-                    ? "opacity-100 h-full py-5"
-                    : "opacity-0 h-0 pointer-events-none"
+                    ? "opacity-100 h-full py-5 mt-2"
+                    : "opacity-0 h-0  pointer-events-none"
                 } transition-all duration-500`}
               >
-                <Order item={item} />
+                <Order
+                  item={item}
+                  closeOrderPage={() => setContactSeller(false)}
+                />
               </div>
             </div>
           </div>

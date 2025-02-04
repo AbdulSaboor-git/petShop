@@ -1,10 +1,10 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
 import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
-import { useSearchParams } from "next/navigation"; // New import for query params
+import { useSearchParams } from "next/navigation";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -27,11 +27,14 @@ export default function Shop() {
   const [error, setError] = useState(null);
 
   const searchParams = useSearchParams();
+
   useEffect(() => {
-    const categoryParam = searchParams.get("category");
-    if (categoryParam) {
-      // If a category is passed in the query string, preselect it.
-      setSelectedCategories([categoryParam]);
+    // Ensure searchParams exists and has a get method
+    if (searchParams && typeof searchParams.get === "function") {
+      let categoryParam = searchParams.get("category");
+      if (categoryParam) {
+        setSelectedCategories([categoryParam]);
+      }
     }
   }, [searchParams]);
 
@@ -167,199 +170,195 @@ export default function Shop() {
     selectedCategories.some((c) => c === "Chicken" || c === "Eggs");
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="flex flex-col gap-4 lg:gap-6 items-center ">
-        <Header />
-        <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
-          {loading ? (
-            <div>loading...</div>
-          ) : error ? (
-            <div>{error}</div>
-          ) : (
-            <div className="flex flex-col lg:flex-row gap-6 transition-all duration-300">
-              {/* Filters Section */}
-              <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-300">
-                <div className="flex flex-col gap-4 transition-all duration-300">
-                  {/* Categories Filter */}
-                  <div className="flex cursor-pointer flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white transition-all duration-300">
-                    <div
-                      onClick={() =>
-                        ShowCategories
-                          ? setShowCategories(false)
-                          : setShowCategories(true)
-                      }
-                      className="flex items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
-                    >
-                      Filter by Categories
-                      {ShowCategories ? (
-                        <MdArrowDropDown size={20} />
-                      ) : (
-                        <MdArrowDropUp size={20} />
-                      )}
-                    </div>
-                    <div
-                      className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
-                        !ShowCategories
-                          ? "h-0 opacity-0 pointer-events-none"
-                          : "h-full opacity-100 pointer-events-auto"
-                      }`}
-                    >
-                      {/* "All" button */}
-                      <button
-                        onClick={() => handleCategoryClick("All")}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                          selectedCategories.includes("All")
-                            ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
-                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                        }`}
-                      >
-                        All
-                      </button>
-                      {categories.map((categ, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleCategoryClick(categ.name)}
-                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
-                            selectedCategories.includes(categ.name)
-                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                          }`}
-                        >
-                          <div className="relative">
-                            {categ.name}
-                            <MdClose className="absolute text-white -right-[18px]  top-[3px]  lg:hidden" />
-                          </div>
-                        </button>
-                      ))}
-                    </div>
+    <div className="flex flex-col gap-4 lg:gap-6 items-center ">
+      <Header />
+      <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
+        {loading ? (
+          <div>loading...</div>
+        ) : error ? (
+          <div>{error}</div>
+        ) : (
+          <div className="flex flex-col lg:flex-row gap-6 transition-all duration-300">
+            {/* Filters Section */}
+            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-300">
+              <div className="flex flex-col items-end gap-3 transition-all duration-300">
+                {/* Categories Filter */}
+                <div className="w-full bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                  <div
+                    onClick={() =>
+                      ShowCategories
+                        ? setShowCategories(false)
+                        : setShowCategories(true)
+                    }
+                    className="flex items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                  >
+                    Filter by Categories
+                    {!ShowCategories ? (
+                      <MdArrowDropDown size={20} />
+                    ) : (
+                      <MdArrowDropUp size={20} />
+                    )}
                   </div>
-
-                  {/* Breeds Filter (only show if applicable) */}
-                  {showBreedFilter && (
-                    <div className="flex flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
-                      <div
-                        onClick={() =>
-                          showBreeds
-                            ? setShowBreeds(false)
-                            : setShowBreeds(true)
-                        }
-                        className="flex cursor-pointer items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
-                      >
-                        Filter by Breeds
-                        {showBreeds ? (
-                          <MdArrowDropDown size={20} />
-                        ) : (
-                          <MdArrowDropUp size={20} />
-                        )}
-                      </div>
-                      <div
-                        className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
-                          !showBreeds
-                            ? "h-0 opacity-0 pointer-events-none"
-                            : "h-full opacity-100 pointer-events-auto"
-                        }`}
-                      >
-                        {/* "All" button for breeds */}
-                        <button
-                          onClick={() => handleBreedClick("All")}
-                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                            selectedBreeds.includes("All")
-                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
-                          }`}
-                        >
-                          All
-                        </button>
-                        {breeds.map((breed, i) => (
-                          <button
-                            key={i}
-                            onClick={() => handleBreedClick(breed.name)}
-                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
-                              selectedBreeds.includes(breed.name)
-                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                            }`}
-                          >
-                            <div className="relative">
-                              {breed.name}
-                              <MdClose className="absolute text-white -right-[18px] top-[3px] lg:hidden" />
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Additional Filters Section: On Sale and Sorting Options */}
-                  <div className="flex cursor-pointer flex-col gap-1 lg:gap-5 lg:border lg:border-[#9e6e3b] p-0 lg:p-3 lg:pb-6 rounded-3xl text-white">
-                    <div
-                      onClick={() =>
-                        ShowMoreFilters
-                          ? setShowMoreFilters(false)
-                          : setShowMoreFilters(true)
-                      }
-                      className="flex items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
-                    >
-                      More Filters
-                      {ShowMoreFilters ? (
-                        <MdArrowDropDown size={20} />
-                      ) : (
-                        <MdArrowDropUp size={20} />
-                      )}
-                    </div>
-                    <div
-                      className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
-                        !ShowMoreFilters
-                          ? "h-0 opacity-0 pointer-events-none"
-                          : "h-full opacity-100 pointer-events-auto"
+                  <div
+                    className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                      !ShowCategories
+                        ? "h-0 opacity-0 pointer-events-none"
+                        : "h-full opacity-100 mt-3 lg:my-5 pointer-events-auto"
+                    }`}
+                  >
+                    {/* "All" button */}
+                    <button
+                      onClick={() => handleCategoryClick("All")}
+                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
+                        selectedCategories.includes("All")
+                          ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
+                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                       }`}
                     >
+                      All
+                    </button>
+                    {categories.map((categ, i) => (
                       <button
-                        onClick={() => setOnSale((prev) => !prev)}
+                        key={i}
+                        onClick={() => handleCategoryClick(categ.name)}
                         className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
-                          onSale
+                          selectedCategories.includes(categ.name)
                             ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
                             : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                         }`}
                       >
                         <div className="relative">
-                          On Sale
-                          <MdClose className="absolute text-white -right-[18px]  top-[3px] lg:hidden" />
-                        </div>{" "}
+                          {categ.name}
+                          <MdClose className="absolute text-white -right-[18px]  top-[3px]  lg:hidden" />
+                        </div>
                       </button>
-                    </div>
-                    <div className="flex flex-row gap-2 mt-2">
-                      <select
-                        value={sortOption}
-                        onChange={(e) => setSortOption(e.target.value)}
-                        className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] p-1 px-4 text-xs lg:text-base text-[#9e562b] bg-white"
-                      >
-                        <option value="default">Default</option>
-                        <option value="priceAsc">Price: Low to High</option>
-                        <option value="priceDesc">Price: High to Low</option>
-                        <option value="newest">Newest</option>
-                      </select>
-                    </div>
+                    ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Items Section */}
-              <div
-                className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                  !items.length &&
-                  "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                }`}
-              >
-                {items.map((item, i) => (
-                  <ProductCardAlt key={i} item={item} />
-                ))}
+                {/* Breeds Filter (only show if applicable) */}
+                {showBreedFilter && (
+                  <div className="w-full bg-gray-100 p-3 flex flex-col  lg:bg-transparent   lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                    <div
+                      onClick={() =>
+                        showBreeds ? setShowBreeds(false) : setShowBreeds(true)
+                      }
+                      className="flex cursor-pointer items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                    >
+                      Filter by Breeds
+                      {!showBreeds ? (
+                        <MdArrowDropDown size={20} />
+                      ) : (
+                        <MdArrowDropUp size={20} />
+                      )}
+                    </div>
+                    <div
+                      className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                        !showBreeds
+                          ? "h-0 opacity-0 pointer-events-none"
+                          : "h-full opacity-100  mt-3 lg:my-5 pointer-events-auto"
+                      }`}
+                    >
+                      {/* "All" button for breeds */}
+                      <button
+                        onClick={() => handleBreedClick("All")}
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
+                          selectedBreeds.includes("All")
+                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
+                        }`}
+                      >
+                        All
+                      </button>
+                      {breeds.map((breed, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleBreedClick(breed.name)}
+                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                            selectedBreeds.includes(breed.name)
+                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                          }`}
+                        >
+                          <div className="relative">
+                            {breed.name}
+                            <MdClose className="absolute text-white -right-[18px] top-[3px] lg:hidden" />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Additional Filters Section: On Sale and Sorting Options */}
+                <div className="w-full bg-gray-100 p-3 flex  flex-col  lg:bg-transparent  lg:border lg:border-[#9e6e3b]  rounded-xl text-white transition-all duration-300">
+                  <div
+                    onClick={() =>
+                      ShowMoreFilters
+                        ? setShowMoreFilters(false)
+                        : setShowMoreFilters(true)
+                    }
+                    className="flex items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                  >
+                    More Filters
+                    {!ShowMoreFilters ? (
+                      <MdArrowDropDown size={20} />
+                    ) : (
+                      <MdArrowDropUp size={20} />
+                    )}
+                  </div>
+                  <div
+                    className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                      !ShowMoreFilters
+                        ? "h-0 opacity-0 pointer-events-none"
+                        : "h-full opacity-100 mt-3 lg:my-5 pointer-events-auto"
+                    }`}
+                  >
+                    <button
+                      onClick={() => setOnSale((prev) => !prev)}
+                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                        onSale
+                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                      }`}
+                    >
+                      <div className="relative">
+                        On Sale
+                        <MdClose className="absolute text-white -right-[18px]  top-[3px] lg:hidden" />
+                      </div>{" "}
+                    </button>
+                  </div>
+                </div>
+                <div className="flex w-fit flex-row gap-2 mt-2">
+                  <select
+                    value={sortOption}
+                    onChange={(e) => setSortOption(e.target.value)}
+                    className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] p-1 px-4 text-xs lg:text-base text-[#9e562b] bg-white"
+                  >
+                    <option value="default">Default</option>
+                    <option value="priceAsc">Price: Low to High</option>
+                    <option value="priceDesc">Price: High to Low</option>
+                    <option value="newest">Newest</option>
+                  </select>
+                </div>
               </div>
             </div>
-          )}
-        </div>
-        <Footer />
+
+            {/* Items Section */}
+            <div
+              className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                !items.length &&
+                "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+              }`}
+            >
+              {items.map((item, i) => (
+                <ProductCardAlt key={i} item={item} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    </Suspense>
+      <Footer />
+    </div>
   );
 }

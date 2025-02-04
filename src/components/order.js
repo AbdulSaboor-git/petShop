@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdEmail, MdWhatsapp } from "react-icons/md";
 
-export default function Order({ item }) {
+export default function Order({ item, closeOrderPage }) {
   const generateOrderMessage = () => {
     if (!item) return "";
     const priceText = item.isDiscounted
@@ -84,6 +84,12 @@ Thank you.`;
             >
               Email
               <MdEmail size={15} />
+            </button>
+            <button
+              onClick={closeOrderPage}
+              className=" bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+            >
+              Cancel
             </button>
           </div>
         </div>
