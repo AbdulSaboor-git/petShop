@@ -190,11 +190,12 @@ export default function Shop() {
                     className="flex items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                   >
                     Filter by Categories
-                    {!ShowCategories ? (
-                      <MdArrowDropDown size={20} />
-                    ) : (
-                      <MdArrowDropUp size={20} />
-                    )}
+                    <MdArrowDropDown
+                      size={20}
+                      className={`${
+                        ShowCategories ? "-rotate-180" : "rotate-0"
+                      } transition-all duration-300`}
+                    />
                   </div>
                   <div
                     className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
@@ -243,11 +244,12 @@ export default function Shop() {
                       className="flex cursor-pointer items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                     >
                       Filter by Breeds
-                      {!showBreeds ? (
-                        <MdArrowDropDown size={20} />
-                      ) : (
-                        <MdArrowDropUp size={20} />
-                      )}
+                      <MdArrowDropDown
+                        size={20}
+                        className={`${
+                          showBreeds ? "-rotate-180" : "rotate-0"
+                        } transition-all duration-300`}
+                      />
                     </div>
                     <div
                       className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
@@ -298,11 +300,12 @@ export default function Shop() {
                     className="flex items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                   >
                     More Filters
-                    {!ShowMoreFilters ? (
-                      <MdArrowDropDown size={20} />
-                    ) : (
-                      <MdArrowDropUp size={20} />
-                    )}
+                    <MdArrowDropDown
+                      size={20}
+                      className={`${
+                        ShowMoreFilters ? "-rotate-180" : "rotate-0"
+                      } transition-all duration-300`}
+                    />
                   </div>
                   <div
                     className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${

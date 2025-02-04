@@ -209,9 +209,9 @@ export default function ItemPage({ params }) {
                   </button>
                   <button
                     onClick={handleFavoriteClick}
-                    className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full hover:bg-orange-500 hover:border-orange-500 hover:text-white ${
+                    className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full hover:animate-bounce ${
                       favorites.includes(item.id)
-                        ? "bg-orange-500 text-white"
+                        ? "bg-orange-500 text-white hover:animate-none"
                         : "bg-white"
                     }`}
                   >

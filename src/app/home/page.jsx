@@ -269,14 +269,14 @@ export default function HomePage() {
                   {categories.map((categ, i) => (
                     <div
                       key={i}
-                      className={`flex w-full h-fit p-8 gap-20 ${
+                      className={`flex w-full p-8 gap-20 ${
                         i === 0 || i === 3 || i === 4 || i === 7 || i === 8
                           ? "bg-[#9e6e3b]"
                           : "bg-[#252525]"
                       } flex items-start justify-between overflow-hidden`}
                     >
                       <div className="flex-1">
-                        <div className="absolute flex flex-col gap-2 justify-start flex-1">
+                        <div className="flex flex-col gap-2 justify-start flex-1">
                           <h2 className="text-white text-2xl font-extrabold">
                             {categ.name.toUpperCase()}
                           </h2>
