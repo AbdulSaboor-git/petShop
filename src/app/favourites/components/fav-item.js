@@ -12,7 +12,7 @@ export default function FavItem({
 }) {
   const router = useRouter();
   function itemClick() {
-    router.push(`/product/${item.id}`);
+    router.push(`/item/${item.id}`);
   }
   return (
     <div
@@ -35,9 +35,9 @@ export default function FavItem({
           className="accent-orange-600 size-3 md:size-4"
         />
         <img
-          src={item.img}
+          src={item.images[1]}
           alt={item.name}
-          className="w-16 md:w-24 object-cover rounded-lg cursor-pointer"
+          className="w-16 md:w-24 object-cover aspect-square rounded-lg cursor-pointer"
           onClick={itemClick}
         />
         <div className="text-sm md:text-base flex flex-col ">

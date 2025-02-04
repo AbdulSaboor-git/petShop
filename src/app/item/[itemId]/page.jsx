@@ -2,20 +2,19 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { RiCircleFill, RiHeartFill } from "react-icons/ri";
-import ItemGallery from "./components/itemGallery";
-import { Favorite, FavoriteOutlined } from "@mui/icons-material";
-import { FaHeart } from "react-icons/fa";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import ItemGallery from "./components/itemGallery";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]);
   const defaultPic =
     "https://lh3.googleusercontent.com/pw/AP1GczM2cnSQPHG8oKKskeSFKCFjs3z_NG31Tt4bQPqb4Fp-Qdteh0m-84BjSvDgQTkscceDPu1eD1Rs2OxUSd0InRuqnowixs1x8kqSVIcu_7BbkBi4XFK13ZqIeq56OxPw0bzq0hoUgYtTHteuYB1cTI-K=w883-h883-s-no-gm";
 
+  // Fetch item data and initialize favorites from localStorage
   useEffect(() => {
     const fetchItemData = async () => {
       try {
@@ -32,8 +31,33 @@ export default function ItemPage({ params }) {
       }
     };
 
+    // Get favorites from localStorage, if any.
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    } else {
+      // Initialize as an empty array.
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavorites([]);
+    }
+
     fetchItemData();
   }, [itemId]);
+
+  const handleFavoriteClick = () => {
+    setFavorites((prevFavorites) => {
+      let updatedFavorites;
+      if (prevFavorites.includes(item.id)) {
+        // Remove item from favorites
+        updatedFavorites = prevFavorites.filter((favId) => favId !== item.id);
+      } else {
+        // Add item to favorites
+        updatedFavorites = [...prevFavorites, item.id];
+      }
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
 
   return (
     <div className="flex flex-col items-center md:gap-10">
@@ -52,7 +76,7 @@ export default function ItemPage({ params }) {
               </div>
 
               {/* Product Details Section */}
-              <div className="flex flex-col h-auto  md:w-2/3 md:max-w-1/3 md:px-4 gap-2.5 md:gap-4 text-gray-700">
+              <div className="flex flex-col h-auto md:w-2/3 md:max-w-1/3 md:px-4 gap-2.5 md:gap-4 text-gray-700">
                 {item.isDiscounted && (
                   <p className="text-green-600 text-xs md:text-sm font-semibold mx-1">
                     {Math.round(
@@ -70,21 +94,20 @@ export default function ItemPage({ params }) {
                       {item.breed.name}
                     </p>
                   )}
-                  <div className=" text-lg md:text-2xl font-bold text-orange-600">
+                  <div className="text-lg md:text-2xl font-bold text-orange-600">
                     {!item?.isDiscounted && (
                       <p>
-                        {" "}
-                        <span className=""> Rs. </span>
+                        <span> Rs. </span>
                         {item?.price}
                       </p>
                     )}
                     {item?.isDiscounted && (
                       <div className="flex flex-row gap-3 items-baseline">
                         <p>
-                          <span className=""> Rs. </span>{" "}
+                          <span> Rs. </span>
                           {item?.discountedPrice}
                         </p>
-                        <p className="font-normal text-xs md:text-sm line-through  decoration-gray-400 text-gray-500">
+                        <p className="font-normal text-xs md:text-sm line-through decoration-gray-400 text-gray-500">
                           Rs. {item?.price}
                         </p>
                       </div>
@@ -148,23 +171,41 @@ export default function ItemPage({ params }) {
                           item.availability ? "text-green-600" : "text-red-600"
                         }`}
                       >
-                        {item.availability ? "Available" : "Not Available"}{" "}
+                        {item.availability ? "Available" : "Not Available"}
                       </span>
                     </p>
                   </ul>
                 </div>
                 <div className="fixed bottom-0 left-0 p-3 px-4 md:p-0 bg-white w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
-                  <button className="bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full">
-                    Conatct Seller
+                  <button
+                    className={`bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full `}
+                  >
+                    Contact Seller
                   </button>
-                  <button className="flex items-center justify-center gap-1 border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full  hover:bg-orange-500 hover:border-orange-500 hover:text-white">
-                    Add to
-                    <MdFavoriteBorder className="text-[16px] md:text-[18px] mt-0.5" />
+                  <button
+                    onClick={handleFavoriteClick}
+                    className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full hover:bg-orange-500 hover:border-orange-500 hover:text-white ${
+                      favorites.includes(item.id)
+                        ? "bg-orange-500 text-white"
+                        : "bg-white"
+                    }`}
+                  >
+                    {favorites.includes(item.id) ? (
+                      <div className="flex items-center justify-center gap-1">
+                        Fav{" "}
+                        <MdFavorite className="text-[16px] md:text-[18px]" />
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-1">
+                        Add to{" "}
+                        <MdFavoriteBorder className="text-[16px] md:text-[18px]" />
+                      </div>
+                    )}
                   </button>
                 </div>
               </div>
             </div>
-            <div className=" text-sm md:text-base">{item.description}</div>
+            <div className="text-sm md:text-base">{item.description}</div>
             <div className="w-full flex gap-3 items-center justify-start bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl">
               <img
                 src={
@@ -176,7 +217,7 @@ export default function ItemPage({ params }) {
                 draggable="false"
                 className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
               />
-              <div className="font-bold text-sm md:text-base ">
+              <div className="font-bold text-sm md:text-base">
                 {item.seller.firstName} {item.seller.lastName}
               </div>
             </div>

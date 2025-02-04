@@ -1,0 +1,39 @@
+import prisma from "@/lib/prisma";
+
+export default async function handler(req, res) {
+  const { method } = req;
+
+  switch (method) {
+    case "GET":
+      return handleGet(req, res);
+    default:
+      res.setHeader("Allow", ["GET"]);
+      return res.status(405).end(`Method ${method} Not Allowed`);
+  }
+}
+
+const handleGet = async (req, res) => {
+  try {
+    // Expecting a query parameter: /api/favItems?ids=1,2,3
+    const { ids } = req.query;
+    if (!ids) {
+      return res.status(400).json({ message: "Missing ids query parameter" });
+    }
+
+    // Parse the comma-separated ids into an array.
+    // Adjust parseInt as needed (or use Number) depending on your ID type.
+    const favIds = ids.split(",").map((id) => parseInt(id, 10));
+
+    // Fetch items whose IDs are in the favIds array
+    const items = await prisma.item.findMany({
+      where: {
+        id: { in: favIds },
+      },
+    });
+
+    return res.status(200).json({ items });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};

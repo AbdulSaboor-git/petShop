@@ -51,7 +51,9 @@ export default function HomePage() {
         setLoading(false);
       }
     };
-
+    if (!localStorage.getItem("favorites")) {
+      localStorage.setItem("favorites", []);
+    }
     fetchItems();
   }, []);
 

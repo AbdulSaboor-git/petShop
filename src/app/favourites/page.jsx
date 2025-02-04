@@ -2,90 +2,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { FaTrashAlt } from "react-icons/fa";
 import FavItem from "./components/fav-item";
 
 export default function Favourites() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [checkout, setCheckout] = useState(false);
   const orderConfirmationRef = useRef(null);
+  const [favoriteIds, setFavoriteIds] = useState([]);
+  const [favorites, setFavorites] = useState([]); // these are the full item objects
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const fav_items = [
-    {
-      id: 18,
-      name: "Orpington Chicken",
-      breed: "Orpington",
-      img: "/3.jpg",
-      price: 2400,
-      discountedPrice: 2200,
-      isDiscounted: true,
-      weight: 2.7,
-      height: 300,
-      age: 2.4,
-      sex: "female",
-      nature: "Gentle, hardy, good for egg production",
-      specifications: "Large, glossy black feathers",
-      type: "Egg-laying bird",
-      availability: true,
-    },
-    {
-      id: 11,
-      name: "Indian Game Chicken",
-      breed: "Indian Game",
-      img: "/2.jpg",
-      price: 2200,
-      discountedPrice: 2000,
-      isDiscounted: true,
-      weight: 3.0,
-      height: 310,
-      age: 1.8,
-      sex: "male",
-      nature: "Aggressive, hardy",
-      specifications: "Feathers in vibrant colors, strong build",
-      type: "Show and meat bird",
-      availability: true,
-    },
-    {
-      id: 20,
-      name: "Indian Game Chicken",
-      breed: "Indian Game",
-      img: "/2.jpg",
-      price: 2200,
-      discountedPrice: 2000,
-      isDiscounted: true,
-      weight: 3.0,
-      height: 310,
-      age: 1.8,
-      sex: "male",
-      nature: "Aggressive, hardy",
-      specifications: "Feathers in vibrant colors, strong build",
-      type: "Show and meat bird",
-      availability: false,
-    },
-    {
-      id: 21,
-      name: "Indian Game Chicken",
-      breed: "Indian Game",
-      img: "/2.jpg",
-      price: 2200,
-      discountedPrice: 2000,
-      isDiscounted: true,
-      weight: 3.0,
-      height: 310,
-      age: 1.8,
-      sex: "male",
-      nature: "Aggressive, hardy",
-      specifications: "Feathers in vibrant colors, strong build",
-      type: "Show and meat bird",
-      availability: true,
-    },
-  ];
-
+  // Handle selecting an item (for example to show details in checkout)
   const handleSelectItem = (itemId) => {
     setCheckout(false);
     setSelectedItem((prev) => (prev === itemId ? null : itemId));
   };
 
+  // Handle checkout (scroll to confirmation section)
   const handleCheckout = () => {
     setCheckout(true);
     setTimeout(() => {
@@ -100,64 +34,103 @@ export default function Favourites() {
     }, 100);
   };
 
-  const handleRemoveFav = (itemId) => {};
-  const handlePlaceOrder = () => {};
+  // Load favorite IDs from localStorage once when the component mounts
+  useEffect(() => {
+    const storedFavoriteIds = localStorage.getItem("favorites");
+    if (storedFavoriteIds) {
+      try {
+        const parsedIds = JSON.parse(storedFavoriteIds);
+        setFavoriteIds(parsedIds);
+      } catch (err) {
+        console.error("Error parsing favorites", err);
+        setFavoriteIds([]);
+      }
+    } else {
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavoriteIds([]);
+    }
+  }, []);
+
+  // Whenever favoriteIds change, fetch the full item details from your backend.
+  // You should create an API endpoint (e.g. /api/itemsByIds) that accepts the IDs.
+  useEffect(() => {
+    async function fetchFavorites() {
+      if (favoriteIds.length === 0) {
+        setFavorites([]);
+        setLoading(false);
+        return;
+      }
+      setLoading(true);
+      try {
+        // Build a query string of ids, e.g., ?ids=1,2,3
+        const queryString = favoriteIds.join(",");
+        const response = await fetch(
+          `/api/favItems?ids=${encodeURIComponent(queryString)}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch favorite items");
+        }
+        const data = await response.json();
+        // Assume the API returns an array of item objects
+        setFavorites(data.items);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchFavorites();
+  }, [favoriteIds]);
+
+  // Remove a favorite item by its ID.
+  const handleRemoveFav = (itemId) => {
+    const updatedIds = favoriteIds.filter((id) => id !== itemId);
+    setFavoriteIds(updatedIds);
+    localStorage.setItem("favorites", JSON.stringify(updatedIds));
+  };
+
+  // Stub for placing an order/inquiry
+  const handlePlaceOrder = () => {
+    // Place your order logic here.
+    console.log("Order placed");
+  };
 
   return (
     <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
       <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
         <div className="flex justify-between items-center px-1">
-          <h1 className="font-bold ">My Favourites ({fav_items.length})</h1>
-          {/* <button
-            className={`items-center text-sm md:text-base text-gray-500 cursor-default  ${
-              selectedItems.length &&
-              "text-red-500 cursor-pointer hover:text-red-600"
-            }`}
-            onClick={() => handleDeleteItem()}
-          >
-            <FaTrashAlt />{" "}
-          </button> */}
+          <h1 className="font-bold ">My Favourites ({favorites.length})</h1>
+          {/* You can add bulk delete functionality here if needed */}
         </div>
         <div className="flex flex-col gap-2">
-          {fav_items.map((item) => (
-            <FavItem
-              key={item.id}
-              item={item}
-              handleSelectItem={handleSelectItem}
-              handleRemoveFav={handleRemoveFav}
-              isSelected={selectedItem === item.id}
-            />
-          ))}
-          {fav_items.length === 0 && (
-            <div className="text-xs md:text-sm  bg-white text-gray-400 text-center border-2 p-2">
+          {loading ? (
+            <div className="text-xs md:text-sm rounded-lg bg-gray-100 text-gray-400 border p-2">
+              Loading Favorites...
+            </div>
+          ) : error ? (
+            <div className="text-xs md:text-sm rounded-lg bg-gray-100 text-red-500 border p-2">
+              {error}
+            </div>
+          ) : favorites.length > 0 ? (
+            favorites.map((item) => (
+              <FavItem
+                key={item.id}
+                item={item}
+                handleSelectItem={handleSelectItem}
+                handleRemoveFav={handleRemoveFav}
+                isSelected={selectedItem === item.id}
+              />
+            ))
+          ) : (
+            <div className="text-xs md:text-sm rounded-lg bg-gray-100 text-gray-400 border p-2">
               Favourites List is empty
             </div>
           )}
         </div>
         <div className="flex flex-col gap-2 border-t border-gray-300 mt-6 p-5">
-          {/* <div className="flex gap-2 w-full justify-between items-center">
-            <div className="flex gap-2 items-center text-[13px] md:text-sm">
-              <input
-                className="accent-orange-600 mb-0.5 size-3 md:size-4"
-                type="checkbox"
-                onClick={handleSelectAll}
-                checked={selectedAll ? true : false}
-              />{" "}
-              All
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <div className=" text-sm md:text-base ">
-                Subtotal: {" "}
-                <span className="font-bold text-base md:text-lg text-orange-500">
-                  Rs. {totalAmount}
-                </span>
-              </div>
-            </div>
-          </div> */}
           <button
-            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded hover:bg-orange-600 disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500
-            "
+            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded hover:bg-orange-600 disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500"
             onClick={handleCheckout}
             disabled={selectedItem === null}
           >
@@ -174,51 +147,10 @@ export default function Favourites() {
             : "opacity-0 h-0 pointer-events-none"
         } transition-all duration-500`}
       >
-        <div
-          className={`flex flex-col mx-4 md:mx-10 text-xs md:text-sm w-fit gap-4 
-            max-w-[400px] self-center p-5 py-10 rounded-xl border border-gray-300 border-dashed
-             bg-gray-50 text-gray-700 text-center shadow-xl relative`}
-        >
+        <div className="flex flex-col mx-4 md:mx-10 text-xs md:text-sm w-fit gap-4 max-w-[400px] self-center p-5 py-10 rounded-xl border border-gray-300 border-dashed bg-gray-50 text-gray-700 text-center shadow-xl relative">
           <h2 className="text-base md:text-lg font-bold">Order Confirmation</h2>
-
-          {/* <div className="flex flex-col text-start font-semibold gap-1 py-2">
-            <h3 className="text-sm md:text-base font-bold px-2">Items:</h3>
-            <div className="flex flex-col">
-              {selectedItems.map((itemId) => {
-                const item = fav_items.find((item) => item.id === itemId);
-                return (
-                  <div
-                    key={item.id}
-                    className="flex justify-between border-b px-2 border-gray-200 py-1"
-                  >
-                    <span className="font-normal">{item.name}</span>
-                    <span className="font-normal">Rs. {item.price}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="flex flex-col text-start font-semibold px-2 gap-1 border-t border-b border-gray-300 py-2">
-            <p className="flex justify-between">
-              <span>Total Items:</span>
-              <span className="font-normal">{selectedItems.length}</span>
-            </p>
-            <p className="flex justify-between">
-              <span>Total Amount:</span>
-              <span className="font-normal">Rs. {totalAmount}</span>
-            </p>
-          </div>
-          <div className="flex flex-col text-start font-semibold gap-1 mt-4 border-gray-300 py-2">
-            <h3 className="text-sm md:text-base font-bold">
-              Terms and Conditions:
-            </h3>
-            <p className="font-normal text-xs md:text-sm">
-              By placing this order, you agree to our terms and conditions.
-              Please ensure that all the information provided is accurate. Once
-              the order is placed, it cannot be modified or canceled.
-            </p>
-          </div> */}
-          {selectedItem}
+          {/* Display selected item details or any additional order info */}
+          <div>{selectedItem && `Selected Item: ${selectedItem}`}</div>
           <button
             className="bg-orange-500 text-white w-fit self-center px-4 py-1.5 rounded hover:bg-orange-600 mt-4"
             onClick={handlePlaceOrder}
