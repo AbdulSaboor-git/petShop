@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import FavItem from "./components/fav-item";
+import Order from "@/components/order";
 
 export default function Favourites() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -14,9 +15,9 @@ export default function Favourites() {
   const [error, setError] = useState(null);
 
   // Handle selecting an item (for example to show details in checkout)
-  const handleSelectItem = (itemId) => {
+  const handleSelectItem = (item) => {
     setCheckout(false);
-    setSelectedItem((prev) => (prev === itemId ? null : itemId));
+    setSelectedItem((prev) => (prev === item ? null : item));
   };
 
   // Handle checkout (scroll to confirmation section)
@@ -119,7 +120,7 @@ export default function Favourites() {
                 item={item}
                 handleSelectItem={handleSelectItem}
                 handleRemoveFav={handleRemoveFav}
-                isSelected={selectedItem === item.id}
+                isSelected={selectedItem?.id === item.id}
               />
             ))
           ) : (
@@ -137,26 +138,16 @@ export default function Favourites() {
             Inquire from Seller
           </button>
         </div>
-      </div>
 
-      <div
-        ref={orderConfirmationRef}
-        className={`flex items-center justify-center ${
-          checkout
-            ? "opacity-100 h-full py-5"
-            : "opacity-0 h-0 pointer-events-none"
-        } transition-all duration-500`}
-      >
-        <div className="flex flex-col mx-4 md:mx-10 text-xs md:text-sm w-fit gap-4 max-w-[400px] self-center p-5 py-10 rounded-xl border border-gray-300 border-dashed bg-gray-50 text-gray-700 text-center shadow-xl relative">
-          <h2 className="text-base md:text-lg font-bold">Order Confirmation</h2>
-          {/* Display selected item details or any additional order info */}
-          <div>{selectedItem && `Selected Item: ${selectedItem}`}</div>
-          <button
-            className="bg-orange-500 text-white w-fit self-center px-4 py-1.5 rounded hover:bg-orange-600 mt-4"
-            onClick={handlePlaceOrder}
-          >
-            Place Order
-          </button>
+        <div
+          ref={orderConfirmationRef}
+          className={`w-full max-w-[500px] flex items-center justify-center ${
+            checkout
+              ? "opacity-100 h-full py-5"
+              : "opacity-0 h-0 pointer-events-none"
+          } transition-all duration-500`}
+        >
+          <Order item={selectedItem} />
         </div>
       </div>
       <Footer />

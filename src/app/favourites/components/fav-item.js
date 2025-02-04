@@ -31,7 +31,7 @@ export default function FavItem({
           type="checkbox"
           disabled={!item.availability}
           checked={isSelected}
-          onChange={() => handleSelectItem(item.id)}
+          onChange={() => handleSelectItem(item)}
           className="accent-orange-600 size-3 md:size-4"
         />
         <img
@@ -40,7 +40,7 @@ export default function FavItem({
           className="w-16 md:w-24 object-cover aspect-square rounded-lg cursor-pointer"
           onClick={itemClick}
         />
-        <div className="text-sm md:text-base flex flex-col ">
+        <div className="text-sm md:text-base flex flex-col gap-[1px] items-start">
           {!item.availability && (
             <p className="text-[10px] md:text-xs text-red-600">Unavailable</p>
           )}
@@ -51,7 +51,10 @@ export default function FavItem({
             {item.name}
           </h3>
           <p className="text-xs md:text-sm text-gray-600">{item.breed} </p>
-          <p className="text-xs md:text-sm text-green-600">Rs. {item.price} </p>
+          <p className="text-xs md:text-sm text-green-600">
+            {" "}
+            Rs. {item.isDiscounted ? item.discountedPrice : item.price}{" "}
+          </p>
         </div>
       </div>
       <button

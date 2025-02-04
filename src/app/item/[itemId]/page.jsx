@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import ItemGallery from "./components/itemGallery";
+import Order from "@/components/order";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -12,6 +13,7 @@ export default function ItemPage({ params }) {
   const [error, setError] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
+
   const sendOrderRef = useRef(null);
 
   const defaultPic =
@@ -76,45 +78,6 @@ export default function ItemPage({ params }) {
   };
 
   // Generate the order message using item details.
-  const generateOrderMessage = () => {
-    if (!item) return "";
-    const priceText = item.isDiscounted
-      ? `Discounted Price: Rs. ${item.discountedPrice} (Original: Rs. ${item.price})`
-      : `Price: Rs. ${item.price}`;
-    return `Hello ${item.seller.firstName},
-
-I am interested in placing an order for the following item:
-
-Item: ${item.name}
-${priceText}
-Description: ${item.description.substring(0, 100)}...
-
-Please let me know the next steps to complete my order.
-
-Thank you.`;
-  };
-
-  // Handler for placing an order via WhatsApp.
-  const handleWhatsappOrder = () => {
-    if (!item || !item.seller.phoneNo) return;
-    const message = generateOrderMessage();
-    const phoneNumber = item.seller.phoneNo.replace(/\D/g, ""); // Remove non-digit characters
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  // Handler for placing an order via Email.
-  const handleEmailOrder = () => {
-    if (!item || !item.seller.email) return;
-    const message = generateOrderMessage();
-    const subject = `Order Inquiry: ${item.name}`;
-    const mailtoUrl = `mailto:${item.seller.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(message)}`;
-    window.location.href = mailtoUrl;
-  };
 
   return (
     <div className="flex flex-col items-center md:gap-10">
@@ -146,9 +109,9 @@ Thank you.`;
                   <p className="text-base md:text-xl font-bold ">
                     {item?.name}
                   </p>
-                  {item.breed && (
+                  {item?.breed && (
                     <p className="text-slate-600 text-sm md:text-base">
-                      {item.breed.name}
+                      {item?.breed?.name}
                     </p>
                   )}
                   <div className="text-lg md:text-2xl font-bold text-orange-600">
@@ -173,51 +136,51 @@ Thank you.`;
                 </div>
                 <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
                   <ul className="text-sm md:text-base ">
-                    {item.height && (
+                    {item?.height && (
                       <p className="font-bold">
                         Height:{" "}
                         <span className="font-normal text-slate-600">
-                          {item.height} cm
+                          {item?.height} cm
                         </span>
                       </p>
                     )}
-                    {item.weight && (
+                    {item?.weight && (
                       <p className="font-bold">
                         Weight:{" "}
                         <span className="font-normal text-slate-600">
-                          {item.weight} g
+                          {item?.weight} g
                         </span>
                       </p>
                     )}
-                    {item.age && (
+                    {item?.age && (
                       <p className="font-bold">
                         Age:{" "}
                         <span className="font-normal text-slate-600">
-                          {item.age} years
+                          {item?.age} years
                         </span>
                       </p>
                     )}
-                    {item.sex && (
+                    {item?.sex && (
                       <p className="font-bold">
                         Gender:{" "}
                         <span className="font-normal text-slate-600">
-                          {item.sex}
+                          {item?.sex}
                         </span>
                       </p>
                     )}
-                    {item.specifications && (
+                    {item?.specifications && (
                       <p className="font-bold">
                         Specifications:{" "}
                         <span className="font-normal text-slate-600">
-                          {item.specifications}
+                          {item?.specifications}
                         </span>
                       </p>
                     )}
-                    {item.nature && (
+                    {item?.nature && (
                       <p className="font-bold">
                         Nature:{" "}
                         <span className="font-normal text-slate-600">
-                          {item.nature}
+                          {item?.nature}
                         </span>
                       </p>
                     )}
@@ -225,10 +188,14 @@ Thank you.`;
                       Availability:{" "}
                       <span
                         className={`font-normal ${
-                          item.availability ? "text-green-600" : "text-red-600"
+                          item?.availability === "AVAILABLE"
+                            ? "text-green-600"
+                            : "text-red-600"
                         }`}
                       >
-                        {item.availability ? "Available" : "Not Available"}
+                        {item?.availability === "AVAILABLE"
+                          ? "Available"
+                          : "Not Available"}
                       </span>
                     </p>
                   </ul>
@@ -266,7 +233,7 @@ Thank you.`;
             <div className="text-sm md:text-base">{item.description}</div>
             <div
               ref={sendOrderRef}
-              className="flex flex-col gap-2 w-full max-w-[600px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl"
+              className="flex flex-col gap-2 w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl"
             >
               <div className=" flex gap-3 items-center justify-start">
                 <img
@@ -290,34 +257,7 @@ Thank you.`;
                     : "opacity-0 h-0 pointer-events-none"
                 } transition-all duration-500`}
               >
-                <div className="flex w-full flex-col text-xs md:text-sm gap-4 max-w-[600px] self-center p-5 py-10 rounded-xl border bg-gray-50 text-gray-700 text-center">
-                  <h2 className="text-base md:text-lg font-bold">
-                    Order Inquiry
-                  </h2>
-                  {/* Display selected item details or any additional order info */}
-                  <p>
-                    <strong>Item:</strong> {item.name}
-                  </p>
-                  <p>
-                    <strong>{item.isDiscounted ? "Price" : "Price"}:</strong>{" "}
-                    {item.isDiscounted ? item.discountedPrice : item.price}
-                  </p>
-                  <h3 className="font-bold text-center">Place Order via:</h3>
-                  <div className="flex flex-col md:flex-row gap-4 justify-center">
-                    <button
-                      onClick={handleWhatsappOrder}
-                      className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-                    >
-                      WhatsApp
-                    </button>
-                    <button
-                      onClick={handleEmailOrder}
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                    >
-                      Email
-                    </button>
-                  </div>
-                </div>
+                <Order item={item} />
               </div>
             </div>
           </div>
