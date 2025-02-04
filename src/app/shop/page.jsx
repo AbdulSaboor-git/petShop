@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
+import { MdClose } from "react-icons/md";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -92,8 +93,8 @@ export default function Shop() {
     // If the newly selected categories do not include "chicken" or "eggs" (case‐insensitive),
     // then reset the breed filter to "All" because breeds only apply to chicken/eggs.
     const hasChickenOrEggs = newSelected.some((c) => {
-      const lc = c.toLowerCase();
-      return lc === "chicken" || lc === "eggs";
+      c;
+      return c === "Chicken" || c === "Eggs";
     });
     if (!hasChickenOrEggs) {
       setSelectedBreeds(["All"]);
@@ -156,10 +157,10 @@ export default function Shop() {
                     {/* "All" button */}
                     <button
                       onClick={() => handleCategoryClick("All")}
-                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base lg:bg-[#9e6e3b]  lg:text-white p-1 px-4 hover:bg-[#9e6e3b] hover:text-white lg:hover:bg-[#7e562b] lg:hover:text-white ${
+                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
                         selectedCategories.includes("All")
-                          ? "bg-[#9e6e3b] text-white"
-                          : "text-[#9e562b]"
+                          ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
+                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                       }`}
                     >
                       All
@@ -168,13 +169,16 @@ export default function Shop() {
                       <button
                         key={i}
                         onClick={() => handleCategoryClick(categ.name)}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base lg:bg-[#9e6e3b]  lg:text-white p-1 px-4 hover:bg-[#9e6e3b] hover:text-white lg:hover:bg-[#7e562b] lg:hover:text-white ${
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
                           selectedCategories.includes(categ.name)
-                            ? "bg-[#9e6e3b] text-white"
-                            : "text-[#9e562b]"
+                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                         }`}
                       >
-                        {categ.name}
+                        <div className="relative">
+                          {categ.name}
+                          <MdClose className="absolute text-white -right-5 top-[3px]  lg:hidden" />
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -190,10 +194,10 @@ export default function Shop() {
                       {/* "All" button for breeds */}
                       <button
                         onClick={() => handleBreedClick("All")}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base lg:bg-[#9e6e3b]  lg:text-white p-1 px-4 hover:bg-[#9e6e3b] hover:text-white lg:hover:bg-[#7e562b] lg:hover:text-white ${
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
                           selectedBreeds.includes("All")
-                            ? "bg-[#9e6e3b] text-white"
-                            : "text-[#9e562b]"
+                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
                         }`}
                       >
                         All
@@ -202,13 +206,16 @@ export default function Shop() {
                         <button
                           key={i}
                           onClick={() => handleBreedClick(breed.name)}
-                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base lg:bg-[#9e6e3b]  lg:text-white p-1 px-4 hover:bg-[#9e6e3b] hover:text-white lg:hover:bg-[#7e562b] lg:hover:text-white ${
+                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
                             selectedBreeds.includes(breed.name)
-                              ? "bg-[#9e6e3b] text-white"
-                              : "text-[#9e562b]"
+                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                           }`}
                         >
-                          {breed.name}
+                          <div className="relative">
+                            {breed.name}
+                            <MdClose className="absolute text-white -right-5 top-[3px] lg:hidden" />
+                          </div>
                         </button>
                       ))}
                     </div>
