@@ -4,16 +4,15 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
 import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
-import { useSearchParams } from "next/navigation";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
-  const [showBreeds, setShowBreeds] = useState(true);
   const [ShowCategories, setShowCategories] = useState(true);
-  const [ShowMoreFilters, setShowMoreFilters] = useState(true);
+  const [showBreeds, setShowBreeds] = useState(false);
+  const [ShowMoreFilters, setShowMoreFilters] = useState(false);
 
   // Use arrays for filtering; "All" is the default selection.
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
@@ -26,17 +25,15 @@ export default function Shop() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const searchParams = useSearchParams();
-
   useEffect(() => {
-    // Ensure searchParams exists and has a get method
-    if (searchParams && typeof searchParams.get === "function") {
-      let categoryParam = searchParams.get("category");
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      let categoryParam = params.get("category");
       if (categoryParam) {
         setSelectedCategories([categoryParam]);
       }
     }
-  }, [searchParams]);
+  }, []);
 
   // Fetch items, categories, and breeds.
   useEffect(() => {
