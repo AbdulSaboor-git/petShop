@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export default function ManageBreedsPage() {
+  const [focused, setFocused] = useState("add");
   const [addBreed, setAddBreed] = useState(true);
   const [editBreed, setEditBreed] = useState(false);
   const [deleteBreed, setDeleteBreed] = useState(false);
@@ -24,6 +25,7 @@ export default function ManageBreedsPage() {
     setDeleteBreed(false);
     setName("");
     setSelectedBreed(null);
+    setFocused("add");
   };
 
   const handleEditBreed = () => {
@@ -32,6 +34,7 @@ export default function ManageBreedsPage() {
     setDeleteBreed(false);
     setName("");
     setSelectedBreed(null);
+    setFocused("edit");
   };
 
   const handleDeleteBreed = () => {
@@ -39,6 +42,7 @@ export default function ManageBreedsPage() {
     setEditBreed(false);
     setDeleteBreed(true);
     setSelectedBreed(null);
+    setFocused("delete");
   };
 
   useEffect(() => {
@@ -52,6 +56,7 @@ export default function ManageBreedsPage() {
         setBreeds(data.breeds);
       } catch (err) {
         setError(err.message);
+        alert(err.message);
       } finally {
         setLoading(false);
       }
@@ -92,19 +97,31 @@ export default function ManageBreedsPage() {
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddBreed}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white flex-1 text-center ${
+                    focused === "add"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Add
                 </button>
                 <button
                   onClick={handleEditBreed}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                    focused === "edit"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e] "
+                  }`}
                 >
                   Edit
                 </button>
                 <button
                   onClick={handleDeleteBreed}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                    focused === "delete"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Delete
                 </button>
@@ -138,7 +155,7 @@ export default function ManageBreedsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                       >
                         Add Breed
                       </button>
@@ -195,7 +212,7 @@ export default function ManageBreedsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                       >
                         Update Breed
                       </button>
@@ -240,7 +257,8 @@ export default function ManageBreedsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-red-600 text-red-600 hover:bg-red-600 hover:text-white disabled:opacity-80"
+                        disabled={!selectedBreed}
+                        className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                       >
                         Delete Breed
                       </button>

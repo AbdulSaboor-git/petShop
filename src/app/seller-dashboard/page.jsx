@@ -52,6 +52,7 @@ export default function SellerDashboardMainPage() {
         // }
       } catch (err) {
         setError(err.message);
+        alert(err.message);
       } finally {
         setLoading(false);
       }
@@ -66,10 +67,6 @@ export default function SellerDashboardMainPage() {
       <div className="w-full max-w-[1200px] px-4 py-6">
         {loading ? (
           <div className="text-center text-base md:text-lg">Loading...</div>
-        ) : error ? (
-          <div className="text-red-600 text-center text-base md:text-lg">
-            {error}
-          </div>
         ) : (
           <div className="flex flex-col gap-8 md:gap-4">
             {/* Headings */}
@@ -83,8 +80,8 @@ export default function SellerDashboardMainPage() {
             </div>
 
             {/* Metrics Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
-              <div className="p-4 border border-[#9e6e3b] rounded-xl shadow text-center">
+            <div className="grid grid-cols-1 bg-gray-100 p-4 rounded-xl sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+              <div className="p-4 border bg-white  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">
                   Total Products
                 </h2>
@@ -92,7 +89,7 @@ export default function SellerDashboardMainPage() {
                   {metrics.totalProducts}
                 </p>
               </div>
-              <div className="p-4 border border-[#9e6e3b] rounded-xl shadow text-center">
+              <div className="p-4 border bg-white  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">
                   Total Categories
                 </h2>
@@ -100,7 +97,7 @@ export default function SellerDashboardMainPage() {
                   {metrics.totalCategories}
                 </p>
               </div>
-              <div className="p-4 border border-[#9e6e3b] rounded-xl shadow text-center">
+              <div className="p-4 border bg-white  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">Total Breeds</h2>
                 <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
                   {metrics.totalBreeds}
@@ -109,7 +106,7 @@ export default function SellerDashboardMainPage() {
             </div>
 
             {/* Analytics Section */}
-            <div className="p-4 border border-[#9e6e3b] rounded-xl shadow">
+            <div className="p-4 border bg-gray-100 rounded-xl shadow">
               <h2 className="text-base md:text-lg font-bold mb-4">Analytics</h2>
               {analytics ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

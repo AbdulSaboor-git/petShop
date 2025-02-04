@@ -250,6 +250,7 @@ export default function HomePage() {
                 <CountdownTimer />
                 <button
                   variant="contained"
+                  onClick={shopClick}
                   className="bg-orange-500 text-base md:text-xl w-fit px-6 py-3 hover:bg-orange-600 text-white rounded-lg"
                 >
                   Shop Now

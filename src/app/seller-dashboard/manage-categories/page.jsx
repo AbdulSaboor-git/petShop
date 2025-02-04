@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export default function ManageCategoriesPage() {
+  const [focused, setFocused] = useState("add");
   const [addCategory, setAddCategory] = useState(true);
   const [editCategory, setEditCategory] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState(false);
@@ -24,6 +25,7 @@ export default function ManageCategoriesPage() {
     setDeleteCategory(false);
     setName("");
     setSelectedCategory(null);
+    setFocused("add");
   };
 
   const handleEditCategory = () => {
@@ -32,6 +34,7 @@ export default function ManageCategoriesPage() {
     setDeleteCategory(false);
     setName("");
     setSelectedCategory(null);
+    setFocused("edit");
   };
 
   const handleDeleteCategory = () => {
@@ -39,6 +42,7 @@ export default function ManageCategoriesPage() {
     setEditCategory(false);
     setDeleteCategory(true);
     setSelectedCategory(null);
+    setFocused("delete");
   };
 
   useEffect(() => {
@@ -52,6 +56,7 @@ export default function ManageCategoriesPage() {
         setCategories(data.categories);
       } catch (err) {
         setError(err.message);
+        alert(err.message);
       } finally {
         setLoading(false);
       }
@@ -71,6 +76,7 @@ export default function ManageCategoriesPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
+      alert(err.message);
     }
   };
 
@@ -80,8 +86,6 @@ export default function ManageCategoriesPage() {
       <div className="w-full max-w-[1200px] px-4">
         {loading ? (
           <div>Loading...</div>
-        ) : error ? (
-          <div className="text-red-600">{error}</div>
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-xl md:2xl font-semibold text-center">
@@ -94,19 +98,31 @@ export default function ManageCategoriesPage() {
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddCategory}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white flex-1 text-center ${
+                    focused === "add"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Add
                 </button>
                 <button
                   onClick={handleEditCategory}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                    focused === "edit"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Edit
                 </button>
                 <button
                   onClick={handleDeleteCategory}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                    focused === "delete"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Delete
                 </button>
@@ -140,7 +156,7 @@ export default function ManageCategoriesPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                       >
                         Add Category
                       </button>
@@ -201,7 +217,7 @@ export default function ManageCategoriesPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                       >
                         Update Category
                       </button>
@@ -249,7 +265,7 @@ export default function ManageCategoriesPage() {
                       <button
                         type="submit"
                         disabled={!selectedCategory}
-                        className="mt-4 p-2 px-4 rounded-xl border border-red-600 text-red-600 hover:bg-red-600 hover:text-white disabled:opacity-80"
+                        className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                       >
                         Delete Category
                       </button>

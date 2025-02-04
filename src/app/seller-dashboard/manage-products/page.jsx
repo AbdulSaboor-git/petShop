@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export default function ManageProductsPage() {
+  const [focused, setFocused] = useState("add");
   const [addProduct, setAddProduct] = useState(true);
   const [editProduct, setEditProduct] = useState(false);
   const [deleteProduct, setDeleteProduct] = useState(false);
@@ -47,6 +48,7 @@ export default function ManageProductsPage() {
     setAddProduct(true);
     setEditProduct(false);
     setDeleteProduct(false);
+    setFocused("add");
   };
 
   const handleEditProduct = () => {
@@ -67,6 +69,7 @@ export default function ManageProductsPage() {
     setAvailability("");
     setImages([]);
     setItem(null); // ADDED: reset selected item for edit
+    setFocused("edit");
   };
 
   const handleDeleteProduct = () => {
@@ -74,6 +77,7 @@ export default function ManageProductsPage() {
     setEditProduct(false);
     setDeleteProduct(true);
     setItem(null); // ADDED: reset selected item for delete
+    setFocused("delete");
   };
 
   useEffect(() => {
@@ -92,6 +96,7 @@ export default function ManageProductsPage() {
         setBreeds(data2.breeds);
       } catch (err) {
         setError(err.message);
+        alert(err.message);
       } finally {
         setLoading(false);
       }
@@ -123,6 +128,7 @@ export default function ManageProductsPage() {
       setImages(data.images || []);
     } catch (err) {
       setItemError(err.message);
+      alert(err.message);
     } finally {
       setItemLoading(false);
     }
@@ -134,8 +140,6 @@ export default function ManageProductsPage() {
       <div className="w-full max-w-[1200px] px-4">
         {loading ? (
           <div>loading...</div>
-        ) : error ? (
-          <div>{error}</div>
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-xl md:2xl font-semibold text-center">
@@ -148,19 +152,31 @@ export default function ManageProductsPage() {
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddProduct}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white flex-1 text-center ${
+                    focused === "add"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Add
                 </button>
                 <button
                   onClick={handleEditProduct}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b]  hover:text-white  text-[#9e6e3b] flex-1 text-center ${
+                    focused === "edit"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Edit
                 </button>
                 <button
                   onClick={handleDeleteProduct}
-                  className="p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white flex-1 text-center"
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b]  hover:text-white  text-[#9e6e3b] flex-1 text-center ${
+                    focused === "delete"
+                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e]"
+                  }`}
                 >
                   Delete
                 </button>
@@ -322,7 +338,7 @@ export default function ManageProductsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                       >
                         Add Product
                       </button>
@@ -517,7 +533,7 @@ export default function ManageProductsPage() {
                       </div>
                       <button
                         type="submit"
-                        className="mt-4 p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                       >
                         Update Product
                       </button>
@@ -564,7 +580,7 @@ export default function ManageProductsPage() {
                       <button
                         type="submit"
                         disabled={!item} // ADDED: disable delete if no product is selected
-                        className="p-2 px-4 rounded-xl border border-red-600 text-red-600 hover:bg-red-600 hover:text-white disabled:opacity-80"
+                        className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                       >
                         Delete Product
                       </button>
