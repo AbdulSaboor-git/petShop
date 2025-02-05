@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
-import { MdArrowDropDown, MdArrowDropUp, MdClose } from "react-icons/md";
+import { MdClose } from "react-icons/md";
+import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -190,18 +191,18 @@ export default function Shop() {
                     className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                   >
                     Filter by Categories
-                    <MdArrowDropDown
-                      size={20}
+                    <RiArrowDownSLine
+                      size={18}
                       className={`${
                         ShowCategories ? "-rotate-180" : "rotate-0"
-                      } transition-all duration-700`}
+                      } transition-all duration-[400ms]`}
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-500 ${
+                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                       !ShowCategories
-                        ? "animate-listCollapse max-h-0 mt-0"
-                        : "animate-listExpand max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                        ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                        : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                     }`}
                   >
                     {/* "All" button */}
@@ -244,18 +245,18 @@ export default function Shop() {
                       className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                     >
                       Filter by Breeds
-                      <MdArrowDropDown
-                        size={20}
+                      <RiArrowDownSLine
+                        size={18}
                         className={`${
                           showBreeds ? "-rotate-180" : "rotate-0"
-                        } transition-all duration-300`}
+                        } transition-all duration-[400ms]`}
                       />
                     </div>
                     <div
-                      className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-500 ${
+                      className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                         !showBreeds
-                          ? "animate-listCollapse max-h-0 mt-0"
-                          : "animate-listExpand max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                          ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                          : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                       }`}
                     >
                       {/* "All" button for breeds */}
@@ -300,18 +301,18 @@ export default function Shop() {
                     className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                   >
                     More Filters
-                    <MdArrowDropDown
-                      size={20}
+                    <RiArrowDownSLine
+                      size={18}
                       className={`${
                         ShowMoreFilters ? "-rotate-180" : "rotate-0"
-                      } transition-all duration-300`}
+                      } transition-all duration-[400ms]`}
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-500 ${
+                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                       !ShowMoreFilters
-                        ? "animate-listCollapse max-h-0 mt-0"
-                        : "animate-listExpand max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                        ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                        : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                     }`}
                   >
                     <button
