@@ -266,12 +266,12 @@ input {
 
 @keyframes listExpand {
   0% {
-    max-height: 0px;
+    /* max-height: 0; */
     opacity: 0;
     transform: translateY(-20px);
   }
   100% {
-    max-height: 150px;
+    /* max-height: 100%; */
     opacity: 1;
     transform: translateY(0px);
   }
@@ -279,12 +279,12 @@ input {
 
 @keyframes listCollapse {
   0% {
-    max-height: 150px;
+    /* max-height: 100%; */
     opacity: 1;
     transform: translateY(0px);
   }
   100% {
-    max-height: 0px;
+    /* max-height: 0; */
     opacity: 0;
     transform: translateY(-20px);
   }

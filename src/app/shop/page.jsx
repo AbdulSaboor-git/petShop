@@ -175,19 +175,19 @@ export default function Shop() {
         ) : error ? (
           <div>{error}</div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-6 transition-all duration-300">
+          <div className="flex flex-col lg:flex-row gap-6 transition-all duration-500">
             {/* Filters Section */}
             <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
               <div className="flex flex-col items-end gap-3 transition-all duration-500">
                 {/* Categories Filter */}
-                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3  flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
                   <div
                     onClick={() =>
                       ShowCategories
                         ? setShowCategories(false)
                         : setShowCategories(true)
                     }
-                    className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                    className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                   >
                     Filter by Categories
                     <MdArrowDropDown
@@ -198,10 +198,10 @@ export default function Shop() {
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap px-1 gap-2 transition-all duration-500 ${
+                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-500 ${
                       !ShowCategories
-                        ? "animate-listCollapse mt-0"
-                        : "animate-listExpand mt-2"
+                        ? "animate-listCollapse max-h-0 mt-0"
+                        : "animate-listExpand max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                     }`}
                   >
                     {/* "All" button */}
@@ -252,10 +252,10 @@ export default function Shop() {
                       />
                     </div>
                     <div
-                      className={`flex flex-row lg:flex-col flex-wrap px-1 gap-2 transition-all duration-500 ${
+                      className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-500 ${
                         !showBreeds
-                          ? "animate-listCollapse mt-0"
-                          : "animate-listExpand mt-2"
+                          ? "animate-listCollapse max-h-0 mt-0"
+                          : "animate-listExpand max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                       }`}
                     >
                       {/* "All" button for breeds */}
@@ -308,10 +308,10 @@ export default function Shop() {
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap px-1 gap-2 transition-all duration-500 ${
+                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-500 ${
                       !ShowMoreFilters
-                        ? "animate-listCollapse mt-0"
-                        : "animate-listExpand mt-2"
+                        ? "animate-listCollapse max-h-0 mt-0"
+                        : "animate-listExpand max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                     }`}
                   >
                     <button
