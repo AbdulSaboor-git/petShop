@@ -88,9 +88,17 @@ export default function Shop() {
     // Sorting: Make a shallow copy before sorting.
     filtered = [...filtered];
     if (sortOption === "priceAsc") {
-      filtered.sort((a, b) => a.price - b.price);
+      filtered.sort(
+        (a, b) =>
+          (a.isDiscounted ? a.discountedPrice : a.price) -
+          (b.isDiscounted ? b.discountedPrice : b.price)
+      );
     } else if (sortOption === "priceDesc") {
-      filtered.sort((a, b) => b.price - a.price);
+      filtered.sort(
+        (a, b) =>
+          (b.isDiscounted ? b.discountedPrice : b.price) -
+          (a.isDiscounted ? a.discountedPrice : a.price)
+      );
     } else if (sortOption === "newest") {
       filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
