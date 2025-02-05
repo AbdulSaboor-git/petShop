@@ -181,14 +181,14 @@ export default function Shop() {
             <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
               <div className="flex flex-col items-end gap-3 transition-all duration-500">
                 {/* Categories Filter */}
-                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3  flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
+                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
                   <div
                     onClick={() =>
                       ShowCategories
                         ? setShowCategories(false)
                         : setShowCategories(true)
                     }
-                    className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                    className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                   >
                     Filter by Categories
                     <RiArrowDownSLine
@@ -199,7 +199,7 @@ export default function Shop() {
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                    className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                       !ShowCategories
                         ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
                         : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
@@ -242,7 +242,7 @@ export default function Shop() {
                       onClick={() =>
                         showBreeds ? setShowBreeds(false) : setShowBreeds(true)
                       }
-                      className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                      className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                     >
                       Filter by Breeds
                       <RiArrowDownSLine
@@ -253,7 +253,7 @@ export default function Shop() {
                       />
                     </div>
                     <div
-                      className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                      className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                         !showBreeds
                           ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
                           : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
@@ -298,7 +298,7 @@ export default function Shop() {
                         ? setShowMoreFilters(false)
                         : setShowMoreFilters(true)
                     }
-                    className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                    className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                   >
                     More Filters
                     <RiArrowDownSLine
@@ -309,7 +309,7 @@ export default function Shop() {
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                    className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                       !ShowMoreFilters
                         ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
                         : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
