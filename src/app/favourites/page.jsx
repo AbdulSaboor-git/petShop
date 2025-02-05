@@ -141,7 +141,10 @@ export default function Favourites() {
               : "opacity-0 h-0 pointer-events-none"
           } transition-all duration-500`}
         >
-          <Order item={selectedItem} />
+          <Order
+            item={selectedItem}
+            closeOrderPage={() => setCheckout(false)}
+          />
         </div>
       </div>
       <Footer />

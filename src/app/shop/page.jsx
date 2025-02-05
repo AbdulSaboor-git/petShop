@@ -10,7 +10,7 @@ export default function Shop() {
   const [allItems, setAllItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
-  const [ShowCategories, setShowCategories] = useState(true);
+  const [ShowCategories, setShowCategories] = useState(false);
   const [showBreeds, setShowBreeds] = useState(false);
   const [ShowMoreFilters, setShowMoreFilters] = useState(false);
 
@@ -177,31 +177,31 @@ export default function Shop() {
         ) : (
           <div className="flex flex-col lg:flex-row gap-6 transition-all duration-300">
             {/* Filters Section */}
-            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-300">
-              <div className="flex flex-col items-end gap-3 transition-all duration-300">
+            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
+              <div className="flex flex-col items-end gap-3 transition-all duration-500">
                 {/* Categories Filter */}
-                <div className="w-full bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                   <div
                     onClick={() =>
                       ShowCategories
                         ? setShowCategories(false)
                         : setShowCategories(true)
                     }
-                    className="flex items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                    className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                   >
                     Filter by Categories
                     <MdArrowDropDown
                       size={20}
                       className={`${
                         ShowCategories ? "-rotate-180" : "rotate-0"
-                      } transition-all duration-300`}
+                      } transition-all duration-700`}
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                    className={`flex flex-row lg:flex-col flex-wrap px-1 gap-2 transition-all duration-500 ${
                       !ShowCategories
-                        ? "h-0 opacity-0 pointer-events-none"
-                        : "h-full opacity-100 mt-3 lg:my-5 pointer-events-auto"
+                        ? "animate-listCollapse mt-0"
+                        : "animate-listExpand mt-2"
                     }`}
                   >
                     {/* "All" button */}
@@ -227,7 +227,7 @@ export default function Shop() {
                       >
                         <div className="relative">
                           {categ.name}
-                          <MdClose className="absolute text-white -right-[18px]  top-[3px]  lg:hidden" />
+                          <MdClose className="absolute text-white -right-[18px]  top-[2px]  lg:hidden" />
                         </div>
                       </button>
                     ))}
@@ -236,12 +236,12 @@ export default function Shop() {
 
                 {/* Breeds Filter (only show if applicable) */}
                 {showBreedFilter && (
-                  <div className="w-full bg-gray-100 p-3 flex flex-col  lg:bg-transparent   lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                  <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                     <div
                       onClick={() =>
                         showBreeds ? setShowBreeds(false) : setShowBreeds(true)
                       }
-                      className="flex cursor-pointer items-center justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                      className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                     >
                       Filter by Breeds
                       <MdArrowDropDown
@@ -252,10 +252,10 @@ export default function Shop() {
                       />
                     </div>
                     <div
-                      className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                      className={`flex flex-row lg:flex-col flex-wrap px-1 gap-2 transition-all duration-500 ${
                         !showBreeds
-                          ? "h-0 opacity-0 pointer-events-none"
-                          : "h-full opacity-100  mt-3 lg:my-5 pointer-events-auto"
+                          ? "animate-listCollapse mt-0"
+                          : "animate-listExpand mt-2"
                       }`}
                     >
                       {/* "All" button for breeds */}
@@ -281,7 +281,7 @@ export default function Shop() {
                         >
                           <div className="relative">
                             {breed.name}
-                            <MdClose className="absolute text-white -right-[18px] top-[3px] lg:hidden" />
+                            <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
                           </div>
                         </button>
                       ))}
@@ -290,14 +290,14 @@ export default function Shop() {
                 )}
 
                 {/* Additional Filters Section: On Sale and Sorting Options */}
-                <div className="w-full bg-gray-100 p-3 flex  flex-col  lg:bg-transparent  lg:border lg:border-[#9e6e3b]  rounded-xl text-white transition-all duration-300">
+                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                   <div
                     onClick={() =>
                       ShowMoreFilters
                         ? setShowMoreFilters(false)
                         : setShowMoreFilters(true)
                     }
-                    className="flex items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
+                    className="flex bg-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-300"
                   >
                     More Filters
                     <MdArrowDropDown
@@ -308,10 +308,10 @@ export default function Shop() {
                     />
                   </div>
                   <div
-                    className={`flex flex-row lg:flex-col flex-wrap gap-2 transition-all duration-300 ${
+                    className={`flex flex-row lg:flex-col flex-wrap px-1 gap-2 transition-all duration-500 ${
                       !ShowMoreFilters
-                        ? "h-0 opacity-0 pointer-events-none"
-                        : "h-full opacity-100 mt-3 lg:my-5 pointer-events-auto"
+                        ? "animate-listCollapse mt-0"
+                        : "animate-listExpand mt-2"
                     }`}
                   >
                     <button
@@ -324,7 +324,7 @@ export default function Shop() {
                     >
                       <div className="relative">
                         On Sale
-                        <MdClose className="absolute text-white -right-[18px]  top-[3px] lg:hidden" />
+                        <MdClose className="absolute text-white -right-[18px]  top-[2px] lg:hidden" />
                       </div>{" "}
                     </button>
                   </div>
