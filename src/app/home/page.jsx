@@ -167,7 +167,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center gap-10">
       <Header />
-      <div className="max-w-[1400px] w-full px-6">
+      <div className="max-w-[1400px] w-full md:px-6">
         {loading ? (
           <div className="text-center py-10 text-xl">Loading...</div>
         ) : error ? (
@@ -178,8 +178,8 @@ export default function HomePage() {
             <Slider {...settings}>
               {randomItems.map((item, index) => (
                 <div key={index}>
-                  <div className="flex flex-col bg-gray-100 sm:flex-row mx-3 p-6 md:px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 ">
-                    <div className="flex flex-col gap-6 w-full md:w-auto">
+                  <div className="flex flex-col bg-gray-100 md:flex-row mx-3 mb-2 p-10 px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 shadow-md ">
+                    <div className="flex md:w-[50%] flex-col gap-6 w-full md:max-w-[400px]">
                       <div className="relative">
                         {nameHover && (
                           <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
@@ -218,7 +218,7 @@ export default function HomePage() {
                         </button>
                       </div>
                     </div>
-                    <div className="flex-shrink-0">
+                    <div className="">
                       <img
                         src={item.images[0] || defaultPic}
                         alt={item.name}

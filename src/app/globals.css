@@ -47,12 +47,17 @@ body {
   background-attachment: fixed;
   letter-spacing: 0.02rem;
   font-family: Arial, Helvetica, sans-serif;
+  user-select: none;
 }
 
 button {
   transition: all 0.23s ease-in-out;
+  user-select: none;
 }
 
+img{
+  user-select: none;
+}
 select,
 input {
   background-color: var(--input-field);

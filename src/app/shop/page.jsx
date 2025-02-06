@@ -40,7 +40,7 @@ export default function Shop() {
       if (breedParam && breedParam != "undefined") {
         setSelectedBreeds([breedParam]);
       }
-      if (saleParam === true && saleParam != "undefined") {
+      if (saleParam === "true" && saleParam != "undefined") {
         setOnSale(saleParam);
       }
       if (sortParam && sortParam != "undefined") {
