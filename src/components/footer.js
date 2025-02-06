@@ -18,42 +18,36 @@ export default function Footer() {
   return (
     <div className="flex w-full flex-col items-center p-6">
       <div className="flex flex-col justify-center w-full max-w-[1200px]">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end w-full py-4 px-6">
-          <div className="flex flex-col items-center justify-center pb-8 md:pb-3">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16  justify-between items-center md:items-end w-full p-4 px-2 md:px-6 ">
+          <div className="flex flex-col items-center justify-center md:pb-3">
             <img src={logoLink} alt="logo" className="h-[50px] md:h-[70px]" />
           </div>
-          <div className="flex gap-4 md:gap-12 justify-center md:px-16">
-            <div className="flex flex-col w-full md:w-auto text-[var(--text-prim)] text-[12px] md:text-[14px] gap-3">
-              <div className="flex items-center gap-3">
-                <SiFacebook className="text-lg md:text-xl" />
-                <p>Royal Aseel Farms</p>
+          <div className="flex flex-col gap-3 text-[var(--text-prim)] text-[12px] md:text-[14px] ">
+            <div className="flex gap-10 md:gap-20 justify-center">
+              <div className="flex flex-col w-full md:w-auto gap-3">
+                <div className="flex items-center gap-3">
+                  <SiFacebook className="text-lg md:text-xl" />
+                  <p>Royal Aseel Farms</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaInstagram className="text-lg md:text-xl" />
+                  <p>@royalaseelfarms</p>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <FaEnvelope className="text-lg md:text-xl" />
-                <p>RoyalAseelFarms@gmail.com</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <SiGoogleplay className="text-lg md:text-xl" />
-                <p>Royal Aseel Farms</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <FaInstagram className="text-lg md:text-xl" />
-                <p>@royalaseelfarms</p>
+              <div className="flex flex-col w-full md:w-auto text-[var(--text-prim)] text-[12px] md:text-[14px] gap-3">
+                <div className="flex items-center gap-3">
+                  <SiYoutube className="text-lg md:text-xl" />
+                  <p>Royal Aseel Farms</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <SiGoogleplay className="text-lg md:text-xl" />
+                  <p>Royal Aseel Farms</p>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col w-full md:w-auto text-[var(--text-prim)] text-[12px] md:text-[14px] gap-3">
-              <div className="flex items-center gap-3">
-                <SiYoutube className="text-lg md:text-xl" />
-                <p>Royal Aseel Farms</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <SiTelegram className="text-lg md:text-xl" />
-                <p>@RoyalAseelFarms</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <SiX className="text-lg md:text-xl" />
-                <p>@RoyalAseelFarms</p>
-              </div>
+            <div className="flex items-center gap-3">
+              <FaEnvelope className="text-lg md:text-xl" />
+              <p>RoyalAseelFarms@gmail.com</p>
             </div>
           </div>
         </div>
