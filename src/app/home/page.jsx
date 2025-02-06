@@ -167,7 +167,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center gap-10">
       <Header />
-      <div className="max-w-[1400px] w-full md:px-6">
+      <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
           <div className="text-center py-10 text-xl">Loading...</div>
         ) : error ? (
@@ -175,7 +175,7 @@ export default function HomePage() {
         ) : (
           <div className="flex flex-col gap-20">
             {/* Random Items Slider */}
-            <Slider {...settings}>
+            <Slider {...settings} className="">
               {randomItems.map((item, index) => (
                 <div key={index}>
                   <div className="flex flex-col bg-gray-100 md:flex-row mx-3 mb-2 p-10 px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 shadow-md ">
@@ -234,8 +234,8 @@ export default function HomePage() {
 
             {/* On Sale Slider */}
             {discountedItems.length && (
-              <div className="flex flex-col gap-2">
-                <div className="text-xl md:text-2xl mx-6 font-extrabold text-[#6e4519]">
+              <div className="flex flex-col gap-2 overflow-hidden">
+                <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
                   On Sale
                 </div>
                 <div className="relative">
@@ -256,11 +256,11 @@ export default function HomePage() {
               </div>
             )}
             {/* Category Section (unchanged as per your request) */}
-            <div className="flex flex-col gap-2">
-              <div className="text-xl md:text-2xl mx-6 font-extrabold text-[#6e4519]">
+            <div className="flex flex-col px-6  gap-8">
+              <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                 Top Categories
               </div>
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 p-6 justify-center">
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
                 {categories.map((categ, i) => (
                   <div
                     key={i}
@@ -279,7 +279,7 @@ export default function HomePage() {
                         onClick={() =>
                           shopClick(categ.name, "All", false, "default")
                         }
-                        className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-black hover:scale-105 rounded-md"
+                        className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#6e4519] hover:scale-105 rounded-md"
                       >
                         VIEW MORE
                       </button>
@@ -301,8 +301,8 @@ export default function HomePage() {
             </div>
 
             {/* Most Valuable Section */}
-            <div className="flex flex-col gap-2">
-              <div className="text-xl md:text-2xl mx-6 font-extrabold text-[#6e4519]">
+            <div className="flex flex-col gap-2 overflow-hidden">
+              <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
                 Most Valuable
               </div>
               <div className="relative">
@@ -323,39 +323,41 @@ export default function HomePage() {
             </div>
 
             {/* Feature / Benefits Section */}
-            <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl mx-6">
-              <div className="flex flex-col items-center text-center justify-center gap-1">
-                <div className="flex flex-col gap-0.5 items-center">
-                  <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
-                  <p className="text-base md:text-lg font-extrabold">
-                    Perfect Health
+            <div className="px-6">
+              <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl ">
+                <div className="flex flex-col items-center text-center justify-center gap-1">
+                  <div className="flex flex-col gap-0.5 items-center">
+                    <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
+                    <p className="text-base md:text-lg font-extrabold">
+                      Perfect Health
+                    </p>
+                  </div>
+                  <p className="text-xs md:text-sm">
+                    We provide pets with perfect health
                   </p>
                 </div>
-                <p className="text-xs md:text-sm">
-                  We provide pets with perfect health
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center justify-center gap-1">
-                <div className="flex flex-col gap-0.5 items-center">
-                  <FaShieldAlt className="w-16 h-16 md:w-20 md:h-20" />
-                  <p className="text-base md:text-lg font-extrabold">
-                    High Immunity
+                <div className="flex flex-col items-center text-center justify-center gap-1">
+                  <div className="flex flex-col gap-0.5 items-center">
+                    <FaShieldAlt className="w-16 h-16 md:w-20 md:h-20" />
+                    <p className="text-base md:text-lg font-extrabold">
+                      High Immunity
+                    </p>
+                  </div>
+                  <p className="text-xs md:text-sm">
+                    We ensure high immunity for a long and happy life
                   </p>
                 </div>
-                <p className="text-xs md:text-sm">
-                  We ensure high immunity for a long and happy life
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center justify-center gap-1">
-                <div className="flex flex-col gap-0.5 items-center">
-                  <MdDiscount className="w-16 h-16 md:w-20 md:h-20" />
-                  <p className="text-base md:text-lg font-extrabold">
-                    Huge Discounts
+                <div className="flex flex-col items-center text-center justify-center gap-1">
+                  <div className="flex flex-col gap-0.5 items-center">
+                    <MdDiscount className="w-16 h-16 md:w-20 md:h-20" />
+                    <p className="text-base md:text-lg font-extrabold">
+                      Huge Discounts
+                    </p>
+                  </div>
+                  <p className="text-xs md:text-sm">
+                    Get exclusive offers and great discounts
                   </p>
                 </div>
-                <p className="text-xs md:text-sm">
-                  Get exclusive offers and great discounts
-                </p>
               </div>
             </div>
           </div>
