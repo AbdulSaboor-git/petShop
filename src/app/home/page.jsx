@@ -165,203 +165,201 @@ export default function HomePage() {
   };
 
   return (
-    <div className="bg-gray-50">
-      <div className="flex flex-col items-center">
-        <Header />
-        <div className="max-w-[1400px] w-full px-6">
-          {loading ? (
-            <div className="text-center py-10 text-xl">Loading...</div>
-          ) : error ? (
-            <div className="text-center py-10 text-red-600">{error}</div>
-          ) : (
-            <div className="flex flex-col gap-20">
-              {/* Random Items Slider */}
-              <Slider {...settings}>
-                {randomItems.map((item, index) => (
-                  <div key={index}>
-                    <div className="flex flex-col sm:flex-row p-10 px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 ">
-                      <div className="flex flex-col gap-6 w-full md:w-auto">
-                        <div className="relative">
-                          {nameHover && (
-                            <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
-                              <div className=" text-center text-xs  text-white bg-[#6e451994] shadow-md p-1 px-2 rounded-3xl">
-                                {item.name.toUpperCase()}
-                              </div>
+    <div className="flex flex-col items-center gap-10">
+      <Header />
+      <div className="max-w-[1400px] w-full px-6">
+        {loading ? (
+          <div className="text-center py-10 text-xl">Loading...</div>
+        ) : error ? (
+          <div className="text-center py-10 text-red-600">{error}</div>
+        ) : (
+          <div className="flex flex-col gap-20">
+            {/* Random Items Slider */}
+            <Slider {...settings}>
+              {randomItems.map((item, index) => (
+                <div key={index}>
+                  <div className="flex flex-col bg-gray-100 sm:flex-row mx-3 p-6 md:px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 ">
+                    <div className="flex flex-col gap-6 w-full md:w-auto">
+                      <div className="relative">
+                        {nameHover && (
+                          <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
+                            <div className=" text-center text-xs  text-white bg-[#6e451994] shadow-md p-1 px-2 rounded-3xl">
+                              {item.name.toUpperCase()}
                             </div>
-                          )}
-                          <h2
-                            className="text-xl md:text-3xl text-center md:text-left font-extrabold text-[#6e4519] tracking-wide truncate"
-                            onMouseEnter={() => setNameHover(true)}
-                            onMouseLeave={() => setNameHover(false)}
-                          >
-                            {item.name.toUpperCase()}
-                          </h2>
-                          <div className="pt-4 mx-1 text-base md:text-lg space-y-1">
-                            {item.breed && (
-                              <p>
-                                <strong className="text-[#6e4519]">
-                                  Breed:{" "}
-                                </strong>
-                                {item.breed.name}
-                              </p>
-                            )}
                           </div>
-                        </div>
-                        <div className="flex text-sm md:text-base flex-col w-full sm:flex-row gap-3 items-center justify-start">
-                          <button
-                            onClick={() => itemClick(item.id)}
-                            className="bg-[#9e6e3b] flex gap-2 items-center justify-center w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
-                          >
-                            View <MdArrowForward size={20} />
-                          </button>
-                          <button className="bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300">
-                            Contact Seller
-                          </button>
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <img
-                          src={item.images[0] || defaultPic}
-                          alt={item.name}
-                          width={230}
-                          height={230}
-                          className="h-[230px] w-[230px] md:h-[350px] md:w-[350px] rounded-xl object-cover aspect-square shadow-md"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-
-              {/* On Sale Slider */}
-              {discountedItems.length && (
-                <div className="flex flex-col gap-2">
-                  <div className="text-xl md:text-2xl font-extrabold text-gray-800">
-                    On Sale
-                  </div>
-                  <div className="relative">
-                    <Slider {...settings3}>
-                      {discountedItems.map((item, i) => (
-                        <ProductCard key={i} item={item} />
-                      ))}
-                    </Slider>
-                  </div>
-                  <button
-                    onClick={() => {
-                      shopClick("All", "All", true, "default");
-                    }}
-                    className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
-                  >
-                    View More
-                  </button>
-                </div>
-              )}
-              {/* Category Section (unchanged as per your request) */}
-              <div className="flex flex-col gap-2">
-                <div className="text-xl md:text-2xl font-extrabold text-gray-800">
-                  Top Categories
-                </div>
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-2 p-6 justify-center">
-                  {categories.map((categ, i) => (
-                    <div
-                      key={i}
-                      className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                        i === 0 || i === 3 || i === 4 || i === 7 || i === 8
-                          ? "bg-gradient-to-r from-[#9e6e3b] to-[#785229]"
-                          : "bg-gradient-to-r from-[#252525] to-[#1a1a1a]"
-                      }`}
-                    >
-                      {/* Absolute positioned text container with gradient overlay */}
-                      <div className="absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 bg-gradient-to-b from-[#9e6e3b]/40 via-transparent to-black/60">
-                        <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-wide break-words">
-                          {categ.name.toUpperCase()}
-                        </h2>
-                        <button
-                          onClick={() =>
-                            shopClick(categ.name, "All", false, "default")
-                          }
-                          className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-black hover:scale-105 rounded-md"
+                        )}
+                        <h2
+                          className="text-xl md:text-3xl text-center md:text-left font-extrabold text-[#6e4519] tracking-wide truncate"
+                          onMouseEnter={() => setNameHover(true)}
+                          onMouseLeave={() => setNameHover(false)}
                         >
-                          VIEW MORE
+                          {item.name.toUpperCase()}
+                        </h2>
+                        <div className="pt-4 mx-1 text-base md:text-lg space-y-1">
+                          {item.breed && (
+                            <p>
+                              <strong className="text-[#6e4519]">
+                                Breed:{" "}
+                              </strong>
+                              {item.breed.name}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex text-sm md:text-base flex-col w-full sm:flex-row gap-3 items-center justify-start">
+                        <button
+                          onClick={() => itemClick(item.id)}
+                          className="bg-[#9e6e3b] flex gap-2 items-center justify-center w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
+                        >
+                          View <MdArrowForward size={20} />
+                        </button>
+                        <button className="bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300">
+                          Contact Seller
                         </button>
                       </div>
-                      {/* Image container */}
-                      <div className="relative z-10 flex-shrink-0 ml-auto">
-                        <img
-                          src={
-                            categImages.find((image) => image.id === categ.id)
-                              ?.image || defaultPic
-                          }
-                          alt={categ.name}
-                          className="w-32  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
-                        />
-                      </div>
                     </div>
-                  ))}
+                    <div className="flex-shrink-0">
+                      <img
+                        src={item.images[0] || defaultPic}
+                        alt={item.name}
+                        width={230}
+                        height={230}
+                        className="w-[230px] md:w-[350px] rounded-xl object-cover aspect-square shadow-md"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
+            </Slider>
 
-              {/* Most Valuable Section */}
+            {/* On Sale Slider */}
+            {discountedItems.length && (
               <div className="flex flex-col gap-2">
                 <div className="text-xl md:text-2xl font-extrabold text-gray-800">
-                  Most Valuable
+                  On Sale
                 </div>
                 <div className="relative">
                   <Slider {...settings3}>
-                    {mostValuedItems.map((item, i) => (
+                    {discountedItems.map((item, i) => (
                       <ProductCard key={i} item={item} />
                     ))}
                   </Slider>
                 </div>
                 <button
                   onClick={() => {
-                    shopClick("All", "All", false, "priceDesc");
+                    shopClick("All", "All", true, "default");
                   }}
                   className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
                 >
                   View More
                 </button>
               </div>
-
-              {/* Feature / Benefits Section */}
-              <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl">
-                <div className="flex flex-col items-center text-center justify-center gap-1">
-                  <div className="flex flex-col gap-0.5 items-center">
-                    <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
-                    <p className="text-base md:text-lg font-extrabold">
-                      Perfect Health
-                    </p>
+            )}
+            {/* Category Section (unchanged as per your request) */}
+            <div className="flex flex-col gap-2">
+              <div className="text-xl md:text-2xl font-extrabold text-gray-800">
+                Top Categories
+              </div>
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 p-6 justify-center">
+                {categories.map((categ, i) => (
+                  <div
+                    key={i}
+                    className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
+                      i === 0 || i === 3 || i === 4 || i === 7 || i === 8
+                        ? "bg-gradient-to-r from-[#9e6e3b] to-[#785229]"
+                        : "bg-gradient-to-r from-[#252525] to-[#1a1a1a]"
+                    }`}
+                  >
+                    {/* Absolute positioned text container with gradient overlay */}
+                    <div className="absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 bg-gradient-to-b from-[#9e6e3b]/40 via-transparent to-black/60">
+                      <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-wide break-words">
+                        {categ.name.toUpperCase()}
+                      </h2>
+                      <button
+                        onClick={() =>
+                          shopClick(categ.name, "All", false, "default")
+                        }
+                        className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-black hover:scale-105 rounded-md"
+                      >
+                        VIEW MORE
+                      </button>
+                    </div>
+                    {/* Image container */}
+                    <div className="relative z-10 flex-shrink-0 ml-auto">
+                      <img
+                        src={
+                          categImages.find((image) => image.id === categ.id)
+                            ?.image || defaultPic
+                        }
+                        alt={categ.name}
+                        className="w-32  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
+                      />
+                    </div>
                   </div>
-                  <p className="text-xs md:text-sm">
-                    We provide pets with perfect health
-                  </p>
-                </div>
-                <div className="flex flex-col items-center text-center justify-center gap-1">
-                  <div className="flex flex-col gap-0.5 items-center">
-                    <FaShieldAlt className="w-16 h-16 md:w-20 md:h-20" />
-                    <p className="text-base md:text-lg font-extrabold">
-                      High Immunity
-                    </p>
-                  </div>
-                  <p className="text-xs md:text-sm">
-                    We ensure high immunity for a long and happy life
-                  </p>
-                </div>
-                <div className="flex flex-col items-center text-center justify-center gap-1">
-                  <div className="flex flex-col gap-0.5 items-center">
-                    <MdDiscount className="w-16 h-16 md:w-20 md:h-20" />
-                    <p className="text-base md:text-lg font-extrabold">
-                      Huge Discounts
-                    </p>
-                  </div>
-                  <p className="text-xs md:text-sm">
-                    Get exclusive offers and great discounts
-                  </p>
-                </div>
+                ))}
               </div>
             </div>
-          )}
-        </div>
+
+            {/* Most Valuable Section */}
+            <div className="flex flex-col gap-2">
+              <div className="text-xl md:text-2xl font-extrabold text-gray-800">
+                Most Valuable
+              </div>
+              <div className="relative">
+                <Slider {...settings3}>
+                  {mostValuedItems.map((item, i) => (
+                    <ProductCard key={i} item={item} />
+                  ))}
+                </Slider>
+              </div>
+              <button
+                onClick={() => {
+                  shopClick("All", "All", false, "priceDesc");
+                }}
+                className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+              >
+                View More
+              </button>
+            </div>
+
+            {/* Feature / Benefits Section */}
+            <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl">
+              <div className="flex flex-col items-center text-center justify-center gap-1">
+                <div className="flex flex-col gap-0.5 items-center">
+                  <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
+                  <p className="text-base md:text-lg font-extrabold">
+                    Perfect Health
+                  </p>
+                </div>
+                <p className="text-xs md:text-sm">
+                  We provide pets with perfect health
+                </p>
+              </div>
+              <div className="flex flex-col items-center text-center justify-center gap-1">
+                <div className="flex flex-col gap-0.5 items-center">
+                  <FaShieldAlt className="w-16 h-16 md:w-20 md:h-20" />
+                  <p className="text-base md:text-lg font-extrabold">
+                    High Immunity
+                  </p>
+                </div>
+                <p className="text-xs md:text-sm">
+                  We ensure high immunity for a long and happy life
+                </p>
+              </div>
+              <div className="flex flex-col items-center text-center justify-center gap-1">
+                <div className="flex flex-col gap-0.5 items-center">
+                  <MdDiscount className="w-16 h-16 md:w-20 md:h-20" />
+                  <p className="text-base md:text-lg font-extrabold">
+                    Huge Discounts
+                  </p>
+                </div>
+                <p className="text-xs md:text-sm">
+                  Get exclusive offers and great discounts
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </div>
