@@ -279,7 +279,7 @@ export default function HomePage() {
                         onClick={() =>
                           shopClick(categ.name, "All", false, "default")
                         }
-                        className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#6e4519] hover:scale-105 rounded-md"
+                        className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                       >
                         VIEW MORE
                       </button>
