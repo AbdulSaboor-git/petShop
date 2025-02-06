@@ -289,7 +289,7 @@ export default function HomePage() {
                     >
                       {/* Absolute positioned text container with gradient overlay */}
                       <div className="absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 bg-gradient-to-b from-[#9e6e3b]/40 via-transparent to-black/60">
-                        <h2 className="text-white text-3xl font-extrabold tracking-wide break-words">
+                        <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-wide break-words">
                           {categ.name.toUpperCase()}
                         </h2>
                         <button

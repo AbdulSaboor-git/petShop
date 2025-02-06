@@ -9,11 +9,44 @@ export default function Order({ item, closeOrderPage }) {
   const [customerEmail, setCustomerEmail] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
 
-  // Check if required fields are filled (trim to avoid whitespace only)
+  // State for error messages for required fields
+  const [nameError, setNameError] = useState("");
+  const [addressError, setAddressError] = useState("");
+  const [contactError, setContactError] = useState("");
+
+  // Validation functions
+  const validateName = (value) => {
+    if (value.trim().length < 2) {
+      setNameError("Name must be at least 2 characters.");
+    } else {
+      setNameError("");
+    }
+  };
+
+  const validateAddress = (value) => {
+    if (value.trim().length < 6) {
+      setAddressError("Address must be at least 6 characters.");
+    } else {
+      setAddressError("");
+    }
+  };
+
+  const validateContact = (value) => {
+    if (value.trim().length < 11) {
+      setContactError("Contact number must be at least 11 digits.");
+    } else {
+      setContactError("");
+    }
+  };
+
+  // Check if required fields are filled and valid
   const isFormValid =
-    customerName.trim().length > 1 &&
-    customerAddress.trim().length > 5 &&
-    customerContact.trim().length > 10;
+    customerName.trim().length >= 2 &&
+    customerAddress.trim().length >= 6 &&
+    customerContact.trim().length >= 11 &&
+    !nameError &&
+    !addressError &&
+    !contactError;
 
   const generateOrderMessage = () => {
     if (!item) return "";
@@ -52,7 +85,11 @@ Thank you.`;
     setAdditionalNotes("");
     setCustomerContact("");
     setCustomerAddress("");
+    setNameError("");
+    setAddressError("");
+    setContactError("");
   };
+
   // Handler for placing an order via WhatsApp.
   const handleWhatsappOrder = () => {
     if (!isFormValid || !item || !item.seller?.phoneNo) return;
@@ -98,35 +135,56 @@ Thank you.`;
               </p>
             </div>
           </div>
-          {/* New Form Section for Customer Details */}
+          {/* Customer Info Form */}
           <div className="flex flex-col gap-2 border p-4 rounded-lg bg-gray-100">
             <input
               type="text"
               placeholder="Your Name"
               value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
+              onChange={(e) => {
+                setCustomerName(e.target.value);
+                validateName(e.target.value);
+              }}
+              onBlur={(e) => validateName(e.target.value)}
               className="p-2 border rounded focus:outline-none"
               required
               minLength={2}
             />
+            {nameError && (
+              <p className="text-red-600 text-xs mt-1">{nameError}</p>
+            )}
             <input
               type="text"
               placeholder="Your Address"
               value={customerAddress}
-              onChange={(e) => setCustomerAddress(e.target.value)}
+              onChange={(e) => {
+                setCustomerAddress(e.target.value);
+                validateAddress(e.target.value);
+              }}
+              onBlur={(e) => validateAddress(e.target.value)}
               className="p-2 border rounded focus:outline-none"
               required
               minLength={6}
             />
+            {addressError && (
+              <p className="text-red-600 text-xs mt-1">{addressError}</p>
+            )}
             <input
-              type="text"
-              placeholder="Contact Number"
+              type="number"
+              placeholder="Contact Number (03001234567)"
               value={customerContact}
-              onChange={(e) => setCustomerContact(e.target.value)}
-              className="p-2 border rounded focus:outline-none"
+              onChange={(e) => {
+                setCustomerContact(e.target.value);
+                validateContact(e.target.value);
+              }}
+              onBlur={(e) => validateContact(e.target.value)}
+              className="p-2 no-spinner border rounded focus:outline-none"
               required
               minLength={11}
             />
+            {contactError && (
+              <p className="text-red-600 text-xs mt-1">{contactError}</p>
+            )}
             <input
               type="email"
               placeholder="Email (Optional)"
@@ -142,7 +200,6 @@ Thank you.`;
             />
           </div>
           <div className="flex flex-col md:flex-row gap-2 justify-center">
-            <h3 className="font-bold text-left">Inquire Order via</h3>
             <button
               onClick={handleWhatsappOrder}
               disabled={!isFormValid}
@@ -150,7 +207,7 @@ Thank you.`;
                 !isFormValid && "opacity-50 cursor-not-allowed"
               }`}
             >
-              WhatsApp
+              Proceed via WhatsApp
               <MdWhatsapp size={15} />
             </button>
             <button
@@ -160,7 +217,7 @@ Thank you.`;
                 !isFormValid && "opacity-50 cursor-not-allowed"
               }`}
             >
-              Email
+              Proceed via Email
               <MdEmail size={15} />
             </button>
             <button
