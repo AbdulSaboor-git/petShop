@@ -166,9 +166,9 @@ export default function HomePage() {
 
   return (
     <div className="bg-gray-50">
-      <div className="flex flex-col items-center px-6">
+      <div className="flex flex-col items-center">
         <Header />
-        <div className="max-w-[1400px] w-full">
+        <div className="max-w-[1400px] w-full px-6">
           {loading ? (
             <div className="text-center py-10 text-xl">Loading...</div>
           ) : error ? (
