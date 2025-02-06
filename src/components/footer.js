@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="flex flex-col items-center justify-center pb-8 md:pb-3">
             <img src={logoLink} alt="logo" className="h-[50px] md:h-[70px]" />
           </div>
-          <div className="flex gap-10 md:gap-16 justify-center  md:px-16">
+          <div className="flex gap-4 md:gap-12 justify-center md:px-16">
             <div className="flex flex-col w-full md:w-auto text-[var(--text-prim)] text-[12px] md:text-[14px] gap-3">
               <div className="flex items-center gap-3">
                 <SiFacebook className="text-lg md:text-xl" />
