@@ -30,8 +30,21 @@ export default function Shop() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       let categoryParam = params.get("category");
-      if (categoryParam) {
+      let breedParam = params.get("breed");
+      let saleParam = params.get("sale");
+      let sortParam = params.get("sort");
+
+      if (categoryParam && categoryParam != "undefined") {
         setSelectedCategories([categoryParam]);
+      }
+      if (breedParam && breedParam != "undefined") {
+        setSelectedBreeds([breedParam]);
+      }
+      if (saleParam === true && saleParam != "undefined") {
+        setOnSale(saleParam);
+      }
+      if (sortParam && sortParam != "undefined") {
+        setSortOption(sortParam);
       }
     }
   }, []);

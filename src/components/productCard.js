@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function ProductCard({ item }) {
   const name = item.name.toUpperCase();
   const router = useRouter();
-  const [hover, setHover] = useState(false);
+  const [nameHover, setNameHover] = useState(false);
   const defaultPic = "https://i.sstatic.net/5ykYD.png";
 
   function prodClick() {
@@ -33,17 +33,17 @@ export default function ProductCard({ item }) {
       </div>
 
       <div className="flex flex-col gap-0.5 p-4 pt-2 relative">
-        {hover && (
+        {nameHover && (
           <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
             <div className=" text-center text-xs  text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
-              {item.name}
+              {item.name.toUpperCase()}
             </div>
           </div>
         )}
         <p
           className="text-xs font-bold text-orange-600 truncate"
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
+          onMouseEnter={() => setNameHover(true)}
+          onMouseLeave={() => setNameHover(false)}
         >
           {name}
         </p>
