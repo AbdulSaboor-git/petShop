@@ -235,7 +235,7 @@ export default function HomePage() {
             {/* On Sale Slider */}
             {discountedItems.length && (
               <div className="flex flex-col gap-2">
-                <div className="text-xl md:text-2xl font-extrabold text-gray-800">
+                <div className="text-xl md:text-2xl mx-6 font-extrabold text-[#6e4519]">
                   On Sale
                 </div>
                 <div className="relative">
@@ -257,7 +257,7 @@ export default function HomePage() {
             )}
             {/* Category Section (unchanged as per your request) */}
             <div className="flex flex-col gap-2">
-              <div className="text-xl md:text-2xl font-extrabold text-gray-800">
+              <div className="text-xl md:text-2xl mx-6 font-extrabold text-[#6e4519]">
                 Top Categories
               </div>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 p-6 justify-center">
@@ -302,7 +302,7 @@ export default function HomePage() {
 
             {/* Most Valuable Section */}
             <div className="flex flex-col gap-2">
-              <div className="text-xl md:text-2xl font-extrabold text-gray-800">
+              <div className="text-xl md:text-2xl mx-6 font-extrabold text-[#6e4519]">
                 Most Valuable
               </div>
               <div className="relative">
@@ -323,7 +323,7 @@ export default function HomePage() {
             </div>
 
             {/* Feature / Benefits Section */}
-            <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl">
+            <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl mx-6">
               <div className="flex flex-col items-center text-center justify-center gap-1">
                 <div className="flex flex-col gap-0.5 items-center">
                   <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
