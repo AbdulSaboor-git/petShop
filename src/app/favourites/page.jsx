@@ -4,6 +4,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import FavItem from "./components/fav-item";
 import Order from "@/components/order";
+import { useRouter } from "next/navigation";
 
 export default function Favourites() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -13,6 +14,7 @@ export default function Favourites() {
   const [favorites, setFavorites] = useState([]); // these are the full item objects
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   // Handle selecting an item (for example to show details in checkout)
   const handleSelectItem = (item) => {
@@ -20,6 +22,9 @@ export default function Favourites() {
     setSelectedItem((prev) => (prev === item ? null : item));
   };
 
+  function shopClick() {
+    router.push(`/shop`);
+  }
   // Handle checkout (scroll to confirmation section)
   const handleCheckout = () => {
     setCheckout(true);
@@ -118,14 +123,22 @@ export default function Favourites() {
               />
             ))
           ) : (
-            <div className="text-xs md:text-sm rounded-lg bg-gray-100 text-gray-400 border p-2">
-              Favourites List is empty
+            <div className="flex flex-col gap-4 justify-center items-center">
+              <div className="text-xs md:text-sm w-full rounded-lg bg-gray-100 text-gray-400 border p-2">
+                Favourites List is empty
+              </div>
+              <button
+                onClick={shopClick}
+                className="text-sm md:text-base w-fit rounded-lg bg-orange-500 hover:bg-orange-600 text-white p-1 px-3"
+              >
+                Shop Now
+              </button>
             </div>
           )}
         </div>
         <div className="flex flex-col gap-2 border-t border-gray-300 mt-6 p-5">
           <button
-            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded hover:bg-orange-600 disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500"
+            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded-lg hover:bg-orange-600 disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500"
             onClick={handleCheckout}
             disabled={selectedItem === null}
           >
