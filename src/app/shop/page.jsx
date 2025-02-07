@@ -193,11 +193,11 @@ export default function Shop() {
       <Header />
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
         {loading ? (
-          <div className="text-xs md:text-sm text-gray-500 p-2 self-start">
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             loading...
           </div>
         ) : error ? (
-          <div className="text-xs md:text-sm text-gray-500 p-2  self-start">
+          <div className="text-sm md:text-base text-gray-500 p-2  self-start">
             {error}
           </div>
         ) : (

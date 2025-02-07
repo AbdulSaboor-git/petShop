@@ -196,11 +196,11 @@ export default function HomePage() {
       <Header />
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
-          <div className="text-xs md:text-sm text-gray-500 mx-6 p-2 self-start">
+          <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
             Loading...
           </div>
         ) : error ? (
-          <div className="text-xs md:text-sm text-gray-500 mx-6 p-2 self-start">
+          <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
             {error}
           </div>
         ) : (

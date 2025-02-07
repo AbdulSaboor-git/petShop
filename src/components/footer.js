@@ -53,7 +53,7 @@ export default function Footer() {
           </div>
         </div>
         <hr className="h-[1px] w-full bg-[#c1c1c1a6]  border-none" />
-        <div className="flex flex-col md:flex-row justify-between p-2 pb-0 text-[10px] md:text-[12px] text-[[var(--text-sec)]] text-center md:text-left">
+        <div className="flex flex-col md:flex-row justify-between p-2 pb-4 text-[10px] md:text-[12px] text-[[var(--text-sec)]] text-center md:text-left">
           <p>The Royal Aseel Farms™</p>
           <p>Copyright © {date.getFullYear()} - All Rights Reserved</p>
         </div>

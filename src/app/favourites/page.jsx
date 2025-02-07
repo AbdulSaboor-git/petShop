@@ -105,11 +105,11 @@ export default function Favourites() {
         </div>
         <div className="flex flex-col gap-2">
           {loading ? (
-            <div className="text-xs md:text-sm rounded-lg bg-gray-100 text-gray-400 border p-2">
+            <div className="text-sm md:text-base text-gray-500 p-2 self-start">
               Loading Favorites...
             </div>
           ) : error ? (
-            <div className="text-xs md:text-sm rounded-lg bg-gray-100 text-red-500 border p-2">
+            <div className="text-sm md:text-base text-gray-500 p-2 self-start">
               {error}
             </div>
           ) : favorites.length > 0 ? (

@@ -66,7 +66,7 @@ export default function SellerDashboardMainPage() {
       <Header />
       <div className="w-full max-w-[1200px] px-4 py-6">
         {loading ? (
-          <div className="text-xs md:text-sm text-gray-500 p-2 self-start">
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             Loading...
           </div>
         ) : (
