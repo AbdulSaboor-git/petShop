@@ -193,9 +193,13 @@ export default function Shop() {
       <Header />
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
         {loading ? (
-          <div>loading...</div>
+          <div className="text-xs md:text-sm text-gray-500 p-2 self-start">
+            loading...
+          </div>
         ) : error ? (
-          <div>{error}</div>
+          <div className="text-xs md:text-sm text-gray-500 p-2  self-start">
+            {error}
+          </div>
         ) : (
           <div className="flex flex-col lg:flex-row gap-6 transition-all duration-500">
             {/* Filters Section */}
@@ -367,15 +371,20 @@ export default function Shop() {
             </div>
 
             {/* Items Section */}
+
             <div
               className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
                 !items.length &&
                 "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
               }`}
             >
-              {items.map((item, i) => (
-                <ProductCardAlt key={i} item={item} />
-              ))}
+              {items.length ? (
+                items.map((item, i) => <ProductCardAlt key={i} item={item} />)
+              ) : (
+                <div className="text-xs md:text-sm text-gray-500 p-2">
+                  No such items found.
+                </div>
+              )}
             </div>
           </div>
         )}

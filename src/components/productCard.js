@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { MdDiscount } from "react-icons/md";
+import { MdDiscount, MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { useState } from "react";
+import { FaHeart } from "react-icons/fa";
 
-export default function ProductCard({ item }) {
+export default function ProductCard({ item, favClick, isFav }) {
   const name = item.name.toUpperCase();
   const router = useRouter();
   const [nameHover, setNameHover] = useState(false);
@@ -32,7 +33,7 @@ export default function ProductCard({ item }) {
         )}
       </div>
 
-      <div className="flex flex-col gap-0.5 p-4 pt-2 relative">
+      <div className="flex flex-col gap-0 p-4 pt-2 relative">
         {nameHover && (
           <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
             <div className=" text-center text-xs  text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
@@ -40,13 +41,24 @@ export default function ProductCard({ item }) {
             </div>
           </div>
         )}
-        <p
-          className="text-xs font-bold text-orange-600 truncate"
-          onMouseEnter={() => setNameHover(true)}
-          onMouseLeave={() => setNameHover(false)}
-        >
-          {name}
-        </p>
+        <div className="flex justify-between items-center">
+          <p
+            className="text-xs font-bold text-orange-600 truncate"
+            onMouseEnter={() => setNameHover(true)}
+            onMouseLeave={() => setNameHover(false)}
+          >
+            {name}
+          </p>
+          <button
+            className="text-orange-500 rounded-full bg-white text-lg"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent the click from bubbling up
+              favClick(); // Execute the favorite toggle logic
+            }}
+          >
+            {!isFav ? <MdFavoriteBorder /> : <MdFavorite />}
+          </button>
+        </div>
         {/* <p className="text-xs text-gray-500"> {item.breed}</p> */}
         <div className="flex justify-between items-center">
           <div className="flex gap-2 items-end">
@@ -63,12 +75,6 @@ export default function ProductCard({ item }) {
             )}
           </div>
         </div>
-        {/* Uncomment if Add to Cart button is needed */}
-        {/* <button 
-          className="bg-orange-500 text-white rounded-full px-4 py-2 flex items-center gap-2 mt-4 hover:bg-orange-600"
-        >
-          Add to Cart <FaCartPlus />
-        </button> */}
       </div>
     </div>
   );

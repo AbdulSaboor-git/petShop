@@ -40,16 +40,14 @@ export default function FavItem({
           className="w-16 md:w-24 object-cover aspect-square rounded-lg cursor-pointer"
           onClick={itemClick}
         />
-        <div className="text-sm md:text-base flex flex-col gap-[1px] items-start">
+        <div
+          className="text-sm md:text-base cursor-pointer flex flex-col gap-[1px] items-start"
+          onClick={itemClick}
+        >
           {!item.availability === "AVAILABLE" && (
             <p className="text-[10px] md:text-xs text-red-600">Unavailable</p>
           )}
-          <h3
-            className="font-bold cursor-pointer leading-tight line-clamp-2 "
-            onClick={itemClick}
-          >
-            {item.name}
-          </h3>
+          <h3 className="font-bold leading-tight line-clamp-2 ">{item.name}</h3>
           <p className="text-xs md:text-sm text-gray-600">
             {item.breed?.name}{" "}
           </p>

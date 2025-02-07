@@ -20,6 +20,7 @@ export default function HomePage() {
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState([]);
   const [error, setError] = useState(null);
   const [nameHover, setNameHover] = useState(false);
 
@@ -119,6 +120,32 @@ export default function HomePage() {
 
   const discountedItems = items.filter((item) => item.isDiscounted).slice(0, 5);
 
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    } else {
+      // Initialize as an empty array.
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavorites([]);
+    }
+  }, []);
+
+  const handleFavoriteClick = (itemId) => {
+    setFavorites((prevFavorites) => {
+      let updatedFavorites;
+      if (prevFavorites.includes(itemId)) {
+        // Remove item from favorites
+        updatedFavorites = prevFavorites.filter((favId) => favId !== itemId);
+      } else {
+        // Add item to favorites
+        updatedFavorites = [...prevFavorites, itemId];
+      }
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -169,9 +196,13 @@ export default function HomePage() {
       <Header />
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
-          <div className="text-center py-10 text-xl">Loading...</div>
+          <div className="text-xs md:text-sm text-gray-500 mx-6 p-2 self-start">
+            Loading...
+          </div>
         ) : error ? (
-          <div className="text-center py-10 text-red-600">{error}</div>
+          <div className="text-xs md:text-sm text-gray-500 mx-6 p-2 self-start">
+            {error}
+          </div>
         ) : (
           <div className="flex flex-col gap-20">
             {/* Random Items Slider */}
@@ -241,7 +272,14 @@ export default function HomePage() {
                 <div className="relative">
                   <Slider {...settings3}>
                     {discountedItems.map((item, i) => (
-                      <ProductCard key={i} item={item} />
+                      <ProductCard
+                        key={i}
+                        item={item}
+                        favClick={() => {
+                          handleFavoriteClick(item.id);
+                        }}
+                        isFav={favorites.includes(item.id)}
+                      />
                     ))}
                   </Slider>
                 </div>
@@ -308,7 +346,14 @@ export default function HomePage() {
               <div className="relative">
                 <Slider {...settings3}>
                   {mostValuedItems.map((item, i) => (
-                    <ProductCard key={i} item={item} />
+                    <ProductCard
+                      key={i}
+                      item={item}
+                      favClick={() => {
+                        handleFavoriteClick(item.id);
+                      }}
+                      isFav={favorites.includes(item.id)}
+                    />
                   ))}
                 </Slider>
               </div>
