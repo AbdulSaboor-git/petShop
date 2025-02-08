@@ -303,42 +303,45 @@ export default function HomePage() {
                 Top Categories
               </div>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
-                {categories.map((categ, i) => (
-                  <div
-                    key={i}
-                    className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                      i === 0 || i === 3 || i === 4 || i === 7 || i === 8
-                        ? "bg-gradient-to-r from-[#9e6e3b] to-[#785229]"
-                        : "bg-gradient-to-r from-[#252525] to-[#1a1a1a]"
-                    }`}
-                  >
-                    {/* Absolute positioned text container with gradient overlay */}
-                    <div className="absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 bg-gradient-to-b from-[#9e6e3b]/40 via-transparent to-black/60">
-                      <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-wide break-words">
-                        {categ.name.toUpperCase()}
-                      </h2>
-                      <button
-                        onClick={() =>
-                          shopClick(categ.name, "All", false, "default")
-                        }
-                        className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
+                {categories.map(
+                  (categ, i) =>
+                    categ.items.length != 0 && (
+                      <div
+                        key={i}
+                        className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
+                          i === 0 || i === 3 || i === 4 || i === 7 || i === 8
+                            ? "bg-gradient-to-r from-[#9e6e3b] to-[#785229]"
+                            : "bg-gradient-to-r from-[#252525] to-[#1a1a1a]"
+                        }`}
                       >
-                        VIEW MORE
-                      </button>
-                    </div>
-                    {/* Image container */}
-                    <div className="relative z-10 flex-shrink-0 ml-auto">
-                      <img
-                        src={
-                          categImages.find((image) => image.id === categ.id)
-                            ?.image || defaultPic
-                        }
-                        alt={categ.name}
-                        className="w-32  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
-                      />
-                    </div>
-                  </div>
-                ))}
+                        {/* Absolute positioned text container with gradient overlay */}
+                        <div className="absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 bg-gradient-to-b from-[#9e6e3b]/40 via-transparent to-black/60">
+                          <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-wide break-words">
+                            {categ.name.toUpperCase()}
+                          </h2>
+                          <button
+                            onClick={() =>
+                              shopClick(categ.name, "All", false, "default")
+                            }
+                            className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
+                          >
+                            VIEW MORE
+                          </button>
+                        </div>
+                        {/* Image container */}
+                        <div className="relative z-10 flex-shrink-0 ml-auto">
+                          <img
+                            src={
+                              categImages.find((image) => image.id === categ.id)
+                                ?.image || defaultPic
+                            }
+                            alt={categ.name}
+                            className="w-32  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
+                          />
+                        </div>
+                      </div>
+                    )
+                )}
               </div>
             </div>
 

@@ -14,8 +14,12 @@ export default async function handler(req, res) {
 
 const handleGet = async (req, res) => {
   try {
-    const categories = await prisma.category.findMany();
-    const breeds = await prisma.breed.findMany();
+    const categories = await prisma.category.findMany({
+      include: { items: true },
+    });
+    const breeds = await prisma.breed.findMany({
+      include: { items: true },
+    });
 
     return res.status(200).json({ categories, breeds });
   } catch (error) {
