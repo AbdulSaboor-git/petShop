@@ -144,15 +144,6 @@ export default function Shop() {
       newSelected = ["All"];
     }
 
-    // If the newly selected categories do not include "Chicken" or "Eggs" (case‑sensitive in this case),
-    // then reset the breed filter to "All" because breeds only apply to chicken/eggs.
-    const hasChickenOrEggs = newSelected.some(
-      (c) => c === "Chicken" || c === "Eggs"
-    );
-    if (!hasChickenOrEggs) {
-      setSelectedBreeds(["All"]);
-    }
-
     setSelectedCategories(newSelected);
   };
 

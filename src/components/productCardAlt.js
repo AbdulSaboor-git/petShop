@@ -15,7 +15,7 @@ export default function ProductCardAlt({ item }) {
   return (
     <div
       onClick={prodClick}
-      className="mb-1 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-all duration-300 ease-in-out relative rounded-xl"
+      className="mb-1 cursor-pointer w-[200px] overflow-hidden transition-all duration-300 ease-in-out relative rounded-xl"
     >
       {/* Product Image */}
       <div className="relative w-full pt-[100%]">
@@ -36,13 +36,13 @@ export default function ProductCardAlt({ item }) {
           )}
           {hover && (
             <div className="w-full flex justify-center absolute -top-8 left-0">
-              <div className=" text-center text-xs  text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
+              <div className=" text-center text-xs text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
                 {item.name}
               </div>
             </div>
           )}
           <div
-            className="truncate"
+            className="truncate w-full"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >

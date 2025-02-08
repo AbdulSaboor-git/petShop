@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const { categoryId } = req.query; // Extract categoryId from query parameters
+  const { categoryId } = req.query;
 
   switch (method) {
     case "GET":
@@ -17,7 +17,6 @@ export default async function handler(req, res) {
   }
 }
 
-// Handle GET request
 async function handleGet(req, res, categoryId) {
   try {
     const id = parseInt(categoryId, 10);
@@ -27,6 +26,7 @@ async function handleGet(req, res, categoryId) {
 
     const category = await prisma.category.findUnique({
       where: { id },
+      include: { items: true },
     });
 
     if (!category) {
@@ -39,7 +39,6 @@ async function handleGet(req, res, categoryId) {
   }
 }
 
-// Handle PATCH request
 async function handlePatch(req, res, categoryId) {
   try {
     const id = parseInt(categoryId, 10);
@@ -55,20 +54,6 @@ async function handlePatch(req, res, categoryId) {
     }
 
     const { name } = req.body;
-    const existingCategoryName = await prisma.category.findUnique({
-      where: { name: name.trim() },
-    });
-
-    if (existingCategoryName) {
-      return res.status(409).json({
-        message: `Category ${name.trim()} already exists`,
-        category: existingCategoryName,
-      });
-    }
-    // Optional: Check if update data is provided
-    if (!name) {
-      return res.status(400).json({ message: "No update data provided." });
-    }
 
     const updatedCategory = await prisma.category.update({
       where: { id },
@@ -84,7 +69,6 @@ async function handlePatch(req, res, categoryId) {
   }
 }
 
-// Handle DELETE request
 async function handleDelete(req, res, categoryId) {
   try {
     const id = parseInt(categoryId, 10);
@@ -92,11 +76,20 @@ async function handleDelete(req, res, categoryId) {
       return res.status(400).json({ message: "Invalid Category ID" });
     }
 
+    // Fetch the category along with its associated items.
     const existingCategory = await prisma.category.findUnique({
       where: { id },
+      include: { items: true },
     });
     if (!existingCategory) {
       return res.status(404).json({ message: "Category not found" });
+    }
+
+    // Prevent deletion if category has items.
+    if (existingCategory.items && existingCategory.items.length > 0) {
+      return res
+        .status(400)
+        .json({ message: "Cannot delete category that has items." });
     }
 
     await prisma.category.delete({ where: { id } });
