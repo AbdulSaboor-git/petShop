@@ -35,8 +35,9 @@ export default function HomePage() {
     );
   }
 
-  function itemClick(itemId) {
-    router.push(`/item/${itemId}`);
+  function itemClick(itemId, contactSeller) {
+    if (contactSeller != true) router.push(`/item/${itemId}`);
+    else router.push(`/item/${itemId}?cs=${contactSeller}`);
   }
 
   useEffect(() => {
@@ -197,7 +198,7 @@ export default function HomePage() {
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
           <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
-            Loading...
+            loading...
           </div>
         ) : error ? (
           <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
@@ -244,7 +245,10 @@ export default function HomePage() {
                         >
                           View <MdArrowForward size={20} />
                         </button>
-                        <button className="bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300">
+                        <button
+                          onClick={() => itemClick(item.id, true)}
+                          className="bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
+                        >
                           Contact Seller
                         </button>
                       </div>

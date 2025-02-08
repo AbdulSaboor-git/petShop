@@ -86,7 +86,7 @@ export default function ManageBreedsPage() {
       <div className="w-full max-w-[1200px] px-4">
         {loading ? (
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            Loading...
+            loading...
           </div>
         ) : (
           <div className="flex flex-col gap-4">

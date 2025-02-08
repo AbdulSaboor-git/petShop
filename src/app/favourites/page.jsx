@@ -106,7 +106,7 @@ export default function Favourites() {
         <div className="flex flex-col gap-2">
           {loading ? (
             <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-              Loading Favorites...
+              loading favorites...
             </div>
           ) : error ? (
             <div className="text-sm md:text-base text-gray-500 p-2 self-start">

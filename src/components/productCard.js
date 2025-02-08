@@ -41,7 +41,7 @@ export default function ProductCard({ item, favClick, isFav }) {
             </div>
           </div>
         )}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-1 pr-1">
           <p
             className="text-xs font-bold text-orange-600 truncate"
             onMouseEnter={() => setNameHover(true)}
