@@ -19,6 +19,43 @@ export default function ManageCategoriesPage() {
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedCategory !== null && name.trim().length >= 1;
 
+  // Helper function to fetch categories (and breeds if needed) from API.
+  const fetchCategoriesData = async () => {
+    try {
+      const response = await fetch(`/api/categories_breeds`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories.");
+      }
+      const data = await response.json();
+      setCategories(data.categories);
+    } catch (err) {
+      setError(err.message);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategoriesData();
+  }, []);
+
+  // Fetch a single category's data (for editing/deleting)
+  const fetchCategoryData = async (categoryId) => {
+    try {
+      const response = await fetch(`/api/category/${categoryId}`);
+      if (!response.ok) {
+        throw new Error("Category not found");
+      }
+      const data = await response.json();
+      setSelectedCategory(data);
+      setName(data.name || "");
+    } catch (err) {
+      setError(err.message);
+      alert(err.message);
+    }
+  };
+
   const handleAddCategory = () => {
     setAddCategory(true);
     setEditCategory(false);
@@ -45,37 +82,75 @@ export default function ManageCategoriesPage() {
     setFocused("delete");
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`/api/categories_breeds`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories.");
-        }
-        const data = await response.json();
-        setCategories(data.categories);
-      } catch (err) {
-        setError(err.message);
-        alert(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
-
-  // Fetch a single category's data
-  const fetchCategoryData = async (categoryId) => {
+  // Handler for add category form submission.
+  const handleAddCategorySubmit = async (e) => {
+    e.preventDefault();
+    if (!isAddFormValid) {
+      alert("Please enter a valid category name.");
+      return;
+    }
     try {
-      const response = await fetch(`/api/category/${categoryId}`);
-      if (!response.ok) {
-        throw new Error("Category not found");
+      const res = await fetch("/api/category", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to add category.");
       }
-      const data = await response.json();
-      setSelectedCategory(data);
-      setName(data.name || "");
+      alert(`Category "${name}" added successfully!`);
+      setName("");
+      fetchCategoriesData();
     } catch (err) {
-      setError(err.message);
+      alert(err.message);
+    }
+  };
+
+  // Handler for edit category form submission.
+  const handleEditCategorySubmit = async (e) => {
+    e.preventDefault();
+    if (!isEditFormValid) {
+      alert("Select a category and enter a valid name.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/category/${selectedCategory.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to update category.");
+      }
+      alert(`Category "${selectedCategory.name}" updated successfully!`);
+      setName("");
+      setSelectedCategory(null);
+      fetchCategoriesData();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Handler for delete category form submission.
+  const handleDeleteCategorySubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedCategory) {
+      alert("Select a category to delete.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/category/${selectedCategory.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to delete category.");
+      }
+      alert(`Category "${name}" deleted successfully!`);
+      setSelectedCategory(null);
+      fetchCategoriesData();
+    } catch (err) {
       alert(err.message);
     }
   };
@@ -90,17 +165,17 @@ export default function ManageCategoriesPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-xl md:2xl font-semibold text-center">
+            <h1 className="text-xl md:text-2xl font-semibold text-center">
               Seller Dashboard
             </h1>
             <h1 className="font-semibold text-center">Manage Categories</h1>
 
-            {/* ADDED: flex-col for mobile, flex-row for medium screens */}
+            {/* Navigation buttons */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddCategory}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
                     focused === "add"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e]"
@@ -110,7 +185,7 @@ export default function ManageCategoriesPage() {
                 </button>
                 <button
                   onClick={handleEditCategory}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
                     focused === "edit"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e]"
@@ -120,7 +195,7 @@ export default function ManageCategoriesPage() {
                 </button>
                 <button
                   onClick={handleDeleteCategory}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
                     focused === "delete"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e]"
@@ -135,15 +210,7 @@ export default function ManageCategoriesPage() {
                     <h3 className="font-bold text-orange-800">Add Category</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!isAddFormValid) {
-                          alert("Please enter a valid category name.");
-                          return;
-                        }
-                        // Insert your add-category submission logic here.
-                        console.log("Category Added:", name);
-                      }}
+                      onSubmit={handleAddCategorySubmit}
                     >
                       <div>
                         <label className="mx-0.5">Category Name</label>
@@ -153,6 +220,7 @@ export default function ManageCategoriesPage() {
                           required
                           minLength={1}
                           maxLength={50}
+                          value={name}
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
@@ -170,19 +238,7 @@ export default function ManageCategoriesPage() {
                     <h3 className="font-bold text-orange-800">Edit Category</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!isEditFormValid) {
-                          alert("Select a category and enter a valid name.");
-                          return;
-                        }
-                        // Insert your update-category submission logic here.
-                        console.log(
-                          "Category Updated:",
-                          selectedCategory.id,
-                          name
-                        );
-                      }}
+                      onSubmit={handleEditCategorySubmit}
                     >
                       <div>
                         <label className="mx-0.5">Select Category</label>
@@ -233,15 +289,7 @@ export default function ManageCategoriesPage() {
                     </h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!selectedCategory) {
-                          alert("Select a category to delete.");
-                          return;
-                        }
-                        // Insert your deletion logic here.
-                        console.log("Category Deleted:", selectedCategory.id);
-                      }}
+                      onSubmit={handleDeleteCategorySubmit}
                     >
                       <div>
                         <label className="mx-0.5">Select Category</label>

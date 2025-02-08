@@ -45,22 +45,23 @@ export default function ManageBreedsPage() {
     setFocused("delete");
   };
 
-  useEffect(() => {
-    const fetchBreeds = async () => {
-      try {
-        const response = await fetch(`/api/categories_breeds`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch breeds.");
-        }
-        const data = await response.json();
-        setBreeds(data.breeds);
-      } catch (err) {
-        setError(err.message);
-        alert(err.message);
-      } finally {
-        setLoading(false);
+  const fetchBreeds = async () => {
+    try {
+      const response = await fetch(`/api/categories_breeds`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch breeds.");
       }
-    };
+      const data = await response.json();
+      setBreeds(data.breeds);
+    } catch (err) {
+      setError(err.message);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchBreeds();
   }, []);
 
@@ -76,6 +77,78 @@ export default function ManageBreedsPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
+      alert(err.message);
+    }
+  };
+
+  const handleAddBreedSubmit = async (e) => {
+    e.preventDefault();
+    if (!isAddFormValid) {
+      alert("Please enter a valid breed name.");
+      return;
+    }
+    try {
+      const res = await fetch("/api/breed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to add breed.");
+      }
+      alert(`Breed "${name}" added successfully!`);
+      setName("");
+      fetchBreeds();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Handler for edit category form submission.
+  const handleEditBreedSubmit = async (e) => {
+    e.preventDefault();
+    if (!isEditFormValid) {
+      alert("Select a breed and enter a valid name.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/breed/${selectedBreed.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim() }),
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to update breed.");
+      }
+      alert(`Breed "${selectedBreed.name}" updated successfully!`);
+      setName("");
+      setSelectedBreed(null);
+      fetchBreeds();
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Handler for delete category form submission.
+  const handleDeleteBreedSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedBreed) {
+      alert("Select a breed to delete.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/breed/${selectedBreed.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to delete breed.");
+      }
+      alert(`Breed "${name}" deleted successfully!`);
+      setSelectedBreed(null);
+      fetchBreeds();
+    } catch (err) {
       alert(err.message);
     }
   };
@@ -134,15 +207,7 @@ export default function ManageBreedsPage() {
                     <h3 className="font-bold text-orange-800">Add Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!isAddFormValid) {
-                          alert("Please enter a valid breed name.");
-                          return;
-                        }
-                        // Insert your add-breed submission logic here.
-                        console.log("Breed Added:", name);
-                      }}
+                      onSubmit={handleAddBreedSubmit}
                     >
                       <div>
                         <label className="mx-0.5">Breed Name</label>
@@ -169,15 +234,7 @@ export default function ManageBreedsPage() {
                     <h3 className="font-bold text-orange-800">Edit Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!isEditFormValid) {
-                          alert(error + " or enter a valid name.");
-                          return;
-                        }
-                        // Insert your update-breed submission logic here.
-                        console.log("Breed Updated:", selectedBreed.id, name);
-                      }}
+                      onSubmit={handleEditBreedSubmit}
                     >
                       <div>
                         <label className="mx-0.5">Select Breed</label>
@@ -226,15 +283,7 @@ export default function ManageBreedsPage() {
                     <h3 className="font-bold text-orange-800">Delete Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        if (!selectedBreed) {
-                          alert(error + " or select a breed to delete.");
-                          return;
-                        }
-                        // Insert your deletion logic here.
-                        console.log("Breed Deleted:", selectedBreed.id);
-                      }}
+                      onSubmit={handleDeleteBreedSubmit}
                     >
                       <div>
                         <label className="mx-0.5">Select Breed</label>

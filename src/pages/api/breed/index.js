@@ -18,26 +18,26 @@ async function handlePost(req, res) {
 
   try {
     // Check if a breed with the given name already exists.
-    const existingCategory = await prisma.category.findUnique({
+    const existingBreed = await prisma.breed.findUnique({
       where: { name: trimmedName },
     });
 
-    if (existingCategory) {
+    if (existingBreed) {
       return res.status(409).json({
-        message: `Category ${trimmedName} already exists`,
-        category: existingCategory,
+        message: `Breed ${trimmedName} already exists`,
+        breed: existingBreed,
       });
     }
 
     // If not, create the new breed.
-    const newCategory = await prisma.category.create({
+    const newBreed = await prisma.breed.create({
       data: {
         name: trimmedName,
       },
     });
-    return res.status(201).json(newCategory);
+    return res.status(201).json(newBreed);
   } catch (error) {
-    console.error("Error adding category:", error);
+    console.error("Error adding breed:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }

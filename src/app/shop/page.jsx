@@ -184,9 +184,9 @@ export default function Shop() {
   // Determine whether to show the breed filter.
   // We show it if either "All" is selected for categories OR if at least one selected
   // category is either "Chicken" or "Eggs".
-  const showBreedFilter =
-    selectedCategories.includes("All") ||
-    selectedCategories.some((c) => c === "Chicken" || c === "Eggs");
+  // const showBreedFilter =
+  //   selectedCategories.includes("All") ||
+  //   selectedCategories.some((c) => c === "Chicken" || c === "Eggs");
 
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
@@ -261,59 +261,57 @@ export default function Shop() {
                 </div>
 
                 {/* Breeds Filter (only show if applicable) */}
-                {showBreedFilter && (
-                  <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
-                    <div
-                      onClick={() =>
-                        showBreeds ? setShowBreeds(false) : setShowBreeds(true)
-                      }
-                      className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
-                    >
-                      Filter by Breeds
-                      <RiArrowDownSLine
-                        size={18}
-                        className={`${
-                          showBreeds ? "-rotate-180" : "rotate-0"
-                        } transition-all duration-[400ms]`}
-                      />
-                    </div>
-                    <div
-                      className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
-                        !showBreeds
-                          ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                          : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                  <div
+                    onClick={() =>
+                      showBreeds ? setShowBreeds(false) : setShowBreeds(true)
+                    }
+                    className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                  >
+                    Filter by Breeds
+                    <RiArrowDownSLine
+                      size={18}
+                      className={`${
+                        showBreeds ? "-rotate-180" : "rotate-0"
+                      } transition-all duration-[400ms]`}
+                    />
+                  </div>
+                  <div
+                    className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                      !showBreeds
+                        ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                        : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                    }`}
+                  >
+                    {/* "All" button for breeds */}
+                    <button
+                      onClick={() => handleBreedClick("All")}
+                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
+                        selectedBreeds.includes("All")
+                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
                       }`}
                     >
-                      {/* "All" button for breeds */}
+                      All
+                    </button>
+                    {breeds.map((breed, i) => (
                       <button
-                        onClick={() => handleBreedClick("All")}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                          selectedBreeds.includes("All")
+                        key={i}
+                        onClick={() => handleBreedClick(breed.name)}
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                          selectedBreeds.includes(breed.name)
                             ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
+                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                         }`}
                       >
-                        All
+                        <div className="relative">
+                          {breed.name}
+                          <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
+                        </div>
                       </button>
-                      {breeds.map((breed, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleBreedClick(breed.name)}
-                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
-                            selectedBreeds.includes(breed.name)
-                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                          }`}
-                        >
-                          <div className="relative">
-                            {breed.name}
-                            <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
-                          </div>
-                        </button>
-                      ))}
-                    </div>
+                    ))}
                   </div>
-                )}
+                </div>
 
                 {/* Additional Filters Section: On Sale and Sorting Options */}
                 <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">

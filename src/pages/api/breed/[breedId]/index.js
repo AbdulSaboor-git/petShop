@@ -2,19 +2,17 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const { breedId } = req.query; // Extract itemId from query parameters
+  const { breedId } = req.query;
 
   switch (method) {
     case "GET":
       return handleGet(req, res, breedId);
-    case "POST":
-      return handlePost(req, res);
     case "PATCH":
       return handlePatch(req, res, breedId);
     case "DELETE":
       return handleDelete(req, res, breedId);
     default:
-      res.setHeader("Allow", ["GET", "POST", "PATCH", "DELETE"]);
+      res.setHeader("Allow", ["GET", "PATCH", "DELETE"]);
       return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
@@ -41,23 +39,6 @@ async function handleGet(req, res, breedId) {
   }
 }
 
-// Handle POST request
-async function handlePost(req, res) {
-  const { name } = req.body;
-
-  try {
-    const newbreed = await prisma.breed.create({
-      data: {
-        name,
-      },
-    });
-    res.status(201).json(newbreed);
-  } catch (error) {
-    console.error("Error creating breed:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-
 // Handle PATCH request
 async function handlePatch(req, res, breedId) {
   try {
@@ -74,11 +55,24 @@ async function handlePatch(req, res, breedId) {
     }
 
     const { name } = req.body;
+    const existingBreedName = await prisma.breed.findUnique({
+      where: { name: name.trim() },
+    });
+
+    if (existingBreedName) {
+      return res.status(409).json({
+        message: `Breed ${name.trim()} already exists`,
+        breed: existingBreedName,
+      });
+    }
+    if (!name) {
+      return res.status(400).json({ message: "No update data provided." });
+    }
 
     const updatedbreed = await prisma.breed.update({
       where: { id },
       data: {
-        ...(name && { name }),
+        ...(name && { name: name.trim() }),
       },
     });
 
