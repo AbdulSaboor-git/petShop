@@ -15,7 +15,7 @@ export default function ProductCardAlt({ item }) {
   return (
     <div
       onClick={prodClick}
-      className="mb-1 cursor-pointer max-w-[200px] min-w-[170px] overflow-hidden transition-all duration-300 ease-in-out relative rounded-xl"
+      className="mb-1 cursor-pointer max-w-[200px] min-w-[150px] overflow-hidden transition-all duration-300 ease-in-out relative rounded-xl"
     >
       {/* Product Image */}
       <div className="relative w-full pt-[100%]">
@@ -27,22 +27,22 @@ export default function ProductCardAlt({ item }) {
         />
       </div>
 
-      <div className="flex flex-col gap-0.5 pl-1 pt-2 relative max-w-[170px]">
-        <div className="text-xs font-normal flex gap-1 items-center truncate">
-          {item.isDiscounted && (
+      <div className="flex flex-col gap-0.5 pl-1 pt-2 relative">
+        <div className="text-xs font-normal flex gap-1 items-center  bg-red-200">
+          {/* {item.isDiscounted && (
             <div className="bg-red-600 text-white px-1 font-semibold flex gap-1 items-center">
               <span>Sale</span> <MdDiscount className="mt-[1.7px]" size={10} />
             </div>
-          )}
+          )} */}
           {hover && (
             <div className="w-full flex justify-center absolute -top-8 left-0">
-              <div className=" text-center text-xs text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
+              <div className="text-center text-xs text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
                 {item.name}
               </div>
             </div>
           )}
           <div
-            className="truncate w-full"
+            className="truncate min-w-[200px]"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
