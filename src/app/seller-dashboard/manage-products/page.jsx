@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { FaMinus } from "react-icons/fa";
 
 export default function ManageProductsPage() {
   const [focused, setFocused] = useState("add");
@@ -41,13 +42,14 @@ export default function ManageProductsPage() {
     name.trim().length >= 3 &&
     price !== "" &&
     Number(price) > 0 &&
-    categoryId !== "";
+    categoryId !== "" &&
+    images.length != 0;
   const isEditFormValid =
-    item !== null &&
     name.trim().length >= 3 &&
     price !== "" &&
     Number(price) > 0 &&
-    categoryId !== "";
+    categoryId !== "" &&
+    images.length != 0;
 
   // Handlers to switch forms.
   const handleAddProduct = () => {
@@ -103,28 +105,28 @@ export default function ManageProductsPage() {
   };
 
   // Fetch all products, categories, and breeds.
-  useEffect(() => {
-    const fetchItemsData = async () => {
-      try {
-        const response = await fetch(`/api/homeItems`);
-        const response2 = await fetch(`/api/categories_breeds`);
-        if (!response.ok || !response2.ok) {
-          throw new Error("Failed to fetch data.");
-        }
-        const data = await response.json();
-        const data2 = await response2.json();
-
-        setItems(data.items);
-        setCategories(data2.categories);
-        setBreeds(data2.breeds);
-      } catch (err) {
-        setError(err.message);
-        alert(err.message);
-      } finally {
-        setLoading(false);
+  const fetchItemsData = async () => {
+    try {
+      const response = await fetch(`/api/allItems`);
+      const response2 = await fetch(`/api/categories_breeds`);
+      if (!response.ok || !response2.ok) {
+        throw new Error("Failed to fetch data.");
       }
-    };
+      const data = await response.json();
+      const data2 = await response2.json();
 
+      setItems(data.items);
+      setCategories(data2.categories);
+      setBreeds(data2.breeds);
+    } catch (err) {
+      setError(err.message);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchItemsData();
   }, []);
 
@@ -158,7 +160,22 @@ export default function ManageProductsPage() {
       setItemLoading(false);
     }
   };
-
+  function resetForm() {
+    setName("");
+    setPrice("");
+    setDiscountedPrice("");
+    setDescription("");
+    setCategoryId("");
+    setBreedId("");
+    setSex("");
+    setNature("");
+    setWeight("");
+    setHeight("");
+    setAge("");
+    setAvailability("");
+    setImages([]);
+    setItem(null);
+  }
   // Handler for adding a product.
   // Handler for adding a product.
   const handleAddProductSubmit = async (e) => {
@@ -174,7 +191,8 @@ export default function ManageProductsPage() {
         body: JSON.stringify({
           name: name.trim(),
           price: Number(price),
-          discountedPrice: discountedPrice ? Number(discountedPrice) : 0,
+          discountedPrice:
+            discountedPrice != undefined ? Number(discountedPrice) : "",
           description,
           categoryId: Number(categoryId),
           breedId: breedId ? Number(breedId) : null,
@@ -186,8 +204,7 @@ export default function ManageProductsPage() {
           availability,
           images, // Array of image URLs
           sellerId,
-          isDiscounted:
-            discountedPrice && Number(discountedPrice) < Number(price),
+          isDiscounted: discountedPrice != "" && discountedPrice < price,
         }),
       });
       if (!res.ok) {
@@ -196,19 +213,8 @@ export default function ManageProductsPage() {
       }
       alert(`Product "${name}" added successfully!`);
       // Reset form state.
-      setName("");
-      setPrice("");
-      setDiscountedPrice("");
-      setDescription("");
-      setCategoryId("");
-      setBreedId("");
-      setSex("");
-      setNature("");
-      setWeight("");
-      setHeight("");
-      setAge("");
-      setAvailability("");
-      setImages([]);
+      fetchItemsData();
+      resetForm();
     } catch (err) {
       alert(err.message);
     }
@@ -230,7 +236,8 @@ export default function ManageProductsPage() {
         body: JSON.stringify({
           name: name.trim(),
           price: Number(price),
-          discountedPrice: discountedPrice ? Number(discountedPrice) : 0,
+          discountedPrice:
+            discountedPrice != undefined ? Number(discountedPrice) : "",
           description,
           categoryId: Number(categoryId),
           breedId: breedId ? Number(breedId) : null,
@@ -241,8 +248,7 @@ export default function ManageProductsPage() {
           age: age ? Number(age) : null,
           availability,
           images,
-          isDiscounted:
-            discountedPrice && Number(discountedPrice) < Number(price),
+          isDiscounted: discountedPrice != "" && discountedPrice < price,
         }),
       });
       if (!res.ok) {
@@ -250,21 +256,8 @@ export default function ManageProductsPage() {
         throw new Error(errorResponse.message || "Failed to update product.");
       }
       alert(`Product "${item.name}" updated successfully!`);
-      // Reset form state.
-      setName("");
-      setPrice("");
-      setDiscountedPrice("");
-      setDescription("");
-      setCategoryId("");
-      setBreedId("");
-      setSex("");
-      setNature("");
-      setWeight("");
-      setHeight("");
-      setAge("");
-      setAvailability("");
-      setImages([]);
-      setItem(null);
+      fetchItemsData();
+      resetForm();
     } catch (err) {
       alert(err.message);
     }
@@ -286,6 +279,7 @@ export default function ManageProductsPage() {
         throw new Error(errorResponse.message || "Failed to delete product.");
       }
       alert(`Product "${item.name}" deleted successfully!`);
+      fetchItemsData();
       setItem(null);
       // Optionally, refresh the product list.
     } catch (err) {
@@ -293,6 +287,9 @@ export default function ManageProductsPage() {
     }
   };
 
+  function removeImage(url) {
+    setImages(images.filter((img_url) => img_url != url));
+  }
   // Handler for file upload via Cloudinary (unsigned upload).
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -389,7 +386,7 @@ export default function ManageProductsPage() {
                       onSubmit={handleAddProductSubmit}
                     >
                       <div>
-                        <label className="mx-0.5">Product Name</label>
+                        <label className="mx-0.5">Product Name*</label>
                         <input
                           type="text"
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
@@ -400,7 +397,7 @@ export default function ManageProductsPage() {
                         />
                       </div>
                       <div>
-                        <label className="mx-0.5">Price</label>
+                        <label className="mx-0.5">Price*</label>
                         <input
                           type="number"
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
@@ -415,7 +412,6 @@ export default function ManageProductsPage() {
                           type="number"
                           onChange={(e) => setDiscountedPrice(e.target.value)}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          min="0"
                         />
                       </div>
                       <div>
@@ -429,7 +425,7 @@ export default function ManageProductsPage() {
                         />
                       </div>
                       <div>
-                        <label className="mx-0.5">Category</label>
+                        <label className="mx-0.5">Category*</label>
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
@@ -445,7 +441,7 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Breed (Optional)</label>
+                        <label className="mx-0.5">Breed</label>
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           value={breedId}
@@ -526,9 +522,10 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Images</label>
+                        <label className="mx-0.5">Images*</label>
                         <input
                           type="file"
+                          multiple
                           accept="image/*"
                           onChange={handleFileChange}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
@@ -539,12 +536,21 @@ export default function ManageProductsPage() {
                         {images.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-2">
                             {images.map((url, index) => (
-                              <img
-                                key={index}
-                                src={url}
-                                alt={`Product Image ${index + 1}`}
-                                className="w-20 h-20 object-cover rounded-md border"
-                              />
+                              <div key={index} className="relative">
+                                <img
+                                  src={url}
+                                  alt={`Product Image ${index + 1}`}
+                                  className="w-20 h-20 object-cover rounded-md border"
+                                />
+                                <div
+                                  onClick={() => {
+                                    removeImage(url);
+                                  }}
+                                  className="absolute p-0.5 right-0.5 top-0.5 bg-gray-50 cursor-pointer rounded-full text-red-500"
+                                >
+                                  <FaMinus size={10} />
+                                </div>
+                              </div>
                             ))}
                           </div>
                         )}
@@ -555,6 +561,13 @@ export default function ManageProductsPage() {
                       >
                         Add Product
                       </button>
+                      <p
+                        className={`text-gray-500 ${
+                          !isAddFormValid && "text-red-500"
+                        }`}
+                      >
+                        * required fields
+                      </p>
                     </form>
                   </div>
                 )}
@@ -566,7 +579,7 @@ export default function ManageProductsPage() {
                       onSubmit={handleEditProductSubmit}
                     >
                       <div>
-                        <label className="mx-0.5">Product</label>
+                        <label className="mx-0.5">Product*</label>
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
@@ -575,6 +588,7 @@ export default function ManageProductsPage() {
                               fetchItemData(e.target.value);
                             }
                           }}
+                          value={item ? item.id : ""}
                         >
                           <option value="">Select a product</option>
                           {items.map((prod, i) => (
@@ -585,7 +599,16 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Product Name</label>
+                        <label className="mx-0.5">Product Id</label>
+                        <input
+                          type="text"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={item ? item.id : ""}
+                          disabled
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Product Name*</label>
                         <input
                           type="text"
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
@@ -596,8 +619,9 @@ export default function ManageProductsPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
+
                       <div>
-                        <label className="mx-0.5">Price</label>
+                        <label className="mx-0.5">Price*</label>
                         <input
                           type="number"
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
@@ -614,7 +638,6 @@ export default function ManageProductsPage() {
                           onChange={(e) => setDiscountedPrice(e.target.value)}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           value={discountedPrice}
-                          min="0"
                         />
                       </div>
                       <div>
@@ -628,7 +651,7 @@ export default function ManageProductsPage() {
                         />
                       </div>
                       <div>
-                        <label className="mx-0.5">Category</label>
+                        <label className="mx-0.5">Category*</label>
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
@@ -644,7 +667,7 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Breed (Optional)</label>
+                        <label className="mx-0.5">Breed</label>
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           value={breedId}
@@ -725,10 +748,11 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Images</label>
+                        <label className="mx-0.5">Images*</label>
                         <input
                           type="file"
                           accept="image/*"
+                          multiple
                           onChange={handleFileChange}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         />
@@ -736,14 +760,23 @@ export default function ManageProductsPage() {
                         {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
                         {/* Image Preview */}
                         {images.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2">
+                          <div className="flex flex-wrap gap-2 mt-2 ">
                             {images.map((url, index) => (
-                              <img
-                                key={index}
-                                src={url}
-                                alt={`Product Image ${index + 1}`}
-                                className="w-20 h-20 object-cover rounded-md border"
-                              />
+                              <div key={index} className="relative">
+                                <img
+                                  src={url}
+                                  alt={`Product Image ${index + 1}`}
+                                  className="w-20 h-20 object-cover rounded-md border"
+                                />
+                                <div
+                                  onClick={() => {
+                                    removeImage(url);
+                                  }}
+                                  className="absolute p-0.5 right-0.5 top-0.5 bg-gray-50 cursor-pointer rounded-full text-red-500"
+                                >
+                                  <FaMinus size={10} />
+                                </div>
+                              </div>
                             ))}
                           </div>
                         )}
@@ -754,6 +787,12 @@ export default function ManageProductsPage() {
                       >
                         Update Product
                       </button>
+                      <p
+                        className={`text-gray-500
+                          ${!isEditFormValid && "text-red-500"}`}
+                      >
+                        * required fields
+                      </p>
                     </form>
                   </div>
                 )}
@@ -777,6 +816,7 @@ export default function ManageProductsPage() {
                             setItem(null);
                           }
                         }}
+                        value={item ? item.id : ""}
                       >
                         <option value="0">Select a product</option>
                         {items.map((prod, i) => (

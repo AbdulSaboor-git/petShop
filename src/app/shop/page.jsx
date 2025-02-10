@@ -14,6 +14,7 @@ export default function Shop() {
   const [ShowCategories, setShowCategories] = useState(false);
   const [showBreeds, setShowBreeds] = useState(false);
   const [ShowMoreFilters, setShowMoreFilters] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   // Use arrays for filtering; "All" is the default selection.
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
@@ -48,6 +49,32 @@ export default function Shop() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    } else {
+      // Initialize as an empty array.
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavorites([]);
+    }
+  }, []);
+
+  const handleFavoriteClick = (itemId) => {
+    setFavorites((prevFavorites) => {
+      let updatedFavorites;
+      if (prevFavorites.includes(itemId)) {
+        // Remove item from favorites
+        updatedFavorites = prevFavorites.filter((favId) => favId !== itemId);
+      } else {
+        // Add item to favorites
+        updatedFavorites = [...prevFavorites, itemId];
+      }
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
+  };
 
   // Fetch items, categories, and breeds.
   useEffect(() => {
@@ -368,7 +395,16 @@ export default function Shop() {
               }`}
             >
               {items.length ? (
-                items.map((item, i) => <ProductCardAlt key={i} item={item} />)
+                items.map((item, i) => (
+                  <ProductCardAlt
+                    key={i}
+                    item={item}
+                    favClick={() => {
+                      handleFavoriteClick(item.id);
+                    }}
+                    isFav={favorites.includes(item.id)}
+                  />
+                ))
               ) : (
                 <div className="text-xs md:text-sm text-gray-500 p-2">
                   No such items found.

@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -13,17 +14,14 @@ export default async function handler(req, res) {
 }
 
 const handleGet = async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
   try {
-    const categories = await prisma.category.findMany({
-      include: { items: true },
-      orderBy: { name: "asc" },
-    });
-    const breeds = await prisma.breed.findMany({
-      include: { items: true },
+    const items = await prisma.item.findMany({
+      include: { seller: true, category: true, breed: true },
       orderBy: { name: "asc" },
     });
 
-    return res.status(200).json({ categories, breeds });
+    return res.status(200).json({ items });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });

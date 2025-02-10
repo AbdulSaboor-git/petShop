@@ -47,7 +47,7 @@ export default function ItemPage({ params }) {
   useEffect(() => {
     const fetchItemData = async () => {
       try {
-        const response = await fetch(`/api/item/${itemId}`);
+        const response = await fetch(`/api/item?productId=${itemId}`);
         if (!response.ok) {
           throw new Error("Item not found");
         }
@@ -217,17 +217,26 @@ export default function ItemPage({ params }) {
                 </div>
                 <div className="fixed z-10 bottom-0 left-0 p-3 px-4 md:p-0 bg-white w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
                   <button
+                    disabled={item.availability != "AVAILABLE"}
                     onClick={handleContactSeller}
-                    className={`bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full `}
+                    className={`bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full ${
+                      item.availability != "AVAILABLE" &&
+                      "cursor-not-allowed hover:bg-[#8a5e2f] opacity-80"
+                    }`}
                   >
                     Contact Seller
                   </button>
                   <button
                     onClick={handleFavoriteClick}
-                    className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full hover:animate-bounce ${
+                    disabled={item.availability != "AVAILABLE"}
+                    className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full ${
                       favorites.includes(item.id)
-                        ? "bg-orange-500 text-white hover:animate-none"
+                        ? "bg-orange-500 text-white"
                         : "bg-white"
+                    }
+                    ${
+                      item.availability != "AVAILABLE" &&
+                      "cursor-not-allowed opacity-80"
                     }`}
                   >
                     {favorites.includes(item.id) ? (

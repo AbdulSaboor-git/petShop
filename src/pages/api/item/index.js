@@ -77,11 +77,11 @@ async function handlePost(req, res) {
       data: {
         name: name.trim(),
         price: Number(price),
-        discountedPrice: discountedPrice ? Number(discountedPrice) : 0,
+        discountedPrice:
+          discountedPrice !== "" ? Number(discountedPrice) : null,
         description: description || "",
         categoryId: Number(categoryId),
         breedId: breedId ? Number(breedId) : null,
-        // Map the front-end "sex" variable to the schema field "sex"
         sex: sex || "",
         nature: nature || "",
         weight: weight ? Number(weight) : null,
@@ -91,7 +91,7 @@ async function handlePost(req, res) {
         images: images, // Expect images as an array of strings (URLs)
         sellerId: Number(sellerId),
         isDiscounted:
-          discountedPrice && Number(discountedPrice) < Number(price),
+          discountedPrice != "" && Number(discountedPrice) < Number(price),
       },
     });
 
@@ -133,12 +133,14 @@ async function handlePatch(req, res, productId) {
       images,
     } = req.body;
 
+    console.log(discountedPrice);
+
     const updatedProduct = await prisma.item.update({
       where: { id },
       data: {
         ...(name && { name: name.trim() }),
         ...(price && { price: Number(price) }),
-        ...(discountedPrice !== undefined && {
+        ...(discountedPrice !== "" && {
           discountedPrice: Number(discountedPrice),
         }),
         ...(description && { description }),
@@ -154,7 +156,7 @@ async function handlePatch(req, res, productId) {
         ...(availability && { availability }),
         ...(images && { images }),
         isDiscounted:
-          discountedPrice && Number(discountedPrice) < Number(price),
+          discountedPrice != "" && Number(discountedPrice) < Number(price),
       },
     });
 

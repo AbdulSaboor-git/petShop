@@ -25,11 +25,11 @@ export default function FavItem({
     >
       <div
         className={`flex gap-4 items-center w-full
-        ${!item.availability === "AVAILABLE" && "opacity-65"}`}
+        ${item.availability !== "AVAILABLE" && "opacity-65"}`}
       >
         <input
           type="checkbox"
-          disabled={!item.availability === "AVAILABLE"}
+          disabled={item.availability !== "AVAILABLE"}
           checked={isSelected}
           onChange={() => handleSelectItem(item)}
           className="accent-orange-600 size-3 md:size-4"
@@ -40,12 +40,13 @@ export default function FavItem({
           className="w-16 md:w-24 object-cover aspect-square rounded-lg cursor-pointer"
           onClick={itemClick}
         />
+
         <div
           className="text-sm md:text-base cursor-pointer flex flex-col gap-[1px] items-start"
           onClick={itemClick}
         >
-          {!item.availability === "AVAILABLE" && (
-            <p className="text-[10px] md:text-xs text-red-600">Unavailable</p>
+          {item.availability !== "AVAILABLE" && (
+            <p className="text-[10px] md:text-xs text-red-600">UNAVAILABLE</p>
           )}
           <h3 className="font-bold leading-tight line-clamp-2 ">{item.name}</h3>
           <p className="text-xs md:text-sm text-gray-600">
@@ -58,7 +59,7 @@ export default function FavItem({
         </div>
       </div>
       <button
-        className={`z-30 items-center text-sm md:text-base  text-red-600 hover:text-red-700 cursor-pointer pointer-events-auto
+        className={`z-30 items-center text-sm md:text-base  text-orange-600 hover:text-orange-700 cursor-pointer pointer-events-auto
              `}
         onClick={() => handleRemoveFav(item.id)}
       >

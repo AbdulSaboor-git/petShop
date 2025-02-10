@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -16,6 +17,7 @@ const handleGet = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   try {
     const items = await prisma.item.findMany({
+      where: { availability: "AVAILABLE" },
       include: { seller: true, category: true, breed: true },
     });
 

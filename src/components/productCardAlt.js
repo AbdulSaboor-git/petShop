@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MdDiscount, MdCircle } from "react-icons/md";
+import {
+  MdDiscount,
+  MdCircle,
+  MdFavoriteBorder,
+  MdFavorite,
+} from "react-icons/md";
 
-export default function ProductCardAlt({ item }) {
+export default function ProductCardAlt({ item, favClick, isFav }) {
   const name = item.name.toUpperCase();
   const router = useRouter();
   const [hover, setHover] = useState(false);
@@ -25,15 +30,24 @@ export default function ProductCardAlt({ item }) {
           draggable="false"
           className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"
         />
+        <button
+          className="absolute bottom-1 right-1 text-white p-1 rounded-full bg-orange-500 text-base"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent the click from bubbling up
+            favClick(); // Execute the favorite toggle logic
+          }}
+        >
+          {!isFav ? <MdFavoriteBorder /> : <MdFavorite />}
+        </button>
       </div>
 
       <div className="flex flex-col gap-0.5 pl-1 pt-2 relative">
         <div className="text-xs font-normal flex gap-1 items-center">
-          {/* {item.isDiscounted && (
+          {item.isDiscounted && (
             <div className="bg-red-600 text-white px-1 font-semibold flex gap-1 items-center">
               <span>Sale</span> <MdDiscount className="mt-[1.7px]" size={10} />
             </div>
-          )} */}
+          )}
           {hover && (
             <div className="w-full flex justify-center absolute -top-8 left-0">
               <div className="text-center text-xs text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
@@ -41,13 +55,14 @@ export default function ProductCardAlt({ item }) {
               </div>
             </div>
           )}
-          <div
-            className="truncate min-w-[200px]"
+
+          <p
+            className="text-xs truncate"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
             {name}
-          </div>
+          </p>
         </div>
         {/* <p className="text-xs text-gray-400 flex gap-1 items-center "> <MdCircle />  {item.breed}</p> */}
         <div className="flex justify-between items-center">
