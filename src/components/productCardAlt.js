@@ -28,7 +28,7 @@ export default function ProductCardAlt({ item }) {
       </div>
 
       <div className="flex flex-col gap-0.5 pl-1 pt-2 relative">
-        <div className="text-xs font-normal flex gap-1 items-center  bg-red-200">
+        <div className="text-xs font-normal flex gap-1 items-center">
           {/* {item.isDiscounted && (
             <div className="bg-red-600 text-white px-1 font-semibold flex gap-1 items-center">
               <span>Sale</span> <MdDiscount className="mt-[1.7px]" size={10} />

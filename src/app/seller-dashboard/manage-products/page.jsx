@@ -23,17 +23,22 @@ export default function ManageProductsPage() {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [breedId, setBreedId] = useState("");
-  const [gender, setGender] = useState(""); // Gender state
-  const [nature, setNature] = useState(""); // Nature state
-  const [weight, setWeight] = useState(""); // Weight state
-  const [height, setHeight] = useState(""); // Height state
-  const [age, setAge] = useState(""); // Age state
-  const [availability, setAvailability] = useState(""); // Availability state
-  const [images, setImages] = useState([]); // Images state
+  const [sex, setSex] = useState("");
+  const [nature, setNature] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [age, setAge] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [images, setImages] = useState([]); // Images state holds an array of URLs
+  const [uploading, setUploading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  // ADDED: Simple form validation state for add/edit forms
+  // For demonstration purposes, we'll hard-code sellerId.
+  const sellerId = 1;
+
+  // Form validation states.
   const isAddFormValid =
-    name.trim().length >= 3 && // product name must be at least 3 characters
+    name.trim().length >= 3 &&
     price !== "" &&
     Number(price) > 0 &&
     categoryId !== "";
@@ -44,44 +49,62 @@ export default function ManageProductsPage() {
     Number(price) > 0 &&
     categoryId !== "";
 
+  // Handlers to switch forms.
   const handleAddProduct = () => {
     setAddProduct(true);
     setEditProduct(false);
     setDeleteProduct(false);
     setFocused("add");
-  };
-
-  const handleEditProduct = () => {
-    setAddProduct(false);
-    setEditProduct(true);
-    setDeleteProduct(false);
+    // Reset form fields.
     setName("");
     setPrice("");
     setDiscountedPrice("");
     setDescription("");
     setCategoryId("");
     setBreedId("");
-    setGender("");
+    setSex("");
     setNature("");
     setWeight("");
     setHeight("");
     setAge("");
     setAvailability("");
     setImages([]);
-    setItem(null); // ADDED: reset selected item for edit
+    setItem(null);
+  };
+
+  const handleEditProduct = () => {
+    setAddProduct(false);
+    setEditProduct(true);
+    setDeleteProduct(false);
     setFocused("edit");
+    // Reset form fields.
+    setName("");
+    setPrice("");
+    setDiscountedPrice("");
+    setDescription("");
+    setCategoryId("");
+    setBreedId("");
+    setSex("");
+    setNature("");
+    setWeight("");
+    setHeight("");
+    setAge("");
+    setAvailability("");
+    setImages([]);
+    setItem(null);
   };
 
   const handleDeleteProduct = () => {
     setAddProduct(false);
     setEditProduct(false);
     setDeleteProduct(true);
-    setItem(null); // ADDED: reset selected item for delete
     setFocused("delete");
+    setItem(null);
   };
 
+  // Fetch all products, categories, and breeds.
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchItemsData = async () => {
       try {
         const response = await fetch(`/api/homeItems`);
         const response2 = await fetch(`/api/categories_breeds`);
@@ -102,14 +125,16 @@ export default function ManageProductsPage() {
       }
     };
 
-    fetchItems();
+    fetchItemsData();
   }, []);
 
+  // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
+    setItemLoading(true);
     try {
-      const response = await fetch(`/api/item/${itemId}`);
+      const response = await fetch(`/api/item?productId=${itemId}`);
       if (!response.ok) {
-        throw new Error("Item not found");
+        throw new Error("Product not found");
       }
       const data = await response.json();
       setItem(data);
@@ -119,18 +144,190 @@ export default function ManageProductsPage() {
       setDescription(data.description || "");
       setCategoryId(data.categoryId || "");
       setBreedId(data.breedId || "");
-      setGender(data.gender || "");
+      setSex(data.sex || "");
       setNature(data.nature || "");
       setWeight(data.weight || "");
       setHeight(data.height || "");
       setAge(data.age || "");
       setAvailability(data.availability || "");
-      setImages(data.images || []);
+      setImages(data.images || []); // Existing product images
     } catch (err) {
       setItemError(err.message);
       alert(err.message);
     } finally {
       setItemLoading(false);
+    }
+  };
+
+  // Handler for adding a product.
+  // Handler for adding a product.
+  const handleAddProductSubmit = async (e) => {
+    e.preventDefault();
+    if (!isAddFormValid) {
+      alert("Please fill out all required fields with valid values.");
+      return;
+    }
+    try {
+      const res = await fetch("/api/item", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          price: Number(price),
+          discountedPrice: discountedPrice ? Number(discountedPrice) : 0,
+          description,
+          categoryId: Number(categoryId),
+          breedId: breedId ? Number(breedId) : null,
+          sex,
+          nature,
+          weight: weight ? Number(weight) : null,
+          height: height ? Number(height) : null,
+          age: age ? Number(age) : null,
+          availability,
+          images, // Array of image URLs
+          sellerId,
+          isDiscounted:
+            discountedPrice && Number(discountedPrice) < Number(price),
+        }),
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to add product.");
+      }
+      alert(`Product "${name}" added successfully!`);
+      // Reset form state.
+      setName("");
+      setPrice("");
+      setDiscountedPrice("");
+      setDescription("");
+      setCategoryId("");
+      setBreedId("");
+      setSex("");
+      setNature("");
+      setWeight("");
+      setHeight("");
+      setAge("");
+      setAvailability("");
+      setImages([]);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Handler for editing a product.
+  const handleEditProductSubmit = async (e) => {
+    e.preventDefault();
+    if (!isEditFormValid || !item) {
+      alert(
+        "Please select a product and fill out all required fields with valid values."
+      );
+      return;
+    }
+    try {
+      const res = await fetch(`/api/item?productId=${item.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          price: Number(price),
+          discountedPrice: discountedPrice ? Number(discountedPrice) : 0,
+          description,
+          categoryId: Number(categoryId),
+          breedId: breedId ? Number(breedId) : null,
+          sex,
+          nature,
+          weight: weight ? Number(weight) : null,
+          height: height ? Number(height) : null,
+          age: age ? Number(age) : null,
+          availability,
+          images,
+          isDiscounted:
+            discountedPrice && Number(discountedPrice) < Number(price),
+        }),
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to update product.");
+      }
+      alert(`Product "${item.name}" updated successfully!`);
+      // Reset form state.
+      setName("");
+      setPrice("");
+      setDiscountedPrice("");
+      setDescription("");
+      setCategoryId("");
+      setBreedId("");
+      setSex("");
+      setNature("");
+      setWeight("");
+      setHeight("");
+      setAge("");
+      setAvailability("");
+      setImages([]);
+      setItem(null);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Handler for deleting a product.
+  const handleDeleteProductSubmit = async (e) => {
+    e.preventDefault();
+    if (!item) {
+      alert("Please select a product to delete.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/item?productId=${item.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to delete product.");
+      }
+      alert(`Product "${item.name}" deleted successfully!`);
+      setItem(null);
+      // Optionally, refresh the product list.
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Handler for file upload via Cloudinary (unsigned upload).
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    setErrorMsg("");
+
+    const formData = new FormData();
+    formData.append("file", file);
+    // Replace with your unsigned upload preset name
+    formData.append("upload_preset", "RoyalAseelFarms");
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dlthizgza/upload`, // Replace "your_cloud_name" with your actual Cloudinary cloud name.
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText);
+      }
+
+      const data = await response.json();
+      // Append the uploaded image URL to the images array
+      setImages((prevImages) => [...prevImages, data.secure_url]);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setErrorMsg("Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -149,12 +346,12 @@ export default function ManageProductsPage() {
             </h1>
             <h1 className="font-semibold text-center">Manage Products</h1>
 
-            {/* ADDED: flex-col for mobile, flex-row for medium screens */}
+            {/* Navigation buttons for Add, Edit, Delete */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddProduct}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
                     focused === "add"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e]"
@@ -164,7 +361,7 @@ export default function ManageProductsPage() {
                 </button>
                 <button
                   onClick={handleEditProduct}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b]  hover:text-white  text-[#9e6e3b] flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] hover:text-white flex-1 text-center text-[#9e6e3b] ${
                     focused === "edit"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e]"
@@ -174,7 +371,7 @@ export default function ManageProductsPage() {
                 </button>
                 <button
                   onClick={handleDeleteProduct}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b]  hover:text-white  text-[#9e6e3b] flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] hover:text-white flex-1 text-center text-[#9e6e3b] ${
                     focused === "delete"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e]"
@@ -188,211 +385,17 @@ export default function ManageProductsPage() {
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
                     <h3 className="font-bold text-orange-800">Add Product</h3>
                     <form
-                      className="flex flex-col gap-2.5 text-sm "
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        // ADDED: Validate the form before submission
-                        if (!isAddFormValid) {
-                          alert(
-                            "Please fill out all required fields with valid values."
-                          );
-                          return;
-                        }
-                        // ADDED: Insert form submission logic for adding product here.
-                      }}
-                    >
-                      <div>
-                        <label className="mx-0.5">Product Name</label>
-                        <input
-                          type="text"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          required
-                          minLength={3} // ADDED: minimum length constraint
-                          maxLength={100} // ADDED: maximum length constraint
-                          onChange={(e) => setName(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Price</label>
-                        <input
-                          type="number"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          required
-                          onChange={(e) => setPrice(e.target.value)}
-                          min="0" // ADDED: price must be positive
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Discounted Price</label>
-                        <input
-                          type="number"
-                          onChange={(e) => setDiscountedPrice(e.target.value)}
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          min="0"
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Description</label>
-                        <input
-                          type="text"
-                          onChange={(e) => setDescription(e.target.value)}
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          maxLength="500"
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Category</label>
-                        <select
-                          onChange={(e) => setCategoryId(e.target.value)}
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          required
-                        >
-                          <option value="">select a category</option>
-                          {categories.map((categ, i) => (
-                            <option key={i} value={categ.id}>
-                              {categ.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Breed (Optional)</label>
-                        <select
-                          onChange={(e) => setBreedId(e.target.value)}
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                        >
-                          <option value="">select a breed</option>
-                          {breeds.map((breed, i) => (
-                            <option key={i} value={breed.id}>
-                              {breed.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Gender</label>
-                        <select
-                          onChange={(e) => setGender(e.target.value)}
-                          className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
-                        >
-                          <option value="">select gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Nature</label>
-                        <input
-                          onChange={(e) => setNature(e.target.value)}
-                          type="text"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          maxLength="200" // ADDED: limit nature text
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Weight (g)</label>
-                        <input
-                          onChange={(e) => setWeight(e.target.value)}
-                          type="number"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          min="0"
-                          step="0.1" // ADDED: allow decimal weights
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Height (cm)</label>
-                        <input
-                          onChange={(e) => setHeight(e.target.value)}
-                          type="number"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          min="0"
-                          step="0.1"
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Age (years)</label>
-                        <input
-                          onChange={(e) => setAge(e.target.value)}
-                          type="number"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          min="0"
-                          step="0.1"
-                        />
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Availability</label>
-                        <select
-                          onChange={(e) => setAvailability(e.target.value)}
-                          className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
-                        >
-                          <option value="AVAILABLE">Available</option>
-                          <option value="UNAVAILABLE">Unavailable</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="mx-0.5">Images</label>
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*" // ADDED: accept only images
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Add Product
-                      </button>
-                    </form>
-                  </div>
-                )}
-                {editProduct && (
-                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Edit Product</h3>
-                    <form
                       className="flex flex-col gap-2.5 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        // ADDED: Validate the form before updating
-                        if (!isEditFormValid) {
-                          alert(
-                            "Please select a product and fill out all required fields with valid values."
-                          );
-                          return;
-                        }
-                        // ADDED: Insert form submission logic for updating product here.
-                      }}
+                      onSubmit={handleAddProductSubmit}
                     >
-                      <div>
-                        <label className="mx-0.5">Product</label>
-                        <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          required
-                          onChange={(e) => {
-                            // ADDED: Only fetch if a valid product id is selected
-                            if (e.target.value) {
-                              fetchItemData(e.target.value);
-                            }
-                          }}
-                        >
-                          <option value="">Select a product</option>
-                          {items.map((item, i) => (
-                            <option key={i} value={item.id}>
-                              {item.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
                       <div>
                         <label className="mx-0.5">Product Name</label>
                         <input
                           type="text"
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
-                          value={name}
-                          minLength={3} // ADDED: minimum length constraint
-                          maxLength={100} // ADDED: maximum length constraint
+                          minLength={3}
+                          maxLength={100}
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
@@ -402,18 +405,16 @@ export default function ManageProductsPage() {
                           type="number"
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
-                          value={price}
                           onChange={(e) => setPrice(e.target.value)}
-                          min="0" // ADDED: price must be positive
+                          min="0"
                         />
                       </div>
                       <div>
                         <label className="mx-0.5">Discounted Price</label>
                         <input
                           type="number"
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
-                          value={discountedPrice}
                           onChange={(e) => setDiscountedPrice(e.target.value)}
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           min="0"
                         />
                       </div>
@@ -459,13 +460,13 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Gender</label>
+                        <label className="mx-0.5">Sex</label>
                         <select
                           className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
-                          value={gender}
-                          onChange={(e) => setGender(e.target.value)}
+                          value={sex}
+                          onChange={(e) => setSex(e.target.value)}
                         >
-                          <option value="">select gender</option>
+                          <option value="">select sex</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
@@ -528,10 +529,224 @@ export default function ManageProductsPage() {
                         <label className="mx-0.5">Images</label>
                         <input
                           type="file"
-                          multiple
-                          accept="image/*" // ADDED: accept only image files
+                          accept="image/*"
+                          onChange={handleFileChange}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         />
+                        {uploading && <p>Uploading...</p>}
+                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+                        {/* Image Preview */}
+                        {images.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {images.map((url, index) => (
+                              <img
+                                key={index}
+                                src={url}
+                                alt={`Product Image ${index + 1}`}
+                                className="w-20 h-20 object-cover rounded-md border"
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        type="submit"
+                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                      >
+                        Add Product
+                      </button>
+                    </form>
+                  </div>
+                )}
+                {editProduct && (
+                  <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
+                    <h3 className="font-bold text-orange-800">Edit Product</h3>
+                    <form
+                      className="flex flex-col gap-2.5 text-sm"
+                      onSubmit={handleEditProductSubmit}
+                    >
+                      <div>
+                        <label className="mx-0.5">Product</label>
+                        <select
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          required
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              fetchItemData(e.target.value);
+                            }
+                          }}
+                        >
+                          <option value="">Select a product</option>
+                          {items.map((prod, i) => (
+                            <option key={i} value={prod.id}>
+                              {prod.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Product Name</label>
+                        <input
+                          type="text"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          required
+                          value={name}
+                          minLength={3}
+                          maxLength={100}
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Price</label>
+                        <input
+                          type="number"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          required
+                          value={price}
+                          onChange={(e) => setPrice(e.target.value)}
+                          min="0"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Discounted Price</label>
+                        <input
+                          type="number"
+                          onChange={(e) => setDiscountedPrice(e.target.value)}
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={discountedPrice}
+                          min="0"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Description</label>
+                        <input
+                          type="text"
+                          value={description}
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          onChange={(e) => setDescription(e.target.value)}
+                          maxLength="500"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Category</label>
+                        <select
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          required
+                          value={categoryId}
+                          onChange={(e) => setCategoryId(e.target.value)}
+                        >
+                          <option value="">select a category</option>
+                          {categories.map((categ, i) => (
+                            <option key={i} value={categ.id}>
+                              {categ.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Breed (Optional)</label>
+                        <select
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={breedId}
+                          onChange={(e) => setBreedId(e.target.value)}
+                        >
+                          <option value="">select a breed</option>
+                          {breeds.map((breed, i) => (
+                            <option key={i} value={breed.id}>
+                              {breed.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Sex</label>
+                        <select
+                          className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
+                          value={sex}
+                          onChange={(e) => setSex(e.target.value)}
+                        >
+                          <option value="">select sex</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Nature</label>
+                        <input
+                          type="text"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={nature}
+                          onChange={(e) => setNature(e.target.value)}
+                          maxLength="200"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Weight (g)</label>
+                        <input
+                          type="number"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={weight}
+                          onChange={(e) => setWeight(e.target.value)}
+                          min="0"
+                          step="0.1"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Height (cm)</label>
+                        <input
+                          type="number"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={height}
+                          onChange={(e) => setHeight(e.target.value)}
+                          min="0"
+                          step="0.1"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Age (years)</label>
+                        <input
+                          type="number"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={age}
+                          onChange={(e) => setAge(e.target.value)}
+                          min="0"
+                          step="0.1"
+                        />
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Availability</label>
+                        <select
+                          className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
+                          value={availability}
+                          onChange={(e) => setAvailability(e.target.value)}
+                        >
+                          <option value="AVAILABLE">Available</option>
+                          <option value="UNAVAILABLE">Unavailable</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Images</label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                        />
+                        {uploading && <p>Uploading...</p>}
+                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+                        {/* Image Preview */}
+                        {images.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {images.map((url, index) => (
+                              <img
+                                key={index}
+                                src={url}
+                                alt={`Product Image ${index + 1}`}
+                                className="w-20 h-20 object-cover rounded-md border"
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <button
                         type="submit"
@@ -549,22 +764,13 @@ export default function ManageProductsPage() {
                     </h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        // ADDED: Check if a valid product is selected before deletion
-                        if (!item) {
-                          alert("Please select a product to delete.");
-                          return;
-                        }
-                        // ADDED: Insert deletion logic here.
-                      }}
+                      onSubmit={handleDeleteProductSubmit}
                     >
                       <label>Select Product</label>
                       <select
                         className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         required
                         onChange={(e) => {
-                          // ADDED: Only fetch item data if a valid product is selected
                           if (e.target.value && e.target.value !== "0") {
                             fetchItemData(e.target.value);
                           } else {
@@ -573,15 +779,15 @@ export default function ManageProductsPage() {
                         }}
                       >
                         <option value="0">Select a product</option>
-                        {items.map((item, i) => (
-                          <option key={i} value={item.id}>
-                            {item.name}
+                        {items.map((prod, i) => (
+                          <option key={i} value={prod.id}>
+                            {prod.name}
                           </option>
                         ))}
                       </select>
                       <button
                         type="submit"
-                        disabled={!item} // ADDED: disable delete if no product is selected
+                        disabled={!item}
                         className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                       >
                         Delete Product
