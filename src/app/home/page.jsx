@@ -205,7 +205,7 @@ export default function HomePage() {
             {error}
           </div>
         ) : (
-          <div className="flex flex-col gap-20">
+          <div className="flex flex-col gap-20 -mt-5 md:-mt-0">
             {/* Random Items Slider */}
             <Slider {...settings} className="">
               {randomItems.map((item, index) => (
@@ -268,7 +268,7 @@ export default function HomePage() {
             </Slider>
 
             {/* On Sale Slider */}
-            {discountedItems.length && (
+            {discountedItems.length != 0 && (
               <div className="flex flex-col gap-2 overflow-hidden">
                 <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
                   On Sale
@@ -297,7 +297,6 @@ export default function HomePage() {
                 </button>
               </div>
             )}
-            {/* Category Section (unchanged as per your request) */}
             <div className="flex flex-col px-6  gap-8">
               <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                 Top Categories
@@ -328,7 +327,6 @@ export default function HomePage() {
                             VIEW MORE
                           </button>
                         </div>
-                        {/* Image container */}
                         <div className="relative z-10 flex-shrink-0 ml-auto">
                           <img
                             src={
@@ -336,7 +334,7 @@ export default function HomePage() {
                                 ?.image || defaultPic
                             }
                             alt={categ.name}
-                            className="w-32  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
+                            className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
                           />
                         </div>
                       </div>
@@ -350,20 +348,26 @@ export default function HomePage() {
               <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
                 Most Valuable
               </div>
-              <div className="relative">
-                <Slider {...settings2}>
-                  {mostValuedItems.map((item, i) => (
-                    <ProductCard
-                      key={i}
-                      item={item}
-                      favClick={() => {
-                        handleFavoriteClick(item.id);
-                      }}
-                      isFav={favorites.includes(item.id)}
-                    />
-                  ))}
-                </Slider>
-              </div>
+              {items.length != 0 ? (
+                <div className="relative">
+                  <Slider {...settings2}>
+                    {mostValuedItems.map((item, i) => (
+                      <ProductCard
+                        key={i}
+                        item={item}
+                        favClick={() => {
+                          handleFavoriteClick(item.id);
+                        }}
+                        isFav={favorites.includes(item.id)}
+                      />
+                    ))}
+                  </Slider>
+                </div>
+              ) : (
+                <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
+                  Empty
+                </div>
+              )}
               <button
                 onClick={() => {
                   shopClick("All", "All", false, "priceDesc");

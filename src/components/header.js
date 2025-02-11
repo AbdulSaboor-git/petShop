@@ -143,7 +143,7 @@ export default function Header({ user }) {
     });
 
   return (
-    <div className="w-full overflow-x-clip">
+    <div className="w-full">
       {/* <div
         onClick={closeSidebar}
         className={`md:hidden fixed h-screen w-full z-40  ${
@@ -260,31 +260,14 @@ export default function Header({ user }) {
               className={`w-auto h-[70px] md:h-[50px] transition-all ease-in-out "
                   `}
             />
-            <div className="flex items-center gap-10">
-              <div className="hidden md:flex gap-3 text-sm">
-                {Buttons.map((btn, i) => (
-                  <button
-                    key={i}
-                    className=" py-1.5 px-5 rounded-full border border-solid border-[#9e6e3b] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
-                    onClick={btn.clickEvent}
-                  >
-                    {btn.btn_name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="fixed flex top-24 md:hidden right-0 items-center text-white text-sm">
-            <button className="py-2 bg-[#9e6e3b5e] h-fit rounded-l-xl backdrop-blur-sm">
-              <RiArrowLeftSLine size={20} />
-            </button>
-            <div className="flex flex-col  gap-2  rounded-l-xl   bg-[#9e6e3b5e] backdrop-blur-sm">
+            <div className="flex gap-2 md:gap-3 ">
               {Buttons.map((btn, i) => (
-                <button key={i} className="p-2">
-                  <div className="flex gap-2 items-center justify-normal">
-                    <div>{btn.icon}</div>
-                    {/* <div>{btn.btn_name}</div> */}
-                  </div>
+                <button
+                  key={i}
+                  className="py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
+                  onClick={btn.clickEvent}
+                >
+                  {btn.btn_name}
                 </button>
               ))}
             </div>

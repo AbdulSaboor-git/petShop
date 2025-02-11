@@ -23,9 +23,9 @@ export default function Footer() {
           <div className="flex flex-col items-center justify-center md:pb-3">
             <img src={logoLink} alt="logo" className="h-[50px] md:h-[70px]" />
           </div>
-          <div className="flex flex-col min-w-[90%] md:min-w-fit md:w-auto justify-center gap-3 text-[var(--text-prim)] text-[12px] md:text-[14px] ">
+          <div className="flex flex-col min-w-[90%] md:min-w-fit md:w-auto justify-center gap-5 text-[var(--text-prim)] text-[12px] md:text-[14px] ">
             <div className="flex gap-6 md:gap-32 justify-center">
-              <div className="flex flex-col w-full md:w-auto gap-3">
+              <div className="flex flex-col w-full md:w-auto gap-5">
                 <div className="flex items-center gap-3">
                   <SiFacebook className="text-lg md:text-xl" />
                   <p>Royal Aseel Farms</p>
@@ -35,7 +35,7 @@ export default function Footer() {
                   <p>@royalaseelfarms</p>
                 </div>
               </div>
-              <div className="flex flex-col w-full md:w-auto text-[var(--text-prim)] text-[12px] md:text-[14px] gap-3">
+              <div className="flex flex-col w-full md:w-auto text-[var(--text-prim)] text-[12px] md:text-[14px] gap-5">
                 <div className="flex items-center gap-3">
                   <SiYoutube className="text-lg md:text-xl" />
                   <p>Royal Aseel Farms</p>
@@ -48,7 +48,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center gap-3">
               <FaEnvelope className="text-lg md:text-xl" />
-              <p>RoyalAseelFarms@gmail.com</p>
+              <p>royalaseelfarms@gmail.com</p>
             </div>
           </div>
         </div>

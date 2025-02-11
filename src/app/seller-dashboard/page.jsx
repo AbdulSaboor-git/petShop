@@ -62,7 +62,7 @@ export default function SellerDashboardMainPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center md:gap-10 min-h-screen">
+    <div className="flex flex-col items-center gap-5 md:gap-10 min-h-screen">
       <Header />
       <div className="w-full max-w-[1200px] px-4 py-6">
         {loading ? (

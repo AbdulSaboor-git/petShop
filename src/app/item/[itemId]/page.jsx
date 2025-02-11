@@ -91,7 +91,7 @@ export default function ItemPage({ params }) {
   // Generate the order message using item details.
 
   return (
-    <div className="flex flex-col items-center md:gap-10">
+    <div className="flex flex-col items-center gap-7 md:gap-10">
       <Header />
       <div className="flex flex-col gap-10 max-w-[1200px] w-full px-4">
         {loading ? (
