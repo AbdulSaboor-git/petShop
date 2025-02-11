@@ -1,50 +1,48 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
 import {
-  FaArrowLeft,
-  FaEnvelope,
-  FaHeart,
-  FaPhone,
-  FaShoppingCart,
-  FaUser,
-} from "react-icons/fa";
-import { SiCarto } from "react-icons/si";
-import {
+  MdAccountBox,
   MdAccountCircle,
-  MdClose,
   MdDashboard,
   MdFavorite,
-  MdFavoriteBorder,
   MdHome,
   MdInfo,
-  MdMenu,
-  MdOpenInFull,
   MdPhone,
-  MdSettings,
   MdShop,
-  MdShoppingCart,
   MdStar,
-  MdStarHalf,
-  MdStars,
-  MdTrolley,
 } from "react-icons/md";
-import { RiArrowDownSLine, RiArrowLeftSLine } from "react-icons/ri";
 
 import Image from "next/image";
-import { Menu, ShoppingCart } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import LoginForm from "./loginForm";
+import Profile from "./profile";
+import useAuthUser from "@/hooks/authUser";
 
-export default function Header({ user }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const logedIn = true;
-  const role = "seller";
-  const theme = true;
+export default function Header() {
+  const [logedIn, setLogedIn] = useState(false);
+  const { user, userLoading } = useAuthUser();
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showAcc, setShowAcc] = useState(false);
+
+  useEffect(() => {
+    if (user) setLogedIn(true);
+    else {
+      setLogedIn(false);
+      setShowAcc(false);
+    }
+    setShowLoginForm(false);
+  }, [user]);
+
   const logoLink = "/logo.jpg";
-  // const logoLink = theme
-  //   ? "https://lh3.googleusercontent.com/pw/AP1GczN9HraQsHh0pJ0YoBThzcS0tY_-uk5zyQquRDFTVgpN6peh1An56u-fUREcdmwVRl0gE_E7MGnSXH_Zsj-fjMW8nIFHQ8lKIep5Xwi6TKKsPZa7kyQLrqofq3dw8994xfpRNfHIjbG257eM0pMU9f4U=w658-h263-s-no-gm"
-  //   : "https://lh3.googleusercontent.com/pw/AP1GczP9XQIrnoVRw2kYBcnVxH8YYxN-SykWCV3zqQKMNev0_k6-Avre4beasxj4GhyKMmQvBKxB4aixxiopYtbKylT2sZbS8Mds7hgD6pL6y1Pc2-ZS2aCOg4K2JWKuTX_Cz9RGVnD3yYEECkwl9j2E59TF=w1350-h540-s-no-gm";
-  const defaultProfilePictureLink =
-    "https://lh3.googleusercontent.com/pw/AP1GczM2cnSQPHG8oKKskeSFKCFjs3z_NG31Tt4bQPqb4Fp-Qdteh0m-84BjSvDgQTkscceDPu1eD1Rs2OxUSd0InRuqnowixs1x8kqSVIcu_7BbkBi4XFK13ZqIeq56OxPw0bzq0hoUgYtTHteuYB1cTI-K=w883-h883-s-no-gm";
+
+  const toggleShowLoginForm = () => {
+    setShowLoginForm((prev) => !prev);
+  };
+
+  const toggleShowAcc = () => {
+    setShowAcc((prev) => !prev);
+  };
 
   const contact = {
     phone: "(+92) 321 855 9574",
@@ -65,19 +63,19 @@ export default function Header({ user }) {
   function aboutClick() {
     router.push("/about-us");
   }
-  function wishlistClick() {
-    router.push("/wishlist");
-  }
+
   function favClick() {
     router.push("/favourites");
   }
-  function loginClick() {}
+  function loginClick() {
+    toggleShowLoginForm();
+  }
   function adminDBClick() {}
   function sellerDBClick() {
     router.push("/seller-dashboard");
   }
   function accountClick() {
-    router.push("/profile");
+    toggleShowAcc();
   }
 
   const Buttons = [
@@ -95,20 +93,7 @@ export default function Header({ user }) {
     },
   ];
 
-  const openSidebar = () => {
-    setIsOpen(true);
-  };
-
-  const closeSidebar = () => {
-    setIsOpen(false);
-  };
-
   const topBtns = [
-    // {
-    //   name: "Wishlist",
-    //   icon: <MdFavorite />,
-    //   onClick: wishlistClick,
-    // },
     {
       name: "Favourites",
       icon: <MdFavorite />,
@@ -116,41 +101,46 @@ export default function Header({ user }) {
     },
   ];
 
-  // logedIn
-  //   ? topBtns.push({
-  //       name: "My Account",
-  //       icon: <FaUser size={9.5} />,
-  //       onClick: accountClick,
-  //     })
-  //   : topBtns.push({
-  //       name: "Login",
-  //       icon: <FaUser size={9.5} />,
-  //       onClick: loginClick,
-  //     });
+  !logedIn &&
+    topBtns.push({
+      name: "Seller Login",
+      icon: <FaUser size={9.5} />,
+      onClick: loginClick,
+    });
 
-  role == "admin" &&
+  logedIn &&
+    user?.role == "ADMIN" &&
     topBtns.push({
       name: "Admin Dashboard",
       icon: <MdDashboard />,
       onClick: adminDBClick,
     });
 
-  role == "seller" &&
+  logedIn &&
+    user?.role == "SELLER" &&
     topBtns.push({
       name: "Seller Dashboard",
       icon: <MdDashboard />,
       onClick: sellerDBClick,
     });
 
+  logedIn &&
+    topBtns.push({
+      name: "My Account",
+      icon: <MdAccountCircle size={16} />,
+      onClick: accountClick,
+    });
+
   return (
-    <div className="w-full">
-      {/* <div
-        onClick={closeSidebar}
-        className={`md:hidden fixed h-screen w-full z-40  ${
-          isOpen ? "translate-x-0" : "-translate-x-[100%]"
-        }`}
-      ></div> */}
-      <div className="relative flex justify-center items-center z-50">
+    <div className="w-full z-50">
+      {showLoginForm ||
+        (showAcc && (
+          <div
+            onClick={showLoginForm ? toggleShowLoginForm : toggleShowAcc}
+            className={`fixed z-10 h-full w-full `}
+          />
+        ))}
+      <div className="relative flex justify-center items-center">
         {/* {(user || Buttons) && (
           <div>
             <div className={`absolute left-4 mt-5 md:hidden`}>
@@ -221,7 +211,7 @@ export default function Header({ user }) {
           // onClick={closeSidebar}
           className="flex flex-col  justify-center w-full items-center "
         >
-          <div className="flex flex-col gap-3 w-full items-center justify-center">
+          <div className="flex flex-col gap-3 w-full items-center justify-center z-0">
             <div className="w-full flex flex-col bg-[#9e6e3b]">
               <div className="flex gap-2 text-xs justify-center items-center w-full p-1.5 px-5 bg-orange-950 text-white">
                 <MdStar color="#ff0" size={15} /> Special Discounts!
@@ -272,6 +262,16 @@ export default function Header({ user }) {
               ))}
             </div>
           </div>
+          {showLoginForm && (
+            <div className="absolute top-[56px] z-20">
+              <LoginForm />
+            </div>
+          )}
+          {showAcc && (
+            <div className="absolute top-[56px] z-20">
+              <Profile />
+            </div>
+          )}
         </div>
       </div>
     </div>

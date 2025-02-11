@@ -228,12 +228,19 @@ export default function HomePage() {
                           {item.name.toUpperCase()}
                         </h2>
                         <div className="pt-4 mx-1 text-base md:text-lg space-y-1">
-                          {item.breed && (
+                          {item.breed ? (
                             <p>
                               <strong className="text-[#6e4519]">
                                 Breed:{" "}
                               </strong>
                               {item.breed.name}
+                            </p>
+                          ) : (
+                            <p>
+                              <strong className="text-[#6e4519]">
+                                Category:{" "}
+                              </strong>
+                              {item.category.name}
                             </p>
                           )}
                         </div>

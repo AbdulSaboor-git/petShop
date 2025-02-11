@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import useAuthUser from "@/hooks/authUser";
 
 export default function SellerDashboardMainPage() {
+  const { user, userLoading, logout } = useAuthUser();
+  const sellerId = user?.id;
   const [metrics, setMetrics] = useState({
     totalProducts: 0,
     totalCategories: 0,
@@ -16,10 +19,13 @@ export default function SellerDashboardMainPage() {
   const router = useRouter();
 
   useEffect(() => {
+    if (!sellerId) return;
     const fetchMetricsAndAnalytics = async () => {
       try {
         // Fetch products data
-        const responseProducts = await fetch(`/api/homeItems`);
+        const responseProducts = await fetch(
+          `/api/sellerItems?sellerId=${sellerId}`
+        );
         if (!responseProducts.ok) {
           throw new Error("Failed to fetch products.");
         }
@@ -59,7 +65,7 @@ export default function SellerDashboardMainPage() {
     };
 
     fetchMetricsAndAnalytics();
-  }, []);
+  }, [sellerId]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10 min-h-screen">
@@ -68,6 +74,14 @@ export default function SellerDashboardMainPage() {
         {loading ? (
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             loading...
+          </div>
+        ) : !user ? (
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+            Login with a seller account to proceed.
+          </div>
+        ) : user?.role !== "SELLER" ? (
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+            Access denied! Login with a seller account to proceed.
           </div>
         ) : (
           <div className="flex flex-col gap-8 md:gap-4">

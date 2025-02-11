@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/redux/userSlice";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { setUser } from "@/redux/userSlice";
 import useAuthUser from "@/hooks/authUser";
 import Loader from "@/components/loader";
 import { triggerNotification } from "@/redux/notificationThunk";
@@ -15,7 +15,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { user, userLoading } = useAuthUser();
+  const { user, userLoading, logout } = useAuthUser();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

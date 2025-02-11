@@ -10,14 +10,14 @@ export const useAuthRedirect = () => {
   const isAuthenticated = () => {
     return user ? true : false;
   };
-
   useEffect(() => {
-    const user = isAuthenticated();
-
-    if (user) {
-      router.push("/home");
-    } else {
-      router.push("/home");
-    }
+    router.push("/home");
   }, [router]);
+
+  //   const user = isAuthenticated();
+
+  //   if (user) {
+  //   } else {
+  //     router.push("/home");
+  //   }
 };

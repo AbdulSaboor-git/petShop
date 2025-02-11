@@ -1,90 +1,126 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Box, Grid, IconButton, InputAdornment } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+"use client";
+import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
+import { triggerNotification } from "@/redux/notificationThunk";
 
 function LoginForm() {
-    const [formValues, setFormValues] = useState({
-        username: '',
-        password: '',
-    });
-    const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
-    };
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
-    const handleClickShowPassword = () => {
-        setShowPassword((prev) => !prev);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form Values:', formValues);
-    };
-
-    return (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-            <Paper elevation={3} sx={{ padding: 4, maxWidth: 400 }}>
-                <Typography variant="h4" align="center" gutterBottom>
-                    Login
-                </Typography>
-                <form onSubmit={handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Username"
-                                name="username"
-                                value={formValues.username}
-                                onChange={handleInputChange}
-                                variant="outlined"
-                                required
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Password"
-                                name="password"
-                                type={showPassword ? 'text' : 'password'}
-                                value={formValues.password}
-                                onChange={handleInputChange}
-                                variant="outlined"
-                                required
-
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            {
-                                                formValues.password &&
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword
-                                                    }
-                                                    edge="end"
-                                                >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            }
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button fullWidth type="submit" variant="contained" color="primary">
-                                Login
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Paper>
-        </Box>
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
     );
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    try {
+      const response = await fetch("/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        showMessage(data.error || "Login failed", false);
+        throw new Error(data.error || "Login failed");
+      }
+
+      // Handle successful login (e.g., store token, user info, redirect user)
+      // Set the cookies
+      showMessage("Loged In", true);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      dispatch(setUser(data.user)); // Store user in Redux
+      router.push("/user"); // Redirect to a different page after successful login
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="backdrop-blur-lg bg-[#2d1d0b62] shadow-lg rounded-xl p-8 w-full max-w-sm ">
+      <div className=" flex flex-col items-center justify-center">
+        <h2 className="text-2xl font-bold text-center mb-6 text-white">
+          Login
+        </h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-sm">
+          <div className="flex flex-col gap-1">
+            <label htmlFor="email" className="block text-white font-semibold">
+              Email
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#9e6e3b]"
+            />
+          </div>
+          <div className="flex flex-col gap-1 relative">
+            <label
+              htmlFor="password"
+              className="block text-white font-semibold"
+            >
+              Password
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#9e6e3b] pr-12"
+            />
+            {password && (
+              <button
+                type="button"
+                onClick={handleTogglePassword}
+                className="absolute right-0 inset-y-0 mt-6 pr-3 flex items-center text-[#9e6e3b]"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            )}
+          </div>
+          <button
+            type="submit"
+            className={`w-full bg-[#9e6e3b] hover:bg-[#875e32] text-white font-semibold py-2 rounded`}
+          >
+            {loading ? <p className="animate-bounce">. . .</p> : <p>Login</p>}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default LoginForm;

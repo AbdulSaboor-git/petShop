@@ -2,8 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import useAuthUser from "@/hooks/authUser";
 
 export default function ManageBreedsPage() {
+  const { user, userLoading, logout } = useAuthUser();
+
   const [focused, setFocused] = useState("add");
   const [addBreed, setAddBreed] = useState(true);
   const [editBreed, setEditBreed] = useState(false);
@@ -154,12 +157,20 @@ export default function ManageBreedsPage() {
   };
 
   return (
-    <div className="flex flex-col items-center md:gap-10">
+    <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />
       <div className="w-full max-w-[1200px] px-4">
         {loading ? (
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             loading...
+          </div>
+        ) : !user ? (
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+            Login with a seller account to proceed.
+          </div>
+        ) : user?.role !== "SELLER" ? (
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+            Access denied! Login with a seller account to proceed.
           </div>
         ) : (
           <div className="flex flex-col gap-4">

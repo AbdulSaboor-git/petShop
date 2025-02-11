@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { FaMinus } from "react-icons/fa";
+import useAuthUser from "@/hooks/authUser";
 
 export default function ManageProductsPage() {
+  const { user, userLoading, logout } = useAuthUser();
+  const sellerId = user?.id;
+
   const [focused, setFocused] = useState("add");
   const [addProduct, setAddProduct] = useState(true);
   const [editProduct, setEditProduct] = useState(false);
@@ -35,7 +39,6 @@ export default function ManageProductsPage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   // For demonstration purposes, we'll hard-code sellerId.
-  const sellerId = 1;
 
   // Form validation states.
   const isAddFormValid =
@@ -107,7 +110,7 @@ export default function ManageProductsPage() {
   // Fetch all products, categories, and breeds.
   const fetchItemsData = async () => {
     try {
-      const response = await fetch(`/api/allItems`);
+      const response = await fetch(`/api/sellerItems?sellerId=${sellerId}`);
       const response2 = await fetch(`/api/categories_breeds`);
       if (!response.ok || !response2.ok) {
         throw new Error("Failed to fetch data.");
@@ -127,8 +130,9 @@ export default function ManageProductsPage() {
   };
 
   useEffect(() => {
+    if (!sellerId) return;
     fetchItemsData();
-  }, []);
+  }, [sellerId]);
 
   // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
@@ -329,12 +333,20 @@ export default function ManageProductsPage() {
   };
 
   return (
-    <div className="flex flex-col items-center md:gap-10">
+    <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />
       <div className="w-full max-w-[1200px] px-4">
         {loading ? (
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             loading...
+          </div>
+        ) : !user ? (
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+            Login with a seller account to proceed.
+          </div>
+        ) : user?.role !== "SELLER" ? (
+          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+            Access denied! Login with a seller account to proceed.
           </div>
         ) : (
           <div className="flex flex-col gap-4">
