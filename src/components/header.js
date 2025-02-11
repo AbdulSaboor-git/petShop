@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import {
+  FaArrowLeft,
   FaEnvelope,
   FaHeart,
   FaPhone,
@@ -17,6 +18,7 @@ import {
   MdHome,
   MdInfo,
   MdMenu,
+  MdOpenInFull,
   MdPhone,
   MdSettings,
   MdShop,
@@ -26,6 +28,8 @@ import {
   MdStars,
   MdTrolley,
 } from "react-icons/md";
+import { RiArrowDownSLine, RiArrowLeftSLine } from "react-icons/ri";
+
 import Image from "next/image";
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -139,15 +143,15 @@ export default function Header({ user }) {
     });
 
   return (
-    <div className="w-full">
-      <div
+    <div className="w-full overflow-x-clip">
+      {/* <div
         onClick={closeSidebar}
         className={`md:hidden fixed h-screen w-full z-40  ${
           isOpen ? "translate-x-0" : "-translate-x-[100%]"
         }`}
-      ></div>
+      ></div> */}
       <div className="relative flex justify-center items-center z-50">
-        {(user || Buttons) && (
+        {/* {(user || Buttons) && (
           <div>
             <div className={`absolute left-4 mt-5 md:hidden`}>
               <button
@@ -211,11 +215,11 @@ export default function Header({ user }) {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         <div
-          onClick={closeSidebar}
-          className="flex flex-col justify-center w-full items-center"
+          // onClick={closeSidebar}
+          className="flex flex-col  justify-center w-full items-center "
         >
           <div className="flex flex-col gap-3 w-full items-center justify-center">
             <div className="w-full flex flex-col bg-[#9e6e3b]">
@@ -268,6 +272,21 @@ export default function Header({ user }) {
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+          <div className="fixed flex top-24 md:hidden right-0 items-center text-white text-sm">
+            <button className="py-2 bg-[#9e6e3b5e] h-fit rounded-l-xl backdrop-blur-sm">
+              <RiArrowLeftSLine size={20} />
+            </button>
+            <div className="flex flex-col  gap-2  rounded-l-xl   bg-[#9e6e3b5e] backdrop-blur-sm">
+              {Buttons.map((btn, i) => (
+                <button key={i} className="p-2">
+                  <div className="flex gap-2 items-center justify-normal">
+                    <div>{btn.icon}</div>
+                    {/* <div>{btn.btn_name}</div> */}
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
