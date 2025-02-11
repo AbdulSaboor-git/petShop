@@ -3,10 +3,8 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { MdArrowForward, MdDiscount } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import Image from "next/image"; // Next.js Image component for better image optimization
 import Header from "@/components/header";
 import { FaHeart, FaShieldAlt } from "react-icons/fa";
-import CountdownTimer from "@/components/timer";
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
 
