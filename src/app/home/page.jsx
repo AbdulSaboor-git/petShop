@@ -351,7 +351,7 @@ export default function HomePage() {
                 Most Valuable
               </div>
               <div className="relative">
-                <Slider {...settings3}>
+                <Slider {...settings2}>
                   {mostValuedItems.map((item, i) => (
                     <ProductCard
                       key={i}
