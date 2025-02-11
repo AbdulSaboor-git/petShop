@@ -133,13 +133,15 @@ export default function Header() {
 
   return (
     <div className="w-full z-50">
-      {showLoginForm ||
-        (showAcc && (
-          <div
-            onClick={showLoginForm ? toggleShowLoginForm : toggleShowAcc}
-            className={`fixed z-10 h-full w-full `}
-          />
-        ))}
+      {showLoginForm && (
+        <div
+          onClick={toggleShowLoginForm}
+          className={`fixed z-10 h-full w-full `}
+        />
+      )}
+      {showAcc && (
+        <div onClick={toggleShowAcc} className={`fixed z-10 h-full w-full `} />
+      )}
       <div className="relative flex justify-center items-center">
         {/* {(user || Buttons) && (
           <div>
