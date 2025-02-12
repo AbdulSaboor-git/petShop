@@ -271,15 +271,20 @@ export default function Shop() {
                       <button
                         key={i}
                         onClick={() => handleCategoryClick(categ.name)}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
                           selectedCategories.includes(categ.name)
-                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
                             : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                         }`}
                       >
                         <div className="relative">
                           {categ.name}
-                          <MdClose className="absolute text-white -right-[18px]  top-[2px]  lg:hidden" />
+                          <MdClose
+                            className={`${
+                              !selectedCategories.includes(categ.name) &&
+                              "hidden"
+                            } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                          />
                         </div>
                       </button>
                     ))}
@@ -332,15 +337,19 @@ export default function Shop() {
                       <button
                         key={i}
                         onClick={() => handleBreedClick(breed.name)}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
                           selectedBreeds.includes(breed.name)
-                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
                             : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                         }`}
                       >
                         <div className="relative">
                           {breed.name}
-                          <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
+                          <MdClose
+                            className={`${
+                              !selectedBreeds.includes(breed.name) && "hidden"
+                            } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                          />
                         </div>
                       </button>
                     ))}
@@ -374,18 +383,64 @@ export default function Shop() {
                   >
                     <button
                       onClick={() => setOnSale((prev) => !prev)}
-                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-6 ${
+                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
                         onSale
-                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
                           : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                       }`}
+                    >
+                      <div className="relative">
+                        On Sale
+                        <MdClose
+                          className={`${
+                            !onSale && "hidden"
+                          } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                        />
+                      </div>{" "}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex gap-2 self-start flex-wrap lg:hidden">
+                  {selectedCategories.length > 0 &&
+                    selectedCategories[0] != "All" &&
+                    selectedCategories.map((category, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleCategoryClick(category)}
+                        className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
+                      >
+                        <div className="relative">
+                          {category}
+                          <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
+                        </div>
+                      </button>
+                    ))}
+                  {selectedBreeds.length > 0 &&
+                    selectedBreeds[0] != "All" &&
+                    selectedBreeds.map((breed, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleBreedClick(breed)}
+                        className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
+                      >
+                        <div className="relative">
+                          {breed}
+                          <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
+                        </div>
+                      </button>
+                    ))}
+                  {onSale && (
+                    <button
+                      onClick={() => setOnSale((prev) => !prev)}
+                      className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
                     >
                       <div className="relative">
                         On Sale
                         <MdClose className="absolute text-white -right-[18px]  top-[2px] lg:hidden" />
                       </div>{" "}
                     </button>
-                  </div>
+                  )}
                 </div>
                 <div className="flex w-fit flex-row gap-2 mt-2">
                   <select
