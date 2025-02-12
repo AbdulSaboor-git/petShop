@@ -342,11 +342,7 @@ export default function ManageProductsPage() {
           </div>
         ) : !user ? (
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            Login with a seller account to proceed.
-          </div>
-        ) : user?.role !== "SELLER" ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            Access denied! Login with a seller account to proceed.
+            Unauthorized Access.
           </div>
         ) : (
           <div className="flex flex-col gap-4">

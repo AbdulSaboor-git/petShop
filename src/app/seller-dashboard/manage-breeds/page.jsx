@@ -168,10 +168,6 @@ export default function ManageBreedsPage() {
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             Login with a seller account to proceed.
           </div>
-        ) : user?.role !== "SELLER" ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            Access denied! Login with a seller account to proceed.
-          </div>
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-xl md:2xl font-semibold text-center">

@@ -116,13 +116,13 @@ export default function Header() {
       onClick: adminDBClick,
     });
 
-  logedIn &&
-    user?.role == "SELLER" &&
-    topBtns.push({
-      name: "Seller Dashboard",
-      icon: <MdDashboard />,
-      onClick: sellerDBClick,
-    });
+  (logedIn && user?.role == "SELLER") ||
+    (user?.role == "ADMIN" &&
+      topBtns.push({
+        name: "Seller Dashboard",
+        icon: <MdDashboard />,
+        onClick: sellerDBClick,
+      }));
 
   logedIn &&
     topBtns.push({
@@ -211,15 +211,15 @@ export default function Header() {
 
         <div
           // onClick={closeSidebar}
-          className="flex flex-col  justify-center w-full items-center "
+          className="flex flex-col relative justify-center w-full items-center "
         >
           <div className="flex flex-col gap-3 w-full items-center justify-center z-0">
             <div className="w-full flex flex-col bg-[#9e6e3b]">
               <div className="flex gap-2 text-xs justify-center items-center w-full p-1.5 px-5 bg-orange-950 text-white">
                 <MdStar color="#ff0" size={15} /> Special Discounts!
               </div>
-              <div className="flex self-center gap-5 text-[11px] md:text-xs justify-center md:justify-between items-center w-full p-2 md:p-1 md:px-4 max-w-[1300px] text-white ">
-                <div className="hidden md:flex items-center gap-6 font-medium text-[10px]">
+              <div className="flex self-center gap-5 text-[11px] lg:text-xs justify-center lg:justify-between items-center w-full p-2 lg:p-1 lg:px-4 max-w-[1300px] text-white ">
+                <div className="hidden lg:flex items-center gap-6 font-medium text-[10px]">
                   <div className="flex gap-2 cursor-pointer items-center hover:text-[#fbe4bf]">
                     <FaPhone className="mb-0.5" />
                     {contact.phone}
@@ -264,14 +264,14 @@ export default function Header() {
               ))}
             </div>
           </div>
+          {showAcc && (
+            <div className="absolute top-24 z-20">
+              <Profile />
+            </div>
+          )}
           {showLoginForm && (
             <div className="absolute top-[56px] z-20">
               <LoginForm />
-            </div>
-          )}
-          {showAcc && (
-            <div className="absolute top-[56px] z-20">
-              <Profile />
             </div>
           )}
         </div>

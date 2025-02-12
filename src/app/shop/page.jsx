@@ -245,7 +245,15 @@ export default function Shop() {
                     className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                       !ShowCategories
                         ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                        : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                        : `opacity-100 translate-y-0 scale-y-100 ${
+                            categories?.length <= 7
+                              ? "max-h-[140px]"
+                              : breeds?.length <= 15
+                              ? "max-h-[220px]"
+                              : breeds.length <= 20
+                              ? "max-h-[280px]"
+                              : "max-h-screen"
+                          } lg:max-h-screen mt-2 lg:pb-3`
                     }`}
                   >
                     {/* "All" button */}
@@ -284,7 +292,7 @@ export default function Shop() {
                     onClick={() =>
                       showBreeds ? setShowBreeds(false) : setShowBreeds(true)
                     }
-                    className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                    className="flex bg-gray-100 shadow-md shadow-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                   >
                     Filter by Breeds
                     <RiArrowDownSLine
@@ -298,7 +306,15 @@ export default function Shop() {
                     className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
                       !showBreeds
                         ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                        : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                        : `opacity-100 translate-y-0 scale-y-100 ${
+                            breeds?.length <= 7
+                              ? "max-h-[140px]"
+                              : breeds?.length <= 15
+                              ? "max-h-[220px]"
+                              : breeds.length <= 20
+                              ? "max-h-[280px]"
+                              : "max-h-screen"
+                          } md:max-h-screen mt-2 lg:pb-3`
                     }`}
                   >
                     {/* "All" button for breeds */}

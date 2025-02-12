@@ -25,13 +25,16 @@ const POST = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: "User not found" });
+    }
+    if (!user.isActive) {
+      return res.status(401).json({ error: "Account inactive" });
     }
 
     const isPasswordValid = password === user.password ? true : false;
 
     if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: "Invalid password" });
     }
 
     // Generate a JWT token
