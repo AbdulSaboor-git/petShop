@@ -4,6 +4,8 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { FaMinus } from "react-icons/fa";
 import useAuthUser from "@/hooks/authUser";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
 
 export default function ManageProductsPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -38,7 +40,15 @@ export default function ManageProductsPage() {
   const [uploading, setUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // For demonstration purposes, we'll hard-code sellerId.
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
 
   // Form validation states.
   const isAddFormValid =
@@ -54,13 +64,7 @@ export default function ManageProductsPage() {
     categoryId !== "" &&
     images.length != 0;
 
-  // Handlers to switch forms.
-  const handleAddProduct = () => {
-    setAddProduct(true);
-    setEditProduct(false);
-    setDeleteProduct(false);
-    setFocused("add");
-    // Reset form fields.
+  function resetForm() {
     setName("");
     setPrice("");
     setDiscountedPrice("");
@@ -75,6 +79,16 @@ export default function ManageProductsPage() {
     setAvailability("");
     setImages([]);
     setItem(null);
+  }
+
+  // Handlers to switch forms.
+  const handleAddProduct = () => {
+    setAddProduct(true);
+    setEditProduct(false);
+    setDeleteProduct(false);
+    setFocused("add");
+    // Reset form fields.
+    resetForm();
   };
 
   const handleEditProduct = () => {
@@ -83,20 +97,7 @@ export default function ManageProductsPage() {
     setDeleteProduct(false);
     setFocused("edit");
     // Reset form fields.
-    setName("");
-    setPrice("");
-    setDiscountedPrice("");
-    setDescription("");
-    setCategoryId("");
-    setBreedId("");
-    setSex("");
-    setNature("");
-    setWeight("");
-    setHeight("");
-    setAge("");
-    setAvailability("");
-    setImages([]);
-    setItem(null);
+    resetForm();
   };
 
   const handleDeleteProduct = () => {
@@ -123,7 +124,7 @@ export default function ManageProductsPage() {
       setBreeds(data2.breeds);
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      showMessage(err.message, false);
     } finally {
       setLoading(false);
     }
@@ -159,33 +160,21 @@ export default function ManageProductsPage() {
       setImages(data.images || []); // Existing product images
     } catch (err) {
       setItemError(err.message);
-      alert(err.message);
+      showMessage(err.message, false);
     } finally {
       setItemLoading(false);
     }
   };
-  function resetForm() {
-    setName("");
-    setPrice("");
-    setDiscountedPrice("");
-    setDescription("");
-    setCategoryId("");
-    setBreedId("");
-    setSex("");
-    setNature("");
-    setWeight("");
-    setHeight("");
-    setAge("");
-    setAvailability("");
-    setImages([]);
-    setItem(null);
-  }
+
   // Handler for adding a product.
   // Handler for adding a product.
   const handleAddProductSubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
-      alert("Please fill out all required fields with valid values.");
+      showMessage(
+        "Please fill out all required fields with valid values.",
+        false
+      );
       return;
     }
     try {
@@ -215,12 +204,11 @@ export default function ManageProductsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add product.");
       }
-      alert(`Product "${name}" added successfully!`);
-      // Reset form state.
-      fetchItemsData();
       resetForm();
+      showMessage(`Product "${name}" added successfully!`, true);
+      fetchItemsData();
     } catch (err) {
-      alert(err.message);
+      showMessage(err.message, false);
     }
   };
 
@@ -228,8 +216,9 @@ export default function ManageProductsPage() {
   const handleEditProductSubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid || !item) {
-      alert(
-        "Please select a product and fill out all required fields with valid values."
+      showMessage(
+        "Please select a product and fill out all required fields with valid values.",
+        false
       );
       return;
     }
@@ -259,11 +248,11 @@ export default function ManageProductsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update product.");
       }
-      alert(`Product "${item.name}" updated successfully!`);
-      fetchItemsData();
+      showMessage(`Product "${item.name}" updated successfully!`, true);
       resetForm();
+      fetchItemsData();
     } catch (err) {
-      alert(err.message);
+      showMessage(err.message, false);
     }
   };
 
@@ -271,7 +260,7 @@ export default function ManageProductsPage() {
   const handleDeleteProductSubmit = async (e) => {
     e.preventDefault();
     if (!item) {
-      alert("Please select a product to delete.");
+      showMessage("Please select a product to delete.", false);
       return;
     }
     try {
@@ -282,12 +271,12 @@ export default function ManageProductsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to delete product.");
       }
-      alert(`Product "${item.name}" deleted successfully!`);
+      showMessage(`Product "${item.name}" deleted successfully!`, true);
       fetchItemsData();
       setItem(null);
       // Optionally, refresh the product list.
     } catch (err) {
-      alert(err.message);
+      showMessage(err.message, false);
     }
   };
 
@@ -402,6 +391,7 @@ export default function ManageProductsPage() {
                           minLength={3}
                           maxLength={100}
                           onChange={(e) => setName(e.target.value)}
+                          value={name}
                         />
                       </div>
                       <div>
@@ -412,6 +402,7 @@ export default function ManageProductsPage() {
                           required
                           onChange={(e) => setPrice(e.target.value)}
                           min="0"
+                          value={price}
                         />
                       </div>
                       <div>
@@ -420,6 +411,7 @@ export default function ManageProductsPage() {
                           type="number"
                           onChange={(e) => setDiscountedPrice(e.target.value)}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={discountedPrice}
                         />
                       </div>
                       <div>

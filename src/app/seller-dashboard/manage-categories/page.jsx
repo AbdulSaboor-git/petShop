@@ -33,7 +33,7 @@ export default function ManageCategoriesPage() {
       setCategories(data.categories);
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      showmessage(err.message, false);
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function ManageCategoriesPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -89,7 +89,7 @@ export default function ManageCategoriesPage() {
   const handleAddCategorySubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
-      alert("Please enter a valid category name.");
+      showmessage("Please enter a valid category name.", false);
       return;
     }
     try {
@@ -102,11 +102,11 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add category.");
       }
-      alert(`Category "${name}" added successfully!`);
+      showmessage(`Category "${name}" added successfully!`, true);
       setName("");
       fetchCategoriesData();
     } catch (err) {
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -114,7 +114,7 @@ export default function ManageCategoriesPage() {
   const handleEditCategorySubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid) {
-      alert("Select a category and enter a valid name.");
+      showmessage("Select a category and enter a valid name.", false);
       return;
     }
     try {
@@ -127,12 +127,15 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update category.");
       }
-      alert(`Category "${selectedCategory.name}" updated successfully!`);
+      showmessage(
+        `Category "${selectedCategory.name}" updated successfully!`,
+        true
+      );
       setName("");
       setSelectedCategory(null);
       fetchCategoriesData();
     } catch (err) {
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -140,7 +143,7 @@ export default function ManageCategoriesPage() {
   const handleDeleteCategorySubmit = async (e) => {
     e.preventDefault();
     if (!selectedCategory) {
-      alert("Select a category to delete.");
+      showmessage("Select a category to delete.", false);
       return;
     }
     try {
@@ -150,11 +153,11 @@ export default function ManageCategoriesPage() {
       if (!res.ok) {
         throw new Error("Failed to delete category.");
       }
-      alert(`Category "${name}" deleted successfully!`);
+      showmessage(`Category "${name}" deleted successfully!`, true);
       setSelectedCategory(null);
       fetchCategoriesData();
     } catch (err) {
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -259,6 +262,7 @@ export default function ManageCategoriesPage() {
                               setSelectedCategory(null);
                             }
                           }}
+                          value={selectedCategory ? selectedCategory.id : ""}
                         >
                           <option value="">Select a category</option>
                           {categories.map((cat) => (
@@ -310,6 +314,7 @@ export default function ManageCategoriesPage() {
                               setSelectedCategory(null);
                             }
                           }}
+                          value={selectedCategory ? selectedCategory.id : ""}
                         >
                           <option value="">Select a category</option>
                           {categories.map((cat) => (

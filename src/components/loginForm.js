@@ -1,12 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
+import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 
 function LoginForm() {
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -17,6 +16,7 @@ function LoginForm() {
     setShowPassword((prev) => !prev);
   };
 
+  const dispatch = useDispatch();
   const showMessage = (msg, state) => {
     dispatch(
       triggerNotification({
@@ -48,7 +48,7 @@ function LoginForm() {
 
       // Handle successful login (e.g., store token, user info, redirect user)
       // Set the cookies
-      showMessage("Loged In", true);
+      showMessage("Successfully loged in", true);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 

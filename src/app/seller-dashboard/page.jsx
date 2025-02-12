@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
 
 export default function SellerDashboardMainPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -17,6 +19,16 @@ export default function SellerDashboardMainPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
 
   useEffect(() => {
     if (!sellerId) return;
@@ -58,7 +70,7 @@ export default function SellerDashboardMainPage() {
         // }
       } catch (err) {
         setError(err.message);
-        alert(err.message);
+        showmessage(err.message, false);
       } finally {
         setLoading(false);
       }
@@ -78,6 +90,7 @@ export default function SellerDashboardMainPage() {
         ) : !user ? (
           <div className="text-sm md:text-base text-gray-500 p-2 self-start">
             Unauthorized Access.
+            {showMessage("Unauthorized Access", false)}
           </div>
         ) : (
           <div className="flex flex-col gap-8 md:gap-4">

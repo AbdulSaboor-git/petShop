@@ -58,7 +58,7 @@ export default function ManageBreedsPage() {
       setBreeds(data.breeds);
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      showmessage(err.message, false);
     } finally {
       setLoading(false);
     }
@@ -80,14 +80,14 @@ export default function ManageBreedsPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
   const handleAddBreedSubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
-      alert("Please enter a valid breed name.");
+      showmessage("Please enter a valid breed name.", false);
       return;
     }
     try {
@@ -100,11 +100,11 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add breed.");
       }
-      alert(`Breed "${name}" added successfully!`);
+      showmessage(`Breed "${name}" added successfully!`, true);
       setName("");
       fetchBreeds();
     } catch (err) {
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -112,7 +112,7 @@ export default function ManageBreedsPage() {
   const handleEditBreedSubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid) {
-      alert("Select a breed and enter a valid name.");
+      showmessage("Select a breed and enter a valid name.", false);
       return;
     }
     try {
@@ -125,12 +125,12 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update breed.");
       }
-      alert(`Breed "${selectedBreed.name}" updated successfully!`);
+      showmessage(`Breed "${selectedBreed.name}" updated successfully!`, true);
       setName("");
       setSelectedBreed(null);
       fetchBreeds();
     } catch (err) {
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -138,7 +138,7 @@ export default function ManageBreedsPage() {
   const handleDeleteBreedSubmit = async (e) => {
     e.preventDefault();
     if (!selectedBreed) {
-      alert("Select a breed to delete.");
+      showmessage("Select a breed to delete.", false);
       return;
     }
     try {
@@ -148,11 +148,11 @@ export default function ManageBreedsPage() {
       if (!res.ok) {
         throw new Error("Failed to delete breed.");
       }
-      alert(`Breed "${name}" deleted successfully!`);
+      showmessage(`Breed "${name}" deleted successfully!`, true);
       setSelectedBreed(null);
       fetchBreeds();
     } catch (err) {
-      alert(err.message);
+      showmessage(err.message, false);
     }
   };
 
@@ -255,6 +255,7 @@ export default function ManageBreedsPage() {
                               setSelectedBreed(null);
                             }
                           }}
+                          value={selectedBreed ? selectedBreed.id : ""}
                         >
                           <option value="">Select a breed</option>
                           {breeds.map((b) => (
@@ -304,6 +305,7 @@ export default function ManageBreedsPage() {
                               setSelectedBreed(null);
                             }
                           }}
+                          value={selectedBreed ? selectedBreed.id : ""}
                         >
                           <option value="">Select a breed</option>
                           {breeds.map((b) => (
