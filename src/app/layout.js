@@ -13,9 +13,9 @@ const inter = Inter({ subsets: ["latin"] });
 const theme = createTheme({
   palette: {
     // Define your color palette here
-    mode: 'light', // or 'dark'
+    mode: "light", // or 'dark'
     primary: {
-      main: '#f97316', // Example primary color
+      main: "#f97316", // Example primary color
     },
     // Add other palette settings as needed
   },
@@ -26,7 +26,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none', // Remove uppercase transformation
+          textTransform: "none", // Remove uppercase transformation
         },
       },
     },
@@ -56,14 +56,28 @@ export default function RootLayout({ children }) {
     }
   }, []);
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
+        })
+        .catch((error) => {
+          console.error("Service Worker registration failed:", error);
+        });
+    }
+  }, []);
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <ReduxProvider>
           {/* Pass the defined theme to ThemeProvider */}
-          <ThemeProvider theme={theme}>
-            {children}
-          </ThemeProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </ReduxProvider>
       </body>
     </html>
