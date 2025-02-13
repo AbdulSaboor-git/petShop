@@ -70,7 +70,7 @@ export default function SellerDashboardMainPage() {
         // }
       } catch (err) {
         setError(err.message);
-        showmessage(err.message, false);
+        showMessage(err.message, false);
       } finally {
         setLoading(false);
       }
