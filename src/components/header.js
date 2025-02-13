@@ -116,13 +116,12 @@ export default function Header() {
       onClick: adminDBClick,
     });
 
-  (logedIn && user?.role == "SELLER") ||
-    (user?.role == "ADMIN" &&
-      topBtns.push({
-        name: "Seller Dashboard",
-        icon: <MdDashboard />,
-        onClick: sellerDBClick,
-      }));
+  logedIn &&
+    topBtns.push({
+      name: "Seller Dashboard",
+      icon: <MdDashboard />,
+      onClick: sellerDBClick,
+    });
 
   logedIn &&
     topBtns.push({

@@ -90,6 +90,7 @@ export default function Favourites() {
 
   // Remove a favorite item by its ID.
   const handleRemoveFav = (itemId) => {
+    setCheckout(false);
     const updatedIds = favoriteIds.filter((id) => id !== itemId);
     setFavoriteIds(updatedIds);
     localStorage.setItem("favorites", JSON.stringify(updatedIds));
