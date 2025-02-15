@@ -51,6 +51,29 @@ export default function ManageProductsPage() {
     );
   };
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      let functionParam = params.get("function");
+      let idParam = params.get("id");
+      let ID = parseInt(idParam, 10);
+
+      if (functionParam && functionParam != "undefined") {
+        if (functionParam == "add") {
+          handleAddProduct();
+        } else if (functionParam == "edit") {
+          handleEditProduct();
+        } else {
+          handleDeleteProduct();
+        }
+      }
+      if (idParam && idParam != "undefined") {
+        // setItemId([ID]);
+        fetchItemData(ID);
+      }
+    }
+  }, []);
+
   // Form validation states.
   const isAddFormValid =
     name.trim().length >= 3 &&

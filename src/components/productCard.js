@@ -4,7 +4,7 @@ import { MdDiscount, MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 
-export default function ProductCard({ item, favClick, isFav }) {
+export default function ProductCard({ item, favClick, isFav, alt }) {
   const name = item.name.toUpperCase();
   const router = useRouter();
   const [nameHover, setNameHover] = useState(false);
@@ -17,7 +17,10 @@ export default function ProductCard({ item, favClick, isFav }) {
   return (
     <div
       onClick={prodClick}
-      className="cursor-pointer max-w-[220px]  min-w-[160px] sm:max-w-[200px] sm:min-w-[140px] rounded-3xl shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out md:hover:shadow-lg md:hover:scale-105  mx-auto my-4 "
+      className={`cursor-pointer max-w-[220px]  min-w-[160px] sm:max-w-[200px] sm:min-w-[140px] rounded-3xl shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
+         md:hover:shadow-lg md:hover:scale-105  mx-auto  ${
+           alt ? "my-0" : "my-4"
+         } `}
     >
       <div className="relative w-full pt-[100%] ">
         <img

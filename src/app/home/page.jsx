@@ -362,6 +362,7 @@ export default function HomePage() {
                           handleFavoriteClick(item.id);
                         }}
                         isFav={favorites.includes(item.id)}
+                        alt={false}
                       />
                     ))}
                   </Slider>
@@ -393,6 +394,7 @@ export default function HomePage() {
                           handleFavoriteClick(item.id);
                         }}
                         isFav={favorites.includes(item.id)}
+                        alt={false}
                       />
                     ))}
                   </Slider>
@@ -479,6 +481,7 @@ export default function HomePage() {
                           handleFavoriteClick(item.id);
                         }}
                         isFav={favorites.includes(item.id)}
+                        alt={false}
                       />
                     ))}
                   </Slider>

@@ -2,7 +2,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { MdFavorite, MdFavoriteBorder, MdMessage } from "react-icons/md";
+import {
+  MdDelete,
+  MdEdit,
+  MdFavorite,
+  MdFavoriteBorder,
+  MdMessage,
+} from "react-icons/md";
 import ItemGallery from "./components/itemGallery";
 import Order from "@/components/order";
 import { useDispatch } from "react-redux";
@@ -115,6 +121,17 @@ export default function ItemPage({ params }) {
     );
   }
 
+  function handleEdit() {
+    router.push(
+      `/seller-dashboard/manage-products/?function=edit&id=${item?.id}`
+    );
+  }
+  function handleDelete() {
+    router.push(
+      `/seller-dashboard/manage-products/?function=delete&id=${item?.id}`
+    );
+  }
+
   const handleContactSeller = () => {
     setContactSeller(true);
     setTimeout(() => {
@@ -155,18 +172,20 @@ export default function ItemPage({ params }) {
       setFavorites([]);
     }
     fetchItemData();
-  }, [itemId]);
+  }, [item]);
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = (ItemId) => {
+    let id;
+    ItemId != 0 ? (id = ItemId) : (id = item.id);
     setFavorites((prevFavorites) => {
       let updatedFavorites;
-      if (prevFavorites.includes(item.id)) {
+      if (prevFavorites.includes(id)) {
         // Remove item from favorites
-        updatedFavorites = prevFavorites.filter((favId) => favId !== item.id);
+        updatedFavorites = prevFavorites.filter((favId) => favId !== id);
         showMessage("Removed from favorites", true);
       } else {
         // Add item to favorites
-        updatedFavorites = [...prevFavorites, item.id];
+        updatedFavorites = [...prevFavorites, id];
         showMessage("Added to favorites", true);
       }
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
@@ -207,9 +226,25 @@ export default function ItemPage({ params }) {
                   </p>
                 )}
                 <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
-                  <p className="text-base md:text-xl font-bold ">
-                    {item?.name}
-                  </p>
+                  <div className="flex justify-between gap-4 items-center">
+                    <p className="text-base md:text-xl font-bold ">
+                      {item?.name}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleEdit}
+                        className=" bg-green-600 hover:bg-green-700 text-white p-1 px-3 rounded-md"
+                      >
+                        <MdEdit />
+                      </button>
+                      <button
+                        onClick={handleDelete}
+                        className=" bg-red-500 hover:bg-red-600 text-white p-1 px-3 rounded-md"
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  </div>
                   {item?.breed && (
                     <p className="text-slate-600 text-sm md:text-base">
                       {item?.breed?.name}
@@ -319,7 +354,7 @@ export default function ItemPage({ params }) {
                     <MdMessage /> Seller{" "}
                   </button>
                   <button
-                    onClick={handleFavoriteClick}
+                    onClick={() => handleFavoriteClick(0)}
                     disabled={item.availability != "AVAILABLE"}
                     className={`border  border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full transition-all duration-300  ${
                       favorites.includes(item.id)
@@ -403,6 +438,7 @@ export default function ItemPage({ params }) {
                             handleFavoriteClick(item.id);
                           }}
                           isFav={favorites.includes(item.id)}
+                          alt={true}
                         />
                       ))}
                     </div>
@@ -434,6 +470,7 @@ export default function ItemPage({ params }) {
                             handleFavoriteClick(item.id);
                           }}
                           isFav={favorites.includes(item.id)}
+                          alt={true}
                         />
                       ))}
                     </div>
