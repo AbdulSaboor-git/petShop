@@ -40,12 +40,13 @@ export default function ItemPage({ params }) {
   }, []);
 
   useEffect(() => {
+    if (!item) return;
     const fetchRelatedItems = async () => {
       try {
         const queryParams = new URLSearchParams();
         if (item?.categoryId) queryParams.append("categ", item.categoryId);
         if (item?.breedId) queryParams.append("breed", item.breedId);
-        if (item?.id) queryParams.append("itemId", itemId);
+        if (item?.id) queryParams.append("itemId", item.id);
         const resItems = await fetch(
           `/api/relatedItems?${queryParams.toString()}`
         );
@@ -62,7 +63,7 @@ export default function ItemPage({ params }) {
       }
     };
     fetchRelatedItems();
-  }, [item, itemId]);
+  }, [item]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
