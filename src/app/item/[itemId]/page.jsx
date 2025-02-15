@@ -179,7 +179,7 @@ export default function ItemPage({ params }) {
       setFavorites([]);
     }
     fetchItemData();
-  }, [item]);
+  }, [itemId]);
 
   const handleFavoriteClick = (ItemId) => {
     let id;
