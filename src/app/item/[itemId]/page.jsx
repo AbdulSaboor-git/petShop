@@ -86,6 +86,7 @@ export default function ItemPage({ params }) {
 
   useEffect(() => {
     if (!item) return;
+
     const fetchRelatedItems = async () => {
       try {
         const queryParams = new URLSearchParams();
@@ -108,8 +109,8 @@ export default function ItemPage({ params }) {
     };
     const fetchBoughtTogether = async () => {
       try {
-        if (!item && !item.sex && !item.breed) {
-          throw new Error("Item data not available");
+        if (!item || item.sex == "" || !item.breedId) {
+          return;
         }
         const queryParams = new URLSearchParams();
         queryParams.append("categ", item.categoryId);
