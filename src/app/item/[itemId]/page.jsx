@@ -149,6 +149,11 @@ export default function ItemPage({ params }) {
 
   // Fetch item data and initialize favorites from localStorage
   useEffect(() => {
+    if (!itemId) {
+      setError("No itemId provided.");
+      setLoading(false);
+      return;
+    }
     const fetchItemData = async () => {
       try {
         const response = await fetch(`/api/item?productId=${itemId}`);
@@ -178,7 +183,7 @@ export default function ItemPage({ params }) {
 
   const handleFavoriteClick = (ItemId) => {
     let id;
-    ItemId != 0 ? (id = ItemId) : (id = item.id);
+    ItemId != 0 ? (id = ItemId) : (id = item?.id);
     setFavorites((prevFavorites) => {
       let updatedFavorites;
       if (prevFavorites.includes(id)) {
