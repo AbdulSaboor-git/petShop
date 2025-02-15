@@ -142,7 +142,7 @@ export default function Favourites() {
               </div>
               <button
                 onClick={shopClick}
-                className="text-sm md:text-base w-fit rounded-lg bg-orange-500 hover:bg-orange-600 text-white p-1 px-3"
+                className="text-sm md:text-base w-fit rounded-lg bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-600 text-white p-1 px-3"
               >
                 Shop Now
               </button>
@@ -151,7 +151,7 @@ export default function Favourites() {
         </div>
         <div className="flex flex-col gap-2 border-t border-gray-300 mt-6 p-5">
           <button
-            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-orange-500 border border-orange-500 px-3 py-2 rounded-lg hover:bg-orange-600 disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500"
+            className="text-xs md:text-sm w-fit cursor-pointer self-end text-white bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-600 px-3 py-2 rounded-lg disabled:opacity-75 disabled:cursor-default disabled:hover:bg-orange-500"
             onClick={handleCheckout}
             disabled={selectedItem === null}
           >

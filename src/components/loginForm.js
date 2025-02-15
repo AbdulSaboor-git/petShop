@@ -63,7 +63,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="backdrop-blur-lg bg-[#2d1d0b62] shadow-lg rounded-xl p-8 w-full max-w-sm ">
+    <div className=" backdrop-blur-lg bg-[#0000002c] shadow-lg drop-shadow rounded-xl p-8 w-full max-w-[300px] ">
       <div className=" flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Login
@@ -113,7 +113,7 @@ function LoginForm() {
           </div>
           <button
             type="submit"
-            className={`w-full bg-[#9e6e3b] hover:bg-[#875e32] text-white font-semibold py-2 rounded`}
+            className={`w-full bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-600 text-white font-semibold py-2 rounded`}
           >
             {loading ? <p className="animate-bounce">. . .</p> : <p>Login</p>}
           </button>

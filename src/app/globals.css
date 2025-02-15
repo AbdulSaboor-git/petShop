@@ -96,6 +96,7 @@ input {
 
 .loader-ring {
   border: 4px solid #6b3a1a97;
+  border-style: groove;
   border-top-color: #825632;
   border-radius: 50%;
   animation: spin 1.3s linear infinite;

@@ -246,12 +246,12 @@ export default function ItemPage({ params }) {
                     disabled={item.availability != "AVAILABLE"}
                     className={`border  border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full transition-all duration-300  ${
                       favorites.includes(item.id)
-                        ? "bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-700 text-white"
-                        : "bg-gradient-to-br hover:bg-gradient-radial from-white via-white to-orange-200"
+                        ? "bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-600 text-white"
+                        : "bg-gradient-to-b hover:bg-gradient-radial from-white via-white to-orange-100"
                     }
                     ${
                       item.availability != "AVAILABLE" &&
-                      "cursor-not-allowed opacity-60"
+                      "cursor-not-allowed  hover:bg-gradient-to-b opacity-60"
                     }`}
                   >
                     {favorites.includes(item.id) ? (

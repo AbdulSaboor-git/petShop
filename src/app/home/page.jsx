@@ -316,7 +316,7 @@ export default function HomePage() {
                         <div
                           className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
                             i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
-                          }  from-[#9e6e3b]/40 via-transparent to-black/80`}
+                          }  from-[#9e6e3b]/40 via-transparent to-black/40`}
                         >
                           <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
                             {breed.name.toUpperCase()}
@@ -433,7 +433,7 @@ export default function HomePage() {
                         <div
                           className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
                             i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
-                          }  from-[#9e6e3b]/40 via-transparent to-black/80`}
+                          }  from-[#9e6e3b]/40 via-transparent to-black/40`}
                         >
                           <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
                             {categ.name.toUpperCase()}
