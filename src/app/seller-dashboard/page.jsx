@@ -83,14 +83,14 @@ export default function SellerDashboardMainPage() {
     <div className="flex flex-col items-center gap-5 md:gap-10 min-h-screen">
       <Header />
       <div className="w-full max-w-[1200px] px-4 py-6">
-        {loading ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
-          </div>
-        ) : !user ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+        {!user && !userLoading ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             Unauthorized Access.
             {showMessage("Unauthorized Access", false)}
+          </div>
+        ) : loading ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            loading...
           </div>
         ) : (
           <div className="flex flex-col gap-8 md:gap-4">

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
 
 export default function ManageCategoriesPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -22,6 +24,16 @@ export default function ManageCategoriesPage() {
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedCategory !== null && name.trim().length >= 1;
 
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
+
   // Helper function to fetch categories (and breeds if needed) from API.
   const fetchCategoriesData = async () => {
     try {
@@ -33,7 +45,7 @@ export default function ManageCategoriesPage() {
       setCategories(data.categories);
     } catch (err) {
       setError(err.message);
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     } finally {
       setLoading(false);
     }
@@ -55,7 +67,7 @@ export default function ManageCategoriesPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -89,7 +101,7 @@ export default function ManageCategoriesPage() {
   const handleAddCategorySubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
-      showmessage("Please enter a valid category name.", false);
+      showMessage("Please enter a valid category name.", false);
       return;
     }
     try {
@@ -102,11 +114,11 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add category.");
       }
-      showmessage(`Category "${name}" added successfully!`, true);
+      showMessage(`Category "${name}" added successfully!`, true);
       setName("");
       fetchCategoriesData();
     } catch (err) {
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -114,7 +126,7 @@ export default function ManageCategoriesPage() {
   const handleEditCategorySubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid) {
-      showmessage("Select a category and enter a valid name.", false);
+      showMessage("Select a category and enter a valid name.", false);
       return;
     }
     try {
@@ -127,7 +139,7 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update category.");
       }
-      showmessage(
+      showMessage(
         `Category "${selectedCategory.name}" updated successfully!`,
         true
       );
@@ -135,7 +147,7 @@ export default function ManageCategoriesPage() {
       setSelectedCategory(null);
       fetchCategoriesData();
     } catch (err) {
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -143,7 +155,7 @@ export default function ManageCategoriesPage() {
   const handleDeleteCategorySubmit = async (e) => {
     e.preventDefault();
     if (!selectedCategory) {
-      showmessage("Select a category to delete.", false);
+      showMessage("Select a category to delete.", false);
       return;
     }
     try {
@@ -153,11 +165,11 @@ export default function ManageCategoriesPage() {
       if (!res.ok) {
         throw new Error("Failed to delete category.");
       }
-      showmessage(`Category "${name}" deleted successfully!`, true);
+      showMessage(`Category "${name}" deleted successfully!`, true);
       setSelectedCategory(null);
       fetchCategoriesData();
     } catch (err) {
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -165,13 +177,14 @@ export default function ManageCategoriesPage() {
     <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />
       <div className="w-full max-w-[1200px] px-4">
-        {loading ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
+        {!userLoading && !user ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            Unauthorized Access.
+            {showMessage("Unauthorized Access", false)}
           </div>
-        ) : !user ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            Login with a seller account to proceed.
+        ) : loading ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            loading...
           </div>
         ) : (
           <div className="flex flex-col gap-4">

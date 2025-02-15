@@ -195,11 +195,11 @@ export default function HomePage() {
       <Header />
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
-          <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
+          <div className="h-screen text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
             loading...
           </div>
         ) : error ? (
-          <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
+          <div className="h-screen text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
             {error}
           </div>
         ) : (
@@ -313,14 +313,18 @@ export default function HomePage() {
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i === 0 || i === 3 || i === 4 || i === 7 || i === 8
-                            ? "bg-gradient-to-r from-[#9e6e3b] to-[#785229]"
-                            : "bg-gradient-to-r from-[#252525] to-[#1a1a1a]"
+                          i % 2
+                            ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
+                            : "bg-gradient-to-br from-[#252525] to-[#111111]"
                         }`}
                       >
                         {/* Absolute positioned text container with gradient overlay */}
-                        <div className="absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 bg-gradient-to-b from-[#9e6e3b]/40 via-transparent to-black/60">
-                          <h2 className="text-white text-2xl md:text-3xl font-extrabold tracking-wide break-words">
+                        <div
+                          className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
+                            i % 2 ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                          }  from-[#9e6e3b]/40 via-transparent to-black/80`}
+                        >
+                          <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
                             {categ.name.toUpperCase()}
                           </h2>
                           <button

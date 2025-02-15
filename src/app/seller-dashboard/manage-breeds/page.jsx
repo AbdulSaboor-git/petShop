@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
 
 export default function ManageBreedsPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -21,6 +23,16 @@ export default function ManageBreedsPage() {
   // Basic form validation: breed name must be at least 1 character.
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedBreed !== null && name.trim().length >= 1;
+
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
 
   const handleAddBreed = () => {
     setAddBreed(true);
@@ -58,7 +70,7 @@ export default function ManageBreedsPage() {
       setBreeds(data.breeds);
     } catch (err) {
       setError(err.message);
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     } finally {
       setLoading(false);
     }
@@ -80,14 +92,14 @@ export default function ManageBreedsPage() {
       setName(data.name || "");
     } catch (err) {
       setError(err.message);
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
   const handleAddBreedSubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
-      showmessage("Please enter a valid breed name.", false);
+      showMessage("Please enter a valid breed name.", false);
       return;
     }
     try {
@@ -100,11 +112,11 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add breed.");
       }
-      showmessage(`Breed "${name}" added successfully!`, true);
+      showMessage(`Breed "${name}" added successfully!`, true);
       setName("");
       fetchBreeds();
     } catch (err) {
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -112,7 +124,7 @@ export default function ManageBreedsPage() {
   const handleEditBreedSubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid) {
-      showmessage("Select a breed and enter a valid name.", false);
+      showMessage("Select a breed and enter a valid name.", false);
       return;
     }
     try {
@@ -125,12 +137,12 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update breed.");
       }
-      showmessage(`Breed "${selectedBreed.name}" updated successfully!`, true);
+      showMessage(`Breed "${selectedBreed.name}" updated successfully!`, true);
       setName("");
       setSelectedBreed(null);
       fetchBreeds();
     } catch (err) {
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -138,7 +150,7 @@ export default function ManageBreedsPage() {
   const handleDeleteBreedSubmit = async (e) => {
     e.preventDefault();
     if (!selectedBreed) {
-      showmessage("Select a breed to delete.", false);
+      showMessage("Select a breed to delete.", false);
       return;
     }
     try {
@@ -148,11 +160,11 @@ export default function ManageBreedsPage() {
       if (!res.ok) {
         throw new Error("Failed to delete breed.");
       }
-      showmessage(`Breed "${name}" deleted successfully!`, true);
+      showMessage(`Breed "${name}" deleted successfully!`, true);
       setSelectedBreed(null);
       fetchBreeds();
     } catch (err) {
-      showmessage(err.message, false);
+      showMessage(err.message, false);
     }
   };
 
@@ -160,13 +172,14 @@ export default function ManageBreedsPage() {
     <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />
       <div className="w-full max-w-[1200px] px-4">
-        {loading ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
+        {!userLoading && !user ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            Unauthorized Access.
+            {showMessage("Unauthorized Access", false)}
           </div>
-        ) : !user ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
-            Login with a seller account to proceed.
+        ) : loading ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            loading...
           </div>
         ) : (
           <div className="flex flex-col gap-4">

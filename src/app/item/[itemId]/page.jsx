@@ -95,11 +95,11 @@ export default function ItemPage({ params }) {
       <Header />
       <div className="flex flex-col gap-10 max-w-[1200px] w-full px-4">
         {loading ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             loading...
           </div>
         ) : error ? (
-          <div className="text-sm md:text-base text-gray-500 p-2 self-start">
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             {error}
           </div>
         ) : (
