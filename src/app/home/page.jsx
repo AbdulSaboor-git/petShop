@@ -269,13 +269,13 @@ export default function HomePage() {
                       <div className="flex text-sm md:text-base flex-col w-full sm:flex-row gap-3 items-center justify-start">
                         <button
                           onClick={() => itemClick(item.id)}
-                          className="bg-[#9e6e3b] flex gap-2 items-center justify-center w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
+                          className=" flex gap-2 items-center justify-center w-full md:w-auto px-7 py-2 bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white rounded-full transition-all duration-300"
                         >
                           View <MdArrowForward size={20} />
                         </button>
                         <button
                           onClick={() => itemClick(item.id, true)}
-                          className="flex items-center justify-center gap-2 bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
+                          className=" flex gap-2 items-center justify-center w-full md:w-auto px-7 py-2 bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white rounded-full transition-all duration-300"
                         >
                           <MdMessage /> Seller
                         </button>
@@ -307,7 +307,7 @@ export default function HomePage() {
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i % 2
+                          i % 3 == 1
                             ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
                             : "bg-gradient-to-br from-[#252525] to-[#111111]"
                         }`}
@@ -315,7 +315,7 @@ export default function HomePage() {
                         {/* Absolute positioned text container with gradient overlay */}
                         <div
                           className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
-                            i % 2 ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                            i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
                           }  from-[#9e6e3b]/40 via-transparent to-black/80`}
                         >
                           <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
@@ -370,7 +370,7 @@ export default function HomePage() {
                   onClick={() => {
                     shopClick("All", "All", true, "default");
                   }}
-                  className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                  className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
                 >
                   View More
                 </button>
@@ -406,7 +406,7 @@ export default function HomePage() {
                 onClick={() => {
                   shopClick("All", "All", false, "priceDesc");
                 }}
-                className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
               >
                 View More
               </button>
@@ -424,7 +424,7 @@ export default function HomePage() {
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i % 2
+                          i % 3 == 1
                             ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
                             : "bg-gradient-to-br from-[#252525] to-[#111111]"
                         }`}
@@ -432,7 +432,7 @@ export default function HomePage() {
                         {/* Absolute positioned text container with gradient overlay */}
                         <div
                           className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
-                            i % 2 ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                            i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
                           }  from-[#9e6e3b]/40 via-transparent to-black/80`}
                         >
                           <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
@@ -492,7 +492,7 @@ export default function HomePage() {
                 onClick={() => {
                   shopClick("All", "All", false, "priceAsc");
                 }}
-                className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
               >
                 View More
               </button>
@@ -500,7 +500,7 @@ export default function HomePage() {
 
             {/* Feature / Benefits Section */}
             <div className="px-6">
-              <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-[var(--form-heading)] text-white p-10 rounded-xl ">
+              <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-gradient-radial from-[#9e6e3b]  to-[#5e3f1d] text-white p-10 rounded-xl ">
                 <div className="flex flex-col items-center text-center justify-center gap-1">
                   <div className="flex flex-col gap-0.5 items-center">
                     <FaHeart className="w-16 h-16 md:w-20 md:h-20" />

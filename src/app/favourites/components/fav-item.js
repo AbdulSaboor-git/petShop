@@ -59,7 +59,7 @@ export default function FavItem({
         </div>
       </div>
       <button
-        className={`z-30 items-center text-sm md:text-base  text-orange-600 hover:text-orange-700 cursor-pointer pointer-events-auto
+        className={`z-30 items-center text-sm md:text-base  text-orange-600 hover:text-orange-700  cursor-pointer pointer-events-auto
              `}
         onClick={() => handleRemoveFav(item.id)}
       >

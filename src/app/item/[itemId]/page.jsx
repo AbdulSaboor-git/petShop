@@ -246,7 +246,7 @@ export default function ItemPage({ params }) {
                     disabled={item.availability != "AVAILABLE"}
                     className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full ${
                       favorites.includes(item.id)
-                        ? "bg-orange-500 text-white"
+                        ? "bg-gradient-to-br from-orange-500 via-orange-500 to-orange-700 text-white"
                         : "bg-white"
                     }
                     ${
