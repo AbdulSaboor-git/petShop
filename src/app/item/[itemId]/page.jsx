@@ -10,6 +10,7 @@ import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import ProductCardAlt from "@/components/productCardAlt";
 import { useRouter } from "next/navigation";
+import ProductCard from "@/components/productCard";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -395,15 +396,14 @@ export default function ItemPage({ params }) {
                       }`}
                     >
                       {boughtTogetherItems.map((item, i) => (
-                        <div key={i} className="shadow-md rounded-xl">
-                          <ProductCardAlt
-                            item={item}
-                            favClick={() => {
-                              handleFavoriteClick(item.id);
-                            }}
-                            isFav={favorites.includes(item.id)}
-                          />
-                        </div>
+                        <ProductCard
+                          key={i}
+                          item={item}
+                          favClick={() => {
+                            handleFavoriteClick(item.id);
+                          }}
+                          isFav={favorites.includes(item.id)}
+                        />
                       ))}
                     </div>
                   </div>
@@ -419,7 +419,7 @@ export default function ItemPage({ params }) {
                 {loading2 ? (
                   <Loader />
                 ) : (
-                  <div className="flex flex-col gap-3 items-center justify-center">
+                  <div className="flex flex-col gap-6 items-center justify-center">
                     <div
                       className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
                         !relatedItems.length &&
@@ -427,15 +427,14 @@ export default function ItemPage({ params }) {
                       }`}
                     >
                       {relatedItems.map((item, i) => (
-                        <div key={i} className="shadow-md rounded-xl">
-                          <ProductCardAlt
-                            item={item}
-                            favClick={() => {
-                              handleFavoriteClick(item.id);
-                            }}
-                            isFav={favorites.includes(item.id)}
-                          />
-                        </div>
+                        <ProductCard
+                          key={i}
+                          item={item}
+                          favClick={() => {
+                            handleFavoriteClick(item.id);
+                          }}
+                          isFav={favorites.includes(item.id)}
+                        />
                       ))}
                     </div>
 
