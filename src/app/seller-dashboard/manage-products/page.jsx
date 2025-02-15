@@ -463,13 +463,13 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Sex</label>
+                        <label className="mx-0.5">Gender</label>
                         <select
                           className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
                           value={sex}
                           onChange={(e) => setSex(e.target.value)}
                         >
-                          <option value="">select sex</option>
+                          <option value="">select gender</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
@@ -689,13 +689,13 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Sex</label>
+                        <label className="mx-0.5">Gender</label>
                         <select
                           className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
                           value={sex}
                           onChange={(e) => setSex(e.target.value)}
                         >
-                          <option value="">select sex</option>
+                          <option value="">select gender</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>

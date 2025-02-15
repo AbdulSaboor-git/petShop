@@ -15,11 +15,14 @@ export default function ItemPage({ params }) {
   const itemId = params.itemId;
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loading2, setLoading2] = useState(true);
   const [error, setError] = useState(null);
+  const [loading2, setLoading2] = useState(true);
   const [error2, setError2] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [loading3, setLoading3] = useState(true);
+  const [error3, setError3] = useState(null);
   const [relatedItems, setRelatedItems] = useState([]);
+  const [boughtTogetherItems, setBoughtTogetherItems] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
   const router = useRouter();
 
@@ -44,9 +47,8 @@ export default function ItemPage({ params }) {
     const fetchRelatedItems = async () => {
       try {
         const queryParams = new URLSearchParams();
-        if (item?.categoryId) queryParams.append("categ", item.categoryId);
-        if (item?.breedId) queryParams.append("breed", item.breedId);
-        if (item?.id) queryParams.append("itemId", item.id);
+        queryParams.append("categ", item.categoryId);
+        if (item.id) queryParams.append("itemId", item.id);
         const resItems = await fetch(
           `/api/relatedItems?${queryParams.toString()}`
         );
@@ -62,6 +64,37 @@ export default function ItemPage({ params }) {
         setLoading2(false);
       }
     };
+    const fetchBoughtTogether = async () => {
+      try {
+        if (!item || !item.sex || !item.breed) {
+          throw new Error("Item data not available");
+        }
+        const queryParams = new URLSearchParams();
+        queryParams.append("categ", item.categoryId);
+        queryParams.append("breed", item.breedId);
+
+        if (item.sex === "Male") {
+          queryParams.append("sex", "Female");
+        } else if (item.sex === "Female") {
+          queryParams.append("sex", "Male");
+        }
+
+        const response = await fetch(
+          `/api/boughtTogetherItems?${queryParams.toString()}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data.");
+        }
+        const dataItems = await response.json();
+        setBoughtTogetherItems(dataItems.items);
+      } catch (err) {
+        setError3(err.message);
+      } finally {
+        setLoading3(false);
+      }
+    };
+
+    fetchBoughtTogether();
     fetchRelatedItems();
   }, [item]);
 
@@ -345,6 +378,37 @@ export default function ItemPage({ params }) {
                 />
               </div>
             </div>
+            {/* Related Items Section */}
+            {boughtTogetherItems.length != 0 && (
+              <div className="flex flex-col gap-4">
+                <div className="text-base md:text-xl font-semibold">
+                  Frequently Bought Together
+                </div>
+                {loading3 ? (
+                  <Loader />
+                ) : (
+                  <div className="flex flex-col gap-3 items-center justify-center">
+                    <div
+                      className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                        !boughtTogetherItems.length &&
+                        "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                      }`}
+                    >
+                      {boughtTogetherItems.map((item, i) => (
+                        <ProductCardAlt
+                          key={i}
+                          item={item}
+                          favClick={() => {
+                            handleFavoriteClick(item.id);
+                          }}
+                          isFav={favorites.includes(item.id)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             {/* Related Items Section */}
             {relatedItems.length != 0 && (
               <div className="flex flex-col gap-4">

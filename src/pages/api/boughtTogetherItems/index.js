@@ -2,31 +2,31 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const { itemId, categ, breed } = req.query;
+  const { categ, breed, sex } = req.query;
 
   switch (method) {
     case "GET":
-      return handleGet(req, res, itemId, categ);
+      return handleGet(req, res, categ, breed, sex);
     default:
       res.setHeader("Allow", ["GET"]);
       return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
 
-const handleGet = async (req, res, itemId, categ) => {
-  const ItemId = parseInt(itemId, 10);
+const handleGet = async (req, res, categ, breed, sex) => {
   const categId = parseInt(categ, 10);
-
+  const BreedId = parseInt(breed, 10);
   try {
     const items = await prisma.item.findMany({
       where: {
         categoryId: categId,
+        breedId: BreedId,
+        sex: sex,
         availability: "AVAILABLE",
-        id: { not: ItemId },
       },
       include: { seller: true, category: true, breed: true },
       orderBy: { name: "asc" },
-      take: 4,
+      take: 2,
     });
 
     return res.status(200).json({ items });
