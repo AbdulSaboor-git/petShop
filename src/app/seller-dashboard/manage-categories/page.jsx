@@ -53,8 +53,10 @@ export default function ManageCategoriesPage() {
   };
 
   useEffect(() => {
-    fetchCategoriesData();
-  }, []);
+    if (!userLoading && user) {
+      fetchCategoriesData();
+    }
+  }, [userLoading, user]);
 
   // Fetch a single category's data (for editing/deleting)
   const fetchCategoryData = async (categoryId) => {

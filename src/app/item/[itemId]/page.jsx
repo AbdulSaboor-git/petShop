@@ -125,12 +125,12 @@ export default function ItemPage({ params }) {
 
   function handleEdit() {
     router.push(
-      `/seller-dashboard/manage-products/?function=edit&id=${item?.id}`
+      `/seller-dashboard/manage-products/?function=edit&id=${itemId}`
     );
   }
   function handleDelete() {
     router.push(
-      `/seller-dashboard/manage-products/?function=delete&id=${item?.id}`
+      `/seller-dashboard/manage-products/?function=delete&id=${itemId}`
     );
   }
 

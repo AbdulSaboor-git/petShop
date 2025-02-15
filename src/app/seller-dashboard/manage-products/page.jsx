@@ -67,7 +67,7 @@ export default function ManageProductsPage() {
           handleDeleteProduct();
         }
       }
-      if (idParam && idParam != "undefined") {
+      if (ID && ID != "undefined") {
         // setItemId([ID]);
         fetchItemData(ID);
       }

@@ -78,8 +78,10 @@ export default function ManageBreedsPage() {
   };
 
   useEffect(() => {
-    fetchBreeds();
-  }, []);
+    if (!userLoading && user) {
+      fetchBreedData();
+    }
+  }, [userLoading, user]);
 
   // Fetch a single breed's data
   const fetchBreedData = async (breedId) => {
