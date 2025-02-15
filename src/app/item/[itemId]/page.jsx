@@ -382,7 +382,7 @@ export default function ItemPage({ params }) {
             {boughtTogetherItems.length != 0 && (
               <div className="flex flex-col gap-4">
                 <div className="text-base md:text-xl font-semibold">
-                  Frequently Bought Together
+                  Perfect Match
                 </div>
                 {loading3 ? (
                   <Loader />
@@ -395,14 +395,15 @@ export default function ItemPage({ params }) {
                       }`}
                     >
                       {boughtTogetherItems.map((item, i) => (
-                        <ProductCardAlt
-                          key={i}
-                          item={item}
-                          favClick={() => {
-                            handleFavoriteClick(item.id);
-                          }}
-                          isFav={favorites.includes(item.id)}
-                        />
+                        <div key={i} className="shadow-md rounded-xl">
+                          <ProductCardAlt
+                            item={item}
+                            favClick={() => {
+                              handleFavoriteClick(item.id);
+                            }}
+                            isFav={favorites.includes(item.id)}
+                          />
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -426,25 +427,21 @@ export default function ItemPage({ params }) {
                       }`}
                     >
                       {relatedItems.map((item, i) => (
-                        <ProductCardAlt
-                          key={i}
-                          item={item}
-                          favClick={() => {
-                            handleFavoriteClick(item.id);
-                          }}
-                          isFav={favorites.includes(item.id)}
-                        />
+                        <div key={i} className="shadow-md rounded-xl">
+                          <ProductCardAlt
+                            item={item}
+                            favClick={() => {
+                              handleFavoriteClick(item.id);
+                            }}
+                            isFav={favorites.includes(item.id)}
+                          />
+                        </div>
                       ))}
                     </div>
 
                     <button
                       onClick={() => {
-                        shopClick(
-                          item?.category.name,
-                          item?.breedId ? item.breed.name : "All",
-                          false,
-                          "default"
-                        );
+                        shopClick(item?.category.name, "All", false, "default");
                       }}
                       className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
                     >
