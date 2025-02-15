@@ -8,13 +8,17 @@ import Order from "@/components/order";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
+import ProductCardAlt from "@/components/productCardAlt";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(true);
   const [error, setError] = useState(null);
+  const [error2, setError2] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [relatedItems, setRelatedItems] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
 
   const sendOrderRef = useRef(null);
@@ -32,6 +36,31 @@ export default function ItemPage({ params }) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    const fetchrelatedItems = async () => {
+      try {
+        const queryParams = new URLSearchParams();
+        if (item?.categoryId) queryParams.append("categ", item.categoryId);
+        if (item?.breedId) queryParams.append("breed", item.breedId);
+        const resItems = await fetch(
+          `/api/relatedItems?${queryParams.toString()}`
+        );
+        if (!resItems.ok) {
+          throw new Error("Failed to fetch data.");
+        }
+        const dataItems = await resItems.json();
+
+        setRelatedItems(dataItems.items);
+      } catch (err) {
+        setError2(err.message);
+      } finally {
+        setLoading2(false);
+      }
+    };
+
+    fetchrelatedItems();
+  }, [item]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
@@ -302,6 +331,43 @@ export default function ItemPage({ params }) {
                 />
               </div>
             </div>
+            {/* Related Items Section */}
+            {loading2 ? (
+              <Loader />
+            ) : (
+              <div className="flex flex-col gap-2 overflow-hidden">
+                <div className="text-base md:text-xl font-semibold">
+                  Related Items
+                </div>
+
+                <div
+                  className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                    !relatedItems.length &&
+                    "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                  }`}
+                >
+                  {relatedItems.map((item, i) => (
+                    <ProductCardAlt
+                      key={i}
+                      item={item}
+                      favClick={() => {
+                        handleFavoriteClick(item.id);
+                      }}
+                      isFav={favorites.includes(item.id)}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => {
+                    shopClick("All", "All", false, "priceAsc");
+                  }}
+                  className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                >
+                  View More
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
