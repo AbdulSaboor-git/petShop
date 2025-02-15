@@ -17,6 +17,7 @@ import Loader from "@/components/loader";
 import ProductCardAlt from "@/components/productCardAlt";
 import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productCard";
+import useAuthUser from "@/hooks/authUser";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -31,6 +32,7 @@ export default function ItemPage({ params }) {
   const [relatedItems, setRelatedItems] = useState([]);
   const [boughtTogetherItems, setBoughtTogetherItems] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
+  const { user, userLoading, logout } = useAuthUser();
   const router = useRouter();
 
   const sendOrderRef = useRef(null);
@@ -230,20 +232,23 @@ export default function ItemPage({ params }) {
                     <p className="text-base md:text-xl font-bold ">
                       {item?.name}
                     </p>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={handleEdit}
-                        className=" bg-green-600 hover:bg-green-700 text-white p-1 px-3 rounded-md"
-                      >
-                        <MdEdit />
-                      </button>
-                      <button
-                        onClick={handleDelete}
-                        className=" bg-red-500 hover:bg-red-600 text-white p-1 px-3 rounded-md"
-                      >
-                        <MdDelete />
-                      </button>
-                    </div>
+
+                    {user && user?.id == item.sellerId && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleEdit}
+                          className=" bg-green-600 hover:bg-green-700 text-white p-1 px-3 rounded-md"
+                        >
+                          <MdEdit />
+                        </button>
+                        <button
+                          onClick={handleDelete}
+                          className=" bg-red-500 hover:bg-red-600 text-white p-1 px-3 rounded-md"
+                        >
+                          <MdDelete />
+                        </button>
+                      </div>
+                    )}
                   </div>
                   {item?.breed && (
                     <p className="text-slate-600 text-sm md:text-base">

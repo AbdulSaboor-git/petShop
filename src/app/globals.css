@@ -133,6 +133,12 @@ input {
   transform: scale(0.9);
 }
 
+.slick-slide img {
+  touch-action: auto;
+  -ms-touch-action: auto;
+}
+
+
 /* Position the arrows correctly */
 .slick-prev,
 .slick-next {
