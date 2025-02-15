@@ -360,7 +360,12 @@ export default function ItemPage({ params }) {
 
                 <button
                   onClick={() => {
-                    shopClick("All", "All", false, "priceAsc");
+                    shopClick(
+                      item?.categoryId,
+                      item?.breedId || "All",
+                      false,
+                      "default"
+                    );
                   }}
                   className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
                 >
