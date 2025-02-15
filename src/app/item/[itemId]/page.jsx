@@ -52,6 +52,39 @@ export default function ItemPage({ params }) {
   }, []);
 
   useEffect(() => {
+    if (!itemId) {
+      setError("No itemId provided.");
+      setLoading(false);
+      return;
+    }
+    const fetchItemData = async () => {
+      try {
+        const response = await fetch(`/api/item?productId=${itemId}`);
+        if (!response.ok) {
+          throw new Error("Item not found");
+        }
+        const data = await response.json();
+        setItem(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Get favorites from localStorage, if any.
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    } else {
+      // Initialize as an empty array.
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavorites([]);
+    }
+    fetchItemData();
+  }, [itemId]);
+
+  useEffect(() => {
     if (!item) return;
     const fetchRelatedItems = async () => {
       try {
@@ -75,7 +108,7 @@ export default function ItemPage({ params }) {
     };
     const fetchBoughtTogether = async () => {
       try {
-        if (!item || !item.sex || !item.breed) {
+        if (!item && !item.sex && !item.breed) {
           throw new Error("Item data not available");
         }
         const queryParams = new URLSearchParams();
@@ -148,38 +181,6 @@ export default function ItemPage({ params }) {
   };
 
   // Fetch item data and initialize favorites from localStorage
-  useEffect(() => {
-    if (!itemId) {
-      setError("No itemId provided.");
-      setLoading(false);
-      return;
-    }
-    const fetchItemData = async () => {
-      try {
-        const response = await fetch(`/api/item?productId=${itemId}`);
-        if (!response.ok) {
-          throw new Error("Item not found");
-        }
-        const data = await response.json();
-        setItem(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Get favorites from localStorage, if any.
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    } else {
-      // Initialize as an empty array.
-      localStorage.setItem("favorites", JSON.stringify([]));
-      setFavorites([]);
-    }
-    fetchItemData();
-  }, [itemId]);
 
   const handleFavoriteClick = (ItemId) => {
     let id;
