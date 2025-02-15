@@ -74,7 +74,7 @@ function LoginForm() {
               Email
             </label>
             <input
-              type="text"
+              type="email"
               id="email"
               name="email"
               placeholder="Enter your email"

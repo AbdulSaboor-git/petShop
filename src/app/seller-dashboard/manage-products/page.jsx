@@ -321,6 +321,12 @@ export default function ManageProductsPage() {
     }
   };
 
+  useEffect(() => {
+    if (!userLoading || !user) {
+      showMessage("Unauthorized Access", false);
+    }
+  }, [userLoading, user]);
+
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />
@@ -328,7 +334,6 @@ export default function ManageProductsPage() {
         {!user && !userLoading ? (
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             Unauthorized Access.
-            {showMessage("Unauthorized Access", false)}
           </div>
         ) : loading ? (
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
