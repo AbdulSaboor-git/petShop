@@ -846,8 +846,8 @@ export default function ManageProductsPage() {
             </div>
           </div>
         )}
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }

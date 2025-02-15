@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import ProductCardAlt from "@/components/productCardAlt";
+import { useRouter } from "next/navigation";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -20,6 +21,7 @@ export default function ItemPage({ params }) {
   const [favorites, setFavorites] = useState([]);
   const [relatedItems, setRelatedItems] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
+  const router = useRouter();
 
   const sendOrderRef = useRef(null);
 
@@ -38,11 +40,12 @@ export default function ItemPage({ params }) {
   }, []);
 
   useEffect(() => {
-    const fetchrelatedItems = async () => {
+    const fetchRelatedItems = async () => {
       try {
         const queryParams = new URLSearchParams();
         if (item?.categoryId) queryParams.append("categ", item.categoryId);
         if (item?.breedId) queryParams.append("breed", item.breedId);
+        if (item?.id) queryParams.append("itemId", itemId);
         const resItems = await fetch(
           `/api/relatedItems?${queryParams.toString()}`
         );
@@ -58,9 +61,8 @@ export default function ItemPage({ params }) {
         setLoading2(false);
       }
     };
-
-    fetchrelatedItems();
-  }, [item]);
+    fetchRelatedItems();
+  }, [item, itemId]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
@@ -71,6 +73,12 @@ export default function ItemPage({ params }) {
       })
     );
   };
+
+  function shopClick(categFilter, breedFilter, saleFilter, sortFilter) {
+    router.push(
+      `/shop?category=${categFilter}&breed=${breedFilter}&sale=${saleFilter}&sort=${sortFilter}`
+    );
+  }
 
   const handleContactSeller = () => {
     setContactSeller(true);
@@ -111,7 +119,6 @@ export default function ItemPage({ params }) {
       localStorage.setItem("favorites", JSON.stringify([]));
       setFavorites([]);
     }
-
     fetchItemData();
   }, [itemId]);
 
@@ -195,6 +202,12 @@ export default function ItemPage({ params }) {
                 </div>
                 <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
                   <ul className="text-sm md:text-base ">
+                    <p className="font-bold">
+                      Category:{" "}
+                      <span className="font-normal text-slate-600">
+                        {item?.category.name}
+                      </span>
+                    </p>
                     {item?.height && (
                       <p className="font-bold">
                         Height:{" "}
@@ -332,45 +345,48 @@ export default function ItemPage({ params }) {
               </div>
             </div>
             {/* Related Items Section */}
-            {loading2 ? (
-              <Loader />
-            ) : (
-              <div className="flex flex-col gap-2 overflow-hidden">
+            {relatedItems.length != 0 && (
+              <div className="flex flex-col gap-4">
                 <div className="text-base md:text-xl font-semibold">
                   Related Items
                 </div>
+                {loading2 ? (
+                  <Loader />
+                ) : (
+                  <div className="flex flex-col gap-3 items-center justify-center">
+                    <div
+                      className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                        !relatedItems.length &&
+                        "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                      }`}
+                    >
+                      {relatedItems.map((item, i) => (
+                        <ProductCardAlt
+                          key={i}
+                          item={item}
+                          favClick={() => {
+                            handleFavoriteClick(item.id);
+                          }}
+                          isFav={favorites.includes(item.id)}
+                        />
+                      ))}
+                    </div>
 
-                <div
-                  className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                    !relatedItems.length &&
-                    "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                  }`}
-                >
-                  {relatedItems.map((item, i) => (
-                    <ProductCardAlt
-                      key={i}
-                      item={item}
-                      favClick={() => {
-                        handleFavoriteClick(item.id);
+                    <button
+                      onClick={() => {
+                        shopClick(
+                          item?.category.name,
+                          item?.breedId ? item.breed.name : "All",
+                          false,
+                          "default"
+                        );
                       }}
-                      isFav={favorites.includes(item.id)}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => {
-                    shopClick(
-                      item?.categoryId,
-                      item?.breedId || "All",
-                      false,
-                      "default"
-                    );
-                  }}
-                  className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
-                >
-                  View More
-                </button>
+                      className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                    >
+                      View More
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

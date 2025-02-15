@@ -357,8 +357,8 @@ export default function ManageCategoriesPage() {
             </div>
           </div>
         )}
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }

@@ -348,8 +348,8 @@ export default function ManageBreedsPage() {
             </div>
           </div>
         )}
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }
