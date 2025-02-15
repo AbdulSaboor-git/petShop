@@ -234,9 +234,9 @@ export default function ItemPage({ params }) {
                   <button
                     disabled={item.availability != "AVAILABLE"}
                     onClick={handleContactSeller}
-                    className={`flex gap-2 items-center justify-center bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full ${
+                    className={`flex gap-2 items-center justify-center text-white py-2 px-4 rounded-xl w-full bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial transition-all duration-300 ${
                       item.availability != "AVAILABLE" &&
-                      "cursor-not-allowed hover:bg-[#8a5e2f] opacity-60"
+                      "cursor-not-allowed hover:bg-gradient-to-br opacity-60"
                     }`}
                   >
                     <MdMessage /> Seller{" "}
@@ -244,10 +244,10 @@ export default function ItemPage({ params }) {
                   <button
                     onClick={handleFavoriteClick}
                     disabled={item.availability != "AVAILABLE"}
-                    className={`border border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full ${
+                    className={`border  border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full transition-all duration-300  ${
                       favorites.includes(item.id)
-                        ? "bg-gradient-to-br from-orange-500 via-orange-500 to-orange-700 text-white"
-                        : "bg-white"
+                        ? "bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-700 text-white"
+                        : "bg-gradient-to-br hover:bg-gradient-radial from-white via-white to-orange-200"
                     }
                     ${
                       item.availability != "AVAILABLE" &&

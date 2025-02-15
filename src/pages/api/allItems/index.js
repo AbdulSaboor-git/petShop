@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
