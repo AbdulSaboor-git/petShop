@@ -1,12 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import { MdArrowForward, MdDiscount } from "react-icons/md";
+import { MdArrowForward, MdCall, MdDiscount, MdMessage } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import { FaHeart, FaShieldAlt } from "react-icons/fa";
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
+import Loader from "@/components/loader";
 
 export default function HomePage() {
   const router = useRouter();
@@ -22,10 +25,19 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [nameHover, setNameHover] = useState(false);
 
-  // const defaultPic = "https://i.sstatic.net/5ykYD.png";
-  const defaultPic = "1.jpg";
-
+  const defaultPic = "https://i.sstatic.net/5ykYD.png";
   let categImages = [];
+  let breedImages = [];
+
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
 
   function shopClick(categFilter, breedFilter, saleFilter, sortFilter) {
     router.push(
@@ -99,6 +111,10 @@ export default function HomePage() {
     .sort((a, b) => b.price - a.price)
     .slice(0, 5);
 
+  const mostAffordableItems = allItems
+    .sort((a, b) => a.price - b.price)
+    .slice(0, 5);
+
   useEffect(() => {
     const getRandomItems = () => {
       if (items.length <= 5) {
@@ -115,6 +131,11 @@ export default function HomePage() {
   categImages = categories.map((category) => {
     const item = items.find((item) => item.categoryId === category.id);
     return { id: category.id, image: item?.images?.[0] || defaultPic };
+  });
+
+  breedImages = breeds.map((breed) => {
+    const item = items.find((item) => item.breedId === breed.id);
+    return { id: breed.id, image: item?.images?.[0] || defaultPic };
   });
 
   const discountedItems = items.filter((item) => item.isDiscounted).slice(0, 5);
@@ -136,9 +157,11 @@ export default function HomePage() {
       if (prevFavorites.includes(itemId)) {
         // Remove item from favorites
         updatedFavorites = prevFavorites.filter((favId) => favId !== itemId);
+        showMessage("Item removed from favorites", true);
       } else {
         // Add item to favorites
         updatedFavorites = [...prevFavorites, itemId];
+        showMessage("Item added to favorites", true);
       }
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return updatedFavorites;
@@ -195,8 +218,8 @@ export default function HomePage() {
       <Header />
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
-          <div className="h-screen text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
-            loading...
+          <div className="h-screen">
+            <Loader />
           </div>
         ) : error ? (
           <div className="h-screen text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
@@ -252,9 +275,9 @@ export default function HomePage() {
                         </button>
                         <button
                           onClick={() => itemClick(item.id, true)}
-                          className="bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
+                          className="flex items-center justify-center gap-2 bg-[#9e6e3b] w-full md:w-auto px-7 py-2 hover:bg-[#785229] text-white rounded-full transition-colors duration-300"
                         >
-                          Contact Seller
+                          <MdMessage /> Seller
                         </button>
                       </div>
                     </div>
@@ -271,6 +294,57 @@ export default function HomePage() {
                 </div>
               ))}
             </Slider>
+
+            {/* Top Breeds */}
+            <div className="flex flex-col px-6  gap-8">
+              <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
+                Top Breeds
+              </div>
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
+                {breeds.map(
+                  (breed, i) =>
+                    breed.items.length != 0 && (
+                      <div
+                        key={i}
+                        className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
+                          i % 2
+                            ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
+                            : "bg-gradient-to-br from-[#252525] to-[#111111]"
+                        }`}
+                      >
+                        {/* Absolute positioned text container with gradient overlay */}
+                        <div
+                          className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
+                            i % 2 ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                          }  from-[#9e6e3b]/40 via-transparent to-black/80`}
+                        >
+                          <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
+                            {breed.name.toUpperCase()}
+                          </h2>
+                          <button
+                            onClick={() =>
+                              shopClick("All", breed.name, false, "default")
+                            }
+                            className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
+                          >
+                            VIEW MORE
+                          </button>
+                        </div>
+                        <div className="relative z-10 flex-shrink-0 ml-auto">
+                          <img
+                            src={
+                              breedImages.find((image) => image.id === breed.id)
+                                ?.image || defaultPic
+                            }
+                            alt={breed.name}
+                            className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
+                          />
+                        </div>
+                      </div>
+                    )
+                )}
+              </div>
+            </div>
 
             {/* On Sale Slider */}
             {discountedItems.length != 0 && (
@@ -302,6 +376,43 @@ export default function HomePage() {
                 </button>
               </div>
             )}
+
+            {/* Most Valuable Section */}
+            <div className="flex flex-col gap-2 overflow-hidden">
+              <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
+                Most Valuable
+              </div>
+              {items.length != 0 ? (
+                <div className="relative">
+                  <Slider {...settings2}>
+                    {mostValuedItems.map((item, i) => (
+                      <ProductCard
+                        key={i}
+                        item={item}
+                        favClick={() => {
+                          handleFavoriteClick(item.id);
+                        }}
+                        isFav={favorites.includes(item.id)}
+                      />
+                    ))}
+                  </Slider>
+                </div>
+              ) : (
+                <div className="text-sm md:text-base text-gray-500 mx-6 p-2 self-start">
+                  Empty
+                </div>
+              )}
+              <button
+                onClick={() => {
+                  shopClick("All", "All", false, "priceDesc");
+                }}
+                className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+              >
+                View More
+              </button>
+            </div>
+
+            {/* Top Categories */}
             <div className="flex flex-col px-6  gap-8">
               <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                 Top Categories
@@ -352,15 +463,15 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Most Valuable Section */}
+            {/* Most Affordable Section */}
             <div className="flex flex-col gap-2 overflow-hidden">
               <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
-                Most Valuable
+                Most Affordable
               </div>
               {items.length != 0 ? (
                 <div className="relative">
                   <Slider {...settings2}>
-                    {mostValuedItems.map((item, i) => (
+                    {mostAffordableItems.map((item, i) => (
                       <ProductCard
                         key={i}
                         item={item}
@@ -379,7 +490,7 @@ export default function HomePage() {
               )}
               <button
                 onClick={() => {
-                  shopClick("All", "All", false, "priceDesc");
+                  shopClick("All", "All", false, "priceAsc");
                 }}
                 className="bg-white hover:bg-[#9e6e3b] hover:text-white text-[#9e6e3b] border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
               >

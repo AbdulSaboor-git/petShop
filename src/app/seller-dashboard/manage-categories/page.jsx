@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
+import Loader from "@/components/loader";
 
 export default function ManageCategoriesPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -174,7 +175,7 @@ export default function ManageCategoriesPage() {
   };
 
   useEffect(() => {
-    if (!userLoading || !user) {
+    if (!userLoading && !user) {
       showMessage("Unauthorized Access", false);
     }
   }, [userLoading, user]);
@@ -188,8 +189,8 @@ export default function ManageCategoriesPage() {
             Unauthorized Access.
           </div>
         ) : loading ? (
-          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
+          <div className="h-screen pt-5">
+            <Loader />
           </div>
         ) : (
           <div className="flex flex-col gap-4">

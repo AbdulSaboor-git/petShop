@@ -5,6 +5,8 @@ import Footer from "@/components/footer";
 import FavItem from "./components/fav-item";
 import Order from "@/components/order";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
 
 export default function Favourites() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -16,6 +18,15 @@ export default function Favourites() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
   // Handle selecting an item (for example to show details in checkout)
   const handleSelectItem = (item) => {
     setCheckout(false);
@@ -94,6 +105,7 @@ export default function Favourites() {
     const updatedIds = favoriteIds.filter((id) => id !== itemId);
     setFavoriteIds(updatedIds);
     localStorage.setItem("favorites", JSON.stringify(updatedIds));
+    showMessage("Removed from favorites", true);
   };
 
   return (

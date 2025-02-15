@@ -2,9 +2,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { MdFavorite, MdFavoriteBorder, MdMessage } from "react-icons/md";
 import ItemGallery from "./components/itemGallery";
 import Order from "@/components/order";
+import { useDispatch } from "react-redux";
+import { triggerNotification } from "@/redux/notificationThunk";
+import Loader from "@/components/loader";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -29,6 +32,16 @@ export default function ItemPage({ params }) {
       }
     }
   }, []);
+
+  const dispatch = useDispatch();
+  const showMessage = (msg, state) => {
+    dispatch(
+      triggerNotification({
+        msg: msg,
+        success: state,
+      })
+    );
+  };
 
   const handleContactSeller = () => {
     setContactSeller(true);
@@ -79,9 +92,11 @@ export default function ItemPage({ params }) {
       if (prevFavorites.includes(item.id)) {
         // Remove item from favorites
         updatedFavorites = prevFavorites.filter((favId) => favId !== item.id);
+        showMessage("Removed from favorites", true);
       } else {
         // Add item to favorites
         updatedFavorites = [...prevFavorites, item.id];
+        showMessage("Added to favorites", true);
       }
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return updatedFavorites;
@@ -95,8 +110,8 @@ export default function ItemPage({ params }) {
       <Header />
       <div className="flex flex-col gap-10 max-w-[1200px] w-full px-4">
         {loading ? (
-          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
+          <div className="h-screen">
+            <Loader />
           </div>
         ) : error ? (
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
@@ -215,16 +230,16 @@ export default function ItemPage({ params }) {
                     </p>
                   </ul>
                 </div>
-                <div className="fixed z-10 bottom-0 left-0 p-3 px-4 md:p-0 bg-white w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
+                <div className="fixed z-10 bottom-0 left-0 p-3 px-4 md:p-0 backdrop-blur-lg  w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
                   <button
                     disabled={item.availability != "AVAILABLE"}
                     onClick={handleContactSeller}
-                    className={`bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full ${
+                    className={`flex gap-2 items-center justify-center bg-[#8a5e2f] hover:bg-[#644321] text-white py-2 px-4 rounded-xl w-full ${
                       item.availability != "AVAILABLE" &&
-                      "cursor-not-allowed hover:bg-[#8a5e2f] opacity-80"
+                      "cursor-not-allowed hover:bg-[#8a5e2f] opacity-60"
                     }`}
                   >
-                    Contact Seller
+                    <MdMessage /> Seller{" "}
                   </button>
                   <button
                     onClick={handleFavoriteClick}
@@ -236,7 +251,7 @@ export default function ItemPage({ params }) {
                     }
                     ${
                       item.availability != "AVAILABLE" &&
-                      "cursor-not-allowed opacity-80"
+                      "cursor-not-allowed opacity-60"
                     }`}
                   >
                     {favorites.includes(item.id) ? (
@@ -278,7 +293,7 @@ export default function ItemPage({ params }) {
                 className={`flex items-center justify-center ${
                   contactSeller
                     ? "opacity-100 h-full py-5 mt-2"
-                    : "opacity-0 h-0  pointer-events-none"
+                    : "opacity-0 h-0 scale-y-105 pointer-events-none"
                 } transition-all duration-500`}
               >
                 <Order

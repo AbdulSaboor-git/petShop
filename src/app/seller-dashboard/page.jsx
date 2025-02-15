@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
+import Loader from "@/components/loader";
 
 export default function SellerDashboardMainPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -94,8 +95,8 @@ export default function SellerDashboardMainPage() {
             Unauthorized Access.
           </div>
         ) : loading ? (
-          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
+          <div className="h-screen">
+            <Loader />
           </div>
         ) : (
           <div className="flex flex-col gap-8 md:gap-4">

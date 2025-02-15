@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
 import { MdClose } from "react-icons/md";
 import { RiArrowDownSLine } from "react-icons/ri";
+import Loader from "@/components/loader";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -211,8 +212,8 @@ export default function Shop() {
       <Header />
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
         {loading ? (
-          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
-            loading...
+          <div className="h-screen pt-6">
+            <Loader />
           </div>
         ) : error ? (
           <div className="h-screen text-sm md:text-base text-gray-500 p-2  self-start">
