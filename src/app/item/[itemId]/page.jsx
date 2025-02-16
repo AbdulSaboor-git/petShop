@@ -110,21 +110,23 @@ export default function ItemPage({ params }) {
     fetchRelatedItems();
   }, [item]);
 
+  // Bought Together Effect
   useEffect(() => {
-    // console.log(item);
-    if (!item || item.sex === "" || !item.breed) {
-      return;
-    }
+    if (!item) return;
     const fetchBoughtTogether = async () => {
       try {
+        // Check if required fields are available:
+        if (!item.sex || item.sex === "" || !item.breedId) {
+          console.log("Insufficient item data for bought together fetch", {
+            item,
+          });
+          return;
+        }
         const queryParams = new URLSearchParams();
         queryParams.append("categ", item.categoryId);
         queryParams.append("breed", item.breedId);
-        if (item.sex === "Male") {
-          queryParams.append("sex", "Female");
-        } else {
-          queryParams.append("sex", "Male");
-        }
+        queryParams.append("gender", item.sex);
+        console.log("BoughtTogether Query:", queryParams.toString());
         const response = await fetch(
           `/api/boughtTogetherItems?${queryParams.toString()}`
         );
@@ -133,6 +135,7 @@ export default function ItemPage({ params }) {
           throw new Error(`Failed to fetch bought-together items: ${text}`);
         }
         const dataItems = await response.json();
+        console.log("Bought Together Items:", dataItems);
         setBoughtTogetherItems(dataItems.items);
       } catch (err) {
         setError3(err.message);
