@@ -85,71 +85,66 @@ export default function ItemPage({ params }) {
   }, [itemId]);
 
   useEffect(() => {
+    // console.log(item);
     if (!item) return;
-
-    const fetchBoth = async () => {
+    const fetchRelatedItems = async () => {
       try {
-        // Build query parameters for related items
-        const relatedParams = new URLSearchParams();
-        relatedParams.append("categ", item.categoryId);
-        // Exclude the current item (if needed) by passing its id in the query
-        if (item.id) relatedParams.append("itemId", item.id);
-
-        // Create the related items fetch promise
-        const relatedPromise = fetch(
-          `/api/relatedItems?${relatedParams.toString()}`
-        ).then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to fetch related items.");
-          }
-          return res.json();
-        });
-
-        // Build and conditionally run the bought-together fetch promise
-        let boughtPromise = Promise.resolve(null);
-        if (item.sex && item.sex !== "" && item.breedId) {
-          const boughtParams = new URLSearchParams();
-          boughtParams.append("categ", item.categoryId);
-          boughtParams.append("breed", item.breedId);
-          // For bought-together, we want items of the opposite sex:
-          if (item.sex === "Male") {
-            boughtParams.append("gender", "Female");
-          } else if (item.sex === "Female") {
-            boughtParams.append("gender", "Male");
-          }
-          boughtPromise = fetch(
-            `/api/boughtTogetherItems?${boughtParams.toString()}`
-          ).then((res) => {
-            if (!res.ok) {
-              throw new Error("Failed to fetch bought-together items.");
-            }
-            return res.json();
-          });
+        const queryParams = new URLSearchParams();
+        queryParams.append("categ", item.categoryId);
+        queryParams.append("itemId", item.id);
+        const resItems = await fetch(
+          `/api/relatedItems?${queryParams.toString()}`
+        );
+        if (!resItems.ok) {
+          throw new Error("Failed to fetch related items.");
         }
-
-        // Run both fetches concurrently
-        const [relatedData, boughtData] = await Promise.all([
-          relatedPromise,
-          boughtPromise,
-        ]);
-
-        // Set state based on the responses
-        setRelatedItems(relatedData.items);
-        setLoading2(false);
-
-        if (boughtData) {
-          setBoughtTogetherItems(boughtData.items);
-        }
-        setLoading3(false);
+        const dataItems = await resItems.json();
+        setRelatedItems(dataItems.items);
       } catch (err) {
         setError2(err.message);
-        setError3(err.message);
+      } finally {
         setLoading2(false);
+      }
+    };
+
+    fetchRelatedItems();
+  }, [item]);
+
+  // Bought Together Effect
+  useEffect(() => {
+    if (!item) return;
+    const fetchBoughtTogether = async () => {
+      try {
+        // Check if required fields are available:
+        if (!item.sex || item.sex === "" || !item.breedId) {
+          console.log("Insufficient item data for bought together fetch", {
+            item,
+          });
+          return;
+        }
+        const queryParams = new URLSearchParams();
+        queryParams.append("categ", item.categoryId);
+        queryParams.append("breed", item.breedId);
+        queryParams.append("gender", item.sex);
+        console.log("BoughtTogether Query:", queryParams.toString());
+        const response = await fetch(
+          `/api/boughtTogetherItems?${queryParams.toString()}`
+        );
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Failed to fetch bought-together items: ${text}`);
+        }
+        const dataItems = await response.json();
+        console.log("Bought Together Items:", dataItems);
+        setBoughtTogetherItems(dataItems.items);
+      } catch (err) {
+        setError3(err.message);
+      } finally {
         setLoading3(false);
       }
     };
 
-    fetchBoth();
+    // fetchBoughtTogether();
   }, [item]);
 
   const dispatch = useDispatch();
