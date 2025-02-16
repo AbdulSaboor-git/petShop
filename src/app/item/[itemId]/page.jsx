@@ -441,19 +441,16 @@ export default function ItemPage({ params }) {
 
                 <div className="flex flex-col gap-3 items-center justify-center">
                   <div
-                    className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                      !boughtTogetherItems.length &&
-                      "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                    }`}
+                    className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3`}
                   >
-                    {boughtTogetherItems.map((item, i) => (
+                    {boughtTogetherItems.map((Item, i) => (
                       <ProductCard
                         key={i}
-                        item={item}
+                        item={Item}
                         favClick={() => {
-                          handleFavoriteClick(item.id);
+                          handleFavoriteClick(Item.id);
                         }}
-                        isFav={favorites.includes(item.id)}
+                        isFav={favorites.includes(Item.id)}
                         alt={true}
                       />
                     ))}
@@ -470,19 +467,16 @@ export default function ItemPage({ params }) {
 
                 <div className="flex flex-col gap-6 items-center justify-center">
                   <div
-                    className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                      !relatedItems.length &&
-                      "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                    }`}
+                    className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3`}
                   >
-                    {relatedItems.map((item, i) => (
+                    {relatedItems.map((Item, i) => (
                       <ProductCard
                         key={i}
-                        item={item}
+                        item={Item}
                         favClick={() => {
-                          handleFavoriteClick(item.id);
+                          handleFavoriteClick(Item.id);
                         }}
-                        isFav={favorites.includes(item.id)}
+                        isFav={favorites.includes(Item.id)}
                         alt={true}
                       />
                     ))}
