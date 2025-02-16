@@ -137,7 +137,7 @@ export default function ItemPage({ params }) {
       }
     };
 
-    fetchBoughtTogether();
+    // fetchBoughtTogether();
     fetchRelatedItems();
   }, [item]);
 
