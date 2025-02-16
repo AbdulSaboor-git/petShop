@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const { itemId, categ, breed } = req.query;
+  const { itemId, categ } = req.query;
 
   switch (method) {
     case "GET":
@@ -24,7 +24,6 @@ const handleGet = async (req, res, itemId, categ) => {
         availability: "AVAILABLE",
         id: { not: ItemId },
       },
-      include: { seller: true, category: true, breed: true },
       orderBy: { name: "asc" },
       take: 4,
     });

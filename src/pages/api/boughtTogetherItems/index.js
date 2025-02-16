@@ -24,7 +24,6 @@ const handleGet = async (req, res, categ, breed, sex) => {
         sex: sex,
         availability: "AVAILABLE",
       },
-      include: { seller: true, category: true, breed: true },
       orderBy: { name: "asc" },
       take: 2,
     });
