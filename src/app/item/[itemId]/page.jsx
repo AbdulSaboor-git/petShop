@@ -85,6 +85,7 @@ export default function ItemPage({ params }) {
   }, [itemId]);
 
   useEffect(() => {
+    // console.log(item);
     if (!item) return;
     const fetchRelatedItems = async () => {
       try {
@@ -110,14 +111,10 @@ export default function ItemPage({ params }) {
   }, [item]);
 
   useEffect(() => {
-    if (
-      !item ||
-      item.sex === "" ||
-      !item.sex ||
-      item.breedId == "" ||
-      !item.breedId
-    )
+    // console.log(item);
+    if (!item || item.sex === "" || !item.breed) {
       return;
+    }
     const fetchBoughtTogether = async () => {
       try {
         const queryParams = new URLSearchParams();
