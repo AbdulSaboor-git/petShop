@@ -79,11 +79,11 @@ async function handlePost(req, res) {
         price: Number(price),
         discountedPrice:
           discountedPrice !== "" ? Number(discountedPrice) : null,
-        description: description || "",
+        description: description || null,
         categoryId: Number(categoryId),
         breedId: breedId ? Number(breedId) : null,
-        sex: sex || "",
-        nature: nature || "",
+        sex: sex || null,
+        nature: nature || null,
         weight: weight ? Number(weight) : null,
         height: height ? Number(height) : null,
         age: age ? Number(age) : null,
@@ -124,7 +124,7 @@ async function handlePatch(req, res, productId) {
       description,
       categoryId,
       breedId,
-      sex, // received from front-end; will be mapped to `sex`
+      sex,
       nature,
       weight,
       height,
@@ -133,30 +133,30 @@ async function handlePatch(req, res, productId) {
       images,
     } = req.body;
 
-    console.log(discountedPrice);
+    // Validate required fields.
+    if (!name || !price || !categoryId) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
 
     const updatedProduct = await prisma.item.update({
       where: { id },
       data: {
-        ...(name && { name: name.trim() }),
-        ...(price && { price: Number(price) }),
-        ...(discountedPrice !== "" && {
-          discountedPrice: Number(discountedPrice),
-        }),
-        ...(description && { description }),
-        ...(categoryId && { categoryId: Number(categoryId) }),
-        ...(breedId !== undefined && {
-          breedId: breedId ? Number(breedId) : null,
-        }),
-        ...(sex && { sex: sex }), // mapping from sex to schema field "sex"
-        ...(nature && { nature }),
-        ...(weight && { weight: Number(weight) }),
-        ...(height && { height: Number(height) }),
-        ...(age && { age: Number(age) }),
-        ...(availability && { availability }),
-        ...(images && { images }),
+        name: name.trim(),
+        price: Number(price),
+        discountedPrice:
+          discountedPrice !== "" ? Number(discountedPrice) : null,
+        description: description !== undefined ? description : null,
+        categoryId: Number(categoryId),
+        breedId: breedId ? Number(breedId) : null,
+        sex: sex !== "" ? sex : null,
+        nature: nature !== "" ? nature : null,
+        weight: weight !== "" ? Number(weight) : null,
+        height: height !== "" ? Number(height) : null,
+        age: age !== "" ? Number(age) : null,
+        availability: availability,
+        images: images,
         isDiscounted:
-          discountedPrice != "" && Number(discountedPrice) < Number(price),
+          discountedPrice !== "" && Number(discountedPrice) < Number(price),
       },
     });
 

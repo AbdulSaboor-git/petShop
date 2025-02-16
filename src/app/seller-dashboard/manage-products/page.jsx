@@ -209,19 +209,19 @@ export default function ManageProductsPage() {
           name: name.trim(),
           price: Number(price),
           discountedPrice:
-            discountedPrice != undefined ? Number(discountedPrice) : "",
-          description,
+            discountedPrice !== undefined ? Number(discountedPrice) : null,
+          description: description !== "" ? description : null,
           categoryId: Number(categoryId),
           breedId: breedId ? Number(breedId) : null,
-          sex,
-          nature,
+          sex: sex !== "" ? sex : null,
+          nature: nature !== "" ? nature : null,
           weight: weight ? Number(weight) : null,
           height: height ? Number(height) : null,
           age: age ? Number(age) : null,
           availability,
           images, // Array of image URLs
           sellerId,
-          isDiscounted: discountedPrice != "" && discountedPrice < price,
+          isDiscounted: discountedPrice !== "" && discountedPrice < price,
         }),
       });
       if (!res.ok) {
@@ -254,18 +254,19 @@ export default function ManageProductsPage() {
           name: name.trim(),
           price: Number(price),
           discountedPrice:
-            discountedPrice != undefined ? Number(discountedPrice) : "",
-          description,
+            discountedPrice !== undefined ? Number(discountedPrice) : null,
+          description: description !== "" ? description : null,
           categoryId: Number(categoryId),
           breedId: breedId ? Number(breedId) : null,
-          sex,
-          nature,
+          sex: sex !== "" ? sex : null,
+          nature: nature !== "" ? nature : null,
           weight: weight ? Number(weight) : null,
           height: height ? Number(height) : null,
           age: age ? Number(age) : null,
           availability,
-          images,
-          isDiscounted: discountedPrice != "" && discountedPrice < price,
+          images, // Array of image URLs
+          sellerId,
+          isDiscounted: discountedPrice !== "" && discountedPrice < price,
         }),
       });
       if (!res.ok) {
