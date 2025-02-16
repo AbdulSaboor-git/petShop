@@ -78,8 +78,7 @@ export default function ManageCategoriesPage() {
     setAddCategory(true);
     setEditCategory(false);
     setDeleteCategory(false);
-    setName("");
-    setSelectedCategory(null);
+    resetForm();
     setFocused("add");
   };
 
@@ -87,8 +86,7 @@ export default function ManageCategoriesPage() {
     setAddCategory(false);
     setEditCategory(true);
     setDeleteCategory(false);
-    setName("");
-    setSelectedCategory(null);
+    resetForm();
     setFocused("edit");
   };
 
@@ -96,9 +94,14 @@ export default function ManageCategoriesPage() {
     setAddCategory(false);
     setEditCategory(false);
     setDeleteCategory(true);
-    setSelectedCategory(null);
+    resetForm();
     setFocused("delete");
   };
+
+  function resetForm() {
+    setName("");
+    setSelectedCategory(null);
+  }
 
   // Handler for add category form submission.
   const handleAddCategorySubmit = async (e) => {
@@ -118,7 +121,7 @@ export default function ManageCategoriesPage() {
         throw new Error(errorResponse.message || "Failed to add category.");
       }
       showMessage(`Category "${name}" added successfully!`, true);
-      setName("");
+      resetForm();
       fetchCategoriesData();
     } catch (err) {
       showMessage(err.message, false);
@@ -146,8 +149,7 @@ export default function ManageCategoriesPage() {
         `Category "${selectedCategory.name}" updated successfully!`,
         true
       );
-      setName("");
-      setSelectedCategory(null);
+      resetForm();
       fetchCategoriesData();
     } catch (err) {
       showMessage(err.message, false);
@@ -169,7 +171,7 @@ export default function ManageCategoriesPage() {
         throw new Error("Failed to delete category.");
       }
       showMessage(`Category "${name}" deleted successfully!`, true);
-      setSelectedCategory(null);
+      resetForm();
       fetchCategoriesData();
     } catch (err) {
       showMessage(err.message, false);
@@ -255,12 +257,21 @@ export default function ManageCategoriesPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Add Category
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                        >
+                          Add Category
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}
@@ -305,12 +316,21 @@ export default function ManageCategoriesPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Update Category
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                        >
+                          Update Category
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}
@@ -345,13 +365,22 @@ export default function ManageCategoriesPage() {
                           ))}
                         </select>
                       </div>
-                      <button
-                        type="submit"
-                        disabled={!selectedCategory}
-                        className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                      >
-                        Delete Category
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          disabled={!selectedCategory}
+                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                        >
+                          Delete Category
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}

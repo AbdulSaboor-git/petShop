@@ -574,12 +574,21 @@ export default function ManageProductsPage() {
                           </div>
                         )}
                       </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Add Product
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                        >
+                          Add Product
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                       <p
                         className={`text-gray-500 ${
                           !isAddFormValid && "text-red-500"
@@ -800,12 +809,21 @@ export default function ManageProductsPage() {
                           </div>
                         )}
                       </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Update Product
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                        >
+                          Update Product
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                       <p
                         className={`text-gray-500
                           ${!isEditFormValid && "text-red-500"}`}
@@ -844,13 +862,22 @@ export default function ManageProductsPage() {
                           </option>
                         ))}
                       </select>
-                      <button
-                        type="submit"
-                        disabled={!item}
-                        className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                      >
-                        Delete Product
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          disabled={!item}
+                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                        >
+                          Delete Product
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}

@@ -35,12 +35,15 @@ export default function ManageBreedsPage() {
     );
   };
 
+  function resetForm() {
+    setName("");
+    setSelectedBreed(null);
+  }
   const handleAddBreed = () => {
     setAddBreed(true);
     setEditBreed(false);
     setDeleteBreed(false);
-    setName("");
-    setSelectedBreed(null);
+    resetForm();
     setFocused("add");
   };
 
@@ -48,8 +51,7 @@ export default function ManageBreedsPage() {
     setAddBreed(false);
     setEditBreed(true);
     setDeleteBreed(false);
-    setName("");
-    setSelectedBreed(null);
+    resetForm();
     setFocused("edit");
   };
 
@@ -57,7 +59,7 @@ export default function ManageBreedsPage() {
     setAddBreed(false);
     setEditBreed(false);
     setDeleteBreed(true);
-    setSelectedBreed(null);
+    resetForm();
     setFocused("delete");
   };
 
@@ -116,7 +118,7 @@ export default function ManageBreedsPage() {
         throw new Error(errorResponse.message || "Failed to add breed.");
       }
       showMessage(`Breed "${name}" added successfully!`, true);
-      setName("");
+      resetForm();
       fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
@@ -141,8 +143,8 @@ export default function ManageBreedsPage() {
         throw new Error(errorResponse.message || "Failed to update breed.");
       }
       showMessage(`Breed "${selectedBreed.name}" updated successfully!`, true);
-      setName("");
-      setSelectedBreed(null);
+      resetForm();
+
       fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
@@ -164,7 +166,7 @@ export default function ManageBreedsPage() {
         throw new Error("Failed to delete breed.");
       }
       showMessage(`Breed "${name}" deleted successfully!`, true);
-      setSelectedBreed(null);
+      resetForm();
       fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
@@ -248,12 +250,21 @@ export default function ManageBreedsPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Add Breed
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                        >
+                          Add Breed
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}
@@ -298,12 +309,21 @@ export default function ManageBreedsPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <button
-                        type="submit"
-                        className="mt-4 p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                      >
-                        Update Breed
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                        >
+                          Update Category
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}
@@ -336,13 +356,22 @@ export default function ManageBreedsPage() {
                           ))}
                         </select>
                       </div>
-                      <button
-                        type="submit"
-                        disabled={!selectedBreed}
-                        className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                      >
-                        Delete Breed
-                      </button>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          disabled={!selectedBreed}
+                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                        >
+                          Delete Category
+                        </button>
+                        <button
+                          type="reset"
+                          onClick={resetForm}
+                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 )}
