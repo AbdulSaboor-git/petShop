@@ -79,7 +79,7 @@ export default function ManageBreedsPage() {
 
   useEffect(() => {
     if (!userLoading && user) {
-      fetchBreedData();
+      fetchBreeds();
     }
   }, [userLoading, user]);
 

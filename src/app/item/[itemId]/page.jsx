@@ -86,7 +86,6 @@ export default function ItemPage({ params }) {
 
   useEffect(() => {
     if (!item) return;
-
     const fetchRelatedItems = async () => {
       try {
         const queryParams = new URLSearchParams();
@@ -96,10 +95,9 @@ export default function ItemPage({ params }) {
           `/api/relatedItems?${queryParams.toString()}`
         );
         if (!resItems.ok) {
-          throw new Error("Failed to fetch data.");
+          throw new Error("Failed to fetch related items.");
         }
         const dataItems = await resItems.json();
-
         setRelatedItems(dataItems.items);
       } catch (err) {
         setError2(err.message);
@@ -107,26 +105,28 @@ export default function ItemPage({ params }) {
         setLoading2(false);
       }
     };
+
+    fetchRelatedItems();
+  }, [item]);
+
+  useEffect(() => {
+    if (!item || !item.sex || !item.breedId) return;
     const fetchBoughtTogether = async () => {
-      if (!item || item.sex === "" || !item.breedId) {
-        return;
-      }
       try {
         const queryParams = new URLSearchParams();
         queryParams.append("categ", item.categoryId);
         queryParams.append("breed", item.breedId);
-
         if (item.sex === "Male") {
           queryParams.append("sex", "Female");
         } else if (item.sex === "Female") {
           queryParams.append("sex", "Male");
         }
-
         const response = await fetch(
           `/api/boughtTogetherItems?${queryParams.toString()}`
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch data.");
+          const text = await response.text();
+          throw new Error(`Failed to fetch bought-together items: ${text}`);
         }
         const dataItems = await response.json();
         setBoughtTogetherItems(dataItems.items);
@@ -137,8 +137,7 @@ export default function ItemPage({ params }) {
       }
     };
 
-    // fetchBoughtTogether();
-    fetchRelatedItems();
+    fetchBoughtTogether();
   }, [item]);
 
   const dispatch = useDispatch();
