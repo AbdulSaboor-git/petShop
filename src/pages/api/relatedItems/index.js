@@ -21,8 +21,8 @@ const handleGet = async (req, res, itemId, categ) => {
     const items = await prisma.item.findMany({
       where: {
         categoryId: categId,
-        availability: "AVAILABLE",
         id: { not: ItemId },
+        availability: "AVAILABLE",
       },
       orderBy: { name: "asc" },
       take: 4,

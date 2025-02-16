@@ -91,7 +91,7 @@ export default function ItemPage({ params }) {
       try {
         const queryParams = new URLSearchParams();
         queryParams.append("categ", item.categoryId);
-        if (item.id) queryParams.append("itemId", item.id);
+        queryParams.append("itemId", item.id);
         const resItems = await fetch(
           `/api/relatedItems?${queryParams.toString()}`
         );
