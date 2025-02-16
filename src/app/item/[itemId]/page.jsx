@@ -108,10 +108,10 @@ export default function ItemPage({ params }) {
       }
     };
     const fetchBoughtTogether = async () => {
+      if (!item || item.sex === "" || !item.breedId) {
+        return;
+      }
       try {
-        if (!item || item.sex == "" || !item.breedId) {
-          return;
-        }
         const queryParams = new URLSearchParams();
         queryParams.append("categ", item.categoryId);
         queryParams.append("breed", item.breedId);
@@ -137,7 +137,7 @@ export default function ItemPage({ params }) {
       }
     };
 
-    // fetchBoughtTogether();
+    fetchBoughtTogether();
     fetchRelatedItems();
   }, [item]);
 
