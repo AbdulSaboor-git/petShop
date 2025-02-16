@@ -27,7 +27,6 @@ const handleGet = async (req, res, categ, breed, sex) => {
       orderBy: { name: "asc" },
       take: 2,
     });
-
     return res.status(200).json({ items });
   } catch (error) {
     console.error(error);

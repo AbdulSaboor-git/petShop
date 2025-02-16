@@ -122,7 +122,7 @@ export default function ItemPage({ params }) {
         queryParams.append("breed", item.breedId);
         if (item.sex === "Male") {
           queryParams.append("sex", "Female");
-        } else if (item.sex === "Female") {
+        } else {
           queryParams.append("sex", "Male");
         }
         const response = await fetch(

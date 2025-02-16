@@ -479,7 +479,7 @@ export default function Shop() {
                 ))
               ) : (
                 <div className="text-xs md:text-sm text-gray-500 p-2">
-                  No such items found.
+                  No items found.
                 </div>
               )}
             </div>
