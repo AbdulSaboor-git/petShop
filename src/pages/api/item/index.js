@@ -82,7 +82,7 @@ async function handlePost(req, res) {
         description: description ? description.trim() : null,
         categoryId: Number(categoryId),
         breedId: breedId ? Number(breedId) : null,
-        sex: sex ? sex.trim : null,
+        sex: sex ? sex.trim() : null,
         nature: nature ? nature.trim() : null,
         weight: weight ? Number(weight) : null,
         height: height ? Number(height) : null,
@@ -145,13 +145,15 @@ async function handlePatch(req, res, productId) {
               discountedPrice: Number(discountedPrice),
             }
           : { discountedPrice: null }),
-        ...(description && { description }),
+        ...(description
+          ? { description: descriptiontrim() }
+          : { description: null }),
         ...(categoryId && { categoryId: Number(categoryId) }),
         ...(breedId !== undefined && {
           breedId: breedId ? Number(breedId) : null,
         }),
-        ...(sex ? { sex: sex } : { sex: null }), // mapping from sex to schema field "sex"
-        ...(nature ? { nature } : { nature: null }),
+        ...(sex ? { sex: sex.trim() } : { sex: null }), // mapping from sex to schema field "sex"
+        ...(nature ? { nature: nature.trim() } : { nature: null }),
         ...(weight ? { weight: Number(weight) } : { weight: null }),
         ...(height ? { height: Number(height) } : { height: null }),
         ...(age ? { age: Number(age) } : { age: null }),
