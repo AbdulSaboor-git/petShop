@@ -284,7 +284,7 @@ export default function ItemPage({ params }) {
                     )}
                     {item?.age && (
                       <p className="font-bold">
-                        Age:{" "}
+                        Age:
                         <span className="font-normal text-slate-600">
                           {item?.age} years
                         </span>
@@ -295,14 +295,6 @@ export default function ItemPage({ params }) {
                         Gender:{" "}
                         <span className="font-normal text-slate-600">
                           {item?.sex}
-                        </span>
-                      </p>
-                    )}
-                    {item?.specifications && (
-                      <p className="font-bold">
-                        Specifications:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.specifications}
                         </span>
                       </p>
                     )}

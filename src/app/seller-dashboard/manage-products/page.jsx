@@ -159,6 +159,28 @@ export default function ManageProductsPage() {
     fetchItemsData();
   }, [sellerId]);
 
+  const payload = {
+    name: name.trim(),
+    price: Number(price),
+    discountedPrice:
+      discountedPrice != undefined ? Number(discountedPrice) : "",
+    description:
+      description && description.toString().trim() !== ""
+        ? description.trim()
+        : null,
+    categoryId: Number(categoryId),
+    breedId:
+      breedId && breedId.toString().trim() !== "" ? Number(breedId) : null,
+    sex: sex && sex.toString().trim() !== "" ? sex.trim() : null,
+    nature: nature && nature.toString().trim() !== "" ? nature.trim() : null,
+    weight: weight && weight.toString().trim() !== "" ? Number(weight) : null,
+    height: height && height.toString().trim() !== "" ? Number(height) : null,
+    age: age && age.toString().trim() !== "" ? Number(age) : null,
+    availability,
+    images, // An array of image URLs
+    sellerId,
+  };
+
   // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
     setItemLoading(true);
@@ -205,24 +227,7 @@ export default function ManageProductsPage() {
       const res = await fetch("/api/item", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          price: Number(price),
-          discountedPrice:
-            discountedPrice !== undefined ? Number(discountedPrice) : null,
-          description: description !== "" ? description : null,
-          categoryId: Number(categoryId),
-          breedId: breedId ? Number(breedId) : null,
-          sex: sex !== "" ? sex : null,
-          nature: nature !== "" ? nature : null,
-          weight: weight ? Number(weight) : null,
-          height: height ? Number(height) : null,
-          age: age ? Number(age) : null,
-          availability,
-          images, // Array of image URLs
-          sellerId,
-          isDiscounted: discountedPrice !== "" && discountedPrice < price,
-        }),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const errorResponse = await res.json();
@@ -250,24 +255,7 @@ export default function ManageProductsPage() {
       const res = await fetch(`/api/item?productId=${item.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: name.trim(),
-          price: Number(price),
-          discountedPrice:
-            discountedPrice !== undefined ? Number(discountedPrice) : null,
-          description: description !== "" ? description : null,
-          categoryId: Number(categoryId),
-          breedId: breedId ? Number(breedId) : null,
-          sex: sex !== "" ? sex : null,
-          nature: nature !== "" ? nature : null,
-          weight: weight ? Number(weight) : null,
-          height: height ? Number(height) : null,
-          age: age ? Number(age) : null,
-          availability,
-          images, // Array of image URLs
-          sellerId,
-          isDiscounted: discountedPrice !== "" && discountedPrice < price,
-        }),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const errorResponse = await res.json();
