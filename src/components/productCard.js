@@ -44,7 +44,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
             </div>
           </div>
         )}
-        <div className="flex justify-between items-center gap-1 pr-1">
+        <div className="flex justify-between items-center gap-2">
           <p
             className="text-xs font-bold text-orange-600 truncate"
             onMouseEnter={() => setNameHover(true)}
@@ -53,7 +53,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
             {name}
           </p>
           <button
-            className="text-orange-500 rounded-full  text-lg"
+            className="text-orange-500 rounded-full text-lg"
             onClick={(e) => {
               e.stopPropagation(); // Prevent the click from bubbling up
               favClick(); // Execute the favorite toggle logic
