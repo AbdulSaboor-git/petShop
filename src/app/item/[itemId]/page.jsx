@@ -137,7 +137,7 @@ export default function ItemPage({ params }) {
       }
     };
 
-    fetchBoughtTogether();
+    // fetchBoughtTogether();
     fetchRelatedItems();
   }, [item]);
 
@@ -427,76 +427,70 @@ export default function ItemPage({ params }) {
               </div>
             </div>
             {/* Related Items Section */}
-            {boughtTogetherItems.length != 0 && (
+            {boughtTogetherItems.length != 0 && !loading3 && (
               <div className="flex flex-col gap-4">
                 <div className="text-base md:text-xl font-semibold">
                   Perfect Match
                 </div>
-                {loading3 ? (
-                  <Loader />
-                ) : (
-                  <div className="flex flex-col gap-3 items-center justify-center">
-                    <div
-                      className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                        !boughtTogetherItems.length &&
-                        "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                      }`}
-                    >
-                      {boughtTogetherItems.map((item, i) => (
-                        <ProductCard
-                          key={i}
-                          item={item}
-                          favClick={() => {
-                            handleFavoriteClick(item.id);
-                          }}
-                          isFav={favorites.includes(item.id)}
-                          alt={true}
-                        />
-                      ))}
-                    </div>
+
+                <div className="flex flex-col gap-3 items-center justify-center">
+                  <div
+                    className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                      !boughtTogetherItems.length &&
+                      "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                    }`}
+                  >
+                    {boughtTogetherItems.map((item, i) => (
+                      <ProductCard
+                        key={i}
+                        item={item}
+                        favClick={() => {
+                          handleFavoriteClick(item.id);
+                        }}
+                        isFav={favorites.includes(item.id)}
+                        alt={true}
+                      />
+                    ))}
                   </div>
-                )}
+                </div>
               </div>
             )}
             {/* Related Items Section */}
-            {relatedItems.length != 0 && (
+            {relatedItems.length != 0 && !loading2 && (
               <div className="flex flex-col gap-4">
                 <div className="text-base md:text-xl font-semibold">
                   Related Items
                 </div>
-                {loading2 ? (
-                  <Loader />
-                ) : (
-                  <div className="flex flex-col gap-6 items-center justify-center">
-                    <div
-                      className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                        !relatedItems.length &&
-                        "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                      }`}
-                    >
-                      {relatedItems.map((item, i) => (
-                        <ProductCard
-                          key={i}
-                          item={item}
-                          favClick={() => {
-                            handleFavoriteClick(item.id);
-                          }}
-                          isFav={favorites.includes(item.id)}
-                          alt={true}
-                        />
-                      ))}
-                    </div>
 
-                    <button
-                      onClick={() => {
-                        shopClick(item?.category.name, "All", false, "default");
-                      }}
-                      className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
-                    >
-                      View More
-                    </button>
+                <div className="flex flex-col gap-6 items-center justify-center">
+                  <div
+                    className={`self-start grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                      !relatedItems.length &&
+                      "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                    }`}
+                  >
+                    {relatedItems.map((item, i) => (
+                      <ProductCard
+                        key={i}
+                        item={item}
+                        favClick={() => {
+                          handleFavoriteClick(item.id);
+                        }}
+                        isFav={favorites.includes(item.id)}
+                        alt={true}
+                      />
+                    ))}
                   </div>
-                )}
+
+                  <button
+                    onClick={() => {
+                      shopClick(item?.category.name, "All", false, "default");
+                    }}
+                    className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                  >
+                    View More
+                  </button>
+                </div>
               </div>
             )}
           </div>
