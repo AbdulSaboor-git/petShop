@@ -27,8 +27,6 @@ export default function ItemPage({ params }) {
   const [loading2, setLoading2] = useState(true);
   const [error2, setError2] = useState(null);
   const [favorites, setFavorites] = useState([]);
-  const [loading3, setLoading3] = useState(true);
-  const [error3, setError3] = useState(null);
   const [relatedItems, setRelatedItems] = useState([]);
   const [boughtTogetherItems, setBoughtTogetherItems] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
@@ -112,40 +110,12 @@ export default function ItemPage({ params }) {
 
   // Bought Together Effect
   useEffect(() => {
-    if (!item) return;
-    const fetchBoughtTogether = async () => {
-      try {
-        // Check if required fields are available:
-        if (!item.sex || item.sex === "" || !item.breedId) {
-          console.log("Insufficient item data for bought together fetch", {
-            item,
-          });
-          return;
-        }
-        const queryParams = new URLSearchParams();
-        queryParams.append("categ", item.categoryId);
-        queryParams.append("breed", item.breedId);
-        queryParams.append("gender", item.sex);
-        console.log("BoughtTogether Query:", queryParams.toString());
-        const response = await fetch(
-          `/api/boughtTogetherItems?${queryParams.toString()}`
-        );
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Failed to fetch bought-together items: ${text}`);
-        }
-        const dataItems = await response.json();
-        console.log("Bought Together Items:", dataItems);
-        setBoughtTogetherItems(dataItems.items);
-      } catch (err) {
-        setError3(err.message);
-      } finally {
-        setLoading3(false);
-      }
-    };
-
-    // fetchBoughtTogether();
-  }, [item]);
+    if (!item || !item.sex || item.sex === "" || !item.breedId) return;
+    const boughtTogether = relatedItems
+      .filter((i) => i.sex !== item.sex && i.breedId === item.breedId)
+      .slice(0, 2);
+    setBoughtTogetherItems(boughtTogether);
+  }, [relatedItems, item]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
@@ -432,8 +402,8 @@ export default function ItemPage({ params }) {
                 />
               </div>
             </div>
-            {/* Related Items Section */}
-            {boughtTogetherItems.length != 0 && !loading3 && (
+            {/* bought together Items Section */}
+            {boughtTogetherItems.length != 0 && (
               <div className="flex flex-col gap-4">
                 <div className="text-base md:text-xl font-semibold">
                   Perfect Match
