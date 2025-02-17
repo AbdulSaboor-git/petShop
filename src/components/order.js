@@ -142,7 +142,10 @@ export default function Order({ items, closeOrderPage }) {
           </h2>
           <div className="flex flex-col items-center justify-center gap-2">
             {items.map((item, i) => (
-              <div className="flex gap-4 items-center w-full border bg-gray-100 p-2 rounded-lg md:min-w-[400px]">
+              <div
+                key={i}
+                className="flex gap-4 items-center w-full border bg-gray-100 p-2 rounded-lg md:min-w-[400px]"
+              >
                 <img
                   src={item.images[0]}
                   alt={item.name}
