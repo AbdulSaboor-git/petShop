@@ -28,7 +28,7 @@ function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const input = email.toLowerCase();
     setLoading(true);
     try {
       const response = await fetch("/api/user/login", {
@@ -36,7 +36,7 @@ function LoginForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ input, password }),
       });
 
       const data = await response.json();
@@ -74,10 +74,10 @@ function LoginForm() {
               Email
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Email or Phone Number"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

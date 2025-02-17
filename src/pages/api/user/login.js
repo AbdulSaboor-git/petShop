@@ -12,16 +12,18 @@ export default async function handler(req, res) {
 }
 
 const POST = async (req, res) => {
-  const { email, password } = req.body;
+  const { input, password } = req.body;
 
   // Check if email and password are provided
-  if (!email || !password) {
+  if (!input || !password) {
     return res.status(400).json({ error: "Email and password are required" });
   }
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [{ phoneNo: input }, { email: input }],
+      },
     });
 
     if (!user) {

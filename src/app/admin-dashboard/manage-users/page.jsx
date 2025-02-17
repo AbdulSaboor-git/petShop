@@ -632,8 +632,12 @@ export default function ManageUsersPage() {
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           required
-                          value={user?.id === selectedUser?.id ? "ADMIN" : role}
-                          onChange={(e) => setRole(e.target.value)}
+                          value={role}
+                          onChange={(e) =>
+                            user?.id === selectedUser?.id
+                              ? setRole("ADMIN")
+                              : setRole(e.target.value)
+                          }
                         >
                           <option value="">select a role</option>
                           <option value="ADMIN">Admin</option>
@@ -644,15 +648,11 @@ export default function ManageUsersPage() {
                         <label className="mx-0.5">Is Active</label>
                         <select
                           className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
-                          value={
-                            user?.id === selectedUser?.id
-                              ? "true"
-                              : isActive
-                              ? "true"
-                              : "false"
-                          }
+                          value={isActive ? "true" : "false"}
                           onChange={(e) =>
-                            setIsActive(e.target.value === "true")
+                            user?.id === selectedUser?.id
+                              ? setIsActive(true)
+                              : setIsActive(e.target.value === "true")
                           }
                         >
                           <option value="true">True</option>
