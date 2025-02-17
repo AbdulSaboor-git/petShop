@@ -17,10 +17,10 @@ export default function FavItem({
   return (
     <div
       key={item.id}
-      className={`flex gap-2 justify-between items-center border p-3 px-5 rounded-lg ${
+      className={`flex gap-2 w-full justify-between items-center border p-3 px-5 rounded-lg ${
         !item.availability === "AVAILABLE"
           ? "bg-[#00000025] opacity-100 border-gray-200 pointer-events-none"
-          : " bg-gray-100 pointer-events-auto"
+          : " bg-gray-50 pointer-events-auto"
       }`}
     >
       <div

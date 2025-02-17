@@ -72,7 +72,7 @@ async function handlePost(req, res) {
         email: email,
         phoneNo: phoneNo,
         password: password,
-        role: tole ? role : null,
+        role: role ? role : null,
         profilePicture: profilePicture,
         isActive: isActive,
       },

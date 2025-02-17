@@ -503,6 +503,7 @@ export default function ManageUsersPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
+                          disabled={uploading}
                           className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                         >
                           Add User
@@ -699,6 +700,7 @@ export default function ManageUsersPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
+                          disabled={uploading || selectedUserLoading}
                           className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                         >
                           Update User

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdEmail, MdWhatsapp } from "react-icons/md";
 
-export default function Order({ item, closeOrderPage }) {
+export default function Order({ items, closeOrderPage }) {
   // New state for customer details
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
@@ -49,33 +49,43 @@ export default function Order({ item, closeOrderPage }) {
     !contactError;
 
   const generateOrderMessage = () => {
-    if (!item) return "";
-    const priceText = item.isDiscounted
-      ? `Price: Rs. ${item.discountedPrice}`
-      : `Price: Rs. ${item.price}`;
+    if (!items || items.length === 0) return "";
 
-    // Construct a full URL to the product.
-    const productLink = `${window.location.origin}/item/${item.id}`;
+    // Build product details for each item
+    const productDetails = items
+      .map((item) => {
+        const priceText = item.isDiscounted
+          ? `Price: Rs. ${item.discountedPrice} (Discounted from Rs. ${item.price})`
+          : `Price: Rs. ${item.price}`;
+        const productLink = `${window.location.origin}/item/${item.id}`;
+        return `Item ID: ${item.id}
+    Item Name: ${item.name}
+    ${priceText}
+    Product Link: ${productLink}`;
+      })
+      .join("\n\n");
 
-    return `Hello ${item.seller.firstName} ${item.seller.lastName},
-      
-I am interested in inquiring about the following item:
-      
-Item ID: ${item.id}
-Item Name: ${item.name}
-${priceText}
-Product Link: ${productLink}
-      
-Customer Details:
-Name: ${customerName}
-Address: ${customerAddress}
-Contact No.: ${customerContact}
-${customerEmail ? "Email: " + customerEmail : ""}
-${additionalNotes ? "Additional Notes: " + '"' + additionalNotes + '"' : ""}
-      
-Please let me know the next steps to complete my order.
-      
-Thank you.`;
+    // Use seller details from the first item (assuming all items are from the same seller)
+    const seller = items[0].seller;
+
+    return `Hello ${seller.firstName} ${seller.lastName},
+    
+    I am interested in inquiring about the following item${
+      items.length > 1 ? "s" : ""
+    }:
+    
+    ${productDetails}
+    
+    Customer Details:
+    Name: ${customerName}
+    Address: ${customerAddress}
+    Contact No.: ${customerContact}
+    ${customerEmail ? "Email: " + customerEmail : ""}
+    ${additionalNotes ? 'Additional Notes: "' + additionalNotes + '"' : ""}
+    
+    Please let me know the next steps to complete my order.
+    
+    Thank you.`;
   };
 
   const closeOrder = () => {
@@ -92,9 +102,15 @@ Thank you.`;
 
   // Handler for placing an order via WhatsApp.
   const handleWhatsappOrder = () => {
-    if (!isFormValid || !item || !item.seller?.phoneNo) return;
+    if (
+      !isFormValid ||
+      !items ||
+      items.length === 0 ||
+      !items[0].seller?.phoneNo
+    )
+      return;
     const message = generateOrderMessage();
-    const phoneNumber = item.seller.phoneNo.replace(/\D/g, ""); // Remove non-digit characters
+    const phoneNumber = items[0].seller.phoneNo.replace(/\D/g, ""); // Remove non-digit characters
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
       message
     )}`;
@@ -104,36 +120,45 @@ Thank you.`;
 
   // Handler for placing an order via Email.
   const handleEmailOrder = () => {
-    if (!isFormValid || !item || !item.seller?.email) return;
+    if (!isFormValid || !items || items.length === 0 || !items[0].seller?.email)
+      return;
     const message = generateOrderMessage();
-    const subject = `Order Inquiry: ${item.name}`;
-    const mailtoUrl = `mailto:${item.seller.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(message)}`;
+    const subject = `Order Inquiry`;
+    const mailtoUrl = `mailto:${
+      items[0].seller.email
+    }?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+      message
+    )}`;
     window.location.href = mailtoUrl;
     closeOrder();
   };
 
   return (
     <div className="w-full max-w-[500px]">
-      {item && (
+      {items.length != 0 && (
         <div className="flex w-full flex-col text-xs md:text-sm gap-4 self-center p-5 py-10 rounded-xl border bg-gray-50 text-gray-700 text-center shadow-md">
-          <h2 className="text-base md:text-lg font-bold">Order Inquiry</h2>
-          <div className="flex gap-4 items-center w-full border bg-gray-100 p-4 rounded-lg md:min-w-[400px]">
-            <img
-              src={item.images[0]}
-              alt={item.name}
-              className="w-16 object-cover aspect-square rounded-lg cursor-pointer"
-            />
-            <div className="text-sm flex flex-col items-start gap-[1px]">
-              <h3 className="font-bold cursor-pointer leading-tight line-clamp-2">
-                {item.name}
-              </h3>
-              <p className="text-xs text-gray-600">{item.breed?.name}</p>
-              <p className="text-xs text-green-600">
-                Rs. {item.isDiscounted ? item.discountedPrice : item.price}
-              </p>
-            </div>
+          <h2 className="text-base md:text-lg font-bold">
+            Product{items.length > 1 && "s"} Inquiry
+          </h2>
+          <div className="flex flex-col items-center justify-center gap-2">
+            {items.map((item, i) => (
+              <div className="flex gap-4 items-center w-full border bg-gray-100 p-2 rounded-lg md:min-w-[400px]">
+                <img
+                  src={item.images[0]}
+                  alt={item.name}
+                  className="w-16 object-cover aspect-square rounded-lg cursor-pointer"
+                />
+                <div className="text-sm flex flex-col items-start gap-[1px]">
+                  <h3 className="font-bold cursor-pointer leading-tight line-clamp-2">
+                    {item.name}
+                  </h3>
+                  <p className="text-xs text-gray-600">{item.breed?.name}</p>
+                  <p className="text-xs text-green-600">
+                    Rs. {item.isDiscounted ? item.discountedPrice : item.price}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
           {/* Customer Info Form */}
           <div className="flex flex-col gap-2 border p-4 rounded-lg bg-gray-100">

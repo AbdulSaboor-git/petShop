@@ -32,7 +32,17 @@ const handleGet = async (req, res) => {
       include: { seller: true, category: true, breed: true },
     });
 
-    return res.status(200).json({ items });
+    const groupedBySeller = items.reduce((acc, item) => {
+      const sellerId = item.seller.id;
+      if (!acc[sellerId]) {
+        acc[sellerId] = { seller: item.seller, items: [] };
+      }
+      acc[sellerId].items.push(item);
+      return acc;
+    }, {});
+    const groupedItemsArray = Object.values(groupedBySeller);
+
+    return res.status(200).json({ groupedItemsArray });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
