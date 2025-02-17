@@ -65,12 +65,14 @@ export default function Header() {
   }
 
   function favClick() {
-    router.push("/favourites");
+    router.push("/favorites");
   }
   function loginClick() {
     toggleShowLoginForm();
   }
-  function adminDBClick() {}
+  function adminDBClick() {
+    router.push("/admin-dashboard");
+  }
   function sellerDBClick() {
     router.push("/seller-dashboard");
   }

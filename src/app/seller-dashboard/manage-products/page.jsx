@@ -184,6 +184,7 @@ export default function ManageProductsPage() {
   // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
     setItemLoading(true);
+    setItem(null);
     try {
       const response = await fetch(`/api/item?productId=${itemId}`);
       if (!response.ok) {
@@ -544,20 +545,28 @@ export default function ManageProductsPage() {
                         <label className="mx-0.5">Images*</label>
                         <input
                           type="file"
-                          multiple
                           accept="image/*"
                           onChange={handleFileChange}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         />
-                        {uploading && <p>Uploading...</p>}
-                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+                        {uploading && (
+                          <p className="text-sm text-gray-500  mt-3">
+                            Uploading...
+                          </p>
+                        )}
+                        {errorMsg && (
+                          <p className="text-sm text-red-500  mt-3">
+                            {errorMsg}
+                          </p>
+                        )}
                         {/* Image Preview */}
                         {images.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2">
+                          <div className="flex flex-wrap gap-2 mt-3">
                             {images.map((url, index) => (
                               <div key={index} className="relative">
                                 <img
                                   src={url}
+                                  value={""}
                                   alt={`Product Image ${index + 1}`}
                                   className="w-20 h-20 object-cover rounded-md border"
                                 />
@@ -779,16 +788,24 @@ export default function ManageProductsPage() {
                         <label className="mx-0.5">Images*</label>
                         <input
                           type="file"
+                          value={""}
                           accept="image/*"
-                          multiple
                           onChange={handleFileChange}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         />
-                        {uploading && <p>Uploading...</p>}
-                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+                        {uploading && (
+                          <p className="text-sm text-gray-500 mt-3">
+                            Uploading...
+                          </p>
+                        )}
+                        {errorMsg && (
+                          <p className="text-sm text-red-500 mt-3">
+                            {errorMsg}
+                          </p>
+                        )}
                         {/* Image Preview */}
                         {images.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2 ">
+                          <div className="flex flex-wrap gap-2 mt-3 ">
                             {images.map((url, index) => (
                               <div key={index} className="relative">
                                 <img

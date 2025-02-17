@@ -51,7 +51,7 @@ model item {
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
   sellerId        Int
-  seller          user       @relation(fields: [sellerId], references: [id], onDelete: Cascade) // Relation to User
+  seller          user       @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 }
 
 enum availability {

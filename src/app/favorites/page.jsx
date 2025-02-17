@@ -113,7 +113,7 @@ export default function Favourites() {
       <Header />
       <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
         <div className="flex justify-between items-center px-1">
-          <h1 className="font-bold ">My Favourites ({favorites.length})</h1>
+          <h1 className="font-bold ">My Favorites ({favorites.length})</h1>
           {/* You can add bulk delete functionality here if needed */}
         </div>
         <div className="flex flex-col gap-2">
@@ -138,7 +138,7 @@ export default function Favourites() {
           ) : (
             <div className="flex flex-col gap-4 justify-center items-center">
               <div className="text-xs md:text-sm w-full rounded-lg bg-gray-100 text-gray-400 border p-2">
-                Favourites List is empty
+                Favorites list is empty
               </div>
               <button
                 onClick={shopClick}

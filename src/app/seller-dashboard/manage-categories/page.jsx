@@ -60,6 +60,7 @@ export default function ManageCategoriesPage() {
 
   // Fetch a single category's data (for editing/deleting)
   const fetchCategoryData = async (categoryId) => {
+    setSelectedCategory(null);
     try {
       const response = await fetch(`/api/category/${categoryId}`);
       if (!response.ok) {

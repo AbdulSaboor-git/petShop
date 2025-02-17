@@ -87,6 +87,7 @@ export default function ManageBreedsPage() {
 
   // Fetch a single breed's data
   const fetchBreedData = async (breedId) => {
+    setSelectedBreed(null);
     try {
       const response = await fetch(`/api/breed/${breedId}`);
       if (!response.ok) {
