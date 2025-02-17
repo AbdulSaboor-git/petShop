@@ -63,7 +63,7 @@ function LoginForm() {
   };
 
   return (
-    <div className=" backdrop-blur-lg bg-[#0000002c] shadow-lg drop-shadow rounded-xl p-8 w-full max-w-[300px] ">
+    <div className=" backdrop-blur-[8px] bg-[#00000067] shadow-lg rounded-xl p-8 w-full max-w-[300px] ">
       <div className=" flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Login

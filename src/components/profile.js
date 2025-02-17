@@ -28,7 +28,7 @@ function Profile() {
   };
 
   return (
-    <div className=" backdrop-blur-lg bg-[#0000002c] shadow-lg drop-shadow rounded-xl p-8 w-full max-w-[300px] ">
+    <div className=" backdrop-blur-[8px] bg-[#00000067] shadow-lg  rounded-xl p-8 w-full max-w-[300px] ">
       <div className="w-full flex flex-col gap-3 items-center justify-center text-white">
         <div className="flex flex-col gap-1 items-center justify-center">
           <img
