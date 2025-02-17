@@ -43,11 +43,11 @@ export default function ItemPage({ params }) {
       const params = new URLSearchParams(window.location.search);
       let contactSellerParam = params.get("cs");
 
-      if (contactSellerParam && contactSellerParam != "undefined") {
-        setContactSeller(true);
+      if (contactSellerParam && contactSellerParam != "undefined" && !loading) {
+        handleContactSeller();
       }
     }
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     if (!itemId) {
@@ -147,7 +147,7 @@ export default function ItemPage({ params }) {
   const handleContactSeller = () => {
     setContactSeller(true);
     setTimeout(() => {
-      const offset = 20;
+      const offset = 0;
       const elementPosition = sendOrderRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
@@ -362,37 +362,33 @@ export default function ItemPage({ params }) {
               </div>
             </div>
             <div className="text-sm md:text-base">{item.description}</div>
+            <div className="w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl flex gap-3 items-center justify-start">
+              <img
+                src={
+                  item.seller.profilePicture
+                    ? item.seller.profilePicture
+                    : defaultPic
+                }
+                alt="seller img"
+                draggable="false"
+                className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
+              />
+              <div className="font-bold text-sm md:text-base">
+                {item.seller.firstName} {item.seller.lastName}
+              </div>
+            </div>
             <div
               ref={sendOrderRef}
-              className="w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl"
+              className={`flex items-center justify-center ${
+                contactSeller
+                  ? "opacity-100 h-full py-5 mt-2"
+                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
+              } transition-all duration-500`}
             >
-              <div className=" flex gap-3 items-center justify-start">
-                <img
-                  src={
-                    item.seller.profilePicture
-                      ? item.seller.profilePicture
-                      : defaultPic
-                  }
-                  alt="seller img"
-                  draggable="false"
-                  className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
-                />
-                <div className="font-bold text-sm md:text-base">
-                  {item.seller.firstName} {item.seller.lastName}
-                </div>
-              </div>
-              <div
-                className={`flex items-center justify-center ${
-                  contactSeller
-                    ? "opacity-100 h-full py-5 mt-2"
-                    : "opacity-0 h-0 scale-y-105 pointer-events-none"
-                } transition-all duration-500`}
-              >
-                <Order
-                  item={item}
-                  closeOrderPage={() => setContactSeller(false)}
-                />
-              </div>
+              <Order
+                item={item}
+                closeOrderPage={() => setContactSeller(false)}
+              />
             </div>
             {/* bought together Items Section */}
             {boughtTogetherItems.length != 0 && (

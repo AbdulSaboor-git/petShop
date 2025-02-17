@@ -97,7 +97,7 @@ export default function Header() {
 
   const topBtns = [
     {
-      name: "Favourites",
+      name: "Favorites",
       icon: <MdFavorite />,
       onClick: favClick,
     },
@@ -105,7 +105,7 @@ export default function Header() {
 
   !logedIn &&
     topBtns.push({
-      name: "Seller Login",
+      name: "Login",
       icon: <FaUser size={9.5} />,
       onClick: loginClick,
     });

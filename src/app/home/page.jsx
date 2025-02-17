@@ -170,7 +170,7 @@ export default function HomePage() {
 
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: randomItems.length > 1 ? true : false,
     speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
