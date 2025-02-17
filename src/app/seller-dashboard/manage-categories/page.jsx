@@ -16,6 +16,7 @@ export default function ManageCategoriesPage() {
   const [deleteCategory, setDeleteCategory] = useState(false);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categoryLoading, setCategoryLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -60,7 +61,7 @@ export default function ManageCategoriesPage() {
 
   // Fetch a single category's data (for editing/deleting)
   const fetchCategoryData = async (categoryId) => {
-    setSelectedCategory(null);
+    setCategoryLoading(true);
     try {
       const response = await fetch(`/api/category/${categoryId}`);
       if (!response.ok) {
@@ -72,6 +73,8 @@ export default function ManageCategoriesPage() {
     } catch (err) {
       setError(err.message);
       showMessage(err.message, false);
+    } finally {
+      setCategoryLoading(false);
     }
   };
 
@@ -369,7 +372,7 @@ export default function ManageCategoriesPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
-                          disabled={!selectedCategory}
+                          disabled={!selectedCategory || categoryLoading}
                           className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                         >
                           Delete Category

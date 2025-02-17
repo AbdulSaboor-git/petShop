@@ -154,7 +154,6 @@ export default function ManageUsersPage() {
 
   // Fetch a single product's data using the user API.
   const fetchUserData = async (userId) => {
-    setSelectedUser(null);
     setSelectedUserLoading(true);
     try {
       const response = await fetch(`/api/user?userId=${userId}`);
@@ -754,7 +753,9 @@ export default function ManageUsersPage() {
                         <button
                           type="submit"
                           disabled={
-                            !selectedUser || user?.id === selectedUser?.id
+                            !selectedUser ||
+                            user?.id === selectedUser?.id ||
+                            selectedUserLoading
                           }
                           className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                         >

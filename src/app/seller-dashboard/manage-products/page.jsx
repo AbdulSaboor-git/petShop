@@ -184,7 +184,6 @@ export default function ManageProductsPage() {
   // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
     setItemLoading(true);
-    setItem(null);
     try {
       const response = await fetch(`/api/item?productId=${itemId}`);
       if (!response.ok) {
@@ -882,7 +881,7 @@ export default function ManageProductsPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
-                          disabled={!item}
+                          disabled={!item || itemLoading}
                           className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                         >
                           Delete Product

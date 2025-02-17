@@ -16,6 +16,7 @@ export default function ManageBreedsPage() {
   const [deleteBreed, setDeleteBreed] = useState(false);
   const [breeds, setBreeds] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [breedLoading, setBreedLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedBreed, setSelectedBreed] = useState(null);
 
@@ -87,7 +88,7 @@ export default function ManageBreedsPage() {
 
   // Fetch a single breed's data
   const fetchBreedData = async (breedId) => {
-    setSelectedBreed(null);
+    setBreedLoading(true);
     try {
       const response = await fetch(`/api/breed/${breedId}`);
       if (!response.ok) {
@@ -99,6 +100,8 @@ export default function ManageBreedsPage() {
     } catch (err) {
       setError(err.message);
       showMessage(err.message, false);
+    } finally {
+      setBreedLoading(false);
     }
   };
 
@@ -360,7 +363,7 @@ export default function ManageBreedsPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
-                          disabled={!selectedBreed}
+                          disabled={!selectedBreed || breedLoading}
                           className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                         >
                           Delete Category
