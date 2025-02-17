@@ -165,7 +165,7 @@ export default function Favourites() {
               key={group.seller.id}
               className="flex flex-col items-center w-full justify-center gap-2 bg-gray-100 p-2 py-4 rounded-lg"
             >
-              <div className="flex w-full items-center justify-between px-2">
+              <div className="flex w-full items-center justify-between px-1.5">
                 <div className="flex items-center justify-center gap-4 px-3">
                   {/* Select All checkbox */}
                   <input

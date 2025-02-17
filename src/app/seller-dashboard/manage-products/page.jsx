@@ -55,7 +55,7 @@ export default function ManageProductsPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       let functionParam = params.get("function");
-      let idParam = params.get("id");
+      let idParam = params.get("id") || "undefined";
       let ID = parseInt(idParam, 10);
 
       if (functionParam && functionParam != "undefined") {

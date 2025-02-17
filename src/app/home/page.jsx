@@ -1,7 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import { MdArrowForward, MdCall, MdDiscount, MdMessage } from "react-icons/md";
+import {
+  MdAdd,
+  MdArrowForward,
+  MdCall,
+  MdDiscount,
+  MdMessage,
+} from "react-icons/md";
 import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import { FaHeart, FaShieldAlt } from "react-icons/fa";
@@ -10,6 +16,7 @@ import Footer from "@/components/footer";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
+import useAuthUser from "@/hooks/authUser";
 
 export default function HomePage() {
   const router = useRouter();
@@ -24,6 +31,7 @@ export default function HomePage() {
   const [favorites, setFavorites] = useState([]);
   const [error, setError] = useState(null);
   const [nameHover, setNameHover] = useState(false);
+  const { user, userLoading, logout } = useAuthUser();
 
   const defaultPic = "https://i.sstatic.net/5ykYD.png";
   let categImages = [];
@@ -38,6 +46,10 @@ export default function HomePage() {
       })
     );
   };
+
+  function handleAddClick() {
+    router.push(`seller-dashboard/manage-products?function=add`);
+  }
 
   function shopClick(categFilter, breedFilter, saleFilter, sortFilter) {
     router.push(
@@ -227,6 +239,17 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="flex flex-col gap-20 -mt-5 md:-mt-0">
+            {/*Add item btn */}
+            {user && (
+              <button
+                onClick={handleAddClick}
+                className="text-white text-xl md:text-2xl flex items-center justify-center fixed bottom-5 right-5 
+              bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] hover:bg-gradient-radial 
+              h-10 md:h-12 aspect-square rounded-full z-50 shadow-md shadow-[#0000003e]"
+              >
+                <MdAdd />
+              </button>
+            )}
             {/* Random Items Slider */}
             <Slider {...settings} className="">
               {randomItems.map((item, index) => (

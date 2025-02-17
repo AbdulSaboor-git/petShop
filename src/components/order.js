@@ -33,7 +33,7 @@ export default function Order({ items, closeOrderPage }) {
 
   const validateContact = (value) => {
     if (value.trim().length < 11) {
-      setContactError("Contact number must be at least 11 digits.");
+      setContactError("Contact number must be 11 digits.");
     } else {
       setContactError("");
     }
@@ -58,7 +58,7 @@ export default function Order({ items, closeOrderPage }) {
           ? `Price: Rs. ${item.discountedPrice} (Discounted from Rs. ${item.price})`
           : `Price: Rs. ${item.price}`;
         const productLink = `${window.location.origin}/item/${item.id}`;
-        return `Item ID: ${item.id}
+        return `    Item ID: ${item.id}
     Item Name: ${item.name}
     ${priceText}
     Product Link: ${productLink}`;
@@ -74,7 +74,7 @@ export default function Order({ items, closeOrderPage }) {
       items.length > 1 ? "s" : ""
     }:
     
-    ${productDetails}
+${productDetails}
     
     Customer Details:
     Name: ${customerName}
@@ -135,13 +135,13 @@ export default function Order({ items, closeOrderPage }) {
 
   return (
     <div className="w-full max-w-[500px]">
-      {items.length != 0 && (
+      {items?.length != 0 && (
         <div className="flex w-full flex-col text-xs md:text-sm gap-4 self-center p-5 py-10 rounded-xl border bg-gray-50 text-gray-700 text-center shadow-md">
           <h2 className="text-base md:text-lg font-bold">
-            Product{items.length > 1 && "s"} Inquiry
+            Product{items?.length > 1 && "s"} Inquiry
           </h2>
           <div className="flex flex-col items-center justify-center gap-2">
-            {items.map((item, i) => (
+            {items?.map((item, i) => (
               <div
                 key={i}
                 className="flex gap-4 items-center w-full border bg-gray-100 p-2 rounded-lg md:min-w-[400px]"
@@ -179,7 +179,7 @@ export default function Order({ items, closeOrderPage }) {
               minLength={2}
             />
             {nameError && (
-              <p className="text-red-600 text-xs mt-1">{nameError}</p>
+              <p className="text-red-600 text-xs mt-1 text-left">{nameError}</p>
             )}
             <input
               type="text"
@@ -195,10 +195,12 @@ export default function Order({ items, closeOrderPage }) {
               minLength={6}
             />
             {addressError && (
-              <p className="text-red-600 text-xs mt-1">{addressError}</p>
+              <p className="text-red-600 text-xs mt-1 text-left">
+                {addressError}
+              </p>
             )}
             <input
-              type="number"
+              type="text"
               placeholder="Contact Number (03001234567)"
               value={customerContact}
               onChange={(e) => {
@@ -206,12 +208,15 @@ export default function Order({ items, closeOrderPage }) {
                 validateContact(e.target.value);
               }}
               onBlur={(e) => validateContact(e.target.value)}
-              className="p-2 no-spinner border rounded focus:outline-none"
+              className="p-2  border rounded focus:outline-none"
               required
               minLength={11}
+              maxLength={11}
             />
             {contactError && (
-              <p className="text-red-600 text-xs mt-1">{contactError}</p>
+              <p className="text-red-600 text-xs mt-1 text-left">
+                {contactError}
+              </p>
             )}
             <input
               type="email"

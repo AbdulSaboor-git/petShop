@@ -4,6 +4,7 @@ import { FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
 import {
   MdAccountBox,
   MdAccountCircle,
+  MdArrowBack,
   MdDashboard,
   MdFavorite,
   MdHome,
@@ -44,10 +45,10 @@ export default function Header() {
     setShowAcc((prev) => !prev);
   };
 
-  const contact = {
-    phone: "(+92) 321 855 9574",
-    email: "petshop@gmail.com",
-  };
+  // const contact = {
+  //   phone: "(+92) 321 855 9574",
+  //   email: "petshop@gmail.com",
+  // };
 
   const router = useRouter();
 
@@ -143,116 +144,44 @@ export default function Header() {
       {showAcc && (
         <div onClick={toggleShowAcc} className={`fixed z-10 h-full w-full `} />
       )}
-      <div className="relative flex justify-center items-center">
-        {/* {(user || Buttons) && (
-          <div>
-            <div className={`absolute left-4 mt-5 md:hidden`}>
-              <button
-                edge="start"
-                aria-label="menu"
-                onClick={openSidebar}
-                className="text-[var(--btn-icons)] hover:text-[var(--btn-icons-sec)]"
-              >
-                <Menu></Menu>
-              </button>
-            </div>
-            <div
-              className={`z-20 md:hidden fixed h-full top-0 left-[-10px] w-[230px] rounded-e-[30px] sidebar bg-[var(--background-prim)] text-[var(--text-prim)] border-r  border-gray-300 transition-transform duration-300 ease-in-out ${
-                isOpen ? "translate-x-0" : "-translate-x-[240px]"
-              }`}
-              style={{ boxShadow: "0 0 20px -5px #404040" }}
-            >
-              <button
-                onClick={closeSidebar}
-                className="absolute top-4 right-4 text-[var(--text-sec)]"
-              >
-                <MdClose style={{ fontSize: "1rem" }} />
-              </button>
-
-              <div className="flex flex-col items-start py-6">
-                <div className="cursor-pointer flex flex-col justify-center items-center  font-[500] text-[12px] gap-1 ml-6">
-                  <img
-                    className="w-[60px] h-[60px] object-cover hover:scale-[1.03] transition-all rounded-full"
-                    src={defaultProfilePictureLink}
-                    alt="avatar"
-                  />
-                  <p className="max-w-[120px] max-h-[40px] overflow-hidden text-[var(--text-sec)]">
-                    username
-                  </p>
-                </div>
-                <div className="flex flex-col w-full">
-                  <div className="flex flex-col pt-8">
-                    {Buttons.map((btn, index) => (
-                      <button
-                        onClick={btn.clickEvent}
-                        className={`w-full justify-start hover:bg-[var(--text-alt-2)]  text-[var(--text-prim)] ${
-                          btn.btn_name === "Logout" &&
-                          "text-[#fc6060] font-semibold"
-                        } text-[11px] px-6 py-[10px]`}
-                        key={index}
-                      >
-                        <div className="flex gap-3 items-center ">
-                          <div className="mb-0.5">{btn.icon}</div>
-                          {btn.btn_name}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex flex-col absolute w-[190px] bottom-2 gap-1.5  ml-6">
-                    <hr className="h-[1px] border-none bg-[#afafaf99]" />
-                    <div className="flex justify-center w-[190px] text-[12px] px-2">
-                      <img className="h-[40px]" src={logoLink} alt="logo" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )} */}
-
-        <div
-          // onClick={closeSidebar}
-          className="flex flex-col relative justify-center w-full items-center "
-        >
+      <div className="relative flex justify-center items-center w-full">
+        <div className="flex flex-col relative justify-center w-full items-center ">
           <div className="flex flex-col gap-3 w-full items-center justify-center z-0">
-            <div className="w-full flex flex-col bg-[#9e6e3b]">
-              <div className="flex gap-2 text-xs justify-center items-center w-full p-1.5 px-5 bg-orange-950 text-white">
-                <MdStar color="#ff0" size={15} /> Special Discounts!
+            <div className="flex flex-col w-full">
+              <div
+                className="flex gap-3 md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end 
+              bg-gradient-to-b  from-[#6e4519] via-[#9e6e3b] to-transparent p-5 pt-7 pb-14 z-10"
+              >
+                {topBtns.map((btn, i) => (
+                  <button
+                    key={i}
+                    className="text-white flex items-center text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
+                    onClick={btn.onClick}
+                  >
+                    <div className="mb-0.5">{btn.icon}</div>
+                    {btn.name}
+                  </button>
+                ))}
               </div>
-              <div className="flex self-center gap-5 text-[11px] lg:text-xs justify-center lg:justify-between items-center w-full p-2 lg:p-1 lg:px-4 max-w-[1300px] text-white ">
-                <div className="hidden lg:flex items-center gap-6 font-medium text-[10px]">
-                  <div className="flex gap-2 cursor-pointer items-center hover:text-[#fbe4bf]">
-                    <FaPhone className="mb-0.5" />
-                    {contact.phone}
-                  </div>
-                  <div className="flex gap-2 cursor-pointer items-center hover:text-[#fbe4bf]">
-                    <FaEnvelope className="mb-0.5" />
-                    {contact.email}
-                  </div>
-                </div>
-                <div className="flex gap-3 md:gap-6 flex-wrap items-center justify-center">
-                  {topBtns.map((btn, i) => (
-                    <button
-                      key={i}
-                      className="text-white flex items-center text-[11px] md:text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
-                      onClick={btn.onClick}
-                    >
-                      <div className="mb-0.5">{btn.icon}</div>
-                      {btn.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* <div className="w-full -mt-2 h-14 bg-gradient-to-b from-[#6e4519] via-[#6e4519] to-transparent pointer-events-none"/> */}
             </div>
-            <Image
-              src={logoLink}
-              alt={"logo"}
-              width={550}
-              height={550}
-              quality={100}
-              className={`w-auto h-[70px] md:h-[50px] transition-all ease-in-out "
-                  `}
-            />
+            <div className="relative w-full flex items-center justify-center">
+              <Image
+                src={logoLink}
+                alt={"logo"}
+                width={550}
+                height={550}
+                quality={100}
+                className={`w-auto h-[70px] md:h-[50px] transition-all ease-in-out "
+                `}
+              />
+              <button
+                className="absolute left-6 lg:hidden text-white bg-gradient-to-br hover:bg-gradient-radial from-[#9e6e3b] via-[#9e6e3b] to-[#6e4519] p-1 px-4 rounded-xl"
+                onClick={() => window.history.back()}
+              >
+                <MdArrowBack />
+              </button>
+            </div>
             <div className="flex gap-2 md:gap-3 ">
               {Buttons.map((btn, i) => (
                 <button
