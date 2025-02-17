@@ -150,7 +150,7 @@ export default function Header() {
             <div className="w-full h-4 bg-[#0b0827] hidden lg:block"></div>
             <div
               className="flex relative gap-3 md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end 
-              bg-gradient-to-b  from-[#5f3d19] via-[#9e6e3b] to-transparent p-5 px-2 md:px-5 pt-7 pb-14 z-10"
+              bg-gradient-to-b  from-[#5f3d19] via-[#9e6e3b] to-transparent p-5 px-2 md:px-5 pb-14 z-10"
             >
               {topBtns.map((btn, i) => (
                 <button
