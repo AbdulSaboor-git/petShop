@@ -24,7 +24,11 @@ export default function Footer() {
       <div className="flex flex-col justify-center w-full max-w-[1200px]">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 justify-center md:justify-evenly items-center md:items-end w-full p-4 px-2 md:px-6 ">
           <div className="flex flex-col items-center justify-center md:pb-3">
-            <img src={logoLink} alt="logo" className="h-[50px] md:h-[70px]" />
+            <img
+              src={logoLink}
+              alt="logo"
+              className="h-[60px] md:h-[90px] rounded-full"
+            />
           </div>
           <div className="flex flex-col min-w-[90%] md:min-w-fit md:w-auto justify-center gap-4 text-[var(--text-prim)] text-[12px] md:text-[14px] ">
             <div className="flex gap-6 md:gap-32 justify-center">

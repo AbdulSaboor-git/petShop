@@ -120,11 +120,19 @@ export default function HomePage() {
   }, []);
 
   const mostValuedItems = allItems
-    .sort((a, b) => b.price - a.price)
+    .sort(
+      (a, b) =>
+        (b.isDiscounted ? b.discountedPrice : b.price) -
+        (a.isDiscounted ? a.discountedPrice : a.price)
+    )
     .slice(0, 5);
 
   const mostAffordableItems = allItems
-    .sort((a, b) => a.price - b.price)
+    .sort(
+      (a, b) =>
+        (a.isDiscounted ? a.discountedPrice : a.price) -
+        (b.isDiscounted ? b.discountedPrice : b.price)
+    )
     .slice(0, 5);
 
   useEffect(() => {
