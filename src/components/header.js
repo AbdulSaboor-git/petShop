@@ -103,7 +103,7 @@ export default function Header() {
 
   logedIn &&
     topBtns.push({
-      name: `${user?.role === "ADMIN" ? "Me" : "My Account"}`,
+      name: `${user ? "Me" : "My Account"}`,
       icon: <MdAccountCircle size={16} />,
       onClick: accountClick,
     });
@@ -153,12 +153,14 @@ export default function Header() {
             <div className="w-full h-4 bg-[#0b0827] hidden lg:block"></div>
             <div className=" relative w-full bg-gradient-to-b  from-[#69461e] via-[#c7802fc5] to-transparent pb-32 lg:pb-12 z-10">
               <div
-                className={`bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 flex gap-4  md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end`}
+                className={`bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 flex ${
+                  user?.role === "ADMIN" ? "gap-3 text-[11px]" : "gap-4 text-xs"
+                }  md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end`}
               >
                 {topBtns.map((btn, i) => (
                   <button
                     key={i}
-                    className="text-white flex items-center text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
+                    className="text-white flex items-center justify-center gap-1.5  hover:text-[#fbe4bf] "
                     onClick={btn.onClick}
                   >
                     <div className="mb-0.5">{btn.icon}</div>
