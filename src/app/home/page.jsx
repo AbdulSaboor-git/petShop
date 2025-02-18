@@ -245,7 +245,7 @@ export default function HomePage() {
                 onClick={handleAddClick}
                 className="text-white text-xl md:text-2xl flex items-center justify-center fixed bottom-5 right-5 
               bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] hover:bg-gradient-radial 
-              h-10 md:h-12 aspect-square rounded-full z-50 shadow-md shadow-[#0000003e]"
+              h-12 md:h-14 aspect-square rounded-full z-50 shadow-md shadow-[#0000003e]"
               >
                 <MdAdd />
               </button>
