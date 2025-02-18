@@ -12,6 +12,7 @@ import {
   MdPhone,
   MdShop,
   MdStar,
+  MdStore,
 } from "react-icons/md";
 
 import Image from "next/image";
@@ -83,32 +84,28 @@ export default function Header() {
 
   const Buttons = [
     { btn_name: "Home", icon: <MdHome size={18} />, clickEvent: homeClick },
-    { btn_name: "Shop", icon: <MdShop size={18} />, clickEvent: shopClick },
+    { btn_name: "Shop", icon: <MdStore size={18} />, clickEvent: shopClick },
     {
-      btn_name: "Contact",
-      icon: <MdPhone size={18} />,
-      clickEvent: contactClick,
-    },
-    {
-      btn_name: "About Us",
-      icon: <MdInfo size={18} />,
-      clickEvent: aboutClick,
+      btn_name: "Favorites",
+      icon: <MdFavorite size={18} className="text-red-500" />,
+      clickEvent: favClick,
     },
   ];
 
-  const topBtns = [
-    {
-      name: "Favorites",
-      icon: <MdFavorite />,
-      onClick: favClick,
-    },
-  ];
+  const topBtns = [];
 
   !logedIn &&
     topBtns.push({
       name: "Login",
       icon: <FaUser size={9.5} />,
       onClick: loginClick,
+    });
+
+  logedIn &&
+    topBtns.push({
+      name: `${user?.role === "ADMIN" ? "Me" : "My Account"}`,
+      icon: <MdAccountCircle size={16} />,
+      onClick: accountClick,
     });
 
   logedIn &&
@@ -121,17 +118,23 @@ export default function Header() {
 
   logedIn &&
     topBtns.push({
-      name: `${user?.role === "ADMIN" ? "Seller" : "Seller Dashboard"}`,
+      name: `${user ? "Seller" : "Seller Dashboard"}`,
       icon: <MdDashboard />,
       onClick: sellerDBClick,
     });
 
-  logedIn &&
-    topBtns.push({
-      name: "My Account",
-      icon: <MdAccountCircle size={16} />,
-      onClick: accountClick,
-    });
+  topBtns.push(
+    {
+      name: `${user ? "Contact" : "Contact Us"}`,
+      icon: <MdPhone size={13} />,
+      onClick: contactClick,
+    },
+    {
+      name: `${user?.role === "ADMIN" ? "About" : "About Us"}`,
+      icon: <MdInfo size={13} />,
+      onClick: aboutClick,
+    }
+  );
 
   return (
     <div className="w-full z-50">
@@ -148,20 +151,21 @@ export default function Header() {
         <div className="flex flex-col relative justify-center w-full items-center ">
           <div className="flex flex-col gap-0 w-full items-center justify-center z-0">
             <div className="w-full h-4 bg-[#0b0827] hidden lg:block"></div>
-            <div
-              className="flex relative gap-3 md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end 
-              bg-gradient-to-b  from-[#69461e] via-[#c7802fc5] to-transparent p-5 pb-32 md:pb-12 z-10"
-            >
-              {topBtns.map((btn, i) => (
-                <button
-                  key={i}
-                  className="text-white flex items-center text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
-                  onClick={btn.onClick}
-                >
-                  <div className="mb-0.5">{btn.icon}</div>
-                  {btn.name}
-                </button>
-              ))}
+            <div className=" relative w-full bg-gradient-to-b  from-[#69461e] via-[#c7802fc5] to-transparent pb-32 lg:pb-12 z-10">
+              <div
+                className={`bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 flex gap-4  md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end`}
+              >
+                {topBtns.map((btn, i) => (
+                  <button
+                    key={i}
+                    className="text-white flex items-center text-xs justify-center gap-1.5  hover:text-[#fbe4bf] "
+                    onClick={btn.onClick}
+                  >
+                    <div className="mb-0.5">{btn.icon}</div>
+                    {btn.name}
+                  </button>
+                ))}
+              </div>
               <div className="items-center justify-center hidden lg:flex absolute -top-1 left-4 bg-[#0b0827] p-6 rounded-b-full">
                 <Image
                   src={logoLink}
@@ -174,8 +178,8 @@ export default function Header() {
                 />
               </div>
             </div>
-            <div className=" w-full flex flex-col items-center justify-center gap-4 lg:mt-3 z-10">
-              <div className="w-full relative flex items-center justify-center -mt-[104px] lg:hidden">
+            <div className=" w-full flex flex-col items-center justify-center gap-5 lg:mt-3 z-10">
+              <div className="w-full relative flex items-center justify-center -mt-[100px] lg:hidden">
                 <Image
                   src={logoLink}
                   alt={"logo"}
@@ -186,7 +190,7 @@ export default function Header() {
                   `}
                 />
                 <button
-                  className="absolute left-6 text-white bg-gradient-to-br hover:bg-gradient-radial from-[#9e6e3b] via-[#9e6e3b] to-[#6e4519] p-1 px-4 rounded-xl"
+                  className="absolute left-6 text-white bg-gradient-to-br hover:bg-gradient-radial to-[#442b0f] via-[#5d3c17] from-[#906434] p-1 px-4 rounded-xl"
                   onClick={() => window.history.back()}
                 >
                   <MdArrowBack />
@@ -196,9 +200,10 @@ export default function Header() {
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
-                    className="py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[var(--btn-bg-sec)] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
+                    className="flex gap-2 items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[#4e3212] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
                     onClick={btn.clickEvent}
                   >
+                    {btn.icon}
                     {btn.btn_name}
                   </button>
                 ))}
@@ -206,7 +211,7 @@ export default function Header() {
             </div>
           </div>
           {showAcc && (
-            <div className="absolute top-24 rounded-xl z-20  md:top-16 lg:right-5">
+            <div className="absolute top-24 rounded-xl z-20  md:top-16 lg:right-24">
               <Profile />
             </div>
           )}
