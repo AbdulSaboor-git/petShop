@@ -31,7 +31,7 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
           className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"
         />
         <button
-          className="absolute bottom-1 right-1 text-white p-1 rounded-full bg-gradient-to-br  from-orange-500 via-orange-500 to-orange-700 hover:bg-gradient-radial text-base drop-shadow-sm"
+          className="absolute bottom-1 right-1 text-white p-1 rounded-full bg-gradient-to-br  from-orange-500 via-orange-500 to-orange-700 hover:bg-gradient-radial text-xl drop-shadow-sm"
           onClick={(e) => {
             e.stopPropagation(); // Prevent the click from bubbling up
             favClick(); // Execute the favorite toggle logic

@@ -53,7 +53,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
             {name}
           </p>
           <button
-            className="text-orange-500 rounded-full text-lg"
+            className="text-orange-500 rounded-full text-xl"
             onClick={(e) => {
               e.stopPropagation(); // Prevent the click from bubbling up
               favClick(); // Execute the favorite toggle logic
