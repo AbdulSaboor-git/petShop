@@ -150,7 +150,7 @@ export default function Header() {
             <div className="w-full h-4 bg-[#0b0827] hidden lg:block"></div>
             <div
               className="flex relative gap-3 md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end 
-              bg-gradient-to-b  from-[#66431c] via-[#66431cbf] to-transparent p-5 pb-14 z-10"
+              bg-gradient-to-b  from-[#69461e] via-[#c7802fc5] to-transparent p-5 pb-32 md:pb-12 z-10"
             >
               {topBtns.map((btn, i) => (
                 <button
@@ -174,8 +174,8 @@ export default function Header() {
                 />
               </div>
             </div>
-            <div className=" w-full flex flex-col items-center justify-center gap-4 lg:mt-3">
-              <div className="w-full relative flex items-center justify-center -mt-8 lg:hidden">
+            <div className=" w-full flex flex-col items-center justify-center gap-4 lg:mt-3 z-10">
+              <div className="w-full relative flex items-center justify-center -mt-[104px] lg:hidden">
                 <Image
                   src={logoLink}
                   alt={"logo"}
