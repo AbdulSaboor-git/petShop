@@ -137,7 +137,7 @@ export default function Header() {
   );
 
   return (
-    <div className="w-full z-50">
+    <div className="w-full z-50 sticky -top-[152px] md:relative md:top-0">
       {showLoginForm && (
         <div
           onClick={toggleShowLoginForm}
@@ -179,8 +179,8 @@ export default function Header() {
                 />
               </div>
             </div>
-            <div className=" w-full flex flex-col items-center justify-center gap-5 lg:mt-3 z-10">
-              <div className="w-full relative flex items-center justify-center -mt-[100px] lg:hidden">
+            <div className=" w-full relative flex flex-col items-center justify-center gap-2.5 lg:mt-3 z-10">
+              <div className="w-full  flex items-center justify-center -mt-[100px] lg:hidden">
                 <Image
                   src={logoLink}
                   alt={"logo"}
@@ -197,11 +197,11 @@ export default function Header() {
                   <MdArrowBack />
                 </button>
               </div>
-              <div className="flex gap-2 md:gap-3 ">
+              <div className="flex gap-2 md:gap-3 items-center justify-center w-full bg-[#ffffff10] backdrop-blur-md md:bg-transparent py-2">
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
-                    className="flex gap-2 items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[#61401c] hover:shadow-sm hover:shadow-[#61401c]"
+                    className="flex gap-2 bg-white items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[#61401c] hover:shadow-sm hover:shadow-[#61401c]"
                     onClick={btn.clickEvent}
                   >
                     {btn.icon}
