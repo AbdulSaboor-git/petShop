@@ -26,6 +26,11 @@ function LoginForm() {
     );
   };
 
+  function resetForm() {
+    setEmail("");
+    setPassword("");
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const input = email.toLowerCase();
@@ -49,6 +54,7 @@ function LoginForm() {
       // Handle successful login (e.g., store token, user info, redirect user)
       // Set the cookies
       showMessage("Successfully loged in", true);
+      resetForm();
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -63,7 +69,7 @@ function LoginForm() {
   };
 
   return (
-    <div className=" backdrop-blur-[8px] bg-[#00000067] shadow-lg rounded-xl p-8 w-full max-w-[300px] ">
+    <div className=" bg-[#140a024e] shadow-lg rounded-xl p-8 w-full max-w-[300px] ">
       <div className=" flex flex-col items-center justify-center">
         <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Login

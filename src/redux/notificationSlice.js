@@ -16,7 +16,7 @@ const notificationSlice = createSlice({
     hideNotification: (state) => {
       state.isVisible = false;
       state.msg = "";
-      state.success = false;
+      // state.success = true;
     },
   },
 });

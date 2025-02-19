@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FaEnvelope, FaPhone, FaUser } from "react-icons/fa";
 import {
   MdAccountBox,
@@ -14,7 +14,6 @@ import {
   MdStar,
   MdStore,
 } from "react-icons/md";
-
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LoginForm from "./loginForm";
@@ -27,6 +26,14 @@ export default function Header() {
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [showAcc, setShowAcc] = useState(false);
 
+  // New states to control mounting and animation classes for popups
+  const [loginMounted, setLoginMounted] = useState(false);
+  const [loginAnimClass, setLoginAnimClass] = useState("");
+  const [profileMounted, setProfileMounted] = useState(false);
+  const [profileAnimClass, setProfileAnimClass] = useState("");
+
+  const router = useRouter();
+
   useEffect(() => {
     if (user) setLogedIn(true);
     else {
@@ -35,6 +42,36 @@ export default function Header() {
     }
     setShowLoginForm(false);
   }, [user]);
+
+  // Manage mounting and animation for LoginForm
+  useEffect(() => {
+    if (showLoginForm) {
+      // When opening, mount and play open animation
+      setLoginMounted(true);
+      setLoginAnimClass("animate-openLoginPopUp");
+    } else if (loginMounted) {
+      // When closing, play close animation then unmount
+      setLoginAnimClass("animate-closeLoginPopUp");
+      const timer = setTimeout(() => {
+        setLoginMounted(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [showLoginForm]);
+
+  // Manage mounting and animation for Profile popup
+  useEffect(() => {
+    if (showAcc) {
+      setProfileMounted(true);
+      setProfileAnimClass("animate-openAccPopUp");
+    } else if (profileMounted) {
+      setProfileAnimClass("animate-closeAccPopUp");
+      const timer = setTimeout(() => {
+        setProfileMounted(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [showAcc]);
 
   const logoLink = "/logo.jpg";
 
@@ -45,13 +82,6 @@ export default function Header() {
   const toggleShowAcc = () => {
     setShowAcc((prev) => !prev);
   };
-
-  // const contact = {
-  //   phone: "(+92) 321 855 9574",
-  //   email: "petshop@gmail.com",
-  // };
-
-  const router = useRouter();
 
   function homeClick() {
     router.push("/home");
@@ -65,7 +95,6 @@ export default function Header() {
   function aboutClick() {
     router.push("/about-us");
   }
-
   function favClick() {
     router.push("/favorites");
   }
@@ -94,43 +123,42 @@ export default function Header() {
 
   const topBtns = [];
 
-  !logedIn &&
+  if (!logedIn)
     topBtns.push({
       name: "Login",
       icon: <FaUser size={9.5} />,
       onClick: loginClick,
     });
 
-  logedIn &&
+  if (logedIn)
     topBtns.push({
-      name: `${user ? "Me" : "My Account"}`,
+      name: user ? "Me" : "My Account",
       icon: <MdAccountCircle size={16} />,
       onClick: accountClick,
     });
 
-  logedIn &&
-    user?.role == "ADMIN" &&
+  if (logedIn && user?.role === "ADMIN")
     topBtns.push({
-      name: `Admin`,
+      name: "Admin",
       icon: <MdDashboard />,
       onClick: adminDBClick,
     });
 
-  logedIn &&
+  if (logedIn)
     topBtns.push({
-      name: `${user ? "Seller" : "Seller Dashboard"}`,
+      name: user ? "Seller" : "Seller Dashboard",
       icon: <MdDashboard />,
       onClick: sellerDBClick,
     });
 
   topBtns.push(
     {
-      name: `${user ? "Contact" : "Contact Us"}`,
+      name: user ? "Contact" : "Contact Us",
       icon: <MdPhone size={13} />,
       onClick: contactClick,
     },
     {
-      name: `${user?.role === "ADMIN" ? "About" : "About Us"}`,
+      name: user?.role === "ADMIN" ? "About" : "About Us",
       icon: <MdInfo size={13} />,
       onClick: aboutClick,
     }
@@ -141,25 +169,25 @@ export default function Header() {
       {showLoginForm && (
         <div
           onClick={toggleShowLoginForm}
-          className={`fixed z-10 h-full w-full `}
+          className="fixed z-10 h-full w-full"
         />
       )}
       {showAcc && (
-        <div onClick={toggleShowAcc} className={`fixed z-10 h-full w-full `} />
+        <div onClick={toggleShowAcc} className="fixed z-10 h-full w-full" />
       )}
       <div className="relative flex justify-center items-center w-full">
-        <div className="flex flex-col relative justify-center w-full items-center ">
+        <div className="flex flex-col relative justify-center w-full items-center">
           <div className="flex flex-col gap-0 w-full items-center justify-center z-0">
-            <div className=" relative w-full bg-gradient-to-b  from-[#69461e] via-[#c7802fc5] to-transparent pb-32 lg:pb-12 z-10">
+            <div className="relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent pb-32 lg:pb-12 z-10">
               <div
-                className={`bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 lg:px-10 lg:p-3 lg:text-xs flex ${
+                className={`bg-gradient-to-br to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 lg:px-10 lg:p-3 lg:text-xs flex ${
                   user?.role === "ADMIN" ? "gap-3 text-[11px]" : "gap-4 text-xs"
-                }  md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end`}
+                } md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end`}
               >
                 {topBtns.map((btn, i) => (
                   <button
                     key={i}
-                    className="text-white flex items-center justify-center gap-1.5  hover:text-[#fbe4bf] "
+                    className="text-white flex items-center justify-center gap-1.5 hover:text-[#fbe4bf]"
                     onClick={btn.onClick}
                   >
                     <div className="mb-0.5">{btn.icon}</div>
@@ -167,28 +195,26 @@ export default function Header() {
                   </button>
                 ))}
               </div>
-              <div className="items-center justify-center hidden lg:flex absolute -top-1 left-4 bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434]  p-6 rounded-b-full">
+              <div className="items-center justify-center hidden lg:flex absolute -top-1 left-4 bg-gradient-to-br to-[#442b0f] via-[#5d3c17] from-[#906434] p-6 rounded-b-full">
                 <Image
                   src={logoLink}
-                  alt={"logo"}
+                  alt="logo"
                   width={550}
                   height={550}
                   quality={100}
-                  className={`w-auto h-[100px] rounded-full transition-all ease-in-out "
-                  `}
+                  className="w-auto h-[100px] rounded-full transition-all ease-in-out"
                 />
               </div>
             </div>
-            <div className=" w-full relative flex flex-col items-center justify-center gap-2.5 lg:mt-3 z-10">
-              <div className="w-full  flex items-center justify-center -mt-[100px] lg:hidden">
+            <div className="w-full relative flex flex-col items-center justify-center gap-2.5 lg:mt-3 z-10">
+              <div className="w-full flex items-center justify-center -mt-[100px] lg:hidden">
                 <Image
                   src={logoLink}
-                  alt={"logo"}
+                  alt="logo"
                   width={550}
                   height={550}
                   quality={100}
-                  className={`w-auto h-[80px] md:h-[100px] rounded-full transition-all ease-in-out "
-                  `}
+                  className="w-auto h-[80px] md:h-[100px] rounded-full transition-all ease-in-out"
                 />
                 <button
                   className="absolute left-6 text-white bg-gradient-to-br hover:bg-gradient-radial to-[#442b0f] via-[#5d3c17] from-[#906434] p-1 px-4 rounded-xl"
@@ -211,13 +237,21 @@ export default function Header() {
               </div>
             </div>
           </div>
-          {showAcc && (
-            <div className="absolute top-12 rounded-xl z-20 lg:right-24">
+          {/* Profile popup */}
+          {profileMounted && (
+            <div
+              className={`absolute backdrop-blur-[8px] top-10 lg:top-12 rounded-xl z-20 lg:right-20 md:mr-10 ${
+                user?.role === "SELLER" && "lg:right-8 md:mr-5"
+              } ${profileAnimClass}`}
+            >
               <Profile />
             </div>
           )}
-          {showLoginForm && (
-            <div className="absolute top-12 rounded-xl z-20  lg:right-5">
+          {/* Login popup */}
+          {loginMounted && (
+            <div
+              className={`absolute backdrop-blur-[8px] top-10 opacity-0 lg:top-12 rounded-xl z-20 lg:right-7 ${loginAnimClass}`}
+            >
               <LoginForm />
             </div>
           )}

@@ -105,17 +105,11 @@ input {
 }
 
 .loader-ring-sm {
-  position: relative;
-  width: 20px;
-  height: 20px;
-}
-
-.inner-ring-sm {
-  position: absolute;
-  border: 4px solid #352416;
-  border-top-color: #6b3a1ac3;
+  border: 4px solid #6b3a1a97;
+  border-style: groove;
+  border-top-color: #825632;
   border-radius: 50%;
-  animation: spin 1.5s linear infinite;
+  animation: spin 1.3s linear infinite;
   width: 20px;
   height: 20px;
 }
@@ -200,64 +194,6 @@ input {
   }
 }
 
-@keyframes slideExpand {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  50% {
-    transform: translateY(0);
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes slideContract {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-
-@keyframes pulseBoxShadow {
-  0%,
-  100% {
-    box-shadow: 0px 0px 3px 0px green;
-  }
-  50% {
-    box-shadow: 0px 0px 10px 1px green;
-  }
-}
-
-@keyframes pulseBoxShadowError {
-  0%,
-  100% {
-    box-shadow: 0px 0px 3px 0px #ff2a2a;
-  }
-  50% {
-    box-shadow: 0px 0px 10px 1px #ff2a2a;
-  }
-}
-
-.animate-slide-expand {
-  animation: slideExpand 1s forwards, pulseBoxShadow 2s infinite;
-}
-.animate-slide-expand-error {
-  animation: slideExpand 1s forwards, pulseBoxShadowError 2s infinite;
-}
-.animate-slide-contract {
-  animation: slideContract 1s backwards;
-}
 
 .hidden {
   display: none;
@@ -303,5 +239,65 @@ input {
 
 .animate-slideUp {
   animation: slideUp 0.3s ease-in forwards;
+}
+
+@keyframes openAccPopUp {
+  from {
+    transform: translateY(-57%) translateX(-45%) scaleZ(0) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0)  translateX(0) scaleZ(1) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes closeAccPopUp {
+  from {
+    transform: translateY(0) translateX(0)   scaleZ(1) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-57%) translateX(-45%)  scaleZ(0) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-openAccPopUp {
+  animation: openAccPopUp 0.3s ease-in forwards;
+}
+
+.animate-closeAccPopUp {
+  animation: closeAccPopUp 0.3s ease-in forwards;
+}
+
+@keyframes openLoginPopUp {
+  from {
+    transform: translateY(-57%) translateX(-35%) scaleZ(0) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0)  translateX(0) scaleZ(1) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes closeLoginPopUp {
+  from {
+    transform: translateY(0) translateX(0)   scaleZ(1) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-57%) translateX(-35%)  scaleZ(0) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-openLoginPopUp {
+  animation: openLoginPopUp 0.3s ease-in  forwards;
+}
+
+.animate-closeLoginPopUp {
+  animation: closeLoginPopUp 0.3s ease-in forwards;
 }
 

@@ -28,36 +28,40 @@ function Profile() {
   };
 
   return (
-    <div className=" backdrop-blur-[8px] bg-[#00000067] shadow-lg  rounded-xl p-8 w-full max-w-[300px] ">
-      <div className="w-full flex flex-col gap-3 items-center justify-center text-white">
-        <div className="flex flex-col gap-1 items-center justify-center">
-          <img
-            className="aspect-square h-20 bg-gray-100 rounded-full "
-            alt={username}
-            src={user?.profilePicture || defaultProfilePictureLink}
-          />
-          <p className="text-lg md:text-xl font-bold text-center text-white">
-            {username}
-          </p>
+    <div className="bg-[#140a024e] shadow-lg  rounded-xl p-8 w-full max-w-[300px] transition-all duration-300 ">
+      {user ? (
+        <div className="w-full flex flex-col gap-3 items-center justify-center text-white transition-all duration-300">
+          <div className="flex flex-col gap-1 items-center justify-center">
+            <img
+              className="aspect-square h-20 bg-gray-100 rounded-full "
+              alt={username}
+              src={user.profilePicture || defaultProfilePictureLink}
+            />
+            <p className="text-lg md:text-xl font-bold text-center text-white">
+              {username}
+            </p>
+          </div>
+          <div className="flex flex-col gap-1 items-start justify-center text-sm">
+            <p>
+              <strong>Email: </strong> {user.email}
+            </p>
+            <p>
+              <strong>Phone Number: </strong> {user.phoneNo}
+            </p>
+            <p>
+              <strong>Role: </strong> {user.role.toLowerCase()}
+            </p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial text-white rounded-lg p-1 px-4"
+          >
+            Logout
+          </button>
         </div>
-        <div className="flex flex-col gap-1 items-start justify-center text-sm">
-          <p>
-            <strong>Email: </strong> {user?.email}
-          </p>
-          <p>
-            <strong>Phone Number: </strong> {user?.phoneNo}
-          </p>
-          <p>
-            <strong>Role: </strong> {user?.role.toLowerCase()}
-          </p>
-        </div>
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 text-white rounded-lg p-1 px-4"
-        >
-          Logout
-        </button>
-      </div>
+      ) : (
+        <div className="h-[225px] w-[225px]"></div>
+      )}
     </div>
   );
 }
