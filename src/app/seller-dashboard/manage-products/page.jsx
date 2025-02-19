@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { FaMinus } from "react-icons/fa";
@@ -7,6 +7,8 @@ import useAuthUser from "@/hooks/authUser";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "@/components/getCroppedImg";
 
 export default function ManageProductsPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -38,8 +40,14 @@ export default function ManageProductsPage() {
   const [age, setAge] = useState("");
   const [availability, setAvailability] = useState("");
   const [images, setImages] = useState([]); // Images state holds an array of URLs
+
   const [uploading, setUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [imageSrc, setImageSrc] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
@@ -103,6 +111,8 @@ export default function ManageProductsPage() {
     setAvailability("");
     setImages([]);
     setItem(null);
+    setImageSrc(null);
+    setShowCropper(false);
   }
 
   // Handlers to switch forms.
@@ -300,34 +310,47 @@ export default function ManageProductsPage() {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageSrc(reader.result);
+      setShowCropper(true);
+    };
+    reader.readAsDataURL(file);
+  };
 
-    setUploading(true);
-    setErrorMsg("");
+  // Called when cropping is complete (the cropped area is determined)
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    // Replace with your unsigned upload preset name
-    formData.append("upload_preset", "RoyalAseelFarms");
-
+  // When the user clicks "Crop", we generate the cropped image and upload it.
+  const handleCropAndUpload = async () => {
     try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/dlthizgza/upload`, // Replace "your_cloud_name" with your actual Cloudinary cloud name.
-        {
-          method: "POST",
-          body: formData,
-        }
+      const croppedImageDataUrl = await getCroppedImg(
+        imageSrc,
+        croppedAreaPixels
       );
-
+      // Now, upload the cropped image data URL to Cloudinary
+      const formData = new FormData();
+      // Cloudinary accepts data URLs if you prefix them with "data:image/jpeg;base64,"
+      formData.append("file", croppedImageDataUrl);
+      formData.append("upload_preset", "RoyalAseelFarms");
+      setUploading(true);
+      setShowCropper(false);
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dlthizgza/upload`,
+        { method: "POST", body: formData }
+      );
       if (!response.ok) {
         const errText = await response.text();
         throw new Error(errText);
       }
-
       const data = await response.json();
-      // Append the uploaded image URL to the images array
-      setImages((prevImages) => [...prevImages, data.secure_url]);
+      images.push(data.secure_url);
+      setErrorMsg("");
+      setImageSrc(null);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error cropping/uploading image:", error);
       setErrorMsg("Failed to upload image. Please try again.");
     } finally {
       setUploading(false);
@@ -545,6 +568,7 @@ export default function ManageProductsPage() {
                         <input
                           type="file"
                           accept="image/*"
+                          value={""}
                           onChange={handleFileChange}
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         />
@@ -904,6 +928,37 @@ export default function ManageProductsPage() {
           </div>
         )}
       </div>
+      {showCropper && imageSrc && (
+        <div className="fixed inset-0 text-xs md:text-sm bg-black bg-opacity-70 backdrop-blur-sm flex flex-col items-center justify-center z-50">
+          <div className="relative w-80 h-80 ">
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              zoom={zoom}
+              aspect={1}
+              onCropChange={setCrop}
+              onZoomChange={setZoom}
+              onCropComplete={onCropComplete}
+            />
+          </div>
+          <button
+            onClick={handleCropAndUpload}
+            disabled={uploading}
+            className="mt-4 bg-gradient-to-br to-[#5c3a16] via-[#734e26] from-[#936433] hover:bg-gradient-radial text-white px-4 py-2 rounded-md"
+          >
+            Crop & Upload
+          </button>
+          <button
+            onClick={() => {
+              setShowCropper(false);
+              setImageSrc(null);
+            }}
+            className="mt-2 bg-gradient-to-br from-red-500 to-red-700 hover:bg-gradient-radial text-white px-4 py-2 rounded-md"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
       <Footer />
     </div>
   );
