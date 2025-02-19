@@ -158,7 +158,14 @@ export default function HomePage() {
     return { id: breed.id, image: item?.images?.[0] || defaultPic };
   });
 
-  const discountedItems = items.filter((item) => item.isDiscounted).slice(0, 5);
+  const discountedItems = items
+    .filter((item) => item.isDiscounted)
+    .sort(
+      (a, b) =>
+        (((b.price - b.discountedPrice) * 100) / b.price).toFixed(0) -
+        (((a.price - a.discountedPrice) * 100) / a.price).toFixed(0)
+    )
+    .slice(0, 5);
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");

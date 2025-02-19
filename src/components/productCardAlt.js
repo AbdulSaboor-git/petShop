@@ -31,7 +31,7 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
           className="absolute top-0 left-0 w-full h-full object-cover rounded-xl bg-transparent"
         />
         <button
-          className="absolute bottom-1 right-1 text-white p-1 rounded-full bg-gradient-to-br  from-orange-500 via-orange-500 to-orange-700 hover:bg-gradient-radial text-xl drop-shadow-sm"
+          className="absolute bottom-1 right-1 text-white p-1 rounded-full bg-gradient-to-br  from-orange-500 via-orange-500 to-orange-700 hover:bg-gradient-radial text-base drop-shadow-sm"
           onClick={(e) => {
             e.stopPropagation(); // Prevent the click from bubbling up
             favClick(); // Execute the favorite toggle logic
@@ -42,10 +42,14 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
       </div>
 
       <div className="flex flex-col gap-0.5 pl-1 pt-2 relative">
-        <div className="text-xs font-normal flex gap-1 items-center">
+        <div className="text-xs font-normal flex gap-1 items-center justify-start">
           {item.isDiscounted && (
-            <div className="bg-red-600 text-white px-1 font-semibold flex gap-1 items-center">
-              <span>Sale</span> <MdDiscount className="mt-[1.7px]" size={10} />
+            <div className=" text-green-600 text-[10px] font-extrabold">
+              {(
+                ((item.price - item.discountedPrice) * 100) /
+                item.price
+              ).toFixed(0)}
+              {"% OFF"}{" "}
             </div>
           )}
           {hover && (

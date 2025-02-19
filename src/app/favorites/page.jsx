@@ -13,6 +13,7 @@ export default function Favourites() {
   const [groupedFavorites, setGroupedFavorites] = useState([]); // grouped by seller (from API)
   const [selectedSellerId, setSelectedSellerId] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]); // items selected from the current seller
+  const [favoriteIds, setFavoriteIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -47,21 +48,31 @@ export default function Favourites() {
     }, 100);
   };
 
+  useEffect(() => {
+    const storedFavoriteIds = localStorage.getItem("favorites");
+    if (storedFavoriteIds) {
+      try {
+        const parsedIds = JSON.parse(storedFavoriteIds);
+        setFavoriteIds(parsedIds);
+      } catch (err) {
+        console.error("Error parsing favorites", err);
+        setFavoriteIds([]);
+      }
+    } else {
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavoriteIds([]);
+    }
+  }, []);
+
   // This function loads your favorites from localStorage and then fetches the full grouped data
   useEffect(() => {
     async function fetchFavorites() {
       try {
-        const storedFavoriteIds = localStorage.getItem("favorites");
-        if (!storedFavoriteIds) {
-          localStorage.setItem("favorites", JSON.stringify([]));
-          setGroupedFavorites([]);
-          return;
-        }
-        const favoriteIds = JSON.parse(storedFavoriteIds); // assume this is an array of IDs
         if (favoriteIds.length === 0) {
           setGroupedFavorites([]);
           return;
         }
+        setLoading(true);
         const queryString = favoriteIds.join(",");
         const response = await fetch(
           `/api/favItems?ids=${encodeURIComponent(queryString)}`
@@ -80,7 +91,7 @@ export default function Favourites() {
       }
     }
     fetchFavorites();
-  }, []);
+  }, [favoriteIds]);
 
   // Handler for toggling an individual item selection.
   const handleToggleItem = (sellerId, item) => {
@@ -124,24 +135,24 @@ export default function Favourites() {
 
   // Handler for removing a favorite item completely.
   const handleRemoveFav = (itemId) => {
-    // Remove the item from the stored favorite IDs.
-    // (You might also update your groupedFavorites state accordingly.)
+    setCheckout(false);
     const allIds = groupedFavorites.reduce(
       (acc, group) => [...acc, ...group.items.map((i) => i.id)],
       []
     );
     const updatedIds = allIds.filter((id) => id !== itemId);
+    setFavoriteIds(updatedIds);
     localStorage.setItem("favorites", JSON.stringify(updatedIds));
     showMessage("Removed from favorites", true);
     // Re-fetch the favorites after removal.
     // (Alternatively, remove from groupedFavorites manually.)
     // For simplicity, we re-run the useEffect by updating state:
-    setLoading(true);
-    setGroupedFavorites([]);
-    setTimeout(() => {
-      // Simulate re-fetching
-      window.location.reload();
-    }, 500);
+    // setLoading(true);
+    // setGroupedFavorites([]);
+    // setTimeout(() => {
+    //   // Simulate re-fetching
+    //   window.location.reload();
+    // }, 500);
   };
 
   return (

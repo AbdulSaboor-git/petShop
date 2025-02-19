@@ -585,7 +585,8 @@ export default function ManageProductsPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                          disabled={uploading}
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white disabled:cursor-not-allowed"
                         >
                           Add Product
                         </button>
@@ -828,7 +829,8 @@ export default function ManageProductsPage() {
                       <div className="mt-4 flex flex-col gap-2">
                         <button
                           type="submit"
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
+                          disabled={uploading}
+                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white  disabled:cursor-not-allowed"
                         >
                           Update Product
                         </button>

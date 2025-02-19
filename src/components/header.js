@@ -150,10 +150,9 @@ export default function Header() {
       <div className="relative flex justify-center items-center w-full">
         <div className="flex flex-col relative justify-center w-full items-center ">
           <div className="flex flex-col gap-0 w-full items-center justify-center z-0">
-            <div className="w-full h-4 bg-[#0b0827] hidden lg:block"></div>
             <div className=" relative w-full bg-gradient-to-b  from-[#69461e] via-[#c7802fc5] to-transparent pb-32 lg:pb-12 z-10">
               <div
-                className={`bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 flex ${
+                className={`bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 lg:px-10 lg:p-3 lg:text-xs flex ${
                   user?.role === "ADMIN" ? "gap-3 text-[11px]" : "gap-4 text-xs"
                 }  md:gap-6 w-full flex-wrap items-center justify-center lg:justify-end`}
               >
@@ -168,7 +167,7 @@ export default function Header() {
                   </button>
                 ))}
               </div>
-              <div className="items-center justify-center hidden lg:flex absolute -top-1 left-4 bg-[#0b0827] p-6 rounded-b-full">
+              <div className="items-center justify-center hidden lg:flex absolute -top-1 left-4 bg-gradient-to-br  to-[#442b0f] via-[#5d3c17] from-[#906434]  p-6 rounded-b-full">
                 <Image
                   src={logoLink}
                   alt={"logo"}
@@ -202,7 +201,7 @@ export default function Header() {
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
-                    className="flex gap-2 items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[#4e3212] hover:shadow-sm hover:shadow-[var(--btn-bg-sec)]"
+                    className="flex gap-2 items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[#61401c] hover:shadow-sm hover:shadow-[#61401c]"
                     onClick={btn.clickEvent}
                   >
                     {btn.icon}

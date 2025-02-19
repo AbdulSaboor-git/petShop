@@ -124,6 +124,11 @@ export default function Shop() {
     // Filter by onSale flag if active.
     if (onSale) {
       filtered = filtered.filter((item) => item.isDiscounted);
+      filtered.sort(
+        (a, b) =>
+          (((b.price - b.discountedPrice) * 100) / b.price).toFixed(0) -
+          (((a.price - a.discountedPrice) * 100) / a.price).toFixed(0)
+      );
     }
 
     // Sorting: Make a shallow copy before sorting.

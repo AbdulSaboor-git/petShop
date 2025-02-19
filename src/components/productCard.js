@@ -26,14 +26,9 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
         <img
           src={item.images[0] || defaultPic}
           alt={name}
-          className="absolute top-0 left-0 w-full h-full object-cover bg-white"
+          className="absolute top-0 left-0 w-full aspect-square h-full object-cover bg-white"
         />
-        <div className="absolute h-[50%] top-[51%] w-full z-20 bg-gradient-to-b from-transparent via-[#ffffff49] to-white"></div>
-        {item.isDiscounted && (
-          <div className="absolute top-0 right-5 bg-red-600 p-1 text-xs font-bold text-white rounded-b-md flex items-center gap-1">
-            SALE <MdDiscount />
-          </div>
-        )}
+        <div className="absolute h-[20%] bottom-0 w-full z-20 bg-gradient-to-b from-transparent to-[#fff] "></div>
       </div>
 
       <div className="flex flex-col gap-0 p-4 pt-2 relative">
@@ -45,13 +40,24 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
           </div>
         )}
         <div className="flex justify-between items-center gap-2">
-          <p
-            className="text-xs font-bold text-orange-600 truncate"
-            onMouseEnter={() => setNameHover(true)}
-            onMouseLeave={() => setNameHover(false)}
-          >
-            {name}
-          </p>
+          <div className="text-xs font-normal flex gap-2 items-center justify-start">
+            {item.isDiscounted && (
+              <div className="text-[10px] font-extrabold text-green-600">
+                {(
+                  ((item.price - item.discountedPrice) * 100) /
+                  item.price
+                ).toFixed(0)}
+                {"% OFF"}
+              </div>
+            )}
+            <p
+              className="font-bold text-orange-600 truncate"
+              onMouseEnter={() => setNameHover(true)}
+              onMouseLeave={() => setNameHover(false)}
+            >
+              {name}
+            </p>
+          </div>
           <button
             className="text-orange-500 rounded-full text-xl"
             onClick={(e) => {
