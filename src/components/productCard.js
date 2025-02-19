@@ -28,7 +28,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
           alt={name}
           className="absolute top-0 left-0 w-full aspect-square h-full object-cover bg-white"
         />
-        <div className="absolute h-[25%] -bottom-1 w-full bg-gradient-to-b from-transparent via-[#ffffff98]  to-[#ffffff] "></div>
+        <div className="absolute h-[25%] -bottom-1 w-full bg-gradient-to-b from-transparent via-[#fff]  to-[#ffffff] "></div>
       </div>
 
       <div className="flex flex-col gap-0 p-4 pt-2 relative">
