@@ -5,7 +5,7 @@ const notificationSlice = createSlice({
   initialState: {
     isVisible: false,
     msg: "",
-    success: false,
+    success: true,
   },
   reducers: {
     showNotification: (state, action) => {

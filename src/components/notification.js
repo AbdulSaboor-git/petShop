@@ -1,4 +1,3 @@
-// Notification.js
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,34 +6,52 @@ export default function Notification() {
   const { msg, success, isVisible } = useSelector(
     (state) => state.notification
   );
-  const [visible, setVisible] = useState(isVisible);
+  // 'show' determines if the notification is rendered
+  const [show, setShow] = useState(false);
+  // 'animationClass' will control our slide-in/slide-out animations
+  const [animationClass, setAnimationClass] = useState("");
 
   useEffect(() => {
-    setVisible(isVisible);
+    let hideTimer;
+    let removeTimer;
 
     if (isVisible) {
-      const timer = setTimeout(() => {
-        setVisible(false);
-      }, 4000);
+      // When triggered visible, show the notification and animate slide down
+      setShow(true);
+      setAnimationClass("animate-slideDown");
 
-      return () => clearTimeout(timer);
+      // After 4 seconds, trigger the slide-up animation (exit)
+      hideTimer = setTimeout(() => {
+        setAnimationClass("animate-slideUp");
+        // After the animation duration (300ms), remove the notification from DOM
+        removeTimer = setTimeout(() => {
+          setShow(false);
+        }, 300);
+      }, 4000);
+    } else {
+      // If isVisible is set to false externally, animate exit if it's currently shown
+      if (show) {
+        setAnimationClass("animate-slideUp");
+        removeTimer = setTimeout(() => {
+          setShow(false);
+        }, 300);
+      }
     }
+
+    return () => {
+      clearTimeout(hideTimer);
+      clearTimeout(removeTimer);
+    };
   }, [isVisible]);
 
-  if (!visible) return null;
+  if (!show) return null;
 
   return (
-    <div className="flex w-full justify-center touch-none">
+    <div className="flex w-full justify-center pointer-events-none">
       <div
-        className={`fixed z-[200] top-2 p-1 px-4 mx-10 bg-white text-xs rounded-full ${
+        className={`fixed z-[200] top-4 p-1 px-5 mx-10 bg-white text-sm rounded-full ${
           success ? "text-[#008514]" : "text-[#cb0000]"
-        } transition-all duration-300 ${
-          isVisible
-            ? success
-              ? "animate-slide-expand"
-              : "animate-slide-expand-error"
-            : "animate-slide-contract"
-        }`}
+        } ${animationClass}`}
         style={
           success
             ? { boxShadow: "0px 0px 10px 1px green", border: "1px solid green" }

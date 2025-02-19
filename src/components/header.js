@@ -197,7 +197,7 @@ export default function Header() {
                   <MdArrowBack />
                 </button>
               </div>
-              <div className="flex gap-2 md:gap-3 items-center justify-center w-full bg-[#ffffff10] backdrop-blur-md md:bg-transparent py-2">
+              <div className="flex gap-2 md:gap-3 items-center justify-center w-full bg-[#ffffff10] backdrop-blur-md md:backdrop-blur-none md:bg-transparent py-2">
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
@@ -212,12 +212,12 @@ export default function Header() {
             </div>
           </div>
           {showAcc && (
-            <div className="absolute top-24 rounded-xl z-20  md:top-16 lg:right-24">
+            <div className="absolute top-12 rounded-xl z-20 lg:right-24">
               <Profile />
             </div>
           )}
           {showLoginForm && (
-            <div className="absolute top-16 rounded-xl z-20  lg:right-5">
+            <div className="absolute top-12 rounded-xl z-20  lg:right-5">
               <LoginForm />
             </div>
           )}
