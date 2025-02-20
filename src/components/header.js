@@ -223,7 +223,7 @@ export default function Header() {
                   <MdArrowBack />
                 </button>
               </div>
-              <div className="flex gap-2 md:gap-3 items-center justify-center w-full bg-[#ffffff10] backdrop-blur-md md:backdrop-blur-none md:bg-transparent py-2">
+              <div className="flex gap-2 md:gap-3 items-center justify-center w-full bg-transparent backdrop-blur-md md:backdrop-blur-none  py-3">
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
