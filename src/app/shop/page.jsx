@@ -273,27 +273,30 @@ export default function Shop() {
                     >
                       All
                     </button>
-                    {categories.map((categ, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleCategoryClick(categ.name)}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                          selectedCategories.includes(categ.name)
-                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                        }`}
-                      >
-                        <div className="relative">
-                          {categ.name}
-                          <MdClose
-                            className={`${
-                              !selectedCategories.includes(categ.name) &&
-                              "hidden"
-                            } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
-                          />
-                        </div>
-                      </button>
-                    ))}
+                    {categories.map(
+                      (categ, i) =>
+                        categ.items.length != 0 && (
+                          <button
+                            key={i}
+                            onClick={() => handleCategoryClick(categ.name)}
+                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                              selectedCategories.includes(categ.name)
+                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                            }`}
+                          >
+                            <div className="relative">
+                              {categ.name}
+                              <MdClose
+                                className={`${
+                                  !selectedCategories.includes(categ.name) &&
+                                  "hidden"
+                                } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                              />
+                            </div>
+                          </button>
+                        )
+                    )}
                   </div>
                 </div>
 
@@ -339,26 +342,30 @@ export default function Shop() {
                     >
                       All
                     </button>
-                    {breeds.map((breed, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleBreedClick(breed.name)}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                          selectedBreeds.includes(breed.name)
-                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                        }`}
-                      >
-                        <div className="relative">
-                          {breed.name}
-                          <MdClose
-                            className={`${
-                              !selectedBreeds.includes(breed.name) && "hidden"
-                            } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
-                          />
-                        </div>
-                      </button>
-                    ))}
+                    {breeds.map(
+                      (breed, i) =>
+                        breed.items.length != 0 && (
+                          <button
+                            key={i}
+                            onClick={() => handleBreedClick(breed.name)}
+                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                              selectedBreeds.includes(breed.name)
+                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                            }`}
+                          >
+                            <div className="relative">
+                              {breed.name}
+                              <MdClose
+                                className={`${
+                                  !selectedBreeds.includes(breed.name) &&
+                                  "hidden"
+                                } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                              />
+                            </div>
+                          </button>
+                        )
+                    )}
                   </div>
                 </div>
 

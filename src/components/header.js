@@ -177,8 +177,8 @@ export default function Header() {
       )}
       <div className="relative flex justify-center items-center w-full">
         <div className="flex flex-col relative justify-center w-full items-center">
-          <div className="flex flex-col gap-0 w-full items-center justify-center z-0">
-            <div className="relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent pb-32 lg:pb-12 z-10">
+          <div className="flex flex-col gap-4 lg:gap-0 w-full items-center justify-center z-0">
+            <div className="relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent pb-28 lg:pb-12 z-10">
               <div
                 className={`bg-gradient-to-br to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 lg:px-10 lg:p-3 lg:text-xs flex ${
                   user?.role === "ADMIN" ? "gap-3 text-[11px]" : "gap-4 text-xs"

@@ -315,7 +315,7 @@ export default function HomePage() {
                           onClick={() => itemClick(item.id, true)}
                           className=" flex gap-2 items-center justify-center w-full md:w-auto px-7 py-2 bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white rounded-full transition-all duration-300"
                         >
-                          <MdMessage /> Seller
+                          <MdMessage /> Contact
                         </button>
                       </div>
                     </div>
