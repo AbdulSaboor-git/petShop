@@ -15,5 +15,5 @@ export const triggerNotification =
     FeedbackTimeout = setTimeout(() => {
       dispatch(hideNotification());
       FeedbackTimeout = null;
-    }, 5000);
+    }, 3000);
   };

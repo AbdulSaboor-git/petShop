@@ -16,6 +16,7 @@ export default function Shop() {
   const [showBreeds, setShowBreeds] = useState(false);
   const [ShowMoreFilters, setShowMoreFilters] = useState(false);
   const [favorites, setFavorites] = useState([]);
+  const [isOnSale, setIsOnSale] = useState(false);
 
   // Use arrays for filtering; "All" is the default selection.
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
@@ -91,6 +92,9 @@ export default function Shop() {
 
         setItems(dataItems.items);
         setAllItems(dataItems.items);
+        dataItems.items.forEach((item) => {
+          item.isDiscounted ? setIsOnSale(true) : setIsOnSale(false);
+        });
         setCategories(dataCatBreed.categories);
         setBreeds(dataCatBreed.breeds);
       } catch (err) {
@@ -205,6 +209,8 @@ export default function Shop() {
     setSelectedBreeds(newSelected);
   };
 
+  const breedsToShow = breeds.filter((b) => b.items != 0);
+  const categoriesToShow = categories.filter((c) => c.items != 0);
   // Determine whether to show the breed filter.
   // We show it if either "All" is selected for categories OR if at least one selected
   // category is either "Chicken" or "Eggs".
@@ -225,57 +231,57 @@ export default function Shop() {
             {error}
           </div>
         ) : (
-          <div className="flex flex-col lg:flex-row gap-6 transition-all duration-500">
+          <div className="flex flex-col w-full lg:flex-row gap-6 transition-all duration-500">
             {/* Filters Section */}
             <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
-              <div className="flex flex-col items-end gap-3 transition-all duration-500">
-                {/* Categories Filter */}
-                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
-                  <div
-                    onClick={() =>
-                      ShowCategories
-                        ? setShowCategories(false)
-                        : setShowCategories(true)
-                    }
-                    className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
-                  >
-                    Filter by Categories
-                    <RiArrowDownSLine
-                      size={18}
-                      className={`${
-                        ShowCategories ? "-rotate-180" : "rotate-0"
-                      } transition-all duration-[400ms]`}
-                    />
-                  </div>
-                  <div
-                    className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
-                      !ShowCategories
-                        ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                        : `opacity-100 translate-y-0 scale-y-100 ${
-                            categories?.length <= 7
-                              ? "max-h-[140px]"
-                              : breeds?.length <= 15
-                              ? "max-h-[220px]"
-                              : breeds.length <= 20
-                              ? "max-h-[280px]"
-                              : "max-h-screen"
-                          } lg:max-h-screen mt-2 lg:pb-3`
-                    }`}
-                  >
-                    {/* "All" button */}
-                    <button
-                      onClick={() => handleCategoryClick("All")}
-                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                        selectedCategories.includes("All")
-                          ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
-                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                      }`}
-                    >
-                      All
-                    </button>
-                    {categories.map(
-                      (categ, i) =>
-                        categ.items.length != 0 && (
+              <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
+                {
+                  /* Categories Filter */
+                  categoriesToShow.length > 0 && (
+                    <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
+                      <div
+                        onClick={() =>
+                          ShowCategories
+                            ? setShowCategories(false)
+                            : setShowCategories(true)
+                        }
+                        className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                      >
+                        Filter by Categories
+                        <RiArrowDownSLine
+                          size={18}
+                          className={`${
+                            ShowCategories ? "-rotate-180" : "rotate-0"
+                          } transition-all duration-[400ms]`}
+                        />
+                      </div>
+                      <div
+                        className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                          !ShowCategories
+                            ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                            : `opacity-100 translate-y-0 scale-y-100 ${
+                                categories?.length <= 7
+                                  ? "max-h-[140px]"
+                                  : breeds?.length <= 15
+                                  ? "max-h-[220px]"
+                                  : breeds.length <= 20
+                                  ? "max-h-[280px]"
+                                  : "max-h-screen"
+                              } lg:max-h-screen mt-2 lg:pb-3`
+                        }`}
+                      >
+                        {/* "All" button */}
+                        <button
+                          onClick={() => handleCategoryClick("All")}
+                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
+                            selectedCategories.includes("All")
+                              ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
+                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                          }`}
+                        >
+                          All
+                        </button>
+                        {categoriesToShow.map((categ, i) => (
                           <button
                             key={i}
                             onClick={() => handleCategoryClick(categ.name)}
@@ -295,124 +301,125 @@ export default function Shop() {
                               />
                             </div>
                           </button>
-                        )
-                    )}
-                  </div>
-                </div>
-
+                        ))}
+                      </div>
+                    </div>
+                  )
+                }
                 {/* Breeds Filter (only show if applicable) */}
-                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
-                  <div
-                    onClick={() =>
-                      showBreeds ? setShowBreeds(false) : setShowBreeds(true)
-                    }
-                    className="flex bg-gray-100 shadow-md shadow-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
-                  >
-                    Filter by Breeds
-                    <RiArrowDownSLine
-                      size={18}
-                      className={`${
-                        showBreeds ? "-rotate-180" : "rotate-0"
-                      } transition-all duration-[400ms]`}
-                    />
-                  </div>
-                  <div
-                    className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
-                      !showBreeds
-                        ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                        : `opacity-100 translate-y-0 scale-y-100 ${
-                            breeds?.length <= 7
-                              ? "max-h-[140px]"
-                              : breeds?.length <= 15
-                              ? "max-h-[220px]"
-                              : breeds.length <= 20
-                              ? "max-h-[280px]"
-                              : "max-h-screen"
-                          } md:max-h-screen mt-2 lg:pb-3`
-                    }`}
-                  >
-                    {/* "All" button for breeds */}
-                    <button
-                      onClick={() => handleBreedClick("All")}
-                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                        selectedBreeds.includes("All")
-                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
+                {breedsToShow.length > 0 && (
+                  <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                    <div
+                      onClick={() =>
+                        showBreeds ? setShowBreeds(false) : setShowBreeds(true)
+                      }
+                      className="flex bg-gray-100 shadow-md shadow-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                    >
+                      Filter by Breeds
+                      <RiArrowDownSLine
+                        size={18}
+                        className={`${
+                          showBreeds ? "-rotate-180" : "rotate-0"
+                        } transition-all duration-[400ms]`}
+                      />
+                    </div>
+                    <div
+                      className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                        !showBreeds
+                          ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                          : `opacity-100 translate-y-0 scale-y-100 ${
+                              breeds?.length <= 7
+                                ? "max-h-[140px]"
+                                : breeds?.length <= 15
+                                ? "max-h-[220px]"
+                                : breeds.length <= 20
+                                ? "max-h-[280px]"
+                                : "max-h-screen"
+                            } md:max-h-screen mt-2 lg:pb-3`
                       }`}
                     >
-                      All
-                    </button>
-                    {breeds.map(
-                      (breed, i) =>
-                        breed.items.length != 0 && (
-                          <button
-                            key={i}
-                            onClick={() => handleBreedClick(breed.name)}
-                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                              selectedBreeds.includes(breed.name)
-                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                            }`}
-                          >
-                            <div className="relative">
-                              {breed.name}
-                              <MdClose
-                                className={`${
-                                  !selectedBreeds.includes(breed.name) &&
-                                  "hidden"
-                                } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
-                              />
-                            </div>
-                          </button>
-                        )
-                    )}
+                      {/* "All" button for breeds */}
+                      <button
+                        onClick={() => handleBreedClick("All")}
+                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
+                          selectedBreeds.includes("All")
+                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
+                        }`}
+                      >
+                        All
+                      </button>
+                      {breedsToShow.map((breed, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleBreedClick(breed.name)}
+                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                            selectedBreeds.includes(breed.name)
+                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                          }`}
+                        >
+                          <div className="relative">
+                            {breed.name}
+                            <MdClose
+                              className={`${
+                                !selectedBreeds.includes(breed.name) && "hidden"
+                              } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                            />
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-
-                {/* Additional Filters Section: On Sale and Sorting Options */}
-                <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
-                  <div
-                    onClick={() =>
-                      ShowMoreFilters
-                        ? setShowMoreFilters(false)
-                        : setShowMoreFilters(true)
-                    }
-                    className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
-                  >
-                    More Filters
-                    <RiArrowDownSLine
-                      size={18}
-                      className={`${
-                        ShowMoreFilters ? "-rotate-180" : "rotate-0"
-                      } transition-all duration-[400ms]`}
-                    />
-                  </div>
-                  <div
-                    className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
-                      !ShowMoreFilters
-                        ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                        : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
-                    }`}
-                  >
-                    <button
-                      onClick={() => setOnSale((prev) => !prev)}
-                      className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                        onSale
-                          ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                          : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                      }`}
-                    >
-                      <div className="relative">
-                        On Sale
-                        <MdClose
+                )}
+                {
+                  /* Additional Filters Section: On Sale and Sorting Options */
+                  isOnSale && (
+                    <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                      <div
+                        onClick={() =>
+                          ShowMoreFilters
+                            ? setShowMoreFilters(false)
+                            : setShowMoreFilters(true)
+                        }
+                        className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                      >
+                        More Filters
+                        <RiArrowDownSLine
+                          size={18}
                           className={`${
-                            !onSale && "hidden"
-                          } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                            ShowMoreFilters ? "-rotate-180" : "rotate-0"
+                          } transition-all duration-[400ms]`}
                         />
-                      </div>{" "}
-                    </button>
-                  </div>
-                </div>
+                      </div>
+                      <div
+                        className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                          !ShowMoreFilters
+                            ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                            : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
+                        }`}
+                      >
+                        <button
+                          onClick={() => setOnSale((prev) => !prev)}
+                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                            onSale
+                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                          }`}
+                        >
+                          <div className="relative">
+                            On Sale
+                            <MdClose
+                              className={`${
+                                !onSale && "hidden"
+                              } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                            />
+                          </div>{" "}
+                        </button>
+                      </div>
+                    </div>
+                  )
+                }
 
                 <div className="flex gap-2 self-start flex-wrap lg:hidden">
                   {selectedCategories.length > 0 &&

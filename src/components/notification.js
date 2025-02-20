@@ -15,7 +15,7 @@ export default function Notification() {
     let hideTimer;
     let removeTimer;
 
-    if (isVisible) {
+    if (isVisible && msg) {
       // When triggered visible, show the notification and animate slide down
       setShow(true);
       setAnimationClass("animate-slideDown");
@@ -26,15 +26,15 @@ export default function Notification() {
         // After the animation duration (300ms), remove the notification from DOM
         removeTimer = setTimeout(() => {
           setShow(false);
-        }, 300);
-      }, 4000);
+        }, 400);
+      }, 3000);
     } else {
       // If isVisible is set to false externally, animate exit if it's currently shown
       if (show) {
         setAnimationClass("animate-slideUp");
         removeTimer = setTimeout(() => {
           setShow(false);
-        }, 300);
+        }, 400);
       }
     }
 
@@ -45,11 +45,10 @@ export default function Notification() {
   }, [isVisible]);
 
   if (!show) return null;
-
   return (
     <div className="flex w-full justify-center pointer-events-none">
       <div
-        className={`fixed z-[200] top-4 p-1 px-5 mx-10 bg-white text-sm rounded-full ${
+        className={`fixed z-[200] top-4 p-1 px-5 mx-10 bg-white text-[13px] font-d rounded-full ${
           success ? "text-[#008514]" : "text-[#cb0000]"
         } ${animationClass}`}
         style={
