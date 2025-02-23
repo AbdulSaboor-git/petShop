@@ -16,7 +16,7 @@ export default function ContactUs() {
           <h1 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-2">
             Contact Us
           </h1>
-          <p className="text-xs md:text-sm text-center text-gray-600 mb-8">
+          <p className="text-sm md:text-base  text-center text-gray-600 mb-8">
             Interested in becoming a seller or simply want to learn more about
             our premium chicken? Get in touch with us!
           </p>
@@ -94,7 +94,7 @@ export default function ContactUs() {
             </div> */}
 
             {/* Contact Details */}
-            <div className="bg-gray-100 p-6 rounded-lg   text-xs md:text-sm">
+            <div className="bg-gray-100 p-6 rounded-lg text-sm md:text-base ">
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">
                 Contact Information
               </h2>

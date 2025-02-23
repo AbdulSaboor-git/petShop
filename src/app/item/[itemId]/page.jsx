@@ -380,7 +380,7 @@ export default function ItemPage({ params }) {
             )}
 
             {/* seller details section */}
-            <div className="w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl flex gap-3 items-center justify-start">
+            <div className="w-full max-w-[400px] bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start">
               <img
                 src={
                   item.seller.profilePicture
@@ -391,7 +391,7 @@ export default function ItemPage({ params }) {
                 draggable="false"
                 className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
               />
-              <div className="font-bold text-sm md:text-base">
+              <div className="font-semibold text-sm ">
                 {item.seller.firstName} {item.seller.lastName}
               </div>
             </div>

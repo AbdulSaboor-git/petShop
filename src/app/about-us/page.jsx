@@ -12,7 +12,7 @@ export default function AboutUs() {
           <h1 className="text-xl md:text-2xl font-bold text-center text-gray-800 mb-4">
             About Us
           </h1>
-          <p className="text-xs md:text-sm text-center text-gray-600 mb-8">
+          <p className="text-sm md:text-base text-center text-gray-600 mb-8">
             We are dedicated to connecting quality chicken producers with
             discerning customers. Discover our story, mission, and why our
             platform is the perfect choice for selling and buying premium
@@ -24,7 +24,7 @@ export default function AboutUs() {
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-2">
                 Our Story
               </h2>
-              <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
+              <p className="text-sm md:text-base  text-gray-700 leading-relaxed">
                 Founded with a passion for quality and sustainability, our
                 platform was created to bring the finest chickens and related
                 products directly from trusted local farmers to your table. Our
@@ -37,7 +37,7 @@ export default function AboutUs() {
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-2">
                 Our Mission
               </h2>
-              <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
+              <p className="text-sm md:text-base  text-gray-700 leading-relaxed">
                 Our mission is to empower poultry sellers and provide customers
                 with the highest quality products. We strive to build a
                 trustworthy marketplace where ethical farming meets modern
@@ -49,7 +49,7 @@ export default function AboutUs() {
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-2">
                 Why Choose Us?
               </h2>
-              <ul className="list-disc list-inside text-xs md:text-sm text-gray-700 space-y-1">
+              <ul className="list-disc list-insidetext-sm md:text-base  text-gray-700 space-y-1">
                 <li>Premium quality chickens from trusted local farmers</li>
                 <li>User-friendly platform for seamless transactions</li>
                 <li>Transparent sourcing and ethical farming practices</li>
@@ -57,11 +57,11 @@ export default function AboutUs() {
               </ul>
             </section>
             {/* Contact Information Section */}
-            <section className="text-xs md:text-sm">
+            <section className="text-sm md:text-base ">
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-2">
                 Contact Information
               </h2>
-              <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
+              <p className="text-sm md:text-base  text-gray-700 leading-relaxed">
                 Want to know more about becoming a seller or have any questions?
                 Reach out to us via WhatsApp or Email. Our office is located at:
               </p>
