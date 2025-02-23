@@ -386,7 +386,7 @@ export default function ItemPage({ params }) {
               } transition-all duration-500`}
             >
               <Order
-                items={[item]}
+                Items={[item]}
                 closeOrderPage={() => setContactSeller(false)}
               />
             </div>

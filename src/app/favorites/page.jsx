@@ -246,7 +246,7 @@ export default function Favourites() {
           } transition-all duration-500`}
         >
           <Order
-            items={selectedItems}
+            Items={selectedItems}
             closeOrderPage={() => setCheckout(false)}
           />
         </div>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { MdEmail, MdWhatsapp } from "react-icons/md";
+import React, { useEffect, useState } from "react";
+import { MdEmail, MdRemove, MdWhatsapp } from "react-icons/md";
 
-export default function Order({ items, closeOrderPage }) {
-  // New state for customer details
+export default function Order({ Items, closeOrderPage }) {
+  // Initialize state from the passed Items prop.
+  const [orderItems, setOrderItems] = useState(Items);
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerContact, setCustomerContact] = useState("");
@@ -13,6 +14,10 @@ export default function Order({ items, closeOrderPage }) {
   const [nameError, setNameError] = useState("");
   const [addressError, setAddressError] = useState("");
   const [contactError, setContactError] = useState("");
+
+  useEffect(() => {
+    setOrderItems(Items);
+  }, [Items]);
 
   // Validation functions
   const validateName = (value) => {
@@ -48,11 +53,18 @@ export default function Order({ items, closeOrderPage }) {
     !addressError &&
     !contactError;
 
+  // Update: Use state update to remove an item
+  const handleRemove = (itemId) => {
+    setOrderItems((prevItems) =>
+      prevItems.filter((item) => item.id !== itemId)
+    );
+  };
+
   const generateOrderMessage = () => {
-    if (!items || items.length === 0) return "";
+    if (!orderItems || orderItems.length === 0) return "";
 
     // Build product details for each item
-    const productDetails = items
+    const productDetails = orderItems
       .map((item) => {
         const priceText = item.isDiscounted
           ? `Price: Rs. ${item.discountedPrice} (Discounted from Rs. ${item.price})`
@@ -66,26 +78,26 @@ export default function Order({ items, closeOrderPage }) {
       .join("\n\n");
 
     // Use seller details from the first item (assuming all items are from the same seller)
-    const seller = items[0].seller;
+    const seller = orderItems[0].seller;
 
     return `Hello ${seller.firstName} ${seller.lastName},
     
-    I am interested in inquiring about the following item${
-      items.length > 1 ? "s" : ""
+I am interested in inquiring about the following item${
+      orderItems.length > 1 ? "s" : ""
     }:
     
 ${productDetails}
     
-    Customer Details:
-    Name: ${customerName}
-    Address: ${customerAddress}
-    Contact No.: ${customerContact}
-    ${customerEmail ? "Email: " + customerEmail : ""}
-    ${additionalNotes ? 'Additional Notes: "' + additionalNotes + '"' : ""}
+Customer Details:
+Name: ${customerName}
+Address: ${customerAddress}
+Contact No.: ${customerContact}
+${customerEmail ? "Email: " + customerEmail : ""}
+${additionalNotes ? "Additional Notes: " + '"' + additionalNotes + '"' : ""}
     
-    Please let me know the next steps to complete my order.
+Please let me know the next steps to complete my order.
     
-    Thank you.`;
+Thank you.`;
   };
 
   const closeOrder = () => {
@@ -104,13 +116,13 @@ ${productDetails}
   const handleWhatsappOrder = () => {
     if (
       !isFormValid ||
-      !items ||
-      items.length === 0 ||
-      !items[0].seller?.phoneNo
+      !orderItems ||
+      orderItems.length === 0 ||
+      !orderItems[0].seller?.phoneNo
     )
       return;
     const message = generateOrderMessage();
-    const phoneNumber = items[0].seller.phoneNo.replace(/\D/g, ""); // Remove non-digit characters
+    const phoneNumber = orderItems[0].seller.phoneNo.replace(/\D/g, "");
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
       message
     )}`;
@@ -120,12 +132,17 @@ ${productDetails}
 
   // Handler for placing an order via Email.
   const handleEmailOrder = () => {
-    if (!isFormValid || !items || items.length === 0 || !items[0].seller?.email)
+    if (
+      !isFormValid ||
+      !orderItems ||
+      orderItems.length === 0 ||
+      !orderItems[0].seller?.email
+    )
       return;
     const message = generateOrderMessage();
-    const subject = `Order Inquiry`;
+    const subject = `Order Inquiry: ${orderItems[0].name}`;
     const mailtoUrl = `mailto:${
-      items[0].seller.email
+      orderItems[0].seller.email
     }?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
       message
     )}`;
@@ -135,13 +152,13 @@ ${productDetails}
 
   return (
     <div className="w-full max-w-[500px]">
-      {items?.length != 0 && (
+      {orderItems?.length !== 0 && (
         <div className="flex w-full flex-col text-xs md:text-sm gap-4 self-center p-5 py-10 rounded-xl border bg-gray-50 text-gray-700 text-center shadow-md">
           <h2 className="text-base md:text-lg font-bold">
-            Product{items?.length > 1 && "s"} Inquiry
+            Product{orderItems?.length > 1 && "s"} Inquiry
           </h2>
           <div className="flex flex-col items-center justify-center gap-2">
-            {items?.map((item, i) => (
+            {orderItems?.map((item, i) => (
               <div
                 key={i}
                 className="flex gap-4 items-center w-full border bg-gray-100 p-2 rounded-lg md:min-w-[400px]"
@@ -151,14 +168,25 @@ ${productDetails}
                   alt={item.name}
                   className="w-16 object-cover aspect-square rounded-lg cursor-pointer"
                 />
-                <div className="text-sm flex flex-col items-start gap-[1px]">
-                  <h3 className="font-bold cursor-pointer leading-tight line-clamp-2">
-                    {item.name}
-                  </h3>
-                  <p className="text-xs text-gray-600">{item.breed?.name}</p>
-                  <p className="text-xs text-green-600">
-                    Rs. {item.isDiscounted ? item.discountedPrice : item.price}
-                  </p>
+                <div className="flex flex-1 gap-2 items-center justify-between">
+                  <div className="text-sm flex flex-col items-start gap-[1px]">
+                    <h3 className="font-bold cursor-pointer leading-tight line-clamp-2">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-gray-600">{item.breed?.name}</p>
+                    <p className="text-xs text-green-600">
+                      Rs.{" "}
+                      {item.isDiscounted ? item.discountedPrice : item.price}
+                    </p>
+                  </div>
+                  {orderItems?.length > 1 && (
+                    <div
+                      onClick={() => handleRemove(item.id)}
+                      className="p-2 rounded-full cursor-pointer hover:text-red-600"
+                    >
+                      <MdRemove />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -200,7 +228,7 @@ ${productDetails}
               </p>
             )}
             <input
-              type="text"
+              type="number"
               placeholder="Contact Number (03001234567)"
               value={customerContact}
               onChange={(e) => {
@@ -208,10 +236,9 @@ ${productDetails}
                 validateContact(e.target.value);
               }}
               onBlur={(e) => validateContact(e.target.value)}
-              className="p-2  border rounded focus:outline-none"
+              className="p-2 border rounded focus:outline-none"
               required
               minLength={11}
-              maxLength={11}
             />
             {contactError && (
               <p className="text-red-600 text-xs mt-1 text-left">
@@ -254,7 +281,10 @@ ${productDetails}
               <MdEmail size={15} />
             </button>
             <button
-              onClick={closeOrder}
+              onClick={() => {
+                closeOrder();
+                setOrderItems(Items);
+              }}
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
             >
               Cancel
