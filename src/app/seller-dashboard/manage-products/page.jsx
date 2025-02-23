@@ -35,6 +35,7 @@ export default function ManageProductsPage() {
   const [breedId, setBreedId] = useState("");
   const [sex, setSex] = useState("");
   const [nature, setNature] = useState("");
+  const [specifications, setSpecifications] = useState("");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
@@ -105,6 +106,7 @@ export default function ManageProductsPage() {
     setBreedId("");
     setSex("");
     setNature("");
+    setSpecifications("");
     setWeight("");
     setHeight("");
     setAge("");
@@ -183,6 +185,10 @@ export default function ManageProductsPage() {
       breedId && breedId.toString().trim() !== "" ? Number(breedId) : null,
     sex: sex && sex.toString().trim() !== "" ? sex.trim() : null,
     nature: nature && nature.toString().trim() !== "" ? nature.trim() : null,
+    specifications:
+      specifications && specifications.toString().trim() !== ""
+        ? specifications.trim()
+        : null,
     weight: weight && weight.toString().trim() !== "" ? Number(weight) : null,
     height: height && height.toString().trim() !== "" ? Number(height) : null,
     age: age && age.toString().trim() !== "" ? Number(age) : null,
@@ -209,6 +215,7 @@ export default function ManageProductsPage() {
       setBreedId(data.breedId || "");
       setSex(data.sex || "");
       setNature(data.nature || "");
+      setSpecifications(data.specifications || "");
       setWeight(data.weight || "");
       setHeight(data.height || "");
       setAge(data.age || "");
@@ -458,12 +465,11 @@ export default function ManageProductsPage() {
                       </div>
                       <div>
                         <label className="mx-0.5">Description</label>
-                        <input
-                          type="text"
+                        <textarea
                           value={description}
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full resize-none"
                           onChange={(e) => setDescription(e.target.value)}
-                          maxLength="500"
+                          maxLength="5000"
                         />
                       </div>
                       <div>
@@ -508,6 +514,16 @@ export default function ManageProductsPage() {
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Specification</label>
+                        <input
+                          type="text"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={specifications}
+                          onChange={(e) => setSpecifications(e.target.value)}
+                          maxLength="200"
+                        />
                       </div>
                       <div>
                         <label className="mx-0.5">Nature</label>
@@ -703,12 +719,11 @@ export default function ManageProductsPage() {
                       </div>
                       <div>
                         <label className="mx-0.5">Description</label>
-                        <input
-                          type="text"
+                        <textarea
                           value={description}
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full resize-none"
                           onChange={(e) => setDescription(e.target.value)}
-                          maxLength="500"
+                          maxLength="5000"
                         />
                       </div>
                       <div>
@@ -753,6 +768,16 @@ export default function ManageProductsPage() {
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Specification</label>
+                        <input
+                          type="text"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          value={specifications}
+                          onChange={(e) => setSpecifications(e.target.value)}
+                          maxLength="200"
+                        />
                       </div>
                       <div>
                         <label className="mx-0.5">Nature</label>

@@ -55,14 +55,25 @@ button {
   user-select: none;
 }
 
+.formatted-text {
+  white-space: pre-line;
+}
+
 
 img{
   user-select: none;
 }
 select,
-input {
-  background-color: var(--input-field);
+input, textarea {
+  background-color: #f7f7f7;
 }
+
+select:focus,
+input:focus, textarea:focus {
+outline: 1px #e47a0a solid;
+
+}
+
 
 @layer utilities {
   .text-balance {

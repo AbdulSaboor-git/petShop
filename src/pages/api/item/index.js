@@ -60,6 +60,7 @@ async function handlePost(req, res) {
       breedId,
       sex, // received from front-end; will be mapped to `sex`
       nature,
+      specifications,
       weight,
       height,
       age,
@@ -84,6 +85,7 @@ async function handlePost(req, res) {
         breedId: breedId ? Number(breedId) : null,
         sex: sex ? sex.trim() : null,
         nature: nature ? nature.trim() : null,
+        specifications: specifications ? specifications.trim() : null,
         weight: weight ? Number(weight) : null,
         height: height ? Number(height) : null,
         age: age ? Number(age) : null,
@@ -126,6 +128,7 @@ async function handlePatch(req, res, productId) {
       breedId,
       sex, // received from front-end; will be mapped to `sex`
       nature,
+      specifications,
       weight,
       height,
       age,
@@ -146,7 +149,7 @@ async function handlePatch(req, res, productId) {
             }
           : { discountedPrice: null }),
         ...(description
-          ? { description: descriptiontrim() }
+          ? { description: description.trim() }
           : { description: null }),
         ...(categoryId && { categoryId: Number(categoryId) }),
         ...(breedId !== undefined && {
@@ -154,6 +157,9 @@ async function handlePatch(req, res, productId) {
         }),
         ...(sex ? { sex: sex.trim() } : { sex: null }), // mapping from sex to schema field "sex"
         ...(nature ? { nature: nature.trim() } : { nature: null }),
+        ...(specifications
+          ? { specifications: specifications.trim() }
+          : { specifications: null }),
         ...(weight ? { weight: Number(weight) } : { weight: null }),
         ...(height ? { height: Number(height) } : { height: null }),
         ...(age ? { age: Number(age) } : { age: null }),

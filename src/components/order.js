@@ -113,7 +113,7 @@ Thank you.`;
   };
 
   // Handler for placing an order via WhatsApp.
-  const handleWhatsappOrder = () => {
+  const handleWhatsappOrder = async () => {
     if (
       !isFormValid ||
       !orderItems ||
@@ -127,11 +127,13 @@ Thank you.`;
       message
     )}`;
     window.open(whatsappUrl, "_blank");
+
+    setOrderItems(Items);
     closeOrder();
   };
 
   // Handler for placing an order via Email.
-  const handleEmailOrder = () => {
+  const handleEmailOrder = async () => {
     if (
       !isFormValid ||
       !orderItems ||
@@ -147,6 +149,8 @@ Thank you.`;
       message
     )}`;
     window.location.href = mailtoUrl;
+
+    setOrderItems(Items);
     closeOrder();
   };
 
@@ -281,7 +285,7 @@ Thank you.`;
               <MdEmail size={15} />
             </button>
             <button
-              onClick={() => {
+              onClick={async () => {
                 closeOrder();
                 setOrderItems(Items);
               }}

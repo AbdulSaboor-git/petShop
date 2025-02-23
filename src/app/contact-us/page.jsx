@@ -23,7 +23,7 @@ export default function ContactUs() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Contact Form */}
-            {/* <div className="bg-gray-50 p-6 rounded-lg shadow-lg ">
+            {/* <div className="bg-gray-100 p-6 rounded-lg  ">
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">
                 Get in Touch
               </h2>
@@ -94,7 +94,7 @@ export default function ContactUs() {
             </div> */}
 
             {/* Contact Details */}
-            <div className="bg-gray-50 p-6 rounded-lg shadow-lg  text-xs md:text-sm">
+            <div className="bg-gray-100 p-6 rounded-lg   text-xs md:text-sm">
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-4">
                 Contact Information
               </h2>

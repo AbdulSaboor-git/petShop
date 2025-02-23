@@ -82,14 +82,15 @@ export default function ItemPage({ params }) {
     fetchItemData();
   }, [itemId]);
 
+  //related items effect
   useEffect(() => {
-    // console.log(item);
     if (!item) return;
     const fetchRelatedItems = async () => {
       try {
         const queryParams = new URLSearchParams();
         queryParams.append("categ", item.categoryId);
         queryParams.append("itemId", item.id);
+        queryParams.append("sex", item.sex);
         const resItems = await fetch(
           `/api/relatedItems?${queryParams.toString()}`
         );
@@ -306,6 +307,14 @@ export default function ItemPage({ params }) {
                         </span>
                       </p>
                     )}
+                    {item?.specifications && (
+                      <p className="font-bold">
+                        Specification:{" "}
+                        <span className="font-normal text-slate-600">
+                          {item?.specifications}
+                        </span>
+                      </p>
+                    )}
                     <p className="font-bold">
                       Availability:{" "}
                       <span
@@ -361,7 +370,16 @@ export default function ItemPage({ params }) {
                 </div>
               </div>
             </div>
-            <div className="text-sm md:text-base">{item.description}</div>
+            {item?.description && (
+              <div className="text-sm md:text-base ">
+                <strong>Description</strong>
+                <div className="mt-2 formatted-text text-justify">
+                  {item.description}
+                </div>
+              </div>
+            )}
+
+            {/* seller details section */}
             <div className="w-full max-w-[500px] bg-gray-100 p-2 md:bg-transparent md:p-0 rounded-2xl flex gap-3 items-center justify-start">
               <img
                 src={
@@ -377,25 +395,11 @@ export default function ItemPage({ params }) {
                 {item.seller.firstName} {item.seller.lastName}
               </div>
             </div>
-            <div
-              ref={sendOrderRef}
-              className={`flex items-center justify-center ${
-                contactSeller
-                  ? "opacity-100 h-full py-5 mt-2"
-                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
-              } transition-all duration-500`}
-            >
-              <Order
-                Items={[item]}
-                closeOrderPage={() => setContactSeller(false)}
-              />
-            </div>
+
             {/* bought together Items Section */}
             {boughtTogetherItems.length != 0 && (
-              <div className="flex flex-col gap-4">
-                <div className="text-base md:text-xl font-semibold">
-                  Perfect Match
-                </div>
+              <div className="flex flex-col gap-4 text-sm md:text-base">
+                <strong>Perfect Match</strong>
 
                 <div className="flex flex-col gap-3 items-center justify-center">
                   <div
@@ -416,12 +420,42 @@ export default function ItemPage({ params }) {
                 </div>
               </div>
             )}
+
+            {/* imagess section */}
+            <div className="text-sm md:text-base ">
+              <strong>Images</strong>
+              <div className="mt-2 flex w-full gap-2 flex-wrap">
+                {item.images.map((img, i) => (
+                  <div key={i} className="w-full max-w-sm">
+                    <img
+                      src={img}
+                      alt="item image"
+                      className="w-full rounded-lg"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Contact Seller Section */}
+            <div
+              ref={sendOrderRef}
+              className={`flex items-center justify-center ${
+                contactSeller
+                  ? "opacity-100 h-full py-5 mt-2"
+                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
+              } transition-all duration-500`}
+            >
+              <Order
+                Items={[item]}
+                closeOrderPage={() => setContactSeller(false)}
+              />
+            </div>
+
             {/* Related Items Section */}
             {relatedItems.length != 0 && !loading2 && (
-              <div className="flex flex-col gap-4">
-                <div className="text-base md:text-xl font-semibold">
-                  Related Items
-                </div>
+              <div className="flex flex-col gap-4 text-sm md:text-base">
+                <strong>Related Items</strong>
 
                 <div className="flex flex-col gap-6 items-center justify-center">
                   <div
