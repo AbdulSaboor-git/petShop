@@ -17,9 +17,9 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
   return (
     <div
       onClick={prodClick}
-      className={`cursor-pointer max-w-[220px]  min-w-[160px] sm:max-w-[200px] sm:min-w-[140px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
+      className={`cursor-pointer min-w-[160px] max-w-[200px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
          md:hover:shadow-lg md:hover:scale-105  mx-auto  ${
-           alt ? "my-0 rounded-lg" : "my-4 rounded-3xl"
+           alt ? "my-0 rounded-lg max-w-[160px]  " : "my-4 rounded-3xl"
          } `}
     >
       <div className="relative w-full pt-[100%] ">
@@ -29,6 +29,15 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
           className="absolute top-0 left-0 w-full aspect-square h-full object-cover bg-white"
         />
         {/* <div className="absolute h-[25%] -bottom-[0.2px] w-full bg-gradient-to-b from-transparent to-[#ffffff] "></div> */}
+        <button
+          className="absolute bottom-1 right-1 text-white p-1 rounded-full bg-gradient-to-br  from-orange-500 via-orange-500 to-orange-700 hover:bg-gradient-radial text-base drop-shadow-sm"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent the click from bubbling up
+            favClick(); // Execute the favorite toggle logic
+          }}
+        >
+          {!isFav ? <MdFavoriteBorder /> : <MdFavorite />}
+        </button>
       </div>
 
       <div className="flex flex-col gap-0 p-4 pt-2 relative">
@@ -39,34 +48,23 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
             </div>
           </div>
         )}
-        <div className="flex justify-between items-center gap-2">
-          <div className="text-xs font-normal flex gap-2 items-center justify-start">
-            {item.isDiscounted && (
-              <div className="text-[10px] font-extrabold text-green-600">
-                {(
-                  ((item.price - item.discountedPrice) * 100) /
-                  item.price
-                ).toFixed(0)}
-                {"% OFF"}
-              </div>
-            )}
-            <p
-              className="font-bold text-orange-600 truncate"
-              onMouseEnter={() => setNameHover(true)}
-              onMouseLeave={() => setNameHover(false)}
-            >
-              {name}
-            </p>
-          </div>
-          <button
-            className="text-orange-500 rounded-full text-xl"
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent the click from bubbling up
-              favClick(); // Execute the favorite toggle logic
-            }}
+        <div className="text-xs font-normal flex gap-2 items-center justify-start">
+          {item.isDiscounted && (
+            <div className="text-[10px] font-extrabold text-green-600">
+              {(
+                ((item.price - item.discountedPrice) * 100) /
+                item.price
+              ).toFixed(0)}
+              {"% OFF"}
+            </div>
+          )}
+          <p
+            className="font-bold text-orange-600 truncate"
+            onMouseEnter={() => setNameHover(true)}
+            onMouseLeave={() => setNameHover(false)}
           >
-            {!isFav ? <MdFavoriteBorder /> : <MdFavorite />}
-          </button>
+            {name}
+          </p>
         </div>
         {/* <p className="text-xs text-gray-500"> {item.breed}</p> */}
         <div className="flex justify-between items-center">

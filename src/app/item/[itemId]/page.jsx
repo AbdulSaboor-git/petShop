@@ -27,6 +27,7 @@ export default function ItemPage({ params }) {
   const [loading2, setLoading2] = useState(true);
   const [error2, setError2] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [allItems, setAllItems] = useState([]);
   const [relatedItems, setRelatedItems] = useState([]);
   const [boughtTogetherItems, setBoughtTogetherItems] = useState([]);
   const [contactSeller, setContactSeller] = useState(false);
@@ -82,23 +83,16 @@ export default function ItemPage({ params }) {
     fetchItemData();
   }, [itemId]);
 
-  //related items effect
   useEffect(() => {
     if (!item) return;
-    const fetchRelatedItems = async () => {
+    const fetchAllItems = async () => {
       try {
-        const queryParams = new URLSearchParams();
-        queryParams.append("categ", item.categoryId);
-        queryParams.append("itemId", item.id);
-        queryParams.append("sex", item.sex);
-        const resItems = await fetch(
-          `/api/relatedItems?${queryParams.toString()}`
-        );
-        if (!resItems.ok) {
-          throw new Error("Failed to fetch related items.");
+        const allItems = await fetch(`/api/shopItems`);
+        if (!allItems.ok) {
+          throw new Error("Failed to fetch items.");
         }
-        const dataItems = await resItems.json();
-        setRelatedItems(dataItems.items);
+        const dataItems = await allItems.json();
+        setAllItems(dataItems.items);
       } catch (err) {
         setError2(err.message);
       } finally {
@@ -106,17 +100,31 @@ export default function ItemPage({ params }) {
       }
     };
 
-    fetchRelatedItems();
+    fetchAllItems();
   }, [item]);
+
+  //related items effect
+  useEffect(() => {
+    if (!item || !item.sex || item.sex === "" || !item.breedId) return;
+    const RelatedItems = allItems
+      .filter(
+        (i) =>
+          i.sex === item.sex &&
+          i.breedId === item.breedId &&
+          i.categoryId === item.categoryId
+      )
+      .slice(0, 4);
+    setRelatedItems(RelatedItems);
+  }, [allItems, item]);
 
   // Bought Together Effect
   useEffect(() => {
     if (!item || !item.sex || item.sex === "" || !item.breedId) return;
-    const boughtTogether = relatedItems
+    const boughtTogether = allItems
       .filter((i) => i.sex !== item.sex && i.breedId === item.breedId)
       .slice(0, 2);
     setBoughtTogetherItems(boughtTogether);
-  }, [relatedItems, item]);
+  }, [allItems, item]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
