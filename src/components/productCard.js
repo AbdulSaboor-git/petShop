@@ -17,11 +17,9 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
   return (
     <div
       onClick={prodClick}
-      className={`cursor-pointer min-w-[160px] max-w-[200px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
+      className={`cursor-pointer min-w-[160px] max-w-[220px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
          md:hover:shadow-lg md:hover:scale-105  mx-auto  ${
-           alt
-             ? "my-0 rounded-lg min-w-[150px] max-w-[160px] md:min-w-[200px]"
-             : "my-4 rounded-3xl"
+           alt ? "my-0 rounded-lg w-[150px] md:w-[180px]" : "my-4 rounded-3xl"
          } `}
     >
       <div className="relative w-full pt-[100%] ">

@@ -109,6 +109,7 @@ export default function ItemPage({ params }) {
     const RelatedItems = allItems
       .filter(
         (i) =>
+          i.id !== item.id &&
           i.sex === item.sex &&
           i.breedId === item.breedId &&
           i.categoryId === item.categoryId
