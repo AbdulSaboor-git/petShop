@@ -174,7 +174,7 @@ Thank you.`;
                 />
                 <div className="flex flex-1 gap-2 items-center justify-between">
                   <div className="text-sm flex flex-col items-start gap-[1px]">
-                    <h3 className="font-bold cursor-pointer leading-tight line-clamp-2">
+                    <h3 className="font-bold cursor-pointer leading-tight line-clamp-2 text-left ">
                       {item.name}
                     </h3>
                     <p className="text-xs text-gray-600">{item.breed?.name}</p>

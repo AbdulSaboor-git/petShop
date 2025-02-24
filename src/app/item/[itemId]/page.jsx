@@ -121,7 +121,13 @@ export default function ItemPage({ params }) {
   useEffect(() => {
     if (!item || !item.sex || item.sex === "" || !item.breedId) return;
     const boughtTogether = allItems
-      .filter((i) => i.sex !== item.sex && i.breedId === item.breedId)
+      .filter(
+        (i) =>
+          i.sex &&
+          i.sex != item.sex &&
+          i.breedId === item.breedId &&
+          i.categoryId === item.categoryId
+      )
       .slice(0, 2);
     setBoughtTogetherItems(boughtTogether);
   }, [allItems, item]);
@@ -481,15 +487,6 @@ export default function ItemPage({ params }) {
                       />
                     ))}
                   </div>
-
-                  <button
-                    onClick={() => {
-                      shopClick(item?.category.name, "All", false, "default");
-                    }}
-                    className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
-                  >
-                    View More
-                  </button>
                 </div>
               </div>
             )}

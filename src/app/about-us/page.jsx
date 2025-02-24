@@ -49,7 +49,7 @@ export default function AboutUs() {
               <h2 className="text-base md:text-lg font-semibold text-gray-800 mb-2">
                 Why Choose Us?
               </h2>
-              <ul className="list-disc list-insidetext-sm md:text-base  text-gray-700 space-y-1">
+              <ul className="list-disc list-inside text-sm md:text-base  text-gray-700 space-y-1">
                 <li>Premium quality chickens from trusted local farmers</li>
                 <li>User-friendly platform for seamless transactions</li>
                 <li>Transparent sourcing and ethical farming practices</li>

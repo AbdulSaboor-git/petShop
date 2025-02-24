@@ -20,7 +20,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
       className={`cursor-pointer min-w-[160px] max-w-[200px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
          md:hover:shadow-lg md:hover:scale-105  mx-auto  ${
            alt
-             ? "my-0 rounded-lg max-w-[160px] sm:min-w-[200px]"
+             ? "my-0 rounded-lg min-w-[150px] max-w-[160px] md:min-w-[200px]"
              : "my-4 rounded-3xl"
          } `}
     >
