@@ -36,6 +36,7 @@ export default function ManageProductsPage() {
   const [sex, setSex] = useState("");
   const [nature, setNature] = useState("");
   const [specifications, setSpecifications] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
@@ -107,6 +108,7 @@ export default function ManageProductsPage() {
     setSex("");
     setNature("");
     setSpecifications("");
+    setIsFeatured(false);
     setWeight("");
     setHeight("");
     setAge("");
@@ -193,6 +195,7 @@ export default function ManageProductsPage() {
     height: height && height.toString().trim() !== "" ? Number(height) : null,
     age: age && age.toString().trim() !== "" ? Number(age) : null,
     availability,
+    isFeatured,
     images, // An array of image URLs
     sellerId,
   };
@@ -216,6 +219,7 @@ export default function ManageProductsPage() {
       setSex(data.sex || "");
       setNature(data.nature || "");
       setSpecifications(data.specifications || "");
+      setIsFeatured(data.isFeatured || false);
       setWeight(data.weight || "");
       setHeight(data.height || "");
       setAge(data.age || "");
@@ -516,6 +520,19 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
+                        <label className="mx-0.5">Is Featured</label>
+                        <select
+                          className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
+                          value={isFeatured ? "true" : "false"}
+                          onChange={(e) =>
+                            setIsFeatured(e.target.value === "true")
+                          }
+                        >
+                          <option value="false">False</option>
+                          <option value="true">True</option>
+                        </select>
+                      </div>
+                      <div>
                         <label className="mx-0.5">Specification</label>
                         <input
                           type="text"
@@ -767,6 +784,19 @@ export default function ManageProductsPage() {
                           <option value="">select gender</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="mx-0.5">Is Featured</label>
+                        <select
+                          className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
+                          value={isFeatured ? "true" : "false"}
+                          onChange={(e) =>
+                            setIsFeatured(e.target.value === "true")
+                          }
+                        >
+                          <option value="false">False</option>
+                          <option value="true">True</option>
                         </select>
                       </div>
                       <div>

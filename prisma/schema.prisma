@@ -47,6 +47,7 @@ model item {
   sex             String?
   nature          String?
   specifications  String?
+  isFeatured      Boolean     @default(false)
   availability    availability   @default(AVAILABLE)
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
