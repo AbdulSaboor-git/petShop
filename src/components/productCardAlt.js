@@ -54,14 +54,14 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
           )}
           {hover && (
             <div className="w-full flex justify-center absolute -top-8 left-0">
-              <div className="text-center text-xs text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
+              <div className="text-center text-[11px]  tracking-tight leading-tight text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
                 {item.name}
               </div>
             </div>
           )}
 
           <p
-            className="text-xs truncate"
+            className="text-[11px] md:text-xs truncate leading-tight tracking-tight"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
@@ -73,7 +73,7 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
           <div className="flex gap-2 items-baseline">
             <div className="flex gap-1 items-baseline -mt-1">
               <div className="text-xs md:text-sm font-semibold">Rs. </div>
-              <div className="font-extrabold text-base md:text-lg  font-mono ">
+              <div className="text-base md:text-lg font-Maston tracking-wider ">
                 {item.isDiscounted ? item.discountedPrice : item.price}
               </div>
             </div>

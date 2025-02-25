@@ -4,6 +4,13 @@
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 
+@font-face {
+  font-family: 'MRKMaston';
+  src: url('/fonts/MRKMaston.ttf') format('truetype'); /* Adjust the path */
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 
 :root {
@@ -71,9 +78,11 @@ input, textarea {
 select:focus,
 input:focus, textarea:focus {
 outline: 1px #e47a0a solid;
-
 }
 
+input[type="checkbox"]:focus{
+  outline: none;
+}
 
 @layer utilities {
   .text-balance {

@@ -100,7 +100,7 @@ Please let me know the next steps to complete my order.
 Thank you.`;
   };
 
-  const closeOrder = () => {
+  const closeOrder = async () => {
     closeOrderPage();
     setCustomerName("");
     setCustomerEmail("");
@@ -110,6 +110,7 @@ Thank you.`;
     setNameError("");
     setAddressError("");
     setContactError("");
+    setOrderItems(Items);
   };
 
   // Handler for placing an order via WhatsApp.
@@ -128,7 +129,6 @@ Thank you.`;
     )}`;
     window.open(whatsappUrl, "_blank");
 
-    setOrderItems(Items);
     closeOrder();
   };
 
@@ -150,7 +150,6 @@ Thank you.`;
     )}`;
     window.location.href = mailtoUrl;
 
-    setOrderItems(Items);
     closeOrder();
   };
 
@@ -173,8 +172,8 @@ Thank you.`;
                   className="w-16 object-cover aspect-square rounded-lg cursor-pointer"
                 />
                 <div className="flex flex-1 gap-2 items-center justify-between">
-                  <div className="text-sm flex flex-col items-start gap-[1px]">
-                    <h3 className="font-bold cursor-pointer leading-tight line-clamp-2 text-left ">
+                  <div className="text-[13px] flex flex-col items-start gap-[1px]">
+                    <h3 className="font-bold cursor-pointer leading-tight  tracking-tight line-clamp-2 text-left ">
                       {item.name}
                     </h3>
                     <p className="text-xs text-gray-600">{item.breed?.name}</p>
@@ -183,14 +182,16 @@ Thank you.`;
                       {item.isDiscounted ? item.discountedPrice : item.price}
                     </p>
                   </div>
-                  {orderItems?.length > 1 && (
-                    <div
-                      onClick={() => handleRemove(item.id)}
-                      className="p-2 rounded-full cursor-pointer hover:text-red-600"
-                    >
-                      <MdRemove />
-                    </div>
-                  )}
+                  <div
+                    onClick={() => {
+                      orderItems?.length > 1
+                        ? handleRemove(item.id)
+                        : closeOrder();
+                    }}
+                    className="p-2 rounded-full cursor-pointer hover:text-red-600"
+                  >
+                    <MdRemove />
+                  </div>
                 </div>
               </div>
             ))}
@@ -285,10 +286,7 @@ Thank you.`;
               <MdEmail size={15} />
             </button>
             <button
-              onClick={async () => {
-                closeOrder();
-                setOrderItems(Items);
-              }}
+              onClick={closeOrder}
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
             >
               Cancel

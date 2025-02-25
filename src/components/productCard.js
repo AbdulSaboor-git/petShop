@@ -17,7 +17,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
   return (
     <div
       onClick={prodClick}
-      className={`cursor-pointer min-w-[160px] max-w-[220px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
+      className={`cursor-pointer min-w-[160px] max-w-[215px]  shadow-md overflow-hidden transform transition-transform duration-300 ease-in-out
          md:hover:shadow-lg md:hover:scale-105  mx-auto  ${
            alt ? "my-0 rounded-lg w-[150px] md:w-[180px]" : "my-4 rounded-3xl"
          } `}
@@ -43,14 +43,14 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
       <div className="flex flex-col gap-0 p-4 pt-2 relative">
         {nameHover && (
           <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
-            <div className=" text-center text-xs  text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
+            <div className=" text-center text-[11px] leading-tight  tracking-tight  text-white bg-[#00000093] shadow-md p-1 px-2 rounded-3xl">
               {item.name.toUpperCase()}
             </div>
           </div>
         )}
-        <div className="text-xs font-normal flex gap-2 items-center justify-start">
+        <div className="text-xs tracking-tight font-normal flex gap-2 items-center justify-start">
           {item.isDiscounted && (
-            <div className="text-[10px] font-extrabold text-green-600">
+            <div className="text-[10px] tracking-tight font-extrabold text-green-600">
               {(
                 ((item.price - item.discountedPrice) * 100) /
                 item.price
@@ -70,8 +70,8 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
         <div className="flex justify-between items-center">
           <div className="flex gap-2 items-end">
             <div className="flex gap-1 items-end ">
-              <div className="text-[10px] pb-1">Rs.</div>
-              <div className="font-extrabold text-lg font-mono">
+              <div className="text-xs pb-1 leading-tight">Rs.</div>
+              <div className="text-lg font-Maston tracking-wider ">
                 {item.isDiscounted ? item.discountedPrice : item.price}
               </div>
             </div>

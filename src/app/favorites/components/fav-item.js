@@ -32,7 +32,7 @@ export default function FavItem({
           disabled={item.availability !== "AVAILABLE"}
           checked={isSelected}
           onChange={() => handleSelectItem(item)}
-          className="accent-orange-600 size-3 md:size-4"
+          className="accent-orange-600 "
         />
         <img
           src={item.images[0]}
@@ -42,13 +42,15 @@ export default function FavItem({
         />
 
         <div
-          className="text-sm md:text-base cursor-pointer flex flex-col gap-[1px] items-start"
+          className="text-[13px] md:text-base cursor-pointer flex flex-col gap-[1px] items-start"
           onClick={itemClick}
         >
           {item.availability !== "AVAILABLE" && (
             <p className="text-[10px] md:text-xs text-red-600">UNAVAILABLE</p>
           )}
-          <h3 className="font-bold leading-tight line-clamp-2 ">{item.name}</h3>
+          <h3 className="font-bold leading-tight  tracking-tight line-clamp-2 ">
+            {item.name}
+          </h3>
           <p className="text-xs md:text-sm text-gray-600">
             {item.breed?.name}{" "}
           </p>

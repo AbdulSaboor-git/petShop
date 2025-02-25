@@ -269,24 +269,24 @@ export default function HomePage() {
             <Slider {...settings} className="">
               {randomItems.map((item, index) => (
                 <div key={index}>
-                  <div className="flex flex-col bg-gray-100 md:flex-row mx-3 mb-2 p-10 px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 shadow-md ">
+                  <div className="flex flex-col bg-gray-100 md:flex-row mx-3 mb-2 p-10 px-12 md:px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 shadow-md ">
                     <div className="flex md:w-[50%] flex-col gap-6 w-full md:max-w-[400px]">
                       <div className="relative">
                         {nameHover && (
                           <div className="w-full flex justify-center absolute -top-8 left-0 z-50">
-                            <div className=" text-center text-xs  text-white bg-[#6e451994] shadow-md p-1 px-2 rounded-3xl">
+                            <div className=" text-center text-[11px] leading-tight  tracking-tight  text-white bg-[#6e451994] shadow-md p-1 px-2 rounded-3xl">
                               {item.name.toUpperCase()}
                             </div>
                           </div>
                         )}
                         <h2
-                          className="text-xl md:text-3xl text-center md:text-left font-extrabold text-[#6e4519] tracking-wide truncate"
+                          className="text-lg md:text-2xl text-center md:text-left font-extrabold text-[#6e4519] truncate"
                           onMouseEnter={() => setNameHover(true)}
                           onMouseLeave={() => setNameHover(false)}
                         >
                           {item.name.toUpperCase()}
                         </h2>
-                        <div className="pt-4 mx-1 text-base md:text-lg space-y-1">
+                        <div className="pt-2 text-base md:text-lg ">
                           {item.breed ? (
                             <p>
                               <strong className="text-[#6e4519]">
@@ -334,7 +334,7 @@ export default function HomePage() {
             </Slider>
 
             {/* Top Breeds */}
-            <div className="flex flex-col px-6  gap-8">
+            <div className="flex flex-col px-6  gap-5">
               <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                 Top Breeds
               </div>
@@ -356,14 +356,14 @@ export default function HomePage() {
                             i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
                           }  from-[#9e6e3b]/40 via-transparent to-black/40`}
                         >
-                          <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
+                          <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
                             {breed.name.toUpperCase()}
                           </h2>
                           <button
                             onClick={() =>
                               shopClick("All", breed.name, false, "default")
                             }
-                            className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
+                            className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                           >
                             VIEW MORE
                           </button>
@@ -453,7 +453,7 @@ export default function HomePage() {
             </div>
 
             {/* Top Categories */}
-            <div className="flex flex-col px-6  gap-8">
+            <div className="flex flex-col px-6 gap-5">
               <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                 Top Categories
               </div>
@@ -475,14 +475,14 @@ export default function HomePage() {
                             i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
                           }  from-[#9e6e3b]/40 via-transparent to-black/40`}
                         >
-                          <h2 className="text-white text-[22px] md:text-3xl font-extrabold tracking-wide break-words">
+                          <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
                             {categ.name.toUpperCase()}
                           </h2>
                           <button
                             onClick={() =>
                               shopClick(categ.name, "All", false, "default")
                             }
-                            className="mt-4 self-start text-xs md:text-sm border-2  py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
+                            className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                           >
                             VIEW MORE
                           </button>

@@ -254,17 +254,17 @@ export default function ItemPage({ params }) {
                       {item?.breed?.name}
                     </p>
                   )}
-                  <div className="text-lg md:text-2xl font-bold text-orange-600">
+                  <div className="text-xl md:text-3xl font-Maston tracking-wider font-bold text-orange-600">
                     {!item?.isDiscounted && (
                       <p>
-                        <span> Rs. </span>
+                        <span className="text-sm"> Rs. </span>
                         {item?.price}
                       </p>
                     )}
                     {item?.isDiscounted && (
                       <div className="flex flex-row gap-3 items-baseline">
                         <p>
-                          <span> Rs. </span>
+                          <span className="text-sm"> Rs. </span>
                           {item?.discountedPrice}
                         </p>
                         <p className="font-normal text-xs md:text-sm line-through decoration-gray-400 text-gray-500">

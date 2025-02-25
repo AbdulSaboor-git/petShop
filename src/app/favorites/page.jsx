@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import { MdStore } from "react-icons/md";
+import { RiArrowRightSLine } from "react-icons/ri";
 
 export default function Favourites() {
   const [groupedFavorites, setGroupedFavorites] = useState([]); // grouped by seller (from API)
@@ -177,11 +178,11 @@ export default function Favourites() {
               className="flex flex-col items-center w-full justify-center gap-2 bg-gray-100 p-2 py-4 rounded-lg"
             >
               <div className="flex w-full items-center justify-between px-1.5">
-                <div className="flex items-center justify-center gap-4 px-3">
+                <div className="flex items-center justify-center gap-4 px-3.5">
                   {/* Select All checkbox */}
                   <input
                     type="checkbox"
-                    className="accent-orange-600"
+                    className="accent-orange-600 size-3.5"
                     checked={
                       selectedSellerId === group.seller.id &&
                       selectedItems.length === group.items.length
@@ -190,9 +191,10 @@ export default function Favourites() {
                       handleSelectAllForSeller(group.seller.id, group.items)
                     }
                   />
-                  <div className="flex gap-2 items-center text-sm md:text-base font-semibold">
-                    <MdStore size={15} className="mb-0.5" />
+                  <div className="flex gap-2 text-gray-600 items-center text-sm md:text-base font-semibold cursor-pointer hover:text-orange-800">
+                    <MdStore size={16} className="mb-0.5" />
                     {group.seller.firstName + " " + group.seller.lastName}
+                    <RiArrowRightSLine />
                   </div>
                 </div>
               </div>
@@ -239,11 +241,11 @@ export default function Favourites() {
         </div>
         <div
           ref={orderConfirmationRef}
-          className={`w-full max-w-[500px] flex items-center justify-center ${
+          className={`w-full max-w-[500px] flex items-start justify-center self-center ${
             checkout
-              ? "opacity-100 h-full py-5"
-              : "opacity-0 h-0 pointer-events-none"
-          } transition-all duration-500`}
+              ? "opacity-100 max-h-[3000px] py-5"
+              : "opacity-0 max-h-0 pointer-events-none"
+          } transition-all duration-700 overflow-hidden`}
         >
           <Order
             Items={selectedItems}
