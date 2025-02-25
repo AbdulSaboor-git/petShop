@@ -69,10 +69,10 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
         </div>
         {/* <p className="text-xs text-gray-500"> {item.breed}</p> */}
         <div className="flex justify-between items-center">
-          <div className="flex gap-2 items-end">
+          <div className="flex gap-2 items-end font-Maston tracking-wider">
             <div className="flex gap-1 items-end ">
               <div className="text-xs pb-1 leading-tight">Rs.</div>
-              <div className="text-lg font-Maston tracking-wider ">
+              <div className="text-lg ">
                 {item.isDiscounted ? item.discountedPrice : item.price}
               </div>
             </div>

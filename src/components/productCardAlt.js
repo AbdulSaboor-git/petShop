@@ -70,10 +70,10 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
         </div>
         {/* <p className="text-xs text-gray-400 flex gap-1 items-center "> <MdCircle />  {item.breed}</p> */}
         <div className="flex justify-between items-center">
-          <div className="flex gap-2 items-baseline">
+          <div className="flex gap-2 items-baseline font-Maston tracking-wider">
             <div className="flex gap-1 items-baseline -mt-1">
               <div className="text-xs md:text-sm font-semibold">Rs. </div>
-              <div className="text-base md:text-lg font-Maston tracking-wider ">
+              <div className="text-base md:text-lg  ">
                 {item.isDiscounted ? item.discountedPrice : item.price}
               </div>
             </div>
