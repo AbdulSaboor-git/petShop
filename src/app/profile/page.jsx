@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 export default function Profile() {
   const [id, setId] = useState(null);
   const [seller, setSeller] = useState(null);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sellerName = (seller?.firstName + " " + seller?.lastName).toUpperCase();
@@ -23,10 +24,13 @@ export default function Profile() {
     const fetchData = async () => {
       try {
         const response = await fetch(`/api/user?userId=${id}`);
-        if (!response.ok) {
+        const response2 = await fetch(`/api/allItems?sellerId=${id}`);
+        if (!response.ok || !response2.ok) {
           throw new Error("Failed to fetch data");
         }
         const seller = await response.json();
+        const itemsData = await response2.json();
+        setItems(itemsData.items);
         setSeller(seller);
       } catch (err) {
         setError(err.message);
@@ -51,7 +55,7 @@ export default function Profile() {
           </div>
         ) : (
           <div className="w-full flex flex-col gap-4 items-center justify-start h-screen bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px]">
-            <div className="flex gap-6 items-center justify-start bg-gray-200 p-3 w-[85%] md:max-w-[600px]  rounded-2xl -mt-[52px] md:-mt-[60px]">
+            <div className="flex gap-4 mdd:gap-6 items-center justify-start bg-gray-200 p-3 w-[90%] md:max-w-[600px]  rounded-2xl -mt-[52px] md:-mt-[60px]">
               <img
                 src={seller.profilePicture}
                 alt={seller.firstName}
@@ -59,7 +63,7 @@ export default function Profile() {
               />
               <div className="text-xs md:text-sm ">
                 <div className="font-extrabold">{sellerName}</div>
-                <div>Total Products: {seller.items.length}</div>
+                <div>Total Products: {items.length}</div>
               </div>
             </div>
           </div>

@@ -15,6 +15,7 @@ export default function SellerDashboardMainPage() {
     totalProducts: 0,
     totalCategories: 0,
     totalBreeds: 0,
+    totalAvailableProducts: 0,
   });
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -47,6 +48,11 @@ export default function SellerDashboardMainPage() {
           ? dataProducts.items.length
           : 0;
 
+        const availableProducts = dataProducts.items.filter(
+          (item) => item.availability === "AVAILABLE"
+        );
+        const totalAvailableProducts = availableProducts.length;
+
         // Fetch categories and breeds data
         const responseCatBreed = await fetch(`/api/categories_breeds`);
         if (!responseCatBreed.ok) {
@@ -61,7 +67,12 @@ export default function SellerDashboardMainPage() {
           : 0;
 
         // Update metrics state
-        setMetrics({ totalProducts, totalCategories, totalBreeds });
+        setMetrics({
+          totalProducts,
+          totalCategories,
+          totalBreeds,
+          totalAvailableProducts,
+        });
 
         // (Optional) Fetch analytics data
         // const responseAnalytics = await fetch(`/api/seller-analytics`);
@@ -118,6 +129,12 @@ export default function SellerDashboardMainPage() {
                 </h2>
                 <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
                   {metrics.totalProducts}
+                </p>
+                <h2 className="text-base md:text-lg font-bold">
+                  Available Products
+                </h2>
+                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                  {metrics.totalAvailableProducts}
                 </p>
               </div>
               <div className="p-4 border bg-white  rounded-xl shadow text-center">
