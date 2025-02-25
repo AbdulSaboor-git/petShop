@@ -16,6 +16,7 @@ export default function SellerDashboardMainPage() {
     totalCategories: 0,
     totalBreeds: 0,
     totalAvailableProducts: 0,
+    productsSold: 0,
   });
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ export default function SellerDashboardMainPage() {
           (item) => item.availability === "AVAILABLE"
         );
         const totalAvailableProducts = availableProducts.length;
+        const productsSold = totalProducts - totalAvailableProducts;
 
         // Fetch categories and breeds data
         const responseCatBreed = await fetch(`/api/categories_breeds`);
@@ -72,6 +74,7 @@ export default function SellerDashboardMainPage() {
           totalCategories,
           totalBreeds,
           totalAvailableProducts,
+          productsSold,
         });
 
         // (Optional) Fetch analytics data
@@ -123,18 +126,24 @@ export default function SellerDashboardMainPage() {
 
             {/* Metrics Cards */}
             <div className="grid grid-cols-1 bg-gray-100 p-4 rounded-xl sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
-              <div className="p-4 border bg-white  rounded-xl shadow text-center">
+              <div className="p-4 border bg-white text-gray-700  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">
                   Total Products
                 </h2>
                 <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
                   {metrics.totalProducts}
                 </p>
-                <h2 className="text-base md:text-lg font-bold">
+                <h2 className="text-base md:text-lg mt-4 font-bold text-green-800">
                   Available Products
                 </h2>
-                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                <p className="text-2xl md:text-3xl mt-2 text-green-800">
                   {metrics.totalAvailableProducts}
+                </p>
+                <h2 className="text-base md:text-lg mt-4 font-bold text-red-800">
+                  Products Sold
+                </h2>
+                <p className="text-2xl md:text-3xl mt-2 text-red-800">
+                  {metrics.productsSold}
                 </p>
               </div>
               <div className="p-4 border bg-white  rounded-xl shadow text-center">
