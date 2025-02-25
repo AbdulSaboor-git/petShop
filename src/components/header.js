@@ -17,20 +17,16 @@ import {
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LoginForm from "./loginForm";
-import Profile from "./profile";
 import useAuthUser from "@/hooks/authUser";
 
 export default function Header() {
   const [logedIn, setLogedIn] = useState(false);
   const { user, userLoading } = useAuthUser();
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const [showAcc, setShowAcc] = useState(false);
 
   // New states to control mounting and animation classes for popups
   const [loginMounted, setLoginMounted] = useState(false);
   const [loginAnimClass, setLoginAnimClass] = useState("");
-  const [profileMounted, setProfileMounted] = useState(false);
-  const [profileAnimClass, setProfileAnimClass] = useState("");
 
   const router = useRouter();
 
@@ -38,7 +34,6 @@ export default function Header() {
     if (user) setLogedIn(true);
     else {
       setLogedIn(false);
-      setShowAcc(false);
     }
     setShowLoginForm(false);
   }, [user]);
@@ -59,28 +54,10 @@ export default function Header() {
     }
   }, [showLoginForm]);
 
-  // Manage mounting and animation for Profile popup
-  useEffect(() => {
-    if (showAcc) {
-      setProfileMounted(true);
-      setProfileAnimClass("animate-openAccPopUp");
-    } else if (profileMounted) {
-      setProfileAnimClass("animate-closeAccPopUp");
-      const timer = setTimeout(() => {
-        setProfileMounted(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [showAcc]);
-
   const logoLink = "/logo.jpg";
 
   const toggleShowLoginForm = () => {
     setShowLoginForm((prev) => !prev);
-  };
-
-  const toggleShowAcc = () => {
-    setShowAcc((prev) => !prev);
   };
 
   function homeClick() {
@@ -108,7 +85,6 @@ export default function Header() {
     router.push("/seller-dashboard");
   }
   function profileClick() {
-    // toggleShowAcc();
     router.push(`/profile?acc=${user?.id}`);
   }
 
@@ -173,9 +149,6 @@ export default function Header() {
           className="fixed z-10 h-full w-full"
         />
       )}
-      {showAcc && (
-        <div onClick={toggleShowAcc} className="fixed z-10 h-full w-full" />
-      )}
       <div className="relative flex justify-center items-center w-full">
         <div className="flex flex-col relative justify-center w-full items-center">
           <div className="flex flex-col gap-6 lg:gap-0 w-full items-center justify-center z-0">
@@ -238,16 +211,7 @@ export default function Header() {
               </div>
             </div>
           </div>
-          {/* Profile popup */}
-          {profileMounted && (
-            <div
-              className={`absolute backdrop-blur-[8px] top-10 lg:top-12 rounded-xl z-20 lg:right-20 md:mr-10 ${
-                user?.role === "SELLER" && "lg:right-8 md:mr-5"
-              } ${profileAnimClass}`}
-            >
-              <Profile />
-            </div>
-          )}
+
           {/* Login popup */}
           {loginMounted && (
             <div

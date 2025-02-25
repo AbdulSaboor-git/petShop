@@ -22,7 +22,7 @@ export default function HomePage() {
   const router = useRouter();
   const [slidesToShow, setSlidesToShow] = useState(4); // Default value for large screens
   const [centerMode, setCenterMode] = useState(false);
-  const [randomItems, setRandomItems] = useState([]);
+  const [featuredItems, setFeaturedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -136,16 +136,21 @@ export default function HomePage() {
     .slice(0, 5);
 
   useEffect(() => {
-    const getRandomItems = () => {
-      if (items.length <= 5) {
-        setRandomItems(items);
-      } else {
-        const shuffled = [...items].sort(() => 0.5 - Math.random());
-        setRandomItems(shuffled.slice(0, 5));
-      }
-    };
-
-    getRandomItems();
+    const fItems = items.filter((item) => item.isfeatured === true);
+    if (fItems.length > 1) {
+      const shuffled = [...fItems].sort(() => 0.6 - Math.random());
+      setFeaturedItems(shuffled.slice(0, 6));
+    } else {
+      const getRandomItems = () => {
+        if (items.length <= 5) {
+          setFeaturedItems(items);
+        } else {
+          const shuffled = [...items].sort(() => 0.5 - Math.random());
+          setFeaturedItems(shuffled.slice(0, 5));
+        }
+      };
+      getRandomItems();
+    }
   }, [items]);
 
   categImages = categories.map((category) => {
@@ -197,7 +202,7 @@ export default function HomePage() {
 
   const settings = {
     dots: true,
-    infinite: randomItems.length > 1 ? true : false,
+    infinite: featuredItems.length > 1 ? true : false,
     speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -267,7 +272,7 @@ export default function HomePage() {
             )}
             {/* Random Items Slider */}
             <Slider {...settings} className="">
-              {randomItems.map((item, index) => (
+              {featuredItems.map((item, index) => (
                 <div key={index}>
                   <div className="flex flex-col bg-gray-100 md:flex-row mx-3 mb-2 p-10 px-12 md:px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 shadow-md ">
                     <div className="flex md:w-[50%] flex-col gap-6 w-full md:max-w-[400px]">
@@ -419,7 +424,7 @@ export default function HomePage() {
             {/* Most Valuable Section */}
             <div className="flex flex-col gap-2 overflow-hidden">
               <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
-                Most Valuable
+                Premium
               </div>
               {items.length != 0 ? (
                 <div className="relative">

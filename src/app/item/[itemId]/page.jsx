@@ -15,7 +15,6 @@ import Order from "@/components/order";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
-import ProductCardAlt from "@/components/productCardAlt";
 import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productCard";
 import useAuthUser from "@/hooks/authUser";
@@ -40,6 +39,10 @@ export default function ItemPage({ params }) {
 
   const defaultPic =
     "https://lh3.googleusercontent.com/pw/AP1GczM2cnSQPHG8oKKskeSFKCFjs3z_NG31Tt4bQPqb4Fp-Qdteh0m-84BjSvDgQTkscceDPu1eD1Rs2OxUSd0InRuqnowixs1x8kqSVIcu_7BbkBi4XFK13ZqIeq56OxPw0bzq0hoUgYtTHteuYB1cTI-K=w883-h883-s-no-gm";
+
+  function profileClick(sellerId) {
+    router.push(`/profile?acc=${sellerId}`);
+  }
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -397,7 +400,10 @@ export default function ItemPage({ params }) {
             )}
 
             {/* seller details section */}
-            <div className="w-full cursor-pointer hover:text-orange-900 max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start">
+            <div
+              onClick={() => profileClick(item.sellerId)}
+              className="w-full cursor-pointer hover:text-orange-900 max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start"
+            >
               <img
                 src={
                   item.seller.profilePicture

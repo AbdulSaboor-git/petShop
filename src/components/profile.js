@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import useAuthUser from "@/hooks/authUser";
 import { triggerNotification } from "@/redux/notificationThunk";
+import { MdClose } from "react-icons/md";
 
-function Profile() {
+function Profile({ close }) {
   const dispatch = useDispatch();
   const { user, userLoading, logout } = useAuthUser();
   const [loading, setLoading] = useState(false);
@@ -29,8 +30,14 @@ function Profile() {
 
   return (
     <div className="bg-[#140a024e] shadow-lg  rounded-xl p-8 w-full max-w-[300px] transition-all duration-300 ">
+      <div
+        className="absolute text-white opacity-70 top-4 right-4 cursor-pointer"
+        onClick={close}
+      >
+        <MdClose size={15} />{" "}
+      </div>
       {user ? (
-        <div className="w-full flex flex-col gap-3 items-center justify-center text-white transition-all duration-300">
+        <div className="w-full relative flex flex-col gap-3 items-center justify-center text-white transition-all duration-300">
           <div className="flex flex-col gap-1 items-center justify-center">
             <img
               className="aspect-square h-20 bg-gray-100 rounded-full "
@@ -54,7 +61,7 @@ function Profile() {
           </div>
           <button
             onClick={handleLogout}
-            className="w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial text-white rounded-lg p-1 px-4"
+            className="w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial text-white rounded-lg p-1.5 px-4"
           >
             Logout
           </button>
