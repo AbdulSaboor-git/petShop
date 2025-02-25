@@ -9,65 +9,65 @@ datasource db {
 }
 
 model user {
-  id             Int         @id @default(autoincrement())
-  email          String      @unique
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
   password       String
   phoneNo        String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
   firstName      String
   lastName       String?
   lastLogin      DateTime?
   profilePicture String?
-  isActive       Boolean     @default(true)
+  isActive       Boolean   @default(true)
   role           role?
-  items          item[]      // Items listed by the seller
-}
-
-enum role{
-  ADMIN
-  SELLER
+  items          item[]
 }
 
 model item {
-  id              Int       @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   name            String
-  breed           breed?    @relation(fields: [breedId], references: [id])
   breedId         Int?
-  category        category  @relation(fields: [categoryId], references: [id])
   categoryId      Int
   images          String[]
   price           Int
   description     String?
   discountedPrice Int
-  isDiscounted    Boolean    @default(false)
+  isDiscounted    Boolean      @default(false)
   weight          Float?
   height          Float?
   age             Float?
   sex             String?
   nature          String?
   specifications  String?
-  isFeatured      Boolean     @default(false)
-  availability    availability   @default(AVAILABLE)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  availability    availability @default(AVAILABLE)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
   sellerId        Int
-  seller          user       @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  isfeatured      Boolean      @default(false)
+  breed           breed?       @relation(fields: [breedId], references: [id])
+  category        category     @relation(fields: [categoryId], references: [id])
+  seller          user         @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+}
+
+model category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  items item[]
+}
+
+model breed {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  items item[]
+}
+
+enum role {
+  ADMIN
+  SELLER
 }
 
 enum availability {
   AVAILABLE
   UNAVAILABLE
 }
-
-model category{
-  id              Int       @id @default(autoincrement())
-  name            String    @unique
-  items           item[]
-}
-
-model breed{
-  id              Int       @id @default(autoincrement())
-  name            String    @unique
-  items           item[]
-} 

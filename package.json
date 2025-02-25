@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:migrate": "prisma migrate dev --name init",
+    "migrate": "prisma migrate deploy",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {

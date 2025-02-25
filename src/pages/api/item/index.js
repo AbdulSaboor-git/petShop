@@ -59,6 +59,7 @@ async function handlePost(req, res) {
       categoryId,
       breedId,
       sex, // received from front-end; will be mapped to `sex`
+      isFeatured,
       nature,
       specifications,
       weight,
@@ -84,6 +85,7 @@ async function handlePost(req, res) {
         categoryId: Number(categoryId),
         breedId: breedId ? Number(breedId) : null,
         sex: sex ? sex.trim() : null,
+        isFeatured: isFeatured,
         nature: nature ? nature.trim() : null,
         specifications: specifications ? specifications.trim() : null,
         weight: weight ? Number(weight) : null,
@@ -126,7 +128,8 @@ async function handlePatch(req, res, productId) {
       description,
       categoryId,
       breedId,
-      sex, // received from front-end; will be mapped to `sex`
+      sex,
+      isFeatured,
       nature,
       specifications,
       weight,
@@ -155,7 +158,8 @@ async function handlePatch(req, res, productId) {
         ...(breedId !== undefined && {
           breedId: breedId ? Number(breedId) : null,
         }),
-        ...(sex ? { sex: sex.trim() } : { sex: null }), // mapping from sex to schema field "sex"
+        ...(sex ? { sex: sex.trim() } : { sex: null }),
+        isFeatured: isFeatured,
         ...(nature ? { nature: nature.trim() } : { nature: null }),
         ...(specifications
           ? { specifications: specifications.trim() }
