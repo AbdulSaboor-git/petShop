@@ -59,7 +59,7 @@ async function handlePost(req, res) {
       categoryId,
       breedId,
       sex, // received from front-end; will be mapped to `sex`
-      isFeatured,
+      isfeatured,
       nature,
       specifications,
       weight,
@@ -85,7 +85,7 @@ async function handlePost(req, res) {
         categoryId: Number(categoryId),
         breedId: breedId ? Number(breedId) : null,
         sex: sex ? sex.trim() : null,
-        isFeatured: isFeatured,
+        isfeatured: isfeatured,
         nature: nature ? nature.trim() : null,
         specifications: specifications ? specifications.trim() : null,
         weight: weight ? Number(weight) : null,
@@ -129,7 +129,7 @@ async function handlePatch(req, res, productId) {
       categoryId,
       breedId,
       sex,
-      isFeatured,
+      isfeatured,
       nature,
       specifications,
       weight,
@@ -159,7 +159,7 @@ async function handlePatch(req, res, productId) {
           breedId: breedId ? Number(breedId) : null,
         }),
         ...(sex ? { sex: sex.trim() } : { sex: null }),
-        isFeatured: isFeatured,
+        isfeatured: isfeatured,
         ...(nature ? { nature: nature.trim() } : { nature: null }),
         ...(specifications
           ? { specifications: specifications.trim() }

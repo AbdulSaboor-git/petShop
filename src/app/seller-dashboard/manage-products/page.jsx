@@ -36,7 +36,7 @@ export default function ManageProductsPage() {
   const [sex, setSex] = useState("");
   const [nature, setNature] = useState("");
   const [specifications, setSpecifications] = useState("");
-  const [isFeatured, setIsFeatured] = useState(false);
+  const [isfeatured, setIsFeatured] = useState(false);
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
@@ -195,7 +195,7 @@ export default function ManageProductsPage() {
     height: height && height.toString().trim() !== "" ? Number(height) : null,
     age: age && age.toString().trim() !== "" ? Number(age) : null,
     availability,
-    isFeatured,
+    isfeatured,
     images, // An array of image URLs
     sellerId,
   };
@@ -219,7 +219,7 @@ export default function ManageProductsPage() {
       setSex(data.sex || "");
       setNature(data.nature || "");
       setSpecifications(data.specifications || "");
-      setIsFeatured(data.isFeatured || false);
+      setIsFeatured(data.isfeatured || false);
       setWeight(data.weight || "");
       setHeight(data.height || "");
       setAge(data.age || "");
@@ -523,7 +523,7 @@ export default function ManageProductsPage() {
                         <label className="mx-0.5">Is Featured</label>
                         <select
                           className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
-                          value={isFeatured ? "true" : "false"}
+                          value={isfeatured ? "true" : "false"}
                           onChange={(e) =>
                             setIsFeatured(e.target.value === "true")
                           }
@@ -790,7 +790,7 @@ export default function ManageProductsPage() {
                         <label className="mx-0.5">Is Featured</label>
                         <select
                           className="p-2 mt-0.5 px-4 rounded-xl border border-[#9e6e3b] w-full"
-                          value={isFeatured ? "true" : "false"}
+                          value={isfeatured ? "true" : "false"}
                           onChange={(e) =>
                             setIsFeatured(e.target.value === "true")
                           }
