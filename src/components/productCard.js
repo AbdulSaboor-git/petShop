@@ -25,6 +25,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
       <div className="relative w-full pt-[100%] ">
         <img
           src={item.images[0] || defaultPic}
+          draggable="false"
           alt={name}
           className="absolute top-0 left-0 w-full aspect-square h-full object-cover bg-white"
         />

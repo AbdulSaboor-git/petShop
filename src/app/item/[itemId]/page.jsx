@@ -8,6 +8,7 @@ import {
   MdFavorite,
   MdFavoriteBorder,
   MdMessage,
+  MdStore,
 } from "react-icons/md";
 import ItemGallery from "./components/itemGallery";
 import Order from "@/components/order";
@@ -18,6 +19,7 @@ import ProductCardAlt from "@/components/productCardAlt";
 import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productCard";
 import useAuthUser from "@/hooks/authUser";
+import { RiArrowRightSLine } from "react-icons/ri";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -395,7 +397,7 @@ export default function ItemPage({ params }) {
             )}
 
             {/* seller details section */}
-            <div className="w-full max-w-[400px] bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start">
+            <div className="w-full cursor-pointer hover:text-orange-900 max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start">
               <img
                 src={
                   item.seller.profilePicture
@@ -404,16 +406,22 @@ export default function ItemPage({ params }) {
                 }
                 alt="seller img"
                 draggable="false"
-                className="rounded-xl border p-1 bg-white border-gray-300 w-14 md:w-16 object-cover aspect-square overflow-hidden"
+                className="rounded-xl border p-1 bg-white border-gray-300 w-16 md:w-[70px] object-cover aspect-square overflow-hidden"
               />
-              <div className="font-semibold text-sm ">
-                {item.seller.firstName} {item.seller.lastName}
+              <div className="w-full flex  gap-2 justify-between items-center">
+                <div className="font-semibold text-sm truncate">
+                  {item.seller.firstName} {item.seller.lastName}
+                </div>
+                <div className="flex gap-1">
+                  <MdStore size={18} />
+                  <RiArrowRightSLine size={18} />
+                </div>
               </div>
             </div>
 
             {/* bought together Items Section */}
             {boughtTogetherItems.length != 0 && (
-              <div className="flex flex-col gap-4 text-sm md:text-base">
+              <div className="flex flex-col gap-3 text-sm md:text-base">
                 <strong>Perfect Match</strong>
 
                 <div className="flex flex-col gap-3 items-center justify-center">
@@ -469,7 +477,7 @@ export default function ItemPage({ params }) {
 
             {/* Related Items Section */}
             {relatedItems.length != 0 && !loading2 && (
-              <div className="flex flex-col gap-4 text-sm md:text-base">
+              <div className="flex flex-col gap-3 text-sm md:text-base">
                 <strong>Related Items</strong>
 
                 <div className="flex flex-col gap-6 items-center justify-center">

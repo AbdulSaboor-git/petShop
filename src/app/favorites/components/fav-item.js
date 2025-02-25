@@ -32,7 +32,7 @@ export default function FavItem({
           disabled={item.availability !== "AVAILABLE"}
           checked={isSelected}
           onChange={() => handleSelectItem(item)}
-          className="accent-orange-600 "
+          className="accent-orange-600 size-4"
         />
         <img
           src={item.images[0]}
