@@ -1,20 +1,9 @@
 import React from "react";
 import { FaEnvelope, FaInstagram } from "react-icons/fa";
 import { SiFacebook, SiGoogleplay, SiYoutube } from "react-icons/si";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
 
 export default function Footer() {
   const date = new Date();
-  const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
-    dispatch(
-      triggerNotification({
-        msg: msg,
-        success: state,
-      })
-    );
-  };
   const logoLink = "/logo.jpg";
   // const logoLink =
   //   "https://lh3.googleusercontent.com/pw/AP1GczN9HraQsHh0pJ0YoBThzcS0tY_-uk5zyQquRDFTVgpN6peh1An56u-fUREcdmwVRl0gE_E7MGnSXH_Zsj-fjMW8nIFHQ8lKIep5Xwi6TKKsPZa7kyQLrqofq3dw8994xfpRNfHIjbG257eM0pMU9f4U=w658-h263-s-no-gm";

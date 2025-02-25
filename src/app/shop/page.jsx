@@ -233,6 +233,12 @@ export default function Shop() {
         ) : (
           <div className="flex flex-col w-full lg:flex-row gap-6 transition-all duration-500">
             {/* Filters Section */}
+            <input
+              type="search"
+              className="w-full -my-3 md:max-w-[350px] md:self-end border bg-gray-100 border-gray-200 p-3 rounded-xl 
+                text-xs md:text-sm"
+              placeholder="search..."
+            />
             <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
               <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
                 {

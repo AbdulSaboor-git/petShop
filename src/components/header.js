@@ -107,8 +107,9 @@ export default function Header() {
   function sellerDBClick() {
     router.push("/seller-dashboard");
   }
-  function accountClick() {
-    toggleShowAcc();
+  function profileClick() {
+    // toggleShowAcc();
+    router.push(`/profile?acc=${user?.id}`);
   }
 
   const Buttons = [
@@ -134,7 +135,7 @@ export default function Header() {
     topBtns.push({
       name: user ? "Me" : "My Account",
       icon: <MdAccountCircle size={16} />,
-      onClick: accountClick,
+      onClick: profileClick,
     });
 
   if (logedIn && user?.role === "ADMIN")
