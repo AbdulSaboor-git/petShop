@@ -100,7 +100,7 @@ export default function Profile() {
             {error}
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-12 pt-0 p-5 justify-start bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px]">
+          <div className="w-full flex flex-col gap-10 pt-0 p-5 justify-start bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px] overflow-hidden">
             <div className="flex flex-col items-center justify-start self-center bg-gray-200 p-3 w-[93%] md:max-w-[600px] rounded-2xl -mt-[52px] md:-mt-[60px] overflow-hidden">
               <div className="flex gap-4 md:gap-6 self-start items-center justify-start">
                 <img
@@ -140,7 +140,7 @@ export default function Profile() {
                     <br />
                     <button
                       onClick={logout}
-                      className="mt-1 flex gap-2 items-center justify-center w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial rounded-md p-0.5 md:p-1 px-2 text-white"
+                      className="mt-1 flex gap-2 items-center justify-center w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial rounded-md p-1 px-2 text-white"
                     >
                       Logout
                     </button>
@@ -159,23 +159,25 @@ export default function Profile() {
             {featuredItems.length > 0 && (
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold">Featured Products</h1>
-                <div className="flex gap-4 w-full justify-start overflow-auto hidden_scroll_bar">
+                <div className="flex gap-2 w-full justify-start overflow-auto hidden_scroll_bar">
                   {featuredItems.map((item) => (
                     <ProductCard_S key={item.id} item={item} alt={true} />
                   ))}
                 </div>
               </div>
             )}
+            <div className="h-3 bg-white w-[120%] self-center" />
             {premiumItems.length > 0 && (
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold">Premium Products</h1>
-                <div className="flex gap-4 w-full overflow-auto hidden_scroll_bar">
+                <div className="flex gap-2 w-full overflow-auto hidden_scroll_bar">
                   {premiumItems.map((item) => (
                     <ProductCard_S key={item.id} item={item} alt={true} />
                   ))}
                 </div>
               </div>
             )}
+            <div className="h-3 bg-white w-[120%] self-center" />
             <div className="flex flex-col gap-2">
               <h1 className="font-bold">All Products</h1>
               {items.length ? (

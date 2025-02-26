@@ -15,7 +15,7 @@ export default function ProductCardAlt({ item, alt }) {
     <div
       onClick={prodClick}
       className={`mb-1 cursor-pointer bg-white ${
-        alt ? "min-w-[160px] max-w-[160px] " : "min-w-[150px] max-w-[200px] "
+        alt ? "min-w-[170px] max-w-[170px] " : "min-w-[150px] max-w-[200px] "
       } overflow-hidden transition-all duration-300 ease-in-out relative rounded-xl`}
     >
       {/* Product Image */}
