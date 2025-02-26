@@ -45,7 +45,7 @@ export default function Shop() {
     if (searchQuery === "") {
       setItems(allItems);
     } else {
-      clearFilters();
+      // clearFilters();
       const fItems = allItems.filter((item) => {
         return (
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -145,6 +145,7 @@ export default function Shop() {
 
   // Whenever the selected filters, onSale toggle, or sorting options change, update the displayed items.
   useEffect(() => {
+    if (searchQuery != "") return;
     let filtered = allItems;
 
     // Filter by category only if "All" is not selected.
@@ -190,7 +191,14 @@ export default function Shop() {
     }
 
     setItems(filtered);
-  }, [selectedCategories, selectedBreeds, allItems, onSale, sortOption]);
+  }, [
+    selectedCategories,
+    selectedBreeds,
+    allItems,
+    onSale,
+    sortOption,
+    searchQuery,
+  ]);
 
   // Handle category selection.
   const handleCategoryClick = (category) => {

@@ -33,7 +33,10 @@ export default function Profile() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const idParam = params.get("acc");
-      if (idParam && idParam !== "undefined") setId(idParam);
+      if (idParam && idParam != "undefined") {
+        console.log(idParam);
+        setId(idParam);
+      }
     }
   }, []);
 
@@ -82,12 +85,10 @@ export default function Profile() {
     if (!user && userLoading) {
       return;
     }
-    if (!id || id === "undefined") {
-      setError("Something went wrong.");
-      setLoading(false);
-      return;
-    }
+
     const fetchData = async () => {
+      setLoading(true);
+      console.log(id + "dsa");
       try {
         const response = await fetch(`/api/user?userId=${id}`);
         const response2 = await fetch(`/api/allItems?sellerId=${id}`);
@@ -111,7 +112,7 @@ export default function Profile() {
         setLoading(false);
       }
     };
-    fetchData();
+    if (id && id != "undefined") fetchData();
   }, [id, user, userLoading]);
 
   // Filter featured items and create premium items without mutating the original items array.
