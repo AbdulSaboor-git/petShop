@@ -52,13 +52,26 @@ export default function Profile() {
 
   // Fetch seller and items data based on the id.
   useEffect(() => {
-    if (!id || id === "undefined") return;
+    if (!user || userLoading) {
+      return;
+    }
+    if (!id || id === "undefined") {
+      setError("Something went wrong.");
+      setLoading(false);
+      return;
+    }
     const fetchData = async () => {
       try {
         const response = await fetch(`/api/user?userId=${id}`);
         const response2 = await fetch(`/api/allItems?sellerId=${id}`);
-        if (!response.ok || !response2.ok) {
-          throw new Error("Failed to fetch data");
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to fetch user data.");
+        }
+        if (!response2.ok) {
+          const errorData2 = await response2.json();
+          throw new Error(errorData2.message || "Failed to fetch items data.");
         }
         const sellerData = await response.json();
         const itemsData = await response2.json();
@@ -71,7 +84,7 @@ export default function Profile() {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, user, userLoading]);
 
   // Filter featured items and create premium items without mutating the original items array.
   useEffect(() => {
@@ -100,7 +113,7 @@ export default function Profile() {
             {error}
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-10 pt-0 p-5 justify-start bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px]">
+          <div className="w-full flex flex-col gap-6 pt-0 p-5 justify-start bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px]">
             <div className="flex flex-col items-center justify-start self-center bg-gray-200 p-3 w-[93%] md:max-w-[600px] rounded-2xl -mt-[52px] md:-mt-[60px] overflow-hidden">
               <div className="flex gap-4 md:gap-6 self-start items-center justify-start">
                 <img
@@ -139,7 +152,10 @@ export default function Profile() {
                     <strong>Role:</strong> {seller.role.toLowerCase()}
                     <br />
                     <button
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        setShowProfile(false);
+                      }}
                       className="mt-1 flex gap-2 items-center justify-center w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial rounded-md p-1 px-2 text-white"
                     >
                       Logout
@@ -151,9 +167,8 @@ export default function Profile() {
             {/* Filters Section */}
             <input
               type="search"
-              className="w-full -mt-7 md:max-w-[350px] md:self-end border bg-white-100 p-3 rounded-xl 
-                text-xs md:text-sm focus:outline-none
-                "
+              className="w-full -mt-2 md:max-w-[350px] md:self-end border bg-white-100 p-3 rounded-xl 
+                text-xs md:text-sm focus:outline-none"
               placeholder="search in store..."
             />
             {featuredItems.length > 0 && (
@@ -164,9 +179,9 @@ export default function Profile() {
                     <ProductCard_S key={item.id} item={item} alt={true} />
                   ))}
                 </div>
+                <div className="h-3 mt-4 bg-white w-[120%] self-center" />
               </div>
             )}
-            <div className="h-3 bg-white w-[120%] self-center" />
             {premiumItems.length > 0 && (
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold">Premium Products</h1>
@@ -175,9 +190,9 @@ export default function Profile() {
                     <ProductCard_S key={item.id} item={item} alt={true} />
                   ))}
                 </div>
+                <div className="h-3 mt-4 bg-white w-[120%] self-center" />
               </div>
             )}
-            <div className="h-3 bg-white w-[120%] self-center" />
             <div className="flex flex-col gap-2">
               <h1 className="font-bold">All Products</h1>
               {items.length ? (
