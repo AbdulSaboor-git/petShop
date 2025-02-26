@@ -23,13 +23,11 @@ const handleGet = async (req, res, sellerId) => {
       const items = await prisma.item.findMany({
         where: { sellerId: id, availability: "AVAILABLE" },
         include: { seller: true, category: true, breed: true },
-        orderBy: { name: "asc" },
       });
       return res.status(200).json({ items });
     } else {
       const items = await prisma.item.findMany({
         include: { seller: true, category: true, breed: true },
-        orderBy: { name: "asc" },
       });
       return res.status(200).json({ items });
     }

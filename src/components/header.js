@@ -84,8 +84,21 @@ export default function Header() {
   function sellerDBClick() {
     router.push("/seller-dashboard");
   }
+
   function profileClick() {
-    router.push(`/profile?acc=${user?.id}`);
+    const targetUrl = `/profile?acc=${user?.id}`;
+    // Get the current base path (without query parameters)
+    const currentPath = window.location.pathname;
+    // Extract the base path from targetUrl
+    const targetPath = new URL(targetUrl, window.location.origin).pathname;
+
+    if (currentPath === targetPath) {
+      // Already on the same base path – force a full reload to update the query params
+      window.location.href = targetUrl;
+    } else {
+      // Different base path – use router.push to navigate without a full reload
+      router.push(targetUrl);
+    }
   }
 
   const Buttons = [
