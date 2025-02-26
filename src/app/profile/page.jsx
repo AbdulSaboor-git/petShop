@@ -12,6 +12,7 @@ export default function Profile() {
   const [id, setId] = useState(null);
   const [seller, setSeller] = useState(null);
   const [items, setItems] = useState([]);
+  const [allItems, setAllItems] = useState([]);
   const [featuredItems, setFeaturedItems] = useState([]);
   const [premiumItems, setPremiumItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ export default function Profile() {
   const [UserIsSeller, setUserIsSeller] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user, userLoading, logout } = useAuthUser();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const router = useRouter();
 
@@ -48,6 +50,33 @@ export default function Profile() {
     setShowProfile((prev) => !prev);
   }
 
+  const handleSearchQueryChange = (e) => {
+    setSearchQuery(e.target.value.trim());
+  };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setItems(allItems);
+    } else {
+      const fItems = allItems.filter((item) => {
+        return (
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.category?.name &&
+            item.category.name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())) ||
+          (item.breed?.name &&
+            item.breed.name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())) ||
+          (item.sex &&
+            item.sex.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+      });
+      setItems(fItems);
+    }
+  }, [searchQuery, allItems]);
+
   // Fetch seller and items data based on the id.
   useEffect(() => {
     if (!user && userLoading) {
@@ -75,6 +104,7 @@ export default function Profile() {
         const itemsData = await response2.json();
         setSeller(sellerData);
         setItems(itemsData.items);
+        setAllItems(itemsData.items);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -169,15 +199,17 @@ export default function Profile() {
                 </div>
               )}
             </div>
-            {/* Filters Section */}
             <input
               type="search"
               className="w-full -mt-2 md:max-w-[350px] md:self-end border bg-white-100 p-3 rounded-xl 
                 text-xs md:text-sm focus:outline-none"
               placeholder="Search in store..."
               aria-label="Search"
+              value={searchQuery}
+              onChange={handleSearchQueryChange}
             />
-            {featuredItems.length > 0 && (
+
+            {searchQuery === "" && featuredItems.length > 0 && (
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold">Featured Products</h1>
                 <div className="flex gap-2 w-full justify-start overflow-auto hidden_scroll_bar">
@@ -188,7 +220,7 @@ export default function Profile() {
                 <div className="h-3 mt-4 bg-white w-[120%] self-center" />
               </div>
             )}
-            {premiumItems.length > 0 && (
+            {searchQuery === "" && premiumItems.length > 0 && (
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold">Premium Products</h1>
                 <div className="flex gap-2 w-full overflow-auto hidden_scroll_bar">
@@ -200,7 +232,9 @@ export default function Profile() {
               </div>
             )}
             <div className="flex flex-col gap-2">
-              <h1 className="font-bold">All Products</h1>
+              {searchQuery === "" && (
+                <h1 className="font-bold">All Products</h1>
+              )}
               {items.length ? (
                 <div className="grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
                   {items.map((item, i) => (
