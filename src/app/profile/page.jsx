@@ -165,10 +165,10 @@ export default function Profile() {
               </div>
               {UserIsSeller && (
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden bg-white rounded-xl ${
+                  className={`transition-all duration-300  p-4 ease-in-out overflow-hidden bg-white rounded-xl ${
                     showProfile
-                      ? "max-h-[200px] opacity-100 m-3 p-4 text-xs md:text-sm"
-                      : "max-h-0 opacity-0 m-0 p-0 text-[1px]"
+                      ? "max-h-[200px] opacity-100 m-3 text-xs md:text-sm"
+                      : "max-h-0 opacity-0 m-0 text-[2px]"
                   }`}
                 >
                   <div>
