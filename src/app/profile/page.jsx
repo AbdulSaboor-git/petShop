@@ -88,7 +88,7 @@ export default function Profile() {
   }, [items]);
 
   return (
-    <div className="flex flex-col gap-4 lg:gap-6 items-center">
+    <div className="flex flex-col gap-4 lg:gap-6 items-center  overflow-hidden">
       <Header />
       <div className="flex flex-col items-center justify-center w-full max-w-[1400px]">
         {loading ? (
@@ -100,7 +100,7 @@ export default function Profile() {
             {error}
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-10 pt-0 p-5 justify-start bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px] overflow-hidden">
+          <div className="w-full flex flex-col gap-10 pt-0 p-5 justify-start bg-gray-100 rounded-2xl mt-[52px] md:mt-[60px]">
             <div className="flex flex-col items-center justify-start self-center bg-gray-200 p-3 w-[93%] md:max-w-[600px] rounded-2xl -mt-[52px] md:-mt-[60px] overflow-hidden">
               <div className="flex gap-4 md:gap-6 self-start items-center justify-start">
                 <img
