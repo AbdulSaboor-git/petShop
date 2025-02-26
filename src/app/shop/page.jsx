@@ -17,6 +17,7 @@ export default function Shop() {
   const [ShowMoreFilters, setShowMoreFilters] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [isOnSale, setIsOnSale] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Use arrays for filtering; "All" is the default selection.
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
@@ -28,6 +29,10 @@ export default function Shop() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleSearchQueryChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -237,7 +242,10 @@ export default function Shop() {
               type="search"
               className="w-full -my-3 md:max-w-[350px] md:self-end bg-gray-100 p-3 rounded-xl 
                 text-xs md:text-sm focus:outline-none"
-              placeholder="search..."
+              placeholder="Search..."
+              aria-label="Search"
+              value={searchQuery}
+              onChange={handleSearchQueryChange}
             />
             <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
               <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">

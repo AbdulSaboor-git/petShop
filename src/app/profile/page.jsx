@@ -48,11 +48,9 @@ export default function Profile() {
     setShowProfile((prev) => !prev);
   }
 
-  // Get the id from the URL parameters
-
   // Fetch seller and items data based on the id.
   useEffect(() => {
-    if (!user || userLoading) {
+    if (!user && userLoading) {
       return;
     }
     if (!id || id === "undefined") {
@@ -136,10 +134,10 @@ export default function Profile() {
               </div>
               {UserIsSeller && (
                 <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden text-xs md:text-sm bg-white rounded-xl ${
+                  className={`transition-all duration-300 ease-in-out overflow-hidden bg-white rounded-xl ${
                     showProfile
-                      ? "max-h-[200px] opacity-100 m-3 p-4"
-                      : "max-h-0 opacity-0 m-0 p-0"
+                      ? "max-h-[200px] opacity-100 m-3 p-4 text-xs md:text-sm"
+                      : "max-h-0 opacity-0 m-0 p-0 text-[1px]"
                   }`}
                 >
                   <div>
@@ -156,7 +154,14 @@ export default function Profile() {
                         logout();
                         setShowProfile(false);
                       }}
-                      className="mt-1 flex gap-2 items-center justify-center w-full bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial rounded-md p-1 px-2 text-white"
+                      className={`mt-1 flex gap-2 items-center justify-center w-full
+                         bg-gradient-to-br from-red-500 to-red-600 hover:bg-gradient-radial rounded-md  text-white
+                         ${
+                           showProfile
+                             ? "p-1 px-2 text-xs md:text-sm "
+                             : "p-0 text-[1px]"
+                         }
+                         `}
                     >
                       Logout
                     </button>
@@ -169,7 +174,8 @@ export default function Profile() {
               type="search"
               className="w-full -mt-2 md:max-w-[350px] md:self-end border bg-white-100 p-3 rounded-xl 
                 text-xs md:text-sm focus:outline-none"
-              placeholder="search in store..."
+              placeholder="Search in store..."
+              aria-label="Search"
             />
             {featuredItems.length > 0 && (
               <div className="flex flex-col gap-2">
