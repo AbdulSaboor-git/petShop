@@ -34,10 +34,18 @@ export default function Shop() {
     setSearchQuery(e.target.value.trim());
   };
 
+  function clearFilters() {
+    setSelectedCategories(["All"]);
+    setSelectedBreeds(["All"]);
+    setOnSale(false);
+    setSortOption("default");
+  }
+
   useEffect(() => {
     if (searchQuery === "") {
       setItems(allItems);
     } else {
+      clearFilters();
       const fItems = allItems.filter((item) => {
         return (
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
