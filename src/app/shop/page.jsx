@@ -31,8 +31,31 @@ export default function Shop() {
   const [error, setError] = useState(null);
 
   const handleSearchQueryChange = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchQuery(e.target.value.trim());
   };
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      setItems(allItems);
+    } else {
+      const fItems = allItems.filter((item) => {
+        return (
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.category?.name &&
+            item.category.name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())) ||
+          (item.breed?.name &&
+            item.breed.name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())) ||
+          (item.sex &&
+            item.sex.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+      });
+      setItems(fItems);
+    }
+  }, [searchQuery, allItems]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -237,7 +260,6 @@ export default function Shop() {
           </div>
         ) : (
           <div className="flex flex-col w-full lg:flex-row gap-6 transition-all duration-500">
-            {/* Filters Section */}
             <input
               type="search"
               className="w-full -my-3 md:max-w-[350px] md:self-end bg-gray-100 p-3 rounded-xl 
@@ -247,69 +269,137 @@ export default function Shop() {
               value={searchQuery}
               onChange={handleSearchQueryChange}
             />
-            <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
-              <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
-                {
-                  /* Categories Filter */
-                  categoriesToShow.length > 0 && (
-                    <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
+            {searchQuery === "" && (
+              <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
+                <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
+                  {
+                    /* Categories Filter */
+                    categoriesToShow.length > 0 && (
+                      <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
+                        <div
+                          onClick={() =>
+                            ShowCategories
+                              ? setShowCategories(false)
+                              : setShowCategories(true)
+                          }
+                          className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                        >
+                          Filter by Categories
+                          <RiArrowDownSLine
+                            size={18}
+                            className={`${
+                              ShowCategories ? "-rotate-180" : "rotate-0"
+                            } transition-all duration-[400ms]`}
+                          />
+                        </div>
+                        <div
+                          className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
+                            !ShowCategories
+                              ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
+                              : `opacity-100 translate-y-0 scale-y-100 ${
+                                  categories?.length <= 7
+                                    ? "max-h-[140px]"
+                                    : breeds?.length <= 15
+                                    ? "max-h-[220px]"
+                                    : breeds.length <= 20
+                                    ? "max-h-[280px]"
+                                    : "max-h-screen"
+                                } lg:max-h-screen mt-2 lg:pb-3`
+                          }`}
+                        >
+                          <button
+                            onClick={() => handleCategoryClick("All")}
+                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
+                              selectedCategories.includes("All")
+                                ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
+                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                            }`}
+                          >
+                            All
+                          </button>
+                          {categoriesToShow.map((categ, i) => (
+                            <button
+                              key={i}
+                              onClick={() => handleCategoryClick(categ.name)}
+                              className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                                selectedCategories.includes(categ.name)
+                                  ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                                  : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                              }`}
+                            >
+                              <div className="relative">
+                                {categ.name}
+                                <MdClose
+                                  className={`${
+                                    !selectedCategories.includes(categ.name) &&
+                                    "hidden"
+                                  } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                                />
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  }
+                  {breedsToShow.length > 0 && (
+                    <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                       <div
                         onClick={() =>
-                          ShowCategories
-                            ? setShowCategories(false)
-                            : setShowCategories(true)
+                          showBreeds
+                            ? setShowBreeds(false)
+                            : setShowBreeds(true)
                         }
-                        className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
+                        className="flex bg-gray-100 shadow-md shadow-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                       >
-                        Filter by Categories
+                        Filter by Breeds
                         <RiArrowDownSLine
                           size={18}
                           className={`${
-                            ShowCategories ? "-rotate-180" : "rotate-0"
+                            showBreeds ? "-rotate-180" : "rotate-0"
                           } transition-all duration-[400ms]`}
                         />
                       </div>
                       <div
                         className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
-                          !ShowCategories
+                          !showBreeds
                             ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
                             : `opacity-100 translate-y-0 scale-y-100 ${
-                                categories?.length <= 7
+                                breeds?.length <= 7
                                   ? "max-h-[140px]"
                                   : breeds?.length <= 15
                                   ? "max-h-[220px]"
                                   : breeds.length <= 20
                                   ? "max-h-[280px]"
                                   : "max-h-screen"
-                              } lg:max-h-screen mt-2 lg:pb-3`
+                              } md:max-h-screen mt-2 lg:pb-3`
                         }`}
                       >
-                        {/* "All" button */}
                         <button
-                          onClick={() => handleCategoryClick("All")}
+                          onClick={() => handleBreedClick("All")}
                           className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                            selectedCategories.includes("All")
-                              ? "bg-[#9e6e3b] text-white lg:bg-[#7e562b]"
-                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                            selectedBreeds.includes("All")
+                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
+                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
                           }`}
                         >
                           All
                         </button>
-                        {categoriesToShow.map((categ, i) => (
+                        {breedsToShow.map((breed, i) => (
                           <button
                             key={i}
-                            onClick={() => handleCategoryClick(categ.name)}
+                            onClick={() => handleBreedClick(breed.name)}
                             className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                              selectedCategories.includes(categ.name)
+                              selectedBreeds.includes(breed.name)
                                 ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
                                 : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                             }`}
                           >
                             <div className="relative">
-                              {categ.name}
+                              {breed.name}
                               <MdClose
                                 className={`${
-                                  !selectedCategories.includes(categ.name) &&
+                                  !selectedBreeds.includes(breed.name) &&
                                   "hidden"
                                 } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
                               />
@@ -318,77 +408,8 @@ export default function Shop() {
                         ))}
                       </div>
                     </div>
-                  )
-                }
-                {/* Breeds Filter (only show if applicable) */}
-                {breedsToShow.length > 0 && (
-                  <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
-                    <div
-                      onClick={() =>
-                        showBreeds ? setShowBreeds(false) : setShowBreeds(true)
-                      }
-                      className="flex bg-gray-100 shadow-md shadow-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
-                    >
-                      Filter by Breeds
-                      <RiArrowDownSLine
-                        size={18}
-                        className={`${
-                          showBreeds ? "-rotate-180" : "rotate-0"
-                        } transition-all duration-[400ms]`}
-                      />
-                    </div>
-                    <div
-                      className={`flex flex-row overflow-hidden lg:flex-col flex-wrap lg:flex-nowrap px-1  gap-2 transition-all duration-300 ease-in-out ${
-                        !showBreeds
-                          ? "opacity-0 -translate-y-5 lg:-translate-y-10 scale-y-50 lg:scale-y-75 max-h-0 mt-0"
-                          : `opacity-100 translate-y-0 scale-y-100 ${
-                              breeds?.length <= 7
-                                ? "max-h-[140px]"
-                                : breeds?.length <= 15
-                                ? "max-h-[220px]"
-                                : breeds.length <= 20
-                                ? "max-h-[280px]"
-                                : "max-h-screen"
-                            } md:max-h-screen mt-2 lg:pb-3`
-                      }`}
-                    >
-                      {/* "All" button for breeds */}
-                      <button
-                        onClick={() => handleBreedClick("All")}
-                        className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-4 ${
-                          selectedBreeds.includes("All")
-                            ? "bg-[#9e6e3b] text-white lg:bg-[#644422]"
-                            : "text-[#9e562b] bg-white lg:bg-[#9e6e3b]"
-                        }`}
-                      >
-                        All
-                      </button>
-                      {breedsToShow.map((breed, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleBreedClick(breed.name)}
-                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                            selectedBreeds.includes(breed.name)
-                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                          }`}
-                        >
-                          <div className="relative">
-                            {breed.name}
-                            <MdClose
-                              className={`${
-                                !selectedBreeds.includes(breed.name) && "hidden"
-                              } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
-                            />
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {
-                  /* Additional Filters Section: On Sale and Sorting Options */
-                  isOnSale && (
+                  )}
+                  {isOnSale && (
                     <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                       <div
                         onClick={() =>
@@ -432,65 +453,64 @@ export default function Shop() {
                         </button>
                       </div>
                     </div>
-                  )
-                }
-
-                <div className="flex gap-2 self-start flex-wrap lg:hidden">
-                  {selectedCategories.length > 0 &&
-                    selectedCategories[0] != "All" &&
-                    selectedCategories.map((category, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleCategoryClick(category)}
-                        className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
-                      >
-                        <div className="relative">
-                          {category}
-                          <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
-                        </div>
-                      </button>
-                    ))}
-                  {selectedBreeds.length > 0 &&
-                    selectedBreeds[0] != "All" &&
-                    selectedBreeds.map((breed, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleBreedClick(breed)}
-                        className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
-                      >
-                        <div className="relative">
-                          {breed}
-                          <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
-                        </div>
-                      </button>
-                    ))}
-                  {onSale && (
-                    <button
-                      onClick={() => setOnSale((prev) => !prev)}
-                      className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
-                    >
-                      <div className="relative">
-                        On Sale
-                        <MdClose className="absolute text-white -right-[18px]  top-[2px] lg:hidden" />
-                      </div>{" "}
-                    </button>
                   )}
-                </div>
-                <div className="flex w-fit flex-row gap-2 mt-2">
-                  <select
-                    value={sortOption}
-                    onChange={(e) => setSortOption(e.target.value)}
-                    className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] p-1 px-4 text-xs lg:text-base text-[#9e562b] bg-white"
-                  >
-                    <option value="default">Default</option>
-                    <option value="priceAsc">Price: Low to High</option>
-                    <option value="priceDesc">Price: High to Low</option>
-                    <option value="newest">Newest</option>
-                  </select>
+
+                  <div className="flex gap-2 self-start flex-wrap lg:hidden">
+                    {selectedCategories.length > 0 &&
+                      selectedCategories[0] != "All" &&
+                      selectedCategories.map((category, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleCategoryClick(category)}
+                          className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
+                        >
+                          <div className="relative">
+                            {category}
+                            <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
+                          </div>
+                        </button>
+                      ))}
+                    {selectedBreeds.length > 0 &&
+                      selectedBreeds[0] != "All" &&
+                      selectedBreeds.map((breed, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleBreedClick(breed)}
+                          className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
+                        >
+                          <div className="relative">
+                            {breed}
+                            <MdClose className="absolute text-white -right-[18px] top-[2px] lg:hidden" />
+                          </div>
+                        </button>
+                      ))}
+                    {onSale && (
+                      <button
+                        onClick={() => setOnSale((prev) => !prev)}
+                        className={`rounded-full w-fit font-normal text-xs p-1 px-3 pr-6 bg-[#9e6e3b] text-white`}
+                      >
+                        <div className="relative">
+                          On Sale
+                          <MdClose className="absolute text-white -right-[18px]  top-[2px] lg:hidden" />
+                        </div>{" "}
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex w-fit flex-row gap-2 mt-2">
+                    <select
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value)}
+                      className="rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] p-1 px-4 text-xs lg:text-base text-[#9e562b] bg-white"
+                    >
+                      <option value="default">Default</option>
+                      <option value="priceAsc">Price: Low to High</option>
+                      <option value="priceDesc">Price: High to Low</option>
+                      <option value="newest">Newest</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-
+            )}
             {/* Items Section */}
 
             <div
