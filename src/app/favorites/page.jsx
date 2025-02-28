@@ -38,7 +38,7 @@ export default function Favourites() {
   const handleCheckout = () => {
     setCheckout(true);
     setTimeout(() => {
-      const offset = 0;
+      const offset = 40;
       const elementPosition =
         orderConfirmationRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -156,6 +156,10 @@ export default function Favourites() {
     // }, 500);
   };
 
+  function profileClick(sellerId) {
+    router.push(`/profile?acc=${sellerId}`);
+  }
+
   return (
     <div className="flex flex-col items-center gap-10 min-h-screen">
       <Header />
@@ -178,8 +182,8 @@ export default function Favourites() {
               className="flex flex-col items-center w-full justify-center gap-2 bg-gray-100 p-2 py-4 rounded-lg"
             >
               <div className="flex w-full items-center justify-between px-[20.5px]">
+                {/* Select All checkbox */}
                 <div className="flex items-center justify-center gap-4 ">
-                  {/* Select All checkbox */}
                   <input
                     type="checkbox"
                     className="accent-orange-600 size-4 "
@@ -191,11 +195,20 @@ export default function Favourites() {
                       handleSelectAllForSeller(group.seller.id, group.items)
                     }
                   />
-                  <div className="flex gap-2 text-gray-600 items-center text-sm md:text-base font-semibold cursor-pointer hover:text-orange-800">
-                    <MdStore size={16} className="mb-0.5" />
-                    {group.seller.firstName + " " + group.seller.lastName}
-                    <RiArrowRightSLine />
-                  </div>
+                  {group.length > 1 ? (
+                    <div
+                      onClick={() => profileClick(group.seller.id)}
+                      className="flex gap-2 text-gray-600 items-center text-sm md:text-base font-semibold cursor-pointer hover:text-orange-800"
+                    >
+                      <MdStore size={16} className="mb-0.5" />
+                      {group.seller.firstName + " " + group.seller.lastName}
+                      <RiArrowRightSLine />
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 text-sm md:text-base">
+                      Select All
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col gap-2 w-full">

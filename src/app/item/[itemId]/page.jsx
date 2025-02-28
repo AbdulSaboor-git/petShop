@@ -168,7 +168,7 @@ export default function ItemPage({ params }) {
   const handleContactSeller = () => {
     setContactSeller(true);
     setTimeout(() => {
-      const offset = 0;
+      const offset = 40;
       const elementPosition = sendOrderRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
