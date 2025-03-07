@@ -8,38 +8,41 @@ import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 
 export default function ManageBreedsPage() {
-  const { user, userLoading, logout } = useAuthUser();
+  const { user, userLoading } = useAuthUser();
+  const dispatch = useDispatch();
 
+  // UI state for tabs
   const [focused, setFocused] = useState("add");
   const [addBreed, setAddBreed] = useState(true);
   const [editBreed, setEditBreed] = useState(false);
   const [deleteBreed, setDeleteBreed] = useState(false);
-  const [breeds, setBreeds] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [breedLoading, setBreedLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedBreed, setSelectedBreed] = useState(null);
 
+  // Data state
+  const [breeds, setBreeds] = useState([]);
+  const [selectedBreed, setSelectedBreed] = useState(null);
   const [name, setName] = useState("");
 
-  // Basic form validation: breed name must be at least 1 character.
+  // Loading and error states
+  const [loading, setLoading] = useState(true);
+  const [breedLoading, setBreedLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Form validation
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedBreed !== null && name.trim().length >= 1;
 
-  const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
-    dispatch(
-      triggerNotification({
-        msg: msg,
-        success: state,
-      })
-    );
+  // Redux notification helper
+  const showMessage = (msg, successState) => {
+    dispatch(triggerNotification({ msg, success: successState }));
   };
 
-  function resetForm() {
+  // Reset form fields
+  const resetForm = () => {
     setName("");
     setSelectedBreed(null);
-  }
+  };
+
+  // Handlers to switch between tabs
   const handleAddBreed = () => {
     setAddBreed(true);
     setEditBreed(false);
@@ -64,11 +67,13 @@ export default function ManageBreedsPage() {
     setFocused("delete");
   };
 
+  // Fetch all breeds (from categories_breeds API)
   const fetchBreeds = async () => {
     try {
       const response = await fetch(`/api/categories_breeds`);
       if (!response.ok) {
-        throw new Error("Failed to fetch breeds.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch breeds.");
       }
       const data = await response.json();
       setBreeds(data.breeds);
@@ -80,19 +85,14 @@ export default function ManageBreedsPage() {
     }
   };
 
-  useEffect(() => {
-    if (!userLoading && user) {
-      fetchBreeds();
-    }
-  }, [userLoading, user]);
-
-  // Fetch a single breed's data
+  // Fetch a single breed's data (for edit and delete forms)
   const fetchBreedData = async (breedId) => {
     setBreedLoading(true);
     try {
       const response = await fetch(`/api/breed/${breedId}`);
       if (!response.ok) {
-        throw new Error("Breed not found");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Breed not found");
       }
       const data = await response.json();
       setSelectedBreed(data);
@@ -105,6 +105,21 @@ export default function ManageBreedsPage() {
     }
   };
 
+  // Fetch breeds when user is loaded
+  useEffect(() => {
+    if (!userLoading && user) {
+      fetchBreeds();
+    }
+  }, [userLoading, user]);
+
+  // If user is not authorized, show a message.
+  useEffect(() => {
+    if (!userLoading && !user) {
+      showMessage("Unauthorized Access", false);
+    }
+  }, [userLoading, user]);
+
+  // Handler for add breed form submission
   const handleAddBreedSubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
@@ -129,7 +144,7 @@ export default function ManageBreedsPage() {
     }
   };
 
-  // Handler for edit category form submission.
+  // Handler for edit breed form submission
   const handleEditBreedSubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid) {
@@ -148,14 +163,13 @@ export default function ManageBreedsPage() {
       }
       showMessage(`Breed "${selectedBreed.name}" updated successfully!`, true);
       resetForm();
-
       fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
     }
   };
 
-  // Handler for delete category form submission.
+  // Handler for delete breed form submission
   const handleDeleteBreedSubmit = async (e) => {
     e.preventDefault();
     if (!selectedBreed) {
@@ -167,7 +181,8 @@ export default function ManageBreedsPage() {
         method: "DELETE",
       });
       if (!res.ok) {
-        throw new Error("Failed to delete breed.");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to delete breed.");
       }
       showMessage(`Breed "${name}" deleted successfully!`, true);
       resetForm();
@@ -176,12 +191,6 @@ export default function ManageBreedsPage() {
       showMessage(err.message, false);
     }
   };
-
-  useEffect(() => {
-    if (!userLoading && !user) {
-      showMessage("Unauthorized Access", false);
-    }
-  }, [userLoading, user]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
@@ -197,39 +206,39 @@ export default function ManageBreedsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-xl md:2xl font-semibold text-center">
+            <h1 className="text-xl md:text-2xl font-semibold text-center">
               Seller Dashboard
             </h1>
             <h1 className="font-semibold text-center">Manage Breeds</h1>
-            {/* Responsive container for side-by-side (desktop) or stacked (mobile) layout */}
+            {/* Tab selectors */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddBreed}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "add"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
+                      ? "bg-[#9e6e3b] text-white"
+                      : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
                   Add
                 </button>
                 <button
                   onClick={handleEditBreed}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "edit"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e] "
+                      ? "bg-[#9e6e3b] text-white"
+                      : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
                   Edit
                 </button>
                 <button
                   onClick={handleDeleteBreed}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b]  hover:text-white  flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "delete"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
+                      ? "bg-[#9e6e3b] text-white"
+                      : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
                   Delete
@@ -252,6 +261,7 @@ export default function ManageBreedsPage() {
                           minLength={1}
                           maxLength={50}
                           onChange={(e) => setName(e.target.value)}
+                          value={name}
                         />
                       </div>
                       <div className="mt-4 flex flex-col gap-2">
@@ -264,7 +274,7 @@ export default function ManageBreedsPage() {
                         <button
                           type="reset"
                           onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
                         >
                           Cancel
                         </button>
@@ -318,12 +328,12 @@ export default function ManageBreedsPage() {
                           type="submit"
                           className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
                         >
-                          Update Category
+                          Update Breed
                         </button>
                         <button
                           type="reset"
                           onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
                         >
                           Cancel
                         </button>
@@ -366,12 +376,12 @@ export default function ManageBreedsPage() {
                           disabled={!selectedBreed || breedLoading}
                           className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                         >
-                          Delete Category
+                          Delete Breed
                         </button>
                         <button
                           type="reset"
                           onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
                         >
                           Cancel
                         </button>

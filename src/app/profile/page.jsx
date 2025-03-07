@@ -82,37 +82,46 @@ export default function Profile() {
 
   // Fetch seller and items data based on the id.
   useEffect(() => {
-    if (!user && userLoading) {
-      return;
-    }
+    if (!user && userLoading) return;
 
     const fetchData = async () => {
-      setLoading(true);
-      console.log(id + "dsa");
-      try {
-        const response = await fetch(`/api/user?userId=${id}`);
-        const response2 = await fetch(`/api/allItems?sellerId=${id}`);
+      if (!id || id === "undefined") return;
 
-        if (!response.ok) {
-          const errorData = await response.json();
+      setLoading(true);
+      setError(null);
+
+      try {
+        const [userRes, itemsRes] = await Promise.all([
+          fetch(`/api/user?userId=${id}`),
+          fetch(`/api/allItems?sellerId=${id}`),
+        ]);
+
+        if (!userRes.ok) {
+          const errorData = await userRes.json();
           throw new Error(errorData.message || "Failed to fetch user data.");
         }
-        if (!response2.ok) {
-          const errorData2 = await response2.json();
+        if (!itemsRes.ok) {
+          const errorData2 = await itemsRes.json();
           throw new Error(errorData2.message || "Failed to fetch items data.");
         }
-        const sellerData = await response.json();
-        const itemsData = await response2.json();
+
+        const [sellerData, itemsData] = await Promise.all([
+          userRes.json(),
+          itemsRes.json(),
+        ]);
+
         setSeller(sellerData);
         setItems(itemsData.items);
         setAllItems(itemsData.items);
       } catch (err) {
+        console.error("Error fetching data:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    if (id && id != "undefined") fetchData();
+
+    fetchData();
   }, [id, user, userLoading]);
 
   // Filter featured items and create premium items without mutating the original items array.

@@ -8,44 +8,56 @@ import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 
 export default function ManageCategoriesPage() {
-  const { user, userLoading, logout } = useAuthUser();
+  const { user, userLoading } = useAuthUser();
 
+  // Tab state
   const [focused, setFocused] = useState("add");
   const [addCategory, setAddCategory] = useState(true);
   const [editCategory, setEditCategory] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState(false);
+
+  // Data states
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [name, setName] = useState("");
+
+  // Loading and error states
   const [loading, setLoading] = useState(true);
   const [categoryLoading, setCategoryLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const [name, setName] = useState("");
-
-  // Basic form validation: category name must be at least 1 character.
+  // Basic form validations
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedCategory !== null && name.trim().length >= 1;
 
   const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
+  const showMessage = (msg, successState) => {
     dispatch(
       triggerNotification({
-        msg: msg,
-        success: state,
+        msg,
+        success: successState,
       })
     );
   };
 
-  // Helper function to fetch categories (and breeds if needed) from API.
+  // Helper: Reset form fields
+  const resetForm = () => {
+    setName("");
+    setSelectedCategory(null);
+  };
+
+  // Fetch all categories (from the categories_breeds API)
   const fetchCategoriesData = async () => {
     try {
       const response = await fetch(`/api/categories_breeds`);
       if (!response.ok) {
-        throw new Error("Failed to fetch categories.");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch categories.");
       }
       const data = await response.json();
       setCategories(data.categories);
     } catch (err) {
+      console.error("Error fetching categories:", err);
       setError(err.message);
       showMessage(err.message, false);
     } finally {
@@ -53,24 +65,20 @@ export default function ManageCategoriesPage() {
     }
   };
 
-  useEffect(() => {
-    if (!userLoading && user) {
-      fetchCategoriesData();
-    }
-  }, [userLoading, user]);
-
-  // Fetch a single category's data (for editing/deleting)
+  // Fetch single category details for editing/deleting
   const fetchCategoryData = async (categoryId) => {
     setCategoryLoading(true);
     try {
       const response = await fetch(`/api/category/${categoryId}`);
       if (!response.ok) {
-        throw new Error("Category not found");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Category not found");
       }
       const data = await response.json();
       setSelectedCategory(data);
       setName(data.name || "");
     } catch (err) {
+      console.error("Error fetching category data:", err);
       setError(err.message);
       showMessage(err.message, false);
     } finally {
@@ -78,6 +86,7 @@ export default function ManageCategoriesPage() {
     }
   };
 
+  // Switch to Add mode
   const handleAddCategory = () => {
     setAddCategory(true);
     setEditCategory(false);
@@ -86,6 +95,7 @@ export default function ManageCategoriesPage() {
     setFocused("add");
   };
 
+  // Switch to Edit mode
   const handleEditCategory = () => {
     setAddCategory(false);
     setEditCategory(true);
@@ -94,6 +104,7 @@ export default function ManageCategoriesPage() {
     setFocused("edit");
   };
 
+  // Switch to Delete mode
   const handleDeleteCategory = () => {
     setAddCategory(false);
     setEditCategory(false);
@@ -102,12 +113,7 @@ export default function ManageCategoriesPage() {
     setFocused("delete");
   };
 
-  function resetForm() {
-    setName("");
-    setSelectedCategory(null);
-  }
-
-  // Handler for add category form submission.
+  // Handler for adding a category
   const handleAddCategorySubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
@@ -128,11 +134,12 @@ export default function ManageCategoriesPage() {
       resetForm();
       fetchCategoriesData();
     } catch (err) {
+      console.error("Error adding category:", err);
       showMessage(err.message, false);
     }
   };
 
-  // Handler for edit category form submission.
+  // Handler for editing a category
   const handleEditCategorySubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid) {
@@ -156,11 +163,12 @@ export default function ManageCategoriesPage() {
       resetForm();
       fetchCategoriesData();
     } catch (err) {
+      console.error("Error updating category:", err);
       showMessage(err.message, false);
     }
   };
 
-  // Handler for delete category form submission.
+  // Handler for deleting a category
   const handleDeleteCategorySubmit = async (e) => {
     e.preventDefault();
     if (!selectedCategory) {
@@ -172,16 +180,26 @@ export default function ManageCategoriesPage() {
         method: "DELETE",
       });
       if (!res.ok) {
-        throw new Error("Failed to delete category.");
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message || "Failed to delete category.");
       }
       showMessage(`Category "${name}" deleted successfully!`, true);
       resetForm();
       fetchCategoriesData();
     } catch (err) {
+      console.error("Error deleting category:", err);
       showMessage(err.message, false);
     }
   };
 
+  // Fetch categories when user is loaded
+  useEffect(() => {
+    if (!userLoading && user) {
+      fetchCategoriesData();
+    }
+  }, [userLoading, user]);
+
+  // Warn if unauthorized
   useEffect(() => {
     if (!userLoading && !user) {
       showMessage("Unauthorized Access", false);
@@ -206,36 +224,35 @@ export default function ManageCategoriesPage() {
               Seller Dashboard
             </h1>
             <h1 className="font-semibold text-center">Manage Categories</h1>
-
-            {/* Navigation buttons */}
+            {/* Navigation Buttons */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
               <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
                 <button
                   onClick={handleAddCategory}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "add"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
+                      ? "bg-[#9e6e3b]  hover:bg-[#9e6e3b]"
+                      : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
                   Add
                 </button>
                 <button
                   onClick={handleEditCategory}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "edit"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
+                      : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
                   Edit
                 </button>
                 <button
                   onClick={handleDeleteCategory}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
+                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "delete"
                       ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
+                      : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
                   Delete
@@ -271,7 +288,7 @@ export default function ManageCategoriesPage() {
                         <button
                           type="reset"
                           onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
                         >
                           Cancel
                         </button>
@@ -330,7 +347,7 @@ export default function ManageCategoriesPage() {
                         <button
                           type="reset"
                           onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
                         >
                           Cancel
                         </button>
@@ -380,7 +397,7 @@ export default function ManageCategoriesPage() {
                         <button
                           type="reset"
                           onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
                         >
                           Cancel
                         </button>

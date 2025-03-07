@@ -35,32 +35,45 @@ export default function SellerDashboardMainPage() {
 
   useEffect(() => {
     if (!sellerId) return;
+
     const fetchMetricsAndAnalytics = async () => {
+      setLoading(true);
       try {
-        // Fetch products data
-        const responseProducts = await fetch(
-          `/api/sellerItems?sellerId=${sellerId}`
-        );
+        // Run both requests in parallel.
+        const [responseProducts, responseCatBreed] = await Promise.all([
+          fetch(`/api/sellerItems?sellerId=${sellerId}`),
+          fetch(`/api/categories_breeds`),
+        ]);
+
+        // Check for errors in both responses.
         if (!responseProducts.ok) {
-          throw new Error("Failed to fetch products.");
+          const errorData = await responseProducts.json();
+          throw new Error(errorData.message || "Failed to fetch products.");
         }
+        if (!responseCatBreed.ok) {
+          const errorData2 = await responseCatBreed.json();
+          throw new Error(
+            errorData2.message || "Failed to fetch categories and breeds."
+          );
+        }
+
+        // Parse JSON responses.
         const dataProducts = await responseProducts.json();
+        const dataCatBreed = await responseCatBreed.json();
+
+        // Calculate product metrics.
         const totalProducts = dataProducts.items
           ? dataProducts.items.length
           : 0;
-
-        const availableProducts = dataProducts.items.filter(
-          (item) => item.availability === "AVAILABLE"
-        );
+        const availableProducts = dataProducts.items
+          ? dataProducts.items.filter(
+              (item) => item.availability === "AVAILABLE"
+            )
+          : [];
         const totalAvailableProducts = availableProducts.length;
         const productsSold = totalProducts - totalAvailableProducts;
 
-        // Fetch categories and breeds data
-        const responseCatBreed = await fetch(`/api/categories_breeds`);
-        if (!responseCatBreed.ok) {
-          throw new Error("Failed to fetch categories and breeds.");
-        }
-        const dataCatBreed = await responseCatBreed.json();
+        // Calculate category and breed metrics.
         const totalCategories = dataCatBreed.categories
           ? dataCatBreed.categories.length
           : 0;
@@ -68,7 +81,7 @@ export default function SellerDashboardMainPage() {
           ? dataCatBreed.breeds.length
           : 0;
 
-        // Update metrics state
+        // Update metrics state.
         setMetrics({
           totalProducts,
           totalCategories,
@@ -77,7 +90,7 @@ export default function SellerDashboardMainPage() {
           productsSold,
         });
 
-        // (Optional) Fetch analytics data
+        // (Optional) Fetch and update analytics data here.
         // const responseAnalytics = await fetch(`/api/seller-analytics`);
         // if (responseAnalytics.ok) {
         //   const analyticsData = await responseAnalytics.json();
