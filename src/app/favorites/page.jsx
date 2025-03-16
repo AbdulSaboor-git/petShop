@@ -35,6 +35,8 @@ export default function Favourites() {
     router.push(`/shop`);
   }
 
+  localStorage.setItem("selectedPage", "favorites");
+
   const handleCheckout = () => {
     setCheckout(true);
     setTimeout(() => {

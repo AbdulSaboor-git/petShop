@@ -32,7 +32,7 @@ export default function Header() {
   const router = useRouter();
 
   useEffect(() => {
-    const selectedPage = localStorage.getItem("selectedPage") || "home";
+    const selectedPage = localStorage.getItem("selectedPage") || "";
     setSelected(selectedPage);
   }, []);
 
@@ -87,22 +87,27 @@ export default function Header() {
   }
 
   function contactClick() {
+    setLocalStorageSelectedPage("");
     router.push("/contact-us");
   }
   function aboutClick() {
+    setLocalStorageSelectedPage("");
     router.push("/about-us");
   }
   function loginClick() {
     toggleShowLoginForm();
   }
   function adminDBClick() {
+    setLocalStorageSelectedPage("");
     router.push("/admin-dashboard");
   }
   function sellerDBClick() {
+    setLocalStorageSelectedPage("");
     router.push("/seller-dashboard");
   }
 
   function profileClick() {
+    setLocalStorageSelectedPage("");
     const targetUrl = `/profile?acc=${user?.id}`;
     window.location.href = targetUrl;
   }

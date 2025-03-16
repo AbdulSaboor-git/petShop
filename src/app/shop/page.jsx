@@ -34,6 +34,8 @@ export default function Shop() {
     setSearchQuery(e.target.value.trim());
   };
 
+  localStorage.setItem("selectedPage", "shop");
+
   function clearFilters() {
     setSelectedCategories(["All"]);
     setSelectedBreeds(["All"]);
