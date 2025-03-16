@@ -135,7 +135,7 @@ export default function Profile() {
   }, [items]);
 
   return (
-    <div className="flex flex-col gap-4 lg:gap-6 items-center  overflow-hidden">
+    <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header />
       <div className="flex flex-col items-center justify-center w-full max-w-[1400px]">
         {loading ? (
