@@ -276,21 +276,21 @@ export default function Shop() {
           </div>
         ) : (
           <div className="flex flex-col w-full lg:flex-row gap-6 transition-all duration-500">
-            <input
-              type="search"
-              className="w-full -my-3 md:max-w-[350px] md:self-end bg-gray-100 p-3 rounded-xl 
-                text-xs md:text-sm focus:outline-none"
-              placeholder="Search..."
-              aria-label="Search"
-              value={searchQuery}
-              onChange={handleSearchQueryChange}
-            />
-            {searchQuery === "" && (
+            {
               <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
                 <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
+                  <input
+                    type="search"
+                    className="w-full md:max-w-[350px] md:self-end bg-gray-100 lg:border lg:border-[#9e6e3b] p-3 rounded-xl 
+                text-xs md:text-sm focus:outline-none"
+                    placeholder="Search..."
+                    aria-label="Search"
+                    value={searchQuery}
+                    onChange={handleSearchQueryChange}
+                  />
                   {
                     /* Categories Filter */
-                    categoriesToShow.length > 0 && (
+                    categoriesToShow.length > 0 && searchQuery === "" && (
                       <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
                         <div
                           onClick={() =>
@@ -358,8 +358,8 @@ export default function Shop() {
                       </div>
                     )
                   }
-                  {breedsToShow.length > 0 && (
-                    <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                  {breedsToShow.length > 0 && searchQuery === "" && (
+                    <div className="w-full overflow-hidden bg-gray-100 p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                       <div
                         onClick={() =>
                           showBreeds
@@ -426,7 +426,7 @@ export default function Shop() {
                     </div>
                   )}
                   {isOnSale && (
-                    <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
+                    <div className="w-full overflow-hidden bg-gray-100 p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                       <div
                         onClick={() =>
                           ShowMoreFilters
@@ -512,7 +512,7 @@ export default function Shop() {
                       </button>
                     )}
                   </div>
-                  <div className="flex w-fit flex-row gap-2 mt-2">
+                  <div className="flex w-fit lg:w-full flex-row gap-2 mt-2">
                     <select
                       value={sortOption}
                       onChange={(e) => setSortOption(e.target.value)}
@@ -526,7 +526,7 @@ export default function Shop() {
                   </div>
                 </div>
               </div>
-            )}
+            }
             {/* Items Section */}
 
             <div
