@@ -34,7 +34,11 @@ export default function Shop() {
     setSearchQuery(e.target.value.trim());
   };
 
-  localStorage.setItem("selectedPage", "shop");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "shop");
+    }
+  }, []);
 
   function clearFilters() {
     setSelectedCategories(["All"]);

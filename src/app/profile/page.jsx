@@ -29,8 +29,11 @@ export default function Profile() {
     ? `${seller.firstName} ${seller.lastName}`.toUpperCase()
     : "";
 
-  localStorage.setItem("selectedPage", "");
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "");
+    }
+  }, []);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);

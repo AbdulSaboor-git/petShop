@@ -168,7 +168,11 @@ export default function ManageProductsPage() {
     }
   };
 
-  localStorage.setItem("selectedPage", "");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "");
+    }
+  }, []);
 
   useEffect(() => {
     if (!sellerId) return;

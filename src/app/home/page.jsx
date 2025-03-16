@@ -37,7 +37,11 @@ export default function HomePage() {
   let categImages = [];
   let breedImages = [];
 
-  localStorage.setItem("selectedPage", "home");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "home");
+    }
+  }, []);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {

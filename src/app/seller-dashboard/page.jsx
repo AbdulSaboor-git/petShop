@@ -34,6 +34,12 @@ export default function SellerDashboardMainPage() {
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "");
+    }
+  }, []);
+
+  useEffect(() => {
     if (!sellerId) return;
     const fetchMetricsAndAnalytics = async () => {
       try {

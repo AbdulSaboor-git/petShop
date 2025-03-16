@@ -7,8 +7,11 @@ import { MdEmail, MdWhatsapp } from "react-icons/md";
 export default function ContactUs() {
   //TO DO: add a in-built on-sided message system for users where they messages quries to admin and admin recieve theme in admin pannel.
   function handleSubmitMessage() {}
-  localStorage.setItem("selectedPage", "");
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "");
+    }
+  }, []);
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />

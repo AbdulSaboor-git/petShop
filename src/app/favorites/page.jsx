@@ -35,7 +35,11 @@ export default function Favourites() {
     router.push(`/shop`);
   }
 
-  localStorage.setItem("selectedPage", "favorites");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selectedPage", "favorites");
+    }
+  }, []);
 
   const handleCheckout = () => {
     setCheckout(true);
