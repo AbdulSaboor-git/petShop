@@ -39,6 +39,7 @@ export default function ManageCategoriesPage() {
       })
     );
   };
+  localStorage.setItem("selectedPage", "");
 
   // Helper: Reset form fields
   const resetForm = () => {

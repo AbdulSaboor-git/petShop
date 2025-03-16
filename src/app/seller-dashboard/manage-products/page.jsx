@@ -168,6 +168,8 @@ export default function ManageProductsPage() {
     }
   };
 
+  localStorage.setItem("selectedPage", "");
+
   useEffect(() => {
     if (!sellerId) return;
     fetchItemsData();

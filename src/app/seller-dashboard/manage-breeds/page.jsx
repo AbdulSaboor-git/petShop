@@ -36,6 +36,8 @@ export default function ManageBreedsPage() {
     dispatch(triggerNotification({ msg, success: successState }));
   };
 
+  localStorage.setItem("selectedPage", "");
+
   // Reset form fields
   const resetForm = () => {
     setName("");
