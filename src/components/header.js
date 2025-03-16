@@ -23,12 +23,18 @@ export default function Header() {
   const [logedIn, setLogedIn] = useState(false);
   const { user, userLoading } = useAuthUser();
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [selected, setSelected] = useState("");
 
   // New states to control mounting and animation classes for popups
   const [loginMounted, setLoginMounted] = useState(false);
   const [loginAnimClass, setLoginAnimClass] = useState("");
 
   const router = useRouter();
+
+  useEffect(() => {
+    const selectedPage = localStorage.getItem("selectedPage") || "home";
+    setSelected(selectedPage);
+  }, []);
 
   useEffect(() => {
     if (user) setLogedIn(true);
@@ -60,20 +66,31 @@ export default function Header() {
     setShowLoginForm((prev) => !prev);
   };
 
+  function setLocalStorageSelectedPage(page) {
+    localStorage.setItem("selectedPage", page);
+    setSelected(page);
+  }
+
   function homeClick() {
+    setLocalStorageSelectedPage("home");
     router.push("/home");
   }
+
   function shopClick() {
+    setLocalStorageSelectedPage("shop");
     router.push("/shop");
   }
+
+  function favClick() {
+    setLocalStorageSelectedPage("favorites");
+    router.push("/favorites");
+  }
+
   function contactClick() {
     router.push("/contact-us");
   }
   function aboutClick() {
     router.push("/about-us");
-  }
-  function favClick() {
-    router.push("/favorites");
   }
   function loginClick() {
     toggleShowLoginForm();
@@ -91,12 +108,30 @@ export default function Header() {
   }
 
   const Buttons = [
-    { btn_name: "Home", icon: <MdHome size={18} />, clickEvent: homeClick },
-    { btn_name: "Shop", icon: <MdStore size={18} />, clickEvent: shopClick },
+    {
+      btn_name: "Home",
+      icon: <MdHome size={18} />,
+      clickEvent: homeClick,
+      isSelected: selected === "home",
+    },
+    {
+      btn_name: "Shop",
+      icon: <MdStore size={18} />,
+      clickEvent: shopClick,
+      isSelected: selected === "shop",
+    },
     {
       btn_name: "Favorites",
-      icon: <MdFavorite size={18} className="text-red-500" />,
+      icon: (
+        <MdFavorite
+          size={18}
+          className={`text-red-500 ${
+            selected === "favorites" ? "text-red-400" : "text-red-500"
+          }`}
+        />
+      ),
       clickEvent: favClick,
+      isSelected: selected === "favorites",
     },
   ];
 
@@ -144,7 +179,11 @@ export default function Header() {
   );
 
   return (
-    <div className="w-full z-50 sticky -top-[152px] md:relative md:top-0">
+    <div
+      className={`w-full z-50 sticky -top-[152px] ${
+        selected !== "home" && "-top-[55px]"
+      }  md:relative md:top-0`}
+    >
       {showLoginForm && (
         <div
           onClick={toggleShowLoginForm}
@@ -154,7 +193,11 @@ export default function Header() {
       <div className="relative flex justify-center items-center w-full">
         <div className="flex flex-col relative justify-center w-full items-center">
           <div className="flex flex-col gap-6 lg:gap-0 w-full items-center justify-center z-0">
-            <div className="relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent pb-[100px] z-10">
+            <div
+              className={`relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent ${
+                selected !== "home" ? "pb-[70px]" : " pb-[100px]"
+              } backdrop-blur-sm z-10`}
+            >
               <div
                 className={`bg-gradient-to-br to-[#442b0f] via-[#5d3c17] from-[#906434] p-2 px-4 lg:px-10 lg:p-3 lg:text-xs flex ${
                   user?.role === "ADMIN" ? "gap-3 text-[11px]" : "gap-4 text-xs"
@@ -183,27 +226,51 @@ export default function Header() {
               </div>
             </div>
             <div className="w-full relative flex flex-col items-center justify-center gap-3 lg:mt-3 z-10">
-              <div className="w-full flex items-center justify-center -mt-[100px] lg:hidden">
-                <Image
-                  src={logoLink}
-                  alt="logo"
-                  width={550}
-                  height={550}
-                  quality={100}
-                  className="w-auto h-[80px] md:h-[100px] rounded-full transition-all ease-in-out"
-                />
-                <button
-                  className="absolute left-6 text-white bg-gradient-to-br hover:bg-gradient-radial to-[#442b0f] via-[#5d3c17] from-[#906434] p-1 px-4 rounded-xl"
-                  onClick={() => window.history.back()}
-                >
-                  <MdArrowBack />
-                </button>
-              </div>
-              <div className="flex gap-2 md:gap-3 items-center justify-center w-full lg:-mt-[50px] bg-transparent backdrop-blur-md md:backdrop-blur-none  py-3">
+              {selected === "home" ? (
+                <div className="w-full flex items-center justify-center -mt-[100px] lg:hidden">
+                  <Image
+                    src={logoLink}
+                    alt="logo"
+                    width={550}
+                    height={550}
+                    quality={100}
+                    className="w-auto h-[80px] md:h-[100px] rounded-full transition-all ease-in-out"
+                  />
+                  <button
+                    className="absolute left-6 text-white bg-gradient-to-br hover:bg-gradient-radial to-[#442b0f] via-[#5d3c17] from-[#906434] p-1 px-4 rounded-xl"
+                    onClick={() => window.history.back()}
+                  >
+                    <MdArrowBack />
+                  </button>
+                </div>
+              ) : (
+                <div className="-mt-[110px]"></div>
+              )}
+              <div
+                className={`flex md:gap-3 items-center justify-center w-full lg:-mt-[50px] bg-transparent backdrop-blur-md md:backdrop-blur-none
+                ${
+                  selected !== "home" ? "backdrop-blur-none gap-1" : "gap-2"
+                }  py-3`}
+              >
+                {selected !== "home" && (
+                  <button
+                    className="text-white bg-gradient-to-br hover:bg-gradient-radial to-[#442b0f] via-[#5d3c17] from-[#906434] p-1 px-2 rounded-xl"
+                    onClick={() => window.history.back()}
+                  >
+                    <MdArrowBack />
+                  </button>
+                )}{" "}
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
-                    className="flex gap-2 bg-white items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid border-[#9e6e3b] text-[#61401c] hover:shadow-sm hover:shadow-[#61401c]"
+                    className={`flex gap-2 items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid
+                      border-[#9e6e3b] hover:shadow-sm hover:shadow-[#61401c]
+                      ${
+                        btn.isSelected
+                          ? "bg-gradient-to-br to-[#442b0f] via-[#5d3c17] from-[#906434] text-white"
+                          : "bg-white text-[#61401c]"
+                      }
+                  `}
                     onClick={btn.clickEvent}
                   >
                     {btn.icon}

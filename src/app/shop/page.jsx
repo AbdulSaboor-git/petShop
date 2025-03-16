@@ -128,8 +128,8 @@ export default function Shop() {
 
         setItems(dataItems.items);
         setAllItems(dataItems.items);
-        dataItems.items.forEach((item) => {
-          item.isDiscounted ? setIsOnSale(true) : setIsOnSale(false);
+        dataItems.items.find((item) => {
+          item.isDiscounted && setIsOnSale(true);
         });
         setCategories(dataCatBreed.categories);
         setBreeds(dataCatBreed.breeds);
@@ -337,19 +337,19 @@ export default function Shop() {
                             <button
                               key={i}
                               onClick={() => handleCategoryClick(categ.name)}
-                              className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                              className={`rounded-full w-fit lg:w-full overflow-hidden font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
                                 selectedCategories.includes(categ.name)
                                   ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                                  : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                                  : "text-[#9e562b]  bg-white lg:bg-[#9e6e3b] "
                               }`}
                             >
                               <div className="relative">
                                 {categ.name}
                                 <MdClose
-                                  className={`${
+                                  className={`text-white ${
                                     !selectedCategories.includes(categ.name) &&
-                                    "hidden"
-                                  } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                                    "hidden "
+                                  } absolute -right-[18px]  top-[2px] lg:hidden`}
                                 />
                               </div>
                             </button>
