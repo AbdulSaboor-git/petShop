@@ -32,7 +32,7 @@ export default function Header() {
   const router = useRouter();
 
   useEffect(() => {
-    const selectedPage = localStorage.getItem("selectedPage") || "";
+    const selectedPage = localStorage.getItem("selectedPage");
     setSelected(selectedPage);
   }, []);
 

@@ -56,12 +56,6 @@ export default function RootLayout({ children }) {
     }
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "home");
-    }
-  }, []);
-
   return (
     <html lang="en">
       <body className={inter.className}>

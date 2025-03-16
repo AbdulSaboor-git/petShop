@@ -30,9 +30,7 @@ export default function Profile() {
     : "";
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
-    }
+    localStorage.setItem("selectedPage", "");
   }, []);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -137,7 +135,7 @@ export default function Profile() {
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header />
-      <div className="flex flex-col items-center justify-center w-full max-w-[1400px]">
+      <div className="flex flex-col items-center justify-center w-full max-w-[1400px] overflow-hidden">
         {loading ? (
           <div className="h-screen pt-6 px-5">
             <Loader />
@@ -205,15 +203,18 @@ export default function Profile() {
                 </div>
               )}
             </div>
-            <input
-              type="search"
-              className="w-full -mt-2 md:max-w-[350px] md:self-end border bg-white-100 p-3 rounded-xl 
+            <div className="flex flex-col gap-2 -my-2">
+              <strong>Search</strong>
+              <input
+                type="search"
+                className="w-full md:max-w-[350px] md:self-end border bg-white-100 p-3 rounded-xl 
                 text-xs md:text-sm focus:outline-none"
-              placeholder="Search in store..."
-              aria-label="Search"
-              value={searchQuery}
-              onChange={handleSearchQueryChange}
-            />
+                placeholder="Search in store..."
+                aria-label="Search"
+                value={searchQuery}
+                onChange={handleSearchQueryChange}
+              />
+            </div>
 
             {searchQuery === "" && featuredItems.length > 0 && (
               <div className="flex flex-col gap-2">

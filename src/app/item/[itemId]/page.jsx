@@ -45,8 +45,11 @@ export default function ItemPage({ params }) {
   }
 
   useEffect(() => {
+    localStorage.setItem("selectedPage", "");
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
       const params = new URLSearchParams(window.location.search);
       let contactSellerParam = params.get("cs");
 
@@ -306,9 +309,11 @@ export default function ItemPage({ params }) {
                     )}
                     {item?.age && (
                       <p className="font-bold">
-                        Age:
+                        Age:{" "}
                         <span className="font-normal text-slate-600">
-                          {item?.age} years
+                          {item?.age < 1
+                            ? item.age * 10 + " months"
+                            : item.age + " years"}
                         </span>
                       </p>
                     )}
@@ -451,37 +456,6 @@ export default function ItemPage({ params }) {
               </div>
             )}
 
-            {/* imagess section */}
-            <div className="text-sm md:text-base ">
-              <strong>Images</strong>
-              <div className="mt-2 flex w-full gap-2 flex-wrap">
-                {item.images.map((img, i) => (
-                  <div key={i} className="w-full max-w-sm">
-                    <img
-                      src={img}
-                      alt="item image"
-                      className="w-full rounded-lg"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Contact Seller Section */}
-            <div
-              ref={sendOrderRef}
-              className={`flex items-center justify-center ${
-                contactSeller
-                  ? "opacity-100 h-full py-5 mt-2"
-                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
-              } transition-all duration-500`}
-            >
-              <Order
-                Items={[item]}
-                closeOrderPage={() => setContactSeller(false)}
-              />
-            </div>
-
             {/* Related Items Section */}
             {relatedItems.length != 0 && !loading2 && (
               <div className="flex flex-col gap-3 text-sm md:text-base">
@@ -506,6 +480,35 @@ export default function ItemPage({ params }) {
                 </div>
               </div>
             )}
+            {/* Contact Seller Section */}
+            <div
+              ref={sendOrderRef}
+              className={`flex items-center justify-center ${
+                contactSeller
+                  ? "opacity-100 h-full py-5 mt-2"
+                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
+              } transition-all duration-500`}
+            >
+              <Order
+                Items={[item]}
+                closeOrderPage={() => setContactSeller(false)}
+              />
+            </div>
+            {/* imagess section */}
+            <div className="text-sm md:text-base ">
+              <strong>Images</strong>
+              <div className="mt-2 flex w-full gap-2 flex-wrap">
+                {item.images.map((img, i) => (
+                  <div key={i} className="w-full max-w-sm">
+                    <img
+                      src={img}
+                      alt="item image"
+                      className="w-full rounded-lg"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
