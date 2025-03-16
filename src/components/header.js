@@ -241,12 +241,6 @@ export default function Header() {
                     quality={100}
                     className="w-auto h-[80px] md:h-[100px] rounded-full transition-all ease-in-out"
                   />
-                  <button
-                    className="absolute left-6 text-white bg-gradient-to-br hover:bg-gradient-radial to-[#442b0f] via-[#5d3c17] from-[#906434] p-1 px-4 rounded-xl"
-                    onClick={() => window.history.back()}
-                  >
-                    <MdArrowBack />
-                  </button>
                 </div>
               ) : (
                 <div className="-mt-[110px]"></div>
