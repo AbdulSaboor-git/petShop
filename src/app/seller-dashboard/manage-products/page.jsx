@@ -11,28 +11,22 @@ import Cropper from "react-easy-crop";
 import getCroppedImg from "@/components/getCroppedImg";
 
 export default function ManageProductsPage() {
-  const { user, userLoading } = useAuthUser();
+  const { user, userLoading, logout } = useAuthUser();
   const sellerId = user?.id;
 
-  // Form tab states
   const [focused, setFocused] = useState("add");
   const [addProduct, setAddProduct] = useState(true);
   const [editProduct, setEditProduct] = useState(false);
   const [deleteProduct, setDeleteProduct] = useState(false);
-
-  // Data states
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
-  const [item, setItem] = useState(null);
-
-  // Loading and error states
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [item, setItem] = useState(null);
   const [itemLoading, setItemLoading] = useState(true);
   const [itemError, setItemError] = useState(null);
-  const [error, setError] = useState(null);
 
-  // Product form fields
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [discountedPrice, setDiscountedPrice] = useState("");
@@ -47,9 +41,8 @@ export default function ManageProductsPage() {
   const [height, setHeight] = useState("");
   const [age, setAge] = useState("");
   const [availability, setAvailability] = useState("");
-  const [images, setImages] = useState([]); // Holds an array of image URLs
+  const [images, setImages] = useState([]); // Images state holds an array of URLs
 
-  // Cropper and upload states
   const [uploading, setUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [imageSrc, setImageSrc] = useState(null);
@@ -68,9 +61,6 @@ export default function ManageProductsPage() {
     );
   };
 
-  // ----------------------
-  // Initial URL Parameter Handling
-  // ----------------------
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -78,40 +68,36 @@ export default function ManageProductsPage() {
       let idParam = params.get("id") || "undefined";
       let ID = parseInt(idParam, 10);
 
-      if (functionParam && functionParam !== "undefined") {
-        if (functionParam === "add") {
+      if (functionParam && functionParam != "undefined") {
+        if (functionParam == "add") {
           handleAddProduct();
-        } else if (functionParam === "edit") {
+        } else if (functionParam == "edit") {
           handleEditProduct();
         } else {
           handleDeleteProduct();
         }
       }
-      if (ID && ID !== "undefined") {
+      if (ID && ID != "undefined") {
+        // setItemId([ID]);
         fetchItemData(ID);
       }
     }
   }, []);
 
-  // ----------------------
-  // Form Validation
-  // ----------------------
+  // Form validation states.
   const isAddFormValid =
     name.trim().length >= 3 &&
     price !== "" &&
     Number(price) > 0 &&
     categoryId !== "" &&
-    images.length !== 0;
+    images.length != 0;
   const isEditFormValid =
     name.trim().length >= 3 &&
     price !== "" &&
     Number(price) > 0 &&
     categoryId !== "" &&
-    images.length !== 0;
+    images.length != 0;
 
-  // ----------------------
-  // Reset Form Fields
-  // ----------------------
   function resetForm() {
     setName("");
     setPrice("");
@@ -133,14 +119,13 @@ export default function ManageProductsPage() {
     setShowCropper(false);
   }
 
-  // ----------------------
-  // Form Tab Handlers
-  // ----------------------
+  // Handlers to switch forms.
   const handleAddProduct = () => {
     setAddProduct(true);
     setEditProduct(false);
     setDeleteProduct(false);
     setFocused("add");
+    // Reset form fields.
     resetForm();
   };
 
@@ -149,6 +134,7 @@ export default function ManageProductsPage() {
     setEditProduct(true);
     setDeleteProduct(false);
     setFocused("edit");
+    // Reset form fields.
     resetForm();
   };
 
@@ -160,21 +146,14 @@ export default function ManageProductsPage() {
     setItem(null);
   };
 
-  // ----------------------
-  // API: Fetch All Products, Categories, and Breeds
-  // ----------------------
+  // Fetch all products, categories, and breeds.
   const fetchItemsData = async () => {
     try {
-      // Fire both API calls in parallel
-      const [response, response2] = await Promise.all([
-        fetch(`/api/sellerItems?sellerId=${sellerId}`),
-        fetch(`/api/categories_breeds`),
-      ]);
-
+      const response = await fetch(`/api/sellerItems?sellerId=${sellerId}`);
+      const response2 = await fetch(`/api/categories_breeds`);
       if (!response.ok || !response2.ok) {
         throw new Error("Failed to fetch data.");
       }
-
       const data = await response.json();
       const data2 = await response2.json();
 
@@ -182,7 +161,6 @@ export default function ManageProductsPage() {
       setCategories(data2.categories);
       setBreeds(data2.breeds);
     } catch (err) {
-      console.error("Error fetching items data:", err);
       setError(err.message);
       showMessage(err.message, false);
     } finally {
@@ -195,9 +173,34 @@ export default function ManageProductsPage() {
     fetchItemsData();
   }, [sellerId]);
 
-  // ----------------------
-  // API: Fetch Single Product Data
-  // ----------------------
+  const payload = {
+    name: name.trim(),
+    price: Number(price),
+    discountedPrice:
+      discountedPrice != undefined ? Number(discountedPrice) : "",
+    description:
+      description && description.toString().trim() !== ""
+        ? description.trim()
+        : null,
+    categoryId: Number(categoryId),
+    breedId:
+      breedId && breedId.toString().trim() !== "" ? Number(breedId) : null,
+    sex: sex && sex.toString().trim() !== "" ? sex.trim() : null,
+    nature: nature && nature.toString().trim() !== "" ? nature.trim() : null,
+    specifications:
+      specifications && specifications.toString().trim() !== ""
+        ? specifications.trim()
+        : null,
+    weight: weight && weight.toString().trim() !== "" ? Number(weight) : null,
+    height: height && height.toString().trim() !== "" ? Number(height) : null,
+    age: age && age.toString().trim() !== "" ? Number(age) : null,
+    availability,
+    isfeatured,
+    images, // An array of image URLs
+    sellerId,
+  };
+
+  // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
     setItemLoading(true);
     try {
@@ -223,7 +226,6 @@ export default function ManageProductsPage() {
       setAvailability(data.availability || "");
       setImages(data.images || []); // Existing product images
     } catch (err) {
-      console.error("Error fetching product data:", err);
       setItemError(err.message);
       showMessage(err.message, false);
     } finally {
@@ -231,41 +233,8 @@ export default function ManageProductsPage() {
     }
   };
 
-  // ----------------------
-  // Payload for Create/Update Product
-  // ----------------------
-  const payload = {
-    name: name.trim(),
-    price: Number(price),
-    discountedPrice:
-      discountedPrice !== undefined && discountedPrice !== ""
-        ? Number(discountedPrice)
-        : "",
-    description:
-      description && description.toString().trim() !== ""
-        ? description.trim()
-        : null,
-    categoryId: Number(categoryId),
-    breedId:
-      breedId && breedId.toString().trim() !== "" ? Number(breedId) : null,
-    sex: sex && sex.toString().trim() !== "" ? sex.trim() : null,
-    nature: nature && nature.toString().trim() !== "" ? nature.trim() : null,
-    specifications:
-      specifications && specifications.toString().trim() !== ""
-        ? specifications.trim()
-        : null,
-    weight: weight && weight.toString().trim() !== "" ? Number(weight) : null,
-    height: height && height.toString().trim() !== "" ? Number(height) : null,
-    age: age && age.toString().trim() !== "" ? Number(age) : null,
-    availability,
-    isfeatured,
-    images, // An array of image URLs
-    sellerId,
-  };
-
-  // ----------------------
-  // API: Handle Add Product Submission
-  // ----------------------
+  // Handler for adding a product.
+  // Handler for adding a product.
   const handleAddProductSubmit = async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
@@ -289,14 +258,11 @@ export default function ManageProductsPage() {
       showMessage(`Product "${name}" added successfully!`, true);
       fetchItemsData();
     } catch (err) {
-      console.error("Error adding product:", err);
       showMessage(err.message, false);
     }
   };
 
-  // ----------------------
-  // API: Handle Edit Product Submission
-  // ----------------------
+  // Handler for editing a product.
   const handleEditProductSubmit = async (e) => {
     e.preventDefault();
     if (!isEditFormValid || !item) {
@@ -320,14 +286,11 @@ export default function ManageProductsPage() {
       resetForm();
       fetchItemsData();
     } catch (err) {
-      console.error("Error updating product:", err);
       showMessage(err.message, false);
     }
   };
 
-  // ----------------------
-  // API: Handle Delete Product Submission
-  // ----------------------
+  // Handler for deleting a product.
   const handleDeleteProductSubmit = async (e) => {
     e.preventDefault();
     if (!item) {
@@ -345,19 +308,16 @@ export default function ManageProductsPage() {
       showMessage(`Product "${item.name}" deleted successfully!`, true);
       fetchItemsData();
       setItem(null);
+      // Optionally, refresh the product list.
     } catch (err) {
-      console.error("Error deleting product:", err);
       showMessage(err.message, false);
     }
   };
 
-  // ----------------------
-  // Image Upload & Crop Handlers
-  // ----------------------
   function removeImage(url) {
-    setImages((prevImages) => prevImages.filter((img_url) => img_url !== url));
+    setImages(images.filter((img_url) => img_url != url));
   }
-
+  // Handler for file upload via Cloudinary (unsigned upload).
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -369,19 +329,21 @@ export default function ManageProductsPage() {
     reader.readAsDataURL(file);
   };
 
-  // Callback when cropping is complete
+  // Called when cropping is complete (the cropped area is determined)
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  // When the user clicks "Crop", we generate the cropped image and upload it.
   const handleCropAndUpload = async () => {
     try {
       const croppedImageDataUrl = await getCroppedImg(
         imageSrc,
         croppedAreaPixels
       );
-      // Prepare formData for Cloudinary upload
+      // Now, upload the cropped image data URL to Cloudinary
       const formData = new FormData();
+      // Cloudinary accepts data URLs if you prefix them with "data:image/jpeg;base64,"
       formData.append("file", croppedImageDataUrl);
       formData.append("upload_preset", "RoyalAseelFarms");
       setUploading(true);
@@ -395,8 +357,7 @@ export default function ManageProductsPage() {
         throw new Error(errText);
       }
       const data = await response.json();
-      // Update images state immutably
-      setImages((prevImages) => [...prevImages, data.secure_url]);
+      images.push(data.secure_url);
       setErrorMsg("");
       setImageSrc(null);
     } catch (error) {
@@ -407,18 +368,12 @@ export default function ManageProductsPage() {
     }
   };
 
-  // ----------------------
-  // Unauthorized Access Effect
-  // ----------------------
   useEffect(() => {
     if (!userLoading && !user) {
       showMessage("Unauthorized Access", false);
     }
   }, [userLoading, user]);
 
-  // ----------------------
-  // Render
-  // ----------------------
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />

@@ -21,7 +21,6 @@ export default function Favourites() {
   const [checkout, setCheckout] = useState(false);
   const orderConfirmationRef = useRef(null);
   const dispatch = useDispatch();
-  const controllerRef = useRef(null);
 
   const showMessage = (msg, success) => {
     dispatch(
@@ -68,53 +67,31 @@ export default function Favourites() {
 
   // This function loads your favorites from localStorage and then fetches the full grouped data
   useEffect(() => {
-    if (favoriteIds.length === 0) {
-      setGroupedFavorites([]);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-
-    // Cancel previous request if a new one starts
-    if (controllerRef.current) {
-      controllerRef.current.abort();
-    }
-
-    const controller = new AbortController();
-    controllerRef.current = controller;
-    const { signal } = controller;
-
-    // Debounce API call
-    const timeout = setTimeout(async () => {
+    async function fetchFavorites() {
       try {
+        if (favoriteIds.length === 0) {
+          setGroupedFavorites([]);
+          return;
+        }
+        setLoading(true);
         const queryString = favoriteIds.join(",");
         const response = await fetch(
-          `/api/favItems?ids=${encodeURIComponent(queryString)}`,
-          { signal }
+          `/api/favItems?ids=${encodeURIComponent(queryString)}`
         );
-
         if (!response.ok) {
           throw new Error("Failed to fetch favorite items");
         }
-
         const data = await response.json();
+        // Assume API returns data.groupedItemsArray (an array of groups)
+        // Each group: { seller: { id, firstName, lastName, ... }, items: [ ... ] }
         setGroupedFavorites(data.groupedItemsArray);
       } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err.message);
-        }
+        setError(err.message);
       } finally {
         setLoading(false);
       }
-    }, 300); // Debounce for 300ms
-
-    return () => {
-      clearTimeout(timeout);
-      if (controllerRef.current) {
-        controllerRef.current.abort();
-      }
-    };
+    }
+    fetchFavorites();
   }, [favoriteIds]);
 
   // Handler for toggling an individual item selection.

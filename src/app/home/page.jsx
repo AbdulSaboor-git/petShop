@@ -64,28 +64,17 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchItems = async () => {
-      if (items.length > 0 && categories.length > 0) {
-        setLoading(false);
-        return;
-      } // ✅ Skip unnecessary fetch
-
-      setLoading(true); // ✅ Only set loading when actually fetching
-
       try {
-        const [response1, response2] = await Promise.all([
-          fetch(`/api/homeItems`),
-          fetch(`/api/categories_breeds`),
-        ]);
-
-        if (!response1.ok || !response2.ok) {
+        const response = await fetch(`/api/homeItems`);
+        const response2 = await fetch(`/api/categories_breeds`);
+        if (!response.ok || !response2.ok) {
           throw new Error("Failed to fetch data.");
         }
-
-        const data1 = await response1.json();
+        const data = await response.json();
         const data2 = await response2.json();
 
-        setItems(data1.items);
-        setAllItems(data1.items);
+        setItems(data.items);
+        setAllItems(data.items);
         setCategories(data2.categories);
         setBreeds(data2.breeds);
       } catch (err) {
@@ -94,13 +83,11 @@ export default function HomePage() {
         setLoading(false);
       }
     };
-
     if (!localStorage.getItem("favorites")) {
-      localStorage.setItem("favorites", JSON.stringify([]));
+      localStorage.setItem("favorites", []);
     }
-
     fetchItems();
-  }, [items, categories]); // ✅ Only refetch if dependencies are empty
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {

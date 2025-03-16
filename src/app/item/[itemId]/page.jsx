@@ -61,90 +61,82 @@ export default function ItemPage({ params }) {
       setLoading(false);
       return;
     }
-
     const fetchItemData = async () => {
       try {
         const response = await fetch(`/api/item?productId=${itemId}`);
-        if (!response.ok) throw new Error("Item not found");
-
+        if (!response.ok) {
+          throw new Error("Item not found");
+        }
         const data = await response.json();
         setItem(data);
       } catch (err) {
-        console.error("Error fetching item:", err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
+    // Get favorites from localStorage, if any.
+    const storedFavorites = localStorage.getItem("favorites");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    } else {
+      // Initialize as an empty array.
+      localStorage.setItem("favorites", JSON.stringify([]));
+      setFavorites([]);
+    }
     fetchItemData();
-  }, [itemId]); // Only re-fetch when `itemId` changes
+  }, [itemId]);
 
   useEffect(() => {
-    // Fetch all items only once, then use cached state
+    if (!item) return;
     const fetchAllItems = async () => {
-      if (allItems.length > 0) {
-        setLoading2(false);
-        return;
-      } // Prevent unnecessary API calls
-
       try {
-        const response = await fetch(`/api/shopItems`);
-        if (!response.ok) throw new Error("Failed to fetch items.");
-
-        const dataItems = await response.json();
+        const allItems = await fetch(`/api/shopItems`);
+        if (!allItems.ok) {
+          throw new Error("Failed to fetch items.");
+        }
+        const dataItems = await allItems.json();
         setAllItems(dataItems.items);
       } catch (err) {
-        console.error("Error fetching shop items:", err);
         setError2(err.message);
       } finally {
         setLoading2(false);
       }
     };
 
-    if (item) fetchAllItems(); // Fetch only when item is available
+    fetchAllItems();
   }, [item]);
 
   //related items effect
   useEffect(() => {
-    if (!item || !item.sex || !item.breedId) return;
-
-    // Find related items
-    setRelatedItems(
-      allItems
-        .filter(
-          (i) =>
-            i.id !== item.id &&
-            i.sex === item.sex &&
-            i.breedId === item.breedId &&
-            i.categoryId === item.categoryId
-        )
-        .slice(0, 4)
-    );
-
-    // Find bought-together items
-    setBoughtTogetherItems(
-      allItems
-        .filter(
-          (i) =>
-            i.sex &&
-            i.sex !== item.sex &&
-            i.breedId === item.breedId &&
-            i.categoryId === item.categoryId
-        )
-        .slice(0, 2)
-    );
+    if (!item || !item.sex || item.sex === "" || !item.breedId) return;
+    const RelatedItems = allItems
+      .filter(
+        (i) =>
+          i.id !== item.id &&
+          i.sex === item.sex &&
+          i.breedId === item.breedId &&
+          i.categoryId === item.categoryId
+      )
+      .slice(0, 4);
+    setRelatedItems(RelatedItems);
   }, [allItems, item]);
 
+  // Bought Together Effect
   useEffect(() => {
-    try {
-      const storedFavorites =
-        JSON.parse(localStorage.getItem("favorites")) || [];
-      setFavorites(storedFavorites);
-    } catch (err) {
-      console.error("Error parsing favorites from localStorage:", err);
-    }
-  }, []);
+    if (!item || !item.sex || item.sex === "" || !item.breedId) return;
+    const boughtTogether = allItems
+      .filter(
+        (i) =>
+          i.sex &&
+          i.sex != item.sex &&
+          i.breedId === item.breedId &&
+          i.categoryId === item.categoryId
+      )
+      .slice(0, 2);
+    setBoughtTogetherItems(boughtTogether);
+  }, [allItems, item]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
