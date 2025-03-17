@@ -167,7 +167,7 @@ export default function Header({ pageOpened }) {
 
   return (
     <div
-      className={`w-full z-50 sticky -top-[155px] -mb-8 ${
+      className={`w-full z-50 sticky -top-[155px] -mb-5 ${
         selected !== "home" && "-top-[55px]"
       }  lg:relative lg:top-0`}
     >
