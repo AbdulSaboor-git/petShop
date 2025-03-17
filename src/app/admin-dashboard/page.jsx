@@ -15,11 +15,6 @@ export default function AdminDashboardMainPage() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
-    }
-  }, []);
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
     dispatch(

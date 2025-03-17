@@ -43,12 +43,6 @@ export default function ManageUsersPage() {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
-    }
-  }, []);
-
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
     dispatch(

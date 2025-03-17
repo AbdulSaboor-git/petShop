@@ -4,12 +4,6 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 
 export default function AboutUs() {
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
-    }
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />

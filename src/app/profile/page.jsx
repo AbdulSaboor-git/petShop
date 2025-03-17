@@ -30,9 +30,6 @@ export default function Profile() {
     : "";
 
   useEffect(() => {
-    localStorage.setItem("selectedPage", "");
-  }, []);
-  useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const idParam = params.get("acc");

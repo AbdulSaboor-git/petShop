@@ -35,12 +35,6 @@ export default function Favourites() {
     router.push(`/shop`);
   }
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "favorites");
-    }
-  }, []);
-
   const handleCheckout = () => {
     setCheckout(true);
     setTimeout(() => {
@@ -168,7 +162,7 @@ export default function Favourites() {
 
   return (
     <div className="flex flex-col items-center gap-10 min-h-screen">
-      <Header />
+      <Header pageOpened={"favorites"} />
       <div className="flex flex-col gap-3 w-full max-w-[800px] p-4">
         <div className="flex justify-between items-center px-1">
           <h1 className="font-bold md:text-lg">My Favorites</h1>

@@ -45,10 +45,6 @@ export default function ItemPage({ params }) {
   }
 
   useEffect(() => {
-    localStorage.setItem("selectedPage", "");
-  }, []);
-
-  useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       let contactSellerParam = params.get("cs");

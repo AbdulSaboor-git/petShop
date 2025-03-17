@@ -169,12 +169,6 @@ export default function ManageProductsPage() {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
-    }
-  }, []);
-
-  useEffect(() => {
     if (!sellerId) return;
     fetchItemsData();
   }, [sellerId]);

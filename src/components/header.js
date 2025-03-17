@@ -19,22 +19,17 @@ import { useRouter } from "next/navigation";
 import LoginForm from "./loginForm";
 import useAuthUser from "@/hooks/authUser";
 
-export default function Header() {
+export default function Header({ pageOpened }) {
   const [logedIn, setLogedIn] = useState(false);
   const { user, userLoading } = useAuthUser();
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(pageOpened || "");
 
   // New states to control mounting and animation classes for popups
   const [loginMounted, setLoginMounted] = useState(false);
   const [loginAnimClass, setLoginAnimClass] = useState("");
 
   const router = useRouter();
-
-  useEffect(() => {
-    const selectedPage = localStorage.getItem("selectedPage");
-    setSelected(selectedPage);
-  }, []);
 
   useEffect(() => {
     if (user) setLogedIn(true);
@@ -66,48 +61,35 @@ export default function Header() {
     setShowLoginForm((prev) => !prev);
   };
 
-  function setLocalStorageSelectedPage(page) {
-    localStorage.setItem("selectedPage", page);
-    setSelected(page);
-  }
-
   function homeClick() {
-    setLocalStorageSelectedPage("home");
     router.push("/home");
   }
 
   function shopClick() {
-    setLocalStorageSelectedPage("shop");
     router.push("/shop");
   }
 
   function favClick() {
-    setLocalStorageSelectedPage("favorites");
     router.push("/favorites");
   }
 
   function contactClick() {
-    setLocalStorageSelectedPage("");
     router.push("/contact-us");
   }
   function aboutClick() {
-    setLocalStorageSelectedPage("");
     router.push("/about-us");
   }
   function loginClick() {
     toggleShowLoginForm();
   }
   function adminDBClick() {
-    setLocalStorageSelectedPage("");
     router.push("/admin-dashboard");
   }
   function sellerDBClick() {
-    setLocalStorageSelectedPage("");
     router.push("/seller-dashboard");
   }
 
   function profileClick() {
-    setLocalStorageSelectedPage("");
     const targetUrl = `/profile?acc=${user?.id}`;
     window.location.href = targetUrl;
   }
@@ -185,9 +167,9 @@ export default function Header() {
 
   return (
     <div
-      className={`w-full z-50 sticky -top-[152px] ${
+      className={`w-full z-50 sticky -top-[155px] ${
         selected !== "home" && "-top-[55px]"
-      }  md:relative md:top-0`}
+      }  lg:relative lg:top-0`}
     >
       {showLoginForm && (
         <div
@@ -200,7 +182,7 @@ export default function Header() {
           <div className="flex flex-col gap-6 lg:gap-0 w-full items-center justify-center z-0">
             <div
               className={`relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent ${
-                selected !== "home" ? "pb-[70px]" : " pb-[100px]"
+                selected !== "home" ? "pb-[70px]" : " pb-[170px]"
               } backdrop-blur-sm z-10`}
             >
               <div
@@ -232,21 +214,21 @@ export default function Header() {
             </div>
             <div className="w-full relative flex flex-col items-center justify-center gap-3 lg:mt-3 z-10">
               {selected === "home" ? (
-                <div className="w-full flex items-center justify-center -mt-[100px] lg:hidden">
+                <div className="w-full flex items-center justify-center -mt-[190px] lg:hidden">
                   <Image
                     src={logoLink}
                     alt="logo"
                     width={550}
                     height={550}
                     quality={100}
-                    className="w-auto h-[80px] md:h-[100px] rounded-full transition-all ease-in-out"
+                    className="w-auto h-[80px] lg:h-[100px] rounded-full transition-all ease-in-out"
                   />
                 </div>
               ) : (
-                <div className="-mt-[110px]"></div>
+                <div className="-mt-[110px] lg:mt-[180px]"></div>
               )}
               <div
-                className={`flex md:gap-3 items-center justify-center w-full lg:-mt-[50px] bg-transparent backdrop-blur-md md:backdrop-blur-none
+                className={`flex md:gap-3 items-center justify-center w-full lg:-mt-[260px]
                 ${
                   selected !== "home" ? "backdrop-blur-none gap-1" : "gap-2"
                 }  py-3`}
@@ -262,7 +244,7 @@ export default function Header() {
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
-                    className={`flex gap-2 items-center justify-center py-1 px-4 md:py-1.5 md:px-5 text-xs md:text-sm rounded-full border border-solid
+                    className={`flex gap-2 items-center justify-center py-1 px-4 lg:py-1.5 lg:px-5 text-xs lg:text-sm rounded-full border border-solid
                       border-[#9e6e3b] hover:shadow-sm hover:shadow-[#61401c]
                       ${
                         btn.isSelected

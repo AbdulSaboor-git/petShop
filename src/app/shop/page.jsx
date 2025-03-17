@@ -34,12 +34,6 @@ export default function Shop() {
     setSearchQuery(e.target.value.trim());
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "shop");
-    }
-  }, []);
-
   function clearFilters() {
     setSelectedCategories(["All"]);
     setSelectedBreeds(["All"]);
@@ -270,7 +264,7 @@ export default function Shop() {
 
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
-      <Header />
+      <Header pageOpened={"shop"} />
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
         {loading ? (
           <div className="h-screen pt-6">

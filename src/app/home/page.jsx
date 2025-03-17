@@ -37,12 +37,6 @@ export default function HomePage() {
   let categImages = [];
   let breedImages = [];
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "home");
-    }
-  }, []);
-
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
     dispatch(
@@ -253,7 +247,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col items-center gap-10">
-      <Header />
+      <Header pageOpened={"home"} />
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
           <div className="h-screen">

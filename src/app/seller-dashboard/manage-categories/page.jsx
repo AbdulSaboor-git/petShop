@@ -40,11 +40,6 @@ export default function ManageCategoriesPage() {
     );
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selectedPage", "");
-    }
-  }, []);
   // Helper: Reset form fields
   const resetForm = () => {
     setName("");
