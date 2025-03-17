@@ -167,7 +167,7 @@ export default function Header({ pageOpened }) {
 
   return (
     <div
-      className={`w-full z-50 sticky -top-[155px] ${
+      className={`w-full z-50 sticky -top-[155px] -mb-8 ${
         selected !== "home" && "-top-[55px]"
       }  lg:relative lg:top-0`}
     >
@@ -179,7 +179,7 @@ export default function Header({ pageOpened }) {
       )}
       <div className="relative flex justify-center items-center w-full">
         <div className="flex flex-col relative justify-center w-full items-center">
-          <div className="flex flex-col gap-6 lg:gap-0 w-full items-center justify-center z-0">
+          <div className="flex flex-col gap-6 lg:gap-0 w-full items-center justify-center z-0 ">
             <div
               className={`relative w-full bg-gradient-to-b from-[#69461e] via-[#c7802fc5] to-transparent ${
                 selected !== "home" ? "pb-[70px]" : " pb-[170px]"
@@ -214,7 +214,7 @@ export default function Header({ pageOpened }) {
             </div>
             <div className="w-full relative flex flex-col items-center justify-center gap-3 lg:mt-3 z-10">
               {selected === "home" ? (
-                <div className="w-full flex items-center justify-center -mt-[190px] lg:hidden">
+                <div className="w-full flex items-center justify-center -mt-[190px]  lg:hidden">
                   <Image
                     src={logoLink}
                     alt="logo"
@@ -240,7 +240,7 @@ export default function Header({ pageOpened }) {
                   >
                     <MdArrowBack />
                   </button>
-                )}{" "}
+                )}
                 {Buttons.map((btn, i) => (
                   <button
                     key={i}
