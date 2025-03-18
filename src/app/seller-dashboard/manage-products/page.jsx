@@ -202,6 +202,11 @@ export default function ManageProductsPage() {
 
   // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
+    if (itemId === "null") {
+      setItem(null);
+      resetForm();
+      return;
+    }
     setItemLoading(true);
     try {
       const response = await fetch(`/api/item?productId=${itemId}`);
@@ -430,11 +435,31 @@ export default function ManageProductsPage() {
               <div className="w-full">
                 {addProduct && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Add Product</h3>
                     <form
                       className="flex flex-col gap-2.5 text-sm"
                       onSubmit={handleAddProductSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Add Product
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={uploading}
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Product Name*</label>
                         <input
@@ -639,22 +664,6 @@ export default function ManageProductsPage() {
                           </div>
                         )}
                       </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={uploading}
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white disabled:cursor-not-allowed"
-                        >
-                          Add Product
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                       <p
                         className={`text-gray-500 ${
                           !isAddFormValid && "text-red-500"
@@ -667,15 +676,35 @@ export default function ManageProductsPage() {
                 )}
                 {editProduct && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Edit Product</h3>
                     <form
                       className="flex flex-col gap-2.5 text-sm"
                       onSubmit={handleEditProductSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Edit Product
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={uploading}
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Update
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Product*</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full bg-[#9e6e3b2e]"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -684,7 +713,7 @@ export default function ManageProductsPage() {
                           }}
                           value={item ? item.id : ""}
                         >
-                          <option value="">Select a product</option>
+                          <option value="null">Select a product</option>
                           {items.map((prod, i) => (
                             <option key={i} value={prod.id}>
                               {prod.name}
@@ -905,22 +934,6 @@ export default function ManageProductsPage() {
                           </div>
                         )}
                       </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={uploading}
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white  disabled:cursor-not-allowed"
-                        >
-                          Update Product
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                       <p
                         className={`text-gray-500
                           ${!isEditFormValid && "text-red-500"}`}
@@ -932,49 +945,47 @@ export default function ManageProductsPage() {
                 )}
                 {deleteProduct && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">
-                      Delete Product
-                    </h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleDeleteProductSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Delete Product
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={!item || itemLoading}
+                            className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                          >
+                            Delete Product
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <label>Select Product</label>
                       <select
                         className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         required
                         onChange={(e) => {
-                          if (e.target.value && e.target.value !== "0") {
-                            fetchItemData(e.target.value);
-                          } else {
-                            setItem(null);
-                          }
+                          fetchItemData(e.target.value);
                         }}
                         value={item ? item.id : ""}
                       >
-                        <option value="0">Select a product</option>
+                        <option value="null">Select a product</option>
                         {items.map((prod, i) => (
                           <option key={i} value={prod.id}>
                             {prod.name}
                           </option>
                         ))}
                       </select>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={!item || itemLoading}
-                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                        >
-                          Delete Product
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                     </form>
                   </div>
                 )}

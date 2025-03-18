@@ -163,6 +163,11 @@ export default function ManageUsersPage() {
 
   // Fetch a single product's data using the user API.
   const fetchUserData = async (userId) => {
+    if (userId === "null") {
+      setSelectedUser(null);
+      resetForm();
+      return;
+    }
     setSelectedUserLoading(true);
     try {
       const response = await fetch(`/api/user?userId=${userId}`);
@@ -394,11 +399,31 @@ export default function ManageUsersPage() {
               <div className="w-full">
                 {addUser && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Add User</h3>
                     <form
                       className="flex flex-col gap-2.5 text-sm"
                       onSubmit={handleAddUserSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Add User
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={uploading}
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">First Name*</label>
                         <input
@@ -524,22 +549,7 @@ export default function ManageUsersPage() {
                           </div>
                         )}
                       </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={uploading}
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                        >
-                          Add User
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
+
                       <p
                         className={`text-gray-500 ${
                           !isAddFormValid && "text-red-500"
@@ -552,15 +562,35 @@ export default function ManageUsersPage() {
                 )}
                 {editUser && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Edit User</h3>
                     <form
                       className="flex flex-col gap-2.5 text-sm"
                       onSubmit={handleEditUserSubmit}
                     >
                       <div>
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="font-bold text-orange-800 text-base">
+                            Edit User
+                          </h3>
+                          <div className="flex gap-2">
+                            <button
+                              type="submit"
+                              disabled={uploading || selectedUserLoading}
+                              className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                            >
+                              Update
+                            </button>
+                            <button
+                              type="reset"
+                              onClick={resetForm}
+                              className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
                         <label className="mx-0.5">User*</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full bg-[#9e6e3b2e]"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -569,7 +599,7 @@ export default function ManageUsersPage() {
                           }}
                           value={selectedUser ? selectedUser.id : ""}
                         >
-                          <option value="">Select a user</option>
+                          <option value="null">Select a user</option>
                           {users.map((user, i) => (
                             <option key={i} value={user.id}>
                               {user.firstName +
@@ -721,22 +751,7 @@ export default function ManageUsersPage() {
                           </div>
                         )}
                       </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={uploading || selectedUserLoading}
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                        >
-                          Update User
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
+
                       <p
                         className={`text-gray-500
                           ${!isEditFormValid && "text-red-500"}`}
@@ -748,11 +763,35 @@ export default function ManageUsersPage() {
                 )}
                 {deleteUser && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Delete User</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleDeleteUserSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Delete User
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={
+                              !selectedUser ||
+                              user?.id === selectedUser?.id ||
+                              selectedUserLoading
+                            }
+                            className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <label>Select User</label>
                       <select
                         className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
@@ -764,7 +803,7 @@ export default function ManageUsersPage() {
                         }}
                         value={selectedUser ? selectedUser.id : ""}
                       >
-                        <option value="">Select a user</option>
+                        <option value="null">Select a user</option>
                         {users.map((user, i) => (
                           <option key={i} value={user.id}>
                             {user.firstName +
@@ -775,26 +814,6 @@ export default function ManageUsersPage() {
                           </option>
                         ))}
                       </select>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={
-                            !selectedUser ||
-                            user?.id === selectedUser?.id ||
-                            selectedUserLoading
-                          }
-                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                        >
-                          Delete User
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className=" p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                     </form>
                   </div>
                 )}

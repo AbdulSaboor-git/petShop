@@ -67,6 +67,11 @@ export default function ManageCategoriesPage() {
 
   // Fetch single category details for editing/deleting
   const fetchCategoryData = async (categoryId) => {
+    if (categoryId === "null") {
+      setSelectedCategory(null);
+      resetForm();
+      return;
+    }
     setCategoryLoading(true);
     try {
       const response = await fetch(`/api/category/${categoryId}`);
@@ -199,12 +204,14 @@ export default function ManageCategoriesPage() {
     }
   }, [userLoading, user]);
 
-  // Warn if unauthorized
+  // If user is not authorized, show a message.
   useEffect(() => {
-    if (!userLoading && !user) {
+    if (!user && !userLoading) {
+      showMessage("Unauthorized Access", false);
+    } else if (user && user.role != "ADMIN") {
       showMessage("Unauthorized Access", false);
     }
-  }, [userLoading, user]);
+  }, [userLoading]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
@@ -214,9 +221,13 @@ export default function ManageCategoriesPage() {
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             Unauthorized Access.
           </div>
-        ) : loading ? (
-          <div className="h-screen pt-5">
+        ) : userLoading ? (
+          <div className="h-screen">
             <Loader />
+          </div>
+        ) : user.role != "ADMIN" ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            Unauthorized Access.
           </div>
         ) : (
           <div className="flex flex-col gap-4">
@@ -231,7 +242,7 @@ export default function ManageCategoriesPage() {
                   onClick={handleAddCategory}
                   className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] flex-1 text-center ${
                     focused === "add"
-                      ? "bg-[#9e6e3b]  hover:bg-[#9e6e3b]"
+                      ? "bg-[#9e6e3b] text-white  hover:bg-[#9e6e3b]"
                       : "hover:bg-[#c29a6e] hover:text-white"
                   }`}
                 >
@@ -261,11 +272,30 @@ export default function ManageCategoriesPage() {
               <div className="w-full">
                 {addCategory && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Add Category</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleAddCategorySubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Add Category
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Category Name</label>
                         <input
@@ -277,36 +307,40 @@ export default function ManageCategoriesPage() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                         />
-                      </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                        >
-                          Add Category
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
                       </div>
                     </form>
                   </div>
                 )}
                 {editCategory && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Edit Category</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleEditCategorySubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Edit Category
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Update
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Select Category</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full bg-[#9e6e3b2e]"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -317,7 +351,7 @@ export default function ManageCategoriesPage() {
                           }}
                           value={selectedCategory ? selectedCategory.id : ""}
                         >
-                          <option value="">Select a category</option>
+                          <option value="null">Select a category</option>
                           {categories.map((cat) => (
                             <option key={cat.id} value={cat.id}>
                               {cat.name}
@@ -337,33 +371,36 @@ export default function ManageCategoriesPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                        >
-                          Update Category
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                     </form>
                   </div>
                 )}
                 {deleteCategory && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">
-                      Delete Category
-                    </h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleDeleteCategorySubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Delete Category
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={!selectedCategory || categoryLoading}
+                            className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Select Category</label>
                         <select
@@ -378,29 +415,13 @@ export default function ManageCategoriesPage() {
                           }}
                           value={selectedCategory ? selectedCategory.id : ""}
                         >
-                          <option value="">Select a category</option>
+                          <option value="null">Select a category</option>
                           {categories.map((cat) => (
                             <option key={cat.id} value={cat.id}>
                               {cat.name}
                             </option>
                           ))}
                         </select>
-                      </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={!selectedCategory || categoryLoading}
-                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                        >
-                          Delete Category
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
                       </div>
                     </form>
                   </div>

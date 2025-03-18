@@ -87,6 +87,11 @@ export default function ManageBreedsPage() {
 
   // Fetch a single breed's data (for edit and delete forms)
   const fetchBreedData = async (breedId) => {
+    if (breedId === "null") {
+      setSelectedBreed(null);
+      resetForm();
+      return;
+    }
     setBreedLoading(true);
     try {
       const response = await fetch(`/api/breed/${breedId}`);
@@ -109,13 +114,6 @@ export default function ManageBreedsPage() {
   useEffect(() => {
     if (!userLoading && user) {
       fetchBreeds();
-    }
-  }, [userLoading, user]);
-
-  // If user is not authorized, show a message.
-  useEffect(() => {
-    if (!userLoading && !user) {
-      showMessage("Unauthorized Access", false);
     }
   }, [userLoading, user]);
 
@@ -192,6 +190,15 @@ export default function ManageBreedsPage() {
     }
   };
 
+  // If user is not authorized, show a message.
+  useEffect(() => {
+    if (!user && !userLoading) {
+      showMessage("Unauthorized Access", false);
+    } else if (user && user.role != "ADMIN") {
+      showMessage("Unauthorized Access", false);
+    }
+  }, [userLoading]);
+
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
       <Header />
@@ -200,9 +207,13 @@ export default function ManageBreedsPage() {
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             Unauthorized Access.
           </div>
-        ) : loading ? (
-          <div className="h-screen pt-5">
+        ) : userLoading ? (
+          <div className="h-screen">
             <Loader />
+          </div>
+        ) : user.role != "ADMIN" ? (
+          <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
+            Unauthorized Access.
           </div>
         ) : (
           <div className="flex flex-col gap-4">
@@ -247,11 +258,30 @@ export default function ManageBreedsPage() {
               <div className="w-full">
                 {addBreed && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Add Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleAddBreedSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Add Breed
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Save
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Breed Name</label>
                         <input
@@ -263,36 +293,40 @@ export default function ManageBreedsPage() {
                           onChange={(e) => setName(e.target.value)}
                           value={name}
                         />
-                      </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                        >
-                          Add Breed
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
                       </div>
                     </form>
                   </div>
                 )}
                 {editBreed && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Edit Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleEditBreedSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Edit Breed
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            Update
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Select Breed</label>
                         <select
-                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
+                          className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full bg-[#9e6e3b2e]"
                           required
                           onChange={(e) => {
                             if (e.target.value) {
@@ -303,7 +337,7 @@ export default function ManageBreedsPage() {
                           }}
                           value={selectedBreed ? selectedBreed.id : ""}
                         >
-                          <option value="">Select a breed</option>
+                          <option value="null">Select a breed</option>
                           {breeds.map((b) => (
                             <option key={b.id} value={b.id}>
                               {b.name}
@@ -323,31 +357,36 @@ export default function ManageBreedsPage() {
                           onChange={(e) => setName(e.target.value)}
                         />
                       </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          className="p-3 px-4 rounded-xl border bg-[#9e6e3b] hover:bg-[#8a6034] text-white"
-                        >
-                          Update Breed
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                     </form>
                   </div>
                 )}
                 {deleteBreed && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
-                    <h3 className="font-bold text-orange-800">Delete Breed</h3>
                     <form
                       className="flex flex-col gap-2 text-sm"
                       onSubmit={handleDeleteBreedSubmit}
                     >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-orange-800 text-base">
+                          Delete Breed
+                        </h3>
+                        <div className="flex gap-2">
+                          <button
+                            type="submit"
+                            disabled={!selectedBreed || breedLoading}
+                            className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
+                          >
+                            Delete Breed
+                          </button>
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
                       <div>
                         <label className="mx-0.5">Select Breed</label>
                         <select
@@ -362,29 +401,13 @@ export default function ManageBreedsPage() {
                           }}
                           value={selectedBreed ? selectedBreed.id : ""}
                         >
-                          <option value="">Select a breed</option>
+                          <option value="null">Select a breed</option>
                           {breeds.map((b) => (
                             <option key={b.id} value={b.id}>
                               {b.name}
                             </option>
                           ))}
                         </select>
-                      </div>
-                      <div className="mt-4 flex flex-col gap-2">
-                        <button
-                          type="submit"
-                          disabled={!selectedBreed || breedLoading}
-                          className="p-3 px-4 mt-2 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
-                        >
-                          Delete Breed
-                        </button>
-                        <button
-                          type="reset"
-                          onClick={resetForm}
-                          className="p-3 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Cancel
-                        </button>
                       </div>
                     </form>
                   </div>

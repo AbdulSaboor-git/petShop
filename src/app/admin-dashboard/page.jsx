@@ -71,6 +71,30 @@ export default function AdminDashboardMainPage() {
                   View, add, edit, and delete users.
                 </p>
               </button>
+              <button
+                onClick={() =>
+                  router.push("/admin-dashboard/manage-categories")
+                }
+                className="block p-4 text-center border border-[#9e6e3b] rounded-xl text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white transition"
+              >
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  Manage Categories
+                </h3>
+                <p className="text-xs md:text-sm">
+                  View, add, edit, and delete categories.
+                </p>
+              </button>
+              <button
+                onClick={() => router.push("/admin-dashboard/manage-breeds")}
+                className="block p-4 text-center border border-[#9e6e3b] rounded-xl text-[#9e6e3b] hover:bg-[#9e6e3b] hover:text-white transition"
+              >
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  Manage Breeds
+                </h3>
+                <p className="text-xs md:text-sm">
+                  View, add, edit, and delete breeds.
+                </p>
+              </button>
             </div>
           </div>
         )}
