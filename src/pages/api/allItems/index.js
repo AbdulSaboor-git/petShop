@@ -18,23 +18,15 @@ const handleGet = async (req, res, sellerId) => {
     if (sellerId) {
       const id = parseInt(sellerId, 10);
       if (isNaN(id) || id <= 0) {
-        return res
-          .status(400)
-          .json({
-            message: "Invalid Seller ID. Please provide a valid numeric ID.",
-          });
+        return res.status(400).json({
+          message: "Invalid Seller ID. Please provide a valid numeric ID.",
+        });
       }
 
       const items = await prisma.item.findMany({
         where: { sellerId: id, availability: "AVAILABLE" },
         include: { seller: true, category: true, breed: true },
       });
-
-      if (!items.length) {
-        return res
-          .status(404)
-          .json({ message: "No available items found for this seller." });
-      }
 
       return res.status(200).json({ items });
     }
