@@ -167,7 +167,7 @@ export default function Profile() {
                 <div
                   className={`transition-all duration-300 ease-in-out overflow-hidden bg-white rounded-xl ${
                     showProfile
-                      ? "max-h-[200px] opacity-100 m-1 mt-3 text-xs p-4  md:text-sm"
+                      ? "max-h-[200px] opacity-100 m-1 mt-3 text-[11px] p-4  md:text-sm"
                       : "max-h-0 opacity-0 m-0 text-[2px] p-0 pointer-events-none"
                   }`}
                 >

@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const { breedId } = req.query;
+  const { breedId } = req.query; // Make sure your query parameter is named appropriately
 
   switch (method) {
     case "GET":
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       return handleDelete(req, res, breedId);
     default:
       res.setHeader("Allow", ["GET", "PATCH", "DELETE"]);
-      return res.status(405).json({ message: `Method ${method} Not Allowed` });
+      return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
 
@@ -32,7 +32,6 @@ async function handleGet(req, res, breedId) {
     if (!breed) {
       return res.status(404).json({ message: "Breed not found" });
     }
-
     return res.status(200).json(breed);
   } catch (error) {
     console.error("Error fetching breed:", error);
@@ -47,41 +46,20 @@ async function handlePatch(req, res, breedId) {
       return res.status(400).json({ message: "Invalid Breed ID" });
     }
 
-    const existingBreed = await prisma.breed.findUnique({ where: { id } });
+    const existingBreed = await prisma.breed.findUnique({
+      where: { id },
+    });
     if (!existingBreed) {
       return res.status(404).json({ message: "Breed not found" });
     }
 
     const { name } = req.body;
-    if (!name?.trim()) {
-      return res.status(400).json({ message: "Breed name cannot be empty" });
-    }
-
-    const trimmedName = name.trim();
-
-    // Check if the name already exists (case-insensitive)
-    const duplicateBreed = await prisma.breed.findFirst({
-      where: { name: { equals: trimmedName, mode: "insensitive" } },
-    });
-
-    if (duplicateBreed && duplicateBreed.id !== id) {
-      return res.status(409).json({
-        message: `Breed '${trimmedName}' already exists`,
-        data: duplicateBreed,
-      });
-    }
-
-    // Prevent unnecessary update if name is unchanged
-    if (trimmedName === existingBreed.name) {
-      return res.status(404).json({
-        message: "No changes made",
-        data: existingBreed,
-      });
-    }
 
     const updatedBreed = await prisma.breed.update({
       where: { id },
-      data: { name: trimmedName },
+      data: {
+        ...(name && { name: name.trim() }),
+      },
     });
 
     return res.status(200).json(updatedBreed);
@@ -98,19 +76,20 @@ async function handleDelete(req, res, breedId) {
       return res.status(400).json({ message: "Invalid Breed ID" });
     }
 
+    // Fetch the breed along with its associated items.
     const existingBreed = await prisma.breed.findUnique({
       where: { id },
       include: { items: true },
     });
-
     if (!existingBreed) {
       return res.status(404).json({ message: "Breed not found" });
     }
 
-    if (existingBreed.items.length > 0) {
+    // Prevent deletion if breed has items.
+    if (existingBreed.items && existingBreed.items.length > 0) {
       return res
         .status(400)
-        .json({ message: "Cannot delete breed with associated items" });
+        .json({ message: "Cannot delete breed that has items." });
     }
 
     await prisma.breed.delete({ where: { id } });

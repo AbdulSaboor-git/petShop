@@ -8,27 +8,24 @@ export default async function handler(req, res) {
       return handleGet(req, res);
     default:
       res.setHeader("Allow", ["GET"]);
-      return res.status(405).json({ message: `Method ${method} Not Allowed` });
+      return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
 
 const handleGet = async (req, res) => {
   try {
-    // Fetch categories and breeds in parallel
-    const [categories, breeds] = await Promise.all([
-      prisma.category.findMany({
-        include: { items: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.breed.findMany({
-        include: { items: true },
-        orderBy: { name: "asc" },
-      }),
-    ]);
+    const categories = await prisma.category.findMany({
+      include: { items: true },
+      orderBy: { name: "asc" },
+    });
+    const breeds = await prisma.breed.findMany({
+      include: { items: true },
+      orderBy: { name: "asc" },
+    });
 
     return res.status(200).json({ categories, breeds });
   } catch (error) {
-    console.error("Error fetching categories and breeds:", error);
+    console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

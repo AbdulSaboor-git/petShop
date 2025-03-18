@@ -9,43 +9,29 @@ export default async function handler(req, res) {
       return handleGet(req, res, itemId, categ, sex);
     default:
       res.setHeader("Allow", ["GET"]);
-      return res.status(405).json({ message: `Method ${method} Not Allowed` });
+      return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
 
 const handleGet = async (req, res, itemId, categ, sex) => {
+  const ItemId = parseInt(itemId, 10);
+  const categId = parseInt(categ, 10);
+
   try {
-    // Validate input parameters
-    const ItemId = parseInt(itemId, 10);
-    const categId = parseInt(categ, 10);
-
-    if (isNaN(ItemId) || ItemId <= 0) {
-      return res.status(400).json({ message: "Invalid itemId parameter" });
-    }
-    if (isNaN(categId) || categId <= 0) {
-      return res.status(400).json({ message: "Invalid category ID" });
-    }
-    if (sex && typeof sex !== "string") {
-      return res.status(400).json({ message: "Invalid sex parameter" });
-    }
-
-    // Fetch related items
     const items = await prisma.item.findMany({
       where: {
         categoryId: categId,
         id: { not: ItemId },
-        sex: sex || undefined,
+        sex: sex,
         availability: "AVAILABLE",
       },
       orderBy: { name: "asc" },
       take: 4,
     });
 
-    return res
-      .status(200)
-      .json({ items, message: "Related items fetched successfully" });
+    return res.status(200).json({ items });
   } catch (error) {
-    console.error("Error fetching related items:", error);
+    console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

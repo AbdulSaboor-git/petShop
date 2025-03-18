@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       return handleGet(req, res);
     default:
       res.setHeader("Allow", ["GET"]);
-      return res.status(405).json({ message: `Method ${method} Not Allowed` });
+      return res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
 
@@ -20,17 +20,9 @@ const handleGet = async (req, res) => {
       return res.status(400).json({ message: "Missing ids query parameter" });
     }
 
-    // Convert the comma-separated string into an array of numbers
-    const favIds = ids
-      .split(",")
-      .map((id) => parseInt(id, 10))
-      .filter((id) => !isNaN(id) && id > 0); // Ensure valid positive integers
-
-    if (favIds.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "Invalid or empty ID list provided" });
-    }
+    // Parse the comma-separated ids into an array.
+    // Adjust parseInt as needed (or use Number) depending on your ID type.
+    const favIds = ids.split(",").map((id) => parseInt(id, 10));
 
     // Fetch items whose IDs are in the favIds array
     const items = await prisma.item.findMany({
@@ -40,13 +32,6 @@ const handleGet = async (req, res) => {
       include: { seller: true, category: true, breed: true },
     });
 
-    if (items.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No items found for the given IDs" });
-    }
-
-    // Group items by seller
     const groupedBySeller = items.reduce((acc, item) => {
       const sellerId = item.seller.id;
       if (!acc[sellerId]) {
@@ -56,9 +41,10 @@ const handleGet = async (req, res) => {
       return acc;
     }, {});
     const groupedItemsArray = Object.values(groupedBySeller);
+
     return res.status(200).json({ groupedItemsArray });
   } catch (error) {
-    console.error("Error fetching favorite items:", error);
+    console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

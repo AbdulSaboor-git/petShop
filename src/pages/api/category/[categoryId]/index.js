@@ -2,11 +2,7 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const categoryId = parseInt(req.query.categoryId, 10);
-
-  if (isNaN(categoryId) || categoryId <= 0) {
-    return res.status(400).json({ message: "Invalid Category ID" });
-  }
+  const { categoryId } = req.query;
 
   switch (method) {
     case "GET":
@@ -23,8 +19,13 @@ export default async function handler(req, res) {
 
 async function handleGet(req, res, categoryId) {
   try {
+    const id = parseInt(categoryId, 10);
+    if (isNaN(id) || id <= 0) {
+      return res.status(400).json({ message: "Invalid Category ID" });
+    }
+
     const category = await prisma.category.findUnique({
-      where: { id: categoryId },
+      where: { id },
       include: { items: true },
     });
 
@@ -45,14 +46,6 @@ async function handlePatch(req, res, categoryId) {
       return res.status(400).json({ message: "Invalid Category ID" });
     }
 
-    const { name } = req.body;
-    if (!name?.trim()) {
-      return res.status(400).json({ message: "Category name is required" });
-    }
-
-    const trimmedName = name.trim();
-
-    // Check if category exists
     const existingCategory = await prisma.category.findUnique({
       where: { id },
     });
@@ -60,30 +53,13 @@ async function handlePatch(req, res, categoryId) {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    // If name hasn't changed, return early
-    if (existingCategory.name.toLowerCase() === trimmedName.toLowerCase()) {
-      return res.status(404).json({
-        message: "No changes made",
-        data: existingCategory,
-      });
-    }
+    const { name } = req.body;
 
-    // Check if the new name already exists (case insensitive)
-    const duplicateCategory = await prisma.category.findFirst({
-      where: { name: { equals: trimmedName, mode: "insensitive" } },
-    });
-
-    if (duplicateCategory && duplicateCategory.id !== id) {
-      return res.status(409).json({
-        message: `Category '${trimmedName}' already exists.`,
-        category: duplicateCategory,
-      });
-    }
-
-    // Update the category
     const updatedCategory = await prisma.category.update({
       where: { id },
-      data: { name: trimmedName },
+      data: {
+        ...(name && { name: name.trim() }),
+      },
     });
 
     return res.status(200).json(updatedCategory);
@@ -95,23 +71,28 @@ async function handlePatch(req, res, categoryId) {
 
 async function handleDelete(req, res, categoryId) {
   try {
-    // Check if category exists and has items
-    const category = await prisma.category.findUnique({
-      where: { id: categoryId },
-      include: { items: { select: { id: true } } },
-    });
+    const id = parseInt(categoryId, 10);
+    if (isNaN(id) || id <= 0) {
+      return res.status(400).json({ message: "Invalid Category ID" });
+    }
 
-    if (!category) {
+    // Fetch the category along with its associated items.
+    const existingCategory = await prisma.category.findUnique({
+      where: { id },
+      include: { items: true },
+    });
+    if (!existingCategory) {
       return res.status(404).json({ message: "Category not found" });
     }
 
-    if (category.items.length > 0) {
+    // Prevent deletion if category has items.
+    if (existingCategory.items && existingCategory.items.length > 0) {
       return res
         .status(400)
-        .json({ message: "Cannot delete category with items" });
+        .json({ message: "Cannot delete category that has items." });
     }
 
-    await prisma.category.delete({ where: { id: categoryId } });
+    await prisma.category.delete({ where: { id } });
 
     return res.status(200).json({ message: "Category deleted successfully" });
   } catch (error) {
