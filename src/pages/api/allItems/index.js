@@ -13,7 +13,6 @@ export default async function handler(req, res) {
 }
 
 const handleGet = async (req, res, sellerId) => {
-  res.setHeader("Cache-Control", "no-store");
   try {
     if (sellerId) {
       const id = parseInt(sellerId, 10);

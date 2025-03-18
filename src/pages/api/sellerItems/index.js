@@ -15,7 +15,6 @@ export default async function handler(req, res) {
 
 const handleGet = async (req, res, sellerId) => {
   const id = parseInt(sellerId, 10);
-  res.setHeader("Cache-Control", "no-store");
   try {
     const items = await prisma.item.findMany({
       where: { sellerId: id },

@@ -14,7 +14,6 @@ export default async function handler(req, res) {
 }
 
 const handleGet = async (req, res) => {
-  res.setHeader("Cache-Control", "no-store");
   try {
     const items = await prisma.item.findMany({
       where: { availability: "AVAILABLE" },
