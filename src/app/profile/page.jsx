@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import useAuthUser from "@/hooks/authUser";
 import { MdAccountCircle, MdClose, MdSearch } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useGlobalSWR } from "@/lib/swrConfig";
 
 export default function Profile() {
   const [id, setId] = useState(null);
@@ -82,75 +81,39 @@ export default function Profile() {
   }, [searchQuery, allItems]);
 
   // Fetch seller and items data based on the id.
-  // useEffect(() => {
-  //   if (!user && userLoading) {
-  //     return;
-  //   }
-
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     console.log(id + "dsa");
-  //     try {
-  //       const response = await fetch(`/api/user?userId=${id}`);
-  //       const response2 = await fetch(`/api/allItems?sellerId=${id}`);
-
-  //       if (!response.ok) {
-  //         const errorData = await response.json();
-  //         throw new Error(errorData.message || "Failed to fetch user data.");
-  //       }
-  //       if (!response2.ok) {
-  //         const errorData2 = await response2.json();
-  //         throw new Error(errorData2.message || "Failed to fetch items data.");
-  //       }
-  //       const sellerData = await response.json();
-  //       const itemsData = await response2.json();
-  //       setSeller(sellerData);
-  //       setItems(itemsData.items);
-  //       setAllItems(itemsData.items);
-  //     } catch (err) {
-  //       setError(err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   if (id && id != "undefined") fetchData();
-  // }, [id, user, userLoading]);
-
-  // Compute SWR keys based on conditions:
-  const sellerKey =
-    id && id !== "undefined" && !userLoading ? `/api/user?userId=${id}` : null;
-  const itemsKey =
-    id && id !== "undefined" && !userLoading
-      ? `/api/allItems?sellerId=${id}`
-      : null;
-
-  const { data: sellerData, error: sellerError } = useGlobalSWR(sellerKey);
-  const { data: itemsData, error: itemsError } = useGlobalSWR(itemsKey);
-
   useEffect(() => {
-    // Determine loading state:
-    if ((!sellerData && !sellerError) || (!itemsData && !itemsError)) {
+    if (!user && userLoading) {
+      return;
+    }
+
+    const fetchData = async () => {
       setLoading(true);
-    } else {
-      setLoading(false);
-    }
+      console.log(id + "dsa");
+      try {
+        const response = await fetch(`/api/user?userId=${id}`);
+        const response2 = await fetch(`/api/allItems?sellerId=${id}`);
 
-    // Update seller state if available
-    if (sellerData) {
-      setSeller(sellerData);
-    }
-
-    // Update items state if available
-    if (itemsData) {
-      setItems(itemsData.items);
-      setAllItems(itemsData.items);
-    }
-
-    // Update error state if any errors occur.
-    if (sellerError || itemsError) {
-      setError(sellerError?.message || itemsError?.message);
-    }
-  }, [sellerData, itemsData, sellerError, itemsError]);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to fetch user data.");
+        }
+        if (!response2.ok) {
+          const errorData2 = await response2.json();
+          throw new Error(errorData2.message || "Failed to fetch items data.");
+        }
+        const sellerData = await response.json();
+        const itemsData = await response2.json();
+        setSeller(sellerData);
+        setItems(itemsData.items);
+        setAllItems(itemsData.items);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (id && id != "undefined") fetchData();
+  }, [id, user, userLoading]);
 
   // Filter featured items and create premium items without mutating the original items array.
   useEffect(() => {
