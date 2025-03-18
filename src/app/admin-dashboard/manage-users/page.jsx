@@ -608,7 +608,7 @@ export default function ManageUsersPage() {
                                 user.email +
                                 ") " +
                                 user.role +
-                                (user.isActive ? " [inactive]" : "")}
+                                (!user.isActive ? " [inactive]" : "")}
                             </option>
                           ))}
                         </select>
@@ -812,7 +812,9 @@ export default function ManageUsersPage() {
                               (user.lastName && " " + user.lastName) +
                               " (" +
                               user.email +
-                              ")"}
+                              ") " +
+                              user.role +
+                              (!user.isActive ? " [inactive]" : "")}
                           </option>
                         ))}
                       </select>
