@@ -407,20 +407,20 @@ export default function ManageUsersPage() {
                         <h3 className="font-bold text-orange-800 text-base">
                           Add User
                         </h3>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 text-xs">
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                          >
+                            Cancel
+                          </button>
                           <button
                             type="submit"
                             disabled={uploading}
                             className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
                           >
-                            Save
-                          </button>
-                          <button
-                            type="reset"
-                            onClick={resetForm}
-                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                          >
-                            Cancel
+                            Add
                           </button>
                         </div>
                       </div>
@@ -571,20 +571,20 @@ export default function ManageUsersPage() {
                           <h3 className="font-bold text-orange-800 text-base">
                             Edit User
                           </h3>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 text-xs">
+                            <button
+                              type="reset"
+                              onClick={resetForm}
+                              className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                            >
+                              Cancel
+                            </button>
                             <button
                               type="submit"
                               disabled={uploading || selectedUserLoading}
                               className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
                             >
                               Update
-                            </button>
-                            <button
-                              type="reset"
-                              onClick={resetForm}
-                              className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                            >
-                              Cancel
                             </button>
                           </div>
                         </div>
@@ -606,7 +606,9 @@ export default function ManageUsersPage() {
                                 (user.lastName && " " + user.lastName) +
                                 " (" +
                                 user.email +
-                                ")"}
+                                ") " +
+                                user.role +
+                                (user.isActive ? " [inactive]" : "")}
                             </option>
                           ))}
                         </select>
@@ -771,7 +773,14 @@ export default function ManageUsersPage() {
                         <h3 className="font-bold text-orange-800 text-base">
                           Delete User
                         </h3>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 text-xs">
+                          <button
+                            type="reset"
+                            onClick={resetForm}
+                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                          >
+                            Cancel
+                          </button>
                           <button
                             type="submit"
                             disabled={
@@ -782,13 +791,6 @@ export default function ManageUsersPage() {
                             className="p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white disabled:opacity-60 disabled:hover:bg-red-500"
                           >
                             Delete
-                          </button>
-                          <button
-                            type="reset"
-                            onClick={resetForm}
-                            className=" p-1.5 px-4 rounded-xl border bg-red-500 hover:bg-red-600 text-white"
-                          >
-                            Cancel
                           </button>
                         </div>
                       </div>
