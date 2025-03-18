@@ -6,6 +6,7 @@ import ProductCardAlt from "@/components/productCardAlt";
 import { MdClose, MdSearch } from "react-icons/md";
 import { RiArrowDownSLine } from "react-icons/ri";
 import Loader from "@/components/loader";
+import { useGlobalSWR } from "@/lib/swrConfig";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -115,33 +116,57 @@ export default function Shop() {
   };
 
   // Fetch items, categories, and breeds.
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const resItems = await fetch(`/api/homeItems`);
+  //       const resCatBreed = await fetch(`/api/categories_breeds`);
+  //       if (!resItems.ok || !resCatBreed.ok) {
+  //         throw new Error("Failed to fetch data.");
+  //       }
+  //       const dataItems = await resItems.json();
+  //       const dataCatBreed = await resCatBreed.json();
+
+  //       setItems(dataItems.items);
+  //       setAllItems(dataItems.items);
+  //       dataItems.items.find((item) => {
+  //         item.isDiscounted && setIsOnSale(true);
+  //       });
+  //       setCategories(dataCatBreed.categories);
+  //       setBreeds(dataCatBreed.breeds);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+  const { data: itemsData, error: itemsError } = useGlobalSWR("/api/homeItems");
+  const { data: catBreedData, error: catBreedError } = useGlobalSWR(
+    "/api/categories_breeds"
+  );
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const resItems = await fetch(`/api/homeItems`);
-        const resCatBreed = await fetch(`/api/categories_breeds`);
-        if (!resItems.ok || !resCatBreed.ok) {
-          throw new Error("Failed to fetch data.");
+    if (itemsData && catBreedData) {
+      setItems(itemsData.items);
+      setAllItems(itemsData.items);
+      // Check if any item is discounted to set isOnSale flag.
+      itemsData.items.find((item) => {
+        if (item.isDiscounted) {
+          setIsOnSale(true);
         }
-        const dataItems = await resItems.json();
-        const dataCatBreed = await resCatBreed.json();
-
-        setItems(dataItems.items);
-        setAllItems(dataItems.items);
-        dataItems.items.find((item) => {
-          item.isDiscounted && setIsOnSale(true);
-        });
-        setCategories(dataCatBreed.categories);
-        setBreeds(dataCatBreed.breeds);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+        return item.isDiscounted;
+      });
+      setCategories(catBreedData.categories);
+      setBreeds(catBreedData.breeds);
+      setLoading(false);
+    } else if (itemsError || catBreedError) {
+      setError(itemsError?.message || catBreedError?.message);
+      setLoading(false);
+    }
+  }, [itemsData, catBreedData, itemsError, catBreedError]);
 
   // Whenever the selected filters, onSale toggle, or sorting options change, update the displayed items.
   useEffect(() => {

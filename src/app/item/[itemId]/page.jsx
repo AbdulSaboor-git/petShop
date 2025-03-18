@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productCard";
 import useAuthUser from "@/hooks/authUser";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { useGlobalSWR } from "@/lib/swrConfig";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -55,60 +56,103 @@ export default function ItemPage({ params }) {
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (!itemId) {
-      setError("No itemId provided.");
-      setLoading(false);
-      return;
-    }
-    const fetchItemData = async () => {
-      try {
-        const response = await fetch(`/api/item?productId=${itemId}`);
-        if (!response.ok) {
-          throw new Error("Item not found");
-        }
-        const data = await response.json();
-        setItem(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   if (!itemId) {
+  //     setError("No itemId provided.");
+  //     setLoading(false);
+  //     return;
+  //   }
+  //   const fetchItemData = async () => {
+  //     try {
+  //       const response = await fetch(`/api/item?productId=${itemId}`);
+  //       if (!response.ok) {
+  //         throw new Error("Item not found");
+  //       }
+  //       const data = await response.json();
+  //       setItem(data);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   // Get favorites from localStorage, if any.
+  //   const storedFavorites = localStorage.getItem("favorites");
+  //   if (storedFavorites) {
+  //     setFavorites(JSON.parse(storedFavorites));
+  //   } else {
+  //     // Initialize as an empty array.
+  //     localStorage.setItem("favorites", JSON.stringify([]));
+  //     setFavorites([]);
+  //   }
+  //   fetchItemData();
+  // }, [itemId]);
 
-    // Get favorites from localStorage, if any.
+  // useEffect(() => {
+  //   if (!item) return;
+  //   const fetchAllItems = async () => {
+  //     try {
+  //       const allItems = await fetch(`/api/shopItems`);
+  //       if (!allItems.ok) {
+  //         throw new Error("Failed to fetch items.");
+  //       }
+  //       const dataItems = await allItems.json();
+  //       setAllItems(dataItems.items);
+  //     } catch (err) {
+  //       setError2(err.message);
+  //     } finally {
+  //       setLoading2(false);
+  //     }
+  //   };
+
+  //   fetchAllItems();
+  // }, [item]);
+
+  //related items effect
+
+  // SWR for fetching item data
+  const { data: itemData, error: fetchItemError } = useGlobalSWR(
+    itemId ? `/api/item?productId=${itemId}` : null
+  );
+
+  useEffect(() => {
+    if (itemData) {
+      setItem(itemData);
+    }
+    setLoading(!itemData);
+    if (fetchItemError) {
+      setError(fetchItemError.message);
+      setLoading(false);
+    }
+  }, [itemData, fetchItemError]);
+
+  // Initialize favorites from localStorage
+  useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites));
     } else {
-      // Initialize as an empty array.
       localStorage.setItem("favorites", JSON.stringify([]));
       setFavorites([]);
     }
-    fetchItemData();
-  }, [itemId]);
+  }, []);
+
+  // SWR for fetching shop items (only if item data exists)
+  const { data: shopItemsData, error: fetchShopItemsError } = useGlobalSWR(
+    item ? `/api/shopItems` : null
+  );
 
   useEffect(() => {
-    if (!item) return;
-    const fetchAllItems = async () => {
-      try {
-        const allItems = await fetch(`/api/shopItems`);
-        if (!allItems.ok) {
-          throw new Error("Failed to fetch items.");
-        }
-        const dataItems = await allItems.json();
-        setAllItems(dataItems.items);
-      } catch (err) {
-        setError2(err.message);
-      } finally {
-        setLoading2(false);
-      }
-    };
+    if (shopItemsData) {
+      setAllItems(shopItemsData.items);
+    }
+    setLoading2(!shopItemsData);
+    if (fetchShopItemsError) {
+      setError2(fetchShopItemsError.message);
+      setLoading2(false);
+    }
+  }, [shopItemsData, fetchShopItemsError, item]);
 
-    fetchAllItems();
-  }, [item]);
-
-  //related items effect
   useEffect(() => {
     if (!item || !item.sex || item.sex === "" || !item.breedId) return;
     const RelatedItems = allItems

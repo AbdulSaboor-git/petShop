@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import useAuthUser from "@/hooks/authUser";
+import { useGlobalSWR } from "@/lib/swrConfig";
 
 export default function HomePage() {
   const router = useRouter();
@@ -62,32 +63,45 @@ export default function HomePage() {
     else router.push(`/item/${itemId}?cs=${contactSeller}`);
   }
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await fetch(`/api/homeItems`);
-        const response2 = await fetch(`/api/categories_breeds`);
-        if (!response.ok || !response2.ok) {
-          throw new Error("Failed to fetch data.");
-        }
-        const data = await response.json();
-        const data2 = await response2.json();
+  // useEffect(() => {
+  //   const fetchItems = async () => {
+  //     try {
+  //       const response = await fetch(`/api/homeItems`);
+  //       const response2 = await fetch(`/api/categories_breeds`);
+  //       if (!response.ok || !response2.ok) {
+  //         throw new Error("Failed to fetch data.");
+  //       }
+  //       const data = await response.json();
+  //       const data2 = await response2.json();
 
-        setItems(data.items);
-        setAllItems(data.items);
-        setCategories(data2.categories);
-        setBreeds(data2.breeds);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (!localStorage.getItem("favorites")) {
-      localStorage.setItem("favorites", []);
-    }
-    fetchItems();
-  }, []);
+  //       setItems(data.items);
+  //       setAllItems(data.items);
+  //       setCategories(data2.categories);
+  //       setBreeds(data2.breeds);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   if (!localStorage.getItem("favorites")) {
+  //     localStorage.setItem("favorites", []);
+  //   }
+  //   fetchItems();
+  // }, []);
+  const { data: itemsData, error: itemsError } = useGlobalSWR("/api/homeItems");
+  const { data: categoriesData, error: categoriesError } = useGlobalSWR(
+    "/api/categories_breeds"
+  );
+
+  useEffect(() => {
+    setItems(itemsData?.items || []);
+    setAllItems(itemsData?.items || []);
+    setCategories(categoriesData?.categories || []);
+    setBreeds(categoriesData?.breeds || []);
+    setLoading(!itemsData || !categoriesData);
+    setError(itemsError || categoriesError);
+  }, [categoriesData, categoriesError, itemsData, itemsError]);
 
   useEffect(() => {
     const handleResize = () => {
