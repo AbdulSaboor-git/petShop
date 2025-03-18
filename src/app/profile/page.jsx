@@ -152,7 +152,7 @@ export default function Profile() {
                 />
                 <div className="flex flex-col text-xs md:text-sm">
                   <div className="font-extrabold">{sellerName}</div>
-                  <div>Total Products: {items.length}</div>
+                  <div>Total Products: {allItems.length}</div>
                   {UserIsSeller && (
                     <button
                       onClick={toggleShowProfile}
@@ -167,7 +167,7 @@ export default function Profile() {
                 <div
                   className={`transition-all duration-300 ease-in-out overflow-hidden bg-white rounded-xl ${
                     showProfile
-                      ? "max-h-[200px] opacity-100 m-3 text-xs  p-4  md:text-sm"
+                      ? "max-h-[200px] opacity-100 m-1 mt-3 text-[11px] p-4  md:text-sm"
                       : "max-h-0 opacity-0 m-0 text-[2px] p-0 pointer-events-none"
                   }`}
                 >
@@ -204,8 +204,8 @@ export default function Profile() {
               <strong>Search</strong>
               <div className="relative w-full md:max-w-[350px] md:self-end bg-white border border-[#9e6e3b] rounded-xl overflow-hidden">
                 <input
-                  type="search"
-                  className="w-full p-3 rounded-xl 
+                  type="input"
+                  className="w-full p-3 rounded-xl pr-12
                                 text-xs md:text-sm focus:outline-none"
                   placeholder="Search in store..."
                   aria-label="Search"

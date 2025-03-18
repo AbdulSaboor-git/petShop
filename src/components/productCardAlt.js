@@ -1,3 +1,5 @@
+//shop product card
+
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -44,7 +46,7 @@ export default function ProductCardAlt({ item, favClick, isFav }) {
       <div className="flex flex-col gap-0.5 pl-1 pt-2 relative">
         <div className="text-xs font-normal flex gap-1 items-center justify-start">
           {item.isDiscounted && (
-            <div className=" text-green-600 text-[10px] font-extrabold">
+            <div className=" text-green-600 text-[10px] font-extrabold min-w-[50px]">
               {(
                 ((item.price - item.discountedPrice) * 100) /
                 item.price

@@ -1,5 +1,10 @@
+//profile page product card
+
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { MdDiscount, MdOutlineDiscount } from "react-icons/md";
+import { DiscountSharp } from "@mui/icons-material";
+import { RiDiscountPercentFill, RiDiscountPercentLine } from "react-icons/ri";
 
 export default function ProductCardAlt({ item, alt }) {
   const name = item.name.toUpperCase();
@@ -31,13 +36,7 @@ export default function ProductCardAlt({ item, alt }) {
       <div className="flex flex-col gap-1 p-2 px-3 relative">
         <div className="text-xs font-normal flex gap-1 items-center justify-start">
           {item.isDiscounted && (
-            <div className=" text-green-600 text-[10px] font-extrabold">
-              {(
-                ((item.price - item.discountedPrice) * 100) /
-                item.price
-              ).toFixed(0)}
-              {"% OFF"}{" "}
-            </div>
+            <MdDiscount size={16} className="text-green-600" />
           )}
           {hover && (
             <div className="w-full flex justify-center absolute -top-8 left-0">

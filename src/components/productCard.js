@@ -1,3 +1,4 @@
+//Home page product card
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { MdDiscount, MdFavorite, MdFavoriteBorder } from "react-icons/md";
@@ -51,7 +52,7 @@ export default function ProductCard({ item, favClick, isFav, alt }) {
         )}
         <div className="text-xs tracking-tight font-normal flex gap-2 items-center justify-start">
           {item.isDiscounted && (
-            <div className="text-[10px] tracking-tight font-extrabold text-green-600">
+            <div className="text-[10px] tracking-tight font-extrabold text-green-600 min-w-[45px]">
               {(
                 ((item.price - item.discountedPrice) * 100) /
                 item.price

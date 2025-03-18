@@ -281,8 +281,8 @@ export default function Shop() {
                 <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
                   <div className="relative w-full md:max-w-[350px] md:self-end bg-gray-100 border border-[#9e6e3b] rounded-xl overflow-hidden">
                     <input
-                      type="search"
-                      className="w-full p-3 rounded-xl 
+                      type="input"
+                      className="w-full p-3 pr-12 rounded-xl 
                     text-xs md:text-sm focus:outline-none"
                       placeholder="Search..."
                       aria-label="Search"
@@ -317,7 +317,9 @@ export default function Shop() {
                           onClick={() =>
                             ShowCategories
                               ? setShowCategories(false)
-                              : setShowCategories(true)
+                              : (setShowCategories(true),
+                                setShowBreeds(false),
+                                setShowMoreFilters(false))
                           }
                           className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                         >
@@ -364,13 +366,14 @@ export default function Shop() {
                                   : "text-[#9e562b]  bg-white lg:bg-[#9e6e3b] "
                               }`}
                             >
-                              <div className="relative">
+                              <div className="relative flex items-center">
                                 {categ.name}
                                 <MdClose
                                   className={`text-white ${
-                                    !selectedCategories.includes(categ.name) &&
-                                    "hidden "
-                                  } absolute -right-[18px]  top-[2px] lg:hidden`}
+                                    !selectedCategories.includes(categ.name)
+                                      ? " opacity-0 -right-[8px] pointer-events-none"
+                                      : "opacity-100 -right-[18px]  pointer-events-auto"
+                                  } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
                                 />
                               </div>
                             </button>
@@ -385,7 +388,9 @@ export default function Shop() {
                         onClick={() =>
                           showBreeds
                             ? setShowBreeds(false)
-                            : setShowBreeds(true)
+                            : (setShowCategories(false),
+                              setShowBreeds(true),
+                              setShowMoreFilters(false))
                         }
                         className="flex bg-gray-100 shadow-md shadow-gray-100 z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                       >
@@ -435,10 +440,11 @@ export default function Shop() {
                             <div className="relative">
                               {breed.name}
                               <MdClose
-                                className={`${
-                                  !selectedBreeds.includes(breed.name) &&
-                                  "hidden"
-                                } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                                className={`text-white ${
+                                  !selectedBreeds.includes(breed.name)
+                                    ? " opacity-0 -right-[8px] pointer-events-none"
+                                    : "opacity-100 -right-[18px]  pointer-events-auto"
+                                } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
                               />
                             </div>
                           </button>
@@ -446,13 +452,15 @@ export default function Shop() {
                       </div>
                     </div>
                   )}
-                  {isOnSale && (
+                  {isOnSale && searchQuery === "" && (
                     <div className="w-full overflow-hidden bg-gray-100 p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                       <div
                         onClick={() =>
                           ShowMoreFilters
                             ? setShowMoreFilters(false)
-                            : setShowMoreFilters(true)
+                            : (setShowCategories(false),
+                              setShowBreeds(false),
+                              setShowMoreFilters(true))
                         }
                         className="flex bg-gray-100 shadow-md shadow-gray-100   z-[1] items-center cursor-pointer justify-between text-xs lg:text-lg font-normal lg:font-bold text-start lg:text-center p-0 lg:p-2 text-[#7e562b] mx-0.5 lg:mx-0 transition-all duration-500"
                       >
@@ -482,9 +490,11 @@ export default function Shop() {
                           <div className="relative">
                             On Sale
                             <MdClose
-                              className={`${
-                                !onSale && "hidden"
-                              } absolute text-white -right-[18px]  top-[2px] lg:hidden`}
+                              className={`text-white ${
+                                !onSale
+                                  ? " opacity-0 -right-[8px] pointer-events-none"
+                                  : "opacity-100 -right-[18px]  pointer-events-auto"
+                              } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
                             />
                           </div>{" "}
                         </button>

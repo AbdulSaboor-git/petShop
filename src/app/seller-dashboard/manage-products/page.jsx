@@ -716,7 +716,7 @@ export default function ManageProductsPage() {
                           <option value="null">Select a product</option>
                           {items.map((prod, i) => (
                             <option key={i} value={prod.id}>
-                              <p className="font-extrabold">{prod.name} </p>
+                              <p className="">{prod.name} </p>
                               {prod.availability == "UNAVAILABLE" &&
                                 "(unavailable)"}
                             </option>
