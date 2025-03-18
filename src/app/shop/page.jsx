@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdSearch } from "react-icons/md";
 import { RiArrowDownSLine } from "react-icons/ri";
 import Loader from "@/components/loader";
 
@@ -279,15 +279,36 @@ export default function Shop() {
             {
               <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
                 <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
-                  <input
-                    type="search"
-                    className="w-full md:max-w-[350px] md:self-end bg-gray-100 lg:border lg:border-[#9e6e3b] p-3 rounded-xl 
-                text-xs md:text-sm focus:outline-none"
-                    placeholder="Search..."
-                    aria-label="Search"
-                    value={searchQuery}
-                    onChange={handleSearchQueryChange}
-                  />
+                  <div className="relative w-full md:max-w-[350px] md:self-end bg-gray-100 border border-[#9e6e3b] rounded-xl overflow-hidden">
+                    <input
+                      type="search"
+                      className="w-full p-3 rounded-xl 
+                    text-xs md:text-sm focus:outline-none"
+                      placeholder="Search..."
+                      aria-label="Search"
+                      value={searchQuery}
+                      onChange={handleSearchQueryChange}
+                    />
+                    <div
+                      className="absolute right-0 top-0 bg-[#9e6e3b] h-full w-10 flex items-center  cursor-pointer text-white"
+                      onClick={() => setSearchQuery("")}
+                    >
+                      <MdSearch
+                        className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
+                          searchQuery.trim() == ""
+                            ? "opacity-100"
+                            : "opacity-0 rotate-90"
+                        }`}
+                      />
+                      <MdClose
+                        className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
+                          searchQuery.trim() !== ""
+                            ? "opacity-100 "
+                            : "opacity-0 -rotate-90"
+                        }`}
+                      />
+                    </div>
+                  </div>
                   {
                     /* Categories Filter */
                     categoriesToShow.length > 0 && searchQuery === "" && (
