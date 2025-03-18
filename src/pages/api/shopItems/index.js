@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client"; // Import the enum
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -8,18 +9,25 @@ export default async function handler(req, res) {
       return handleGet(req, res);
     default:
       res.setHeader("Allow", ["GET"]);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      return res.status(405).json({ message: `Method ${method} Not Allowed` });
   }
 }
 
 const handleGet = async (req, res) => {
   try {
     const items = await prisma.item.findMany({
-      where: { availability: "AVAILABLE" },
+      where: { availability: availability.AVAILABLE }, // Use enum
     });
+
+    if (items.length === 0) {
+      return res.status(404).json({ message: "No available items found." });
+    }
+
     return res.status(200).json({ items });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error fetching available items:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while retrieving items." });
   }
 };

@@ -8,34 +8,42 @@ export default async function handler(req, res) {
       return handlePost(req, res);
     default:
       res.setHeader("Allow", ["POST"]);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      return res.status(405).json({ message: `Method ${method} Not Allowed` });
   }
 }
 
 async function handlePost(req, res) {
-  const { name } = req.body;
-  const trimmedName = name.trim();
-
   try {
-    // Check if a breed with the given name already exists.
-    const existingBreed = await prisma.breed.findUnique({
-      where: { name: trimmedName },
+    const { name } = req.body;
+
+    // Validate input
+    if (!name?.trim()) {
+      return res.status(400).json({ message: "Breed name is required" });
+    }
+
+    const trimmedName = name.trim();
+
+    // Check for duplicate name (case-insensitive)
+    const existingBreed = await prisma.breed.findFirst({
+      where: { name: { equals: trimmedName, mode: "insensitive" } },
     });
 
     if (existingBreed) {
       return res.status(409).json({
-        message: `Breed ${trimmedName} already exists`,
-        breed: existingBreed,
+        message: `Breed '${trimmedName}' already exists`,
+        data: existingBreed,
       });
     }
 
-    // If not, create the new breed.
+    // Create new breed
     const newBreed = await prisma.breed.create({
-      data: {
-        name: trimmedName,
-      },
+      data: { name: trimmedName },
     });
-    return res.status(201).json(newBreed);
+
+    return res.status(201).json({
+      message: "Breed created successfully",
+      data: newBreed,
+    });
   } catch (error) {
     console.error("Error adding breed:", error);
     return res.status(500).json({ message: "Internal Server Error" });
