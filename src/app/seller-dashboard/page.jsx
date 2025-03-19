@@ -39,7 +39,7 @@ export default function SellerDashboardMainPage() {
       try {
         // Fetch products data
         const responseProducts = await fetch(
-          `/api/allItems?sellerId=${sellerId}`
+          `/api/sellerAllItems?sellerId=${sellerId}`
         );
         if (!responseProducts.ok) {
           throw new Error("Failed to fetch products.");

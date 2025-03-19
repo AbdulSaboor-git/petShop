@@ -149,7 +149,7 @@ export default function ManageProductsPage() {
   // Fetch all products, categories, and breeds.
   const fetchItemsData = async () => {
     try {
-      const response = await fetch(`/api/allItems?sellerId=${sellerId}`);
+      const response = await fetch(`/api/sellerAllItems?sellerId=${sellerId}`);
       const response2 = await fetch(`/api/categories_breeds`);
       if (!response.ok || !response2.ok) {
         throw new Error("Failed to fetch data.");
