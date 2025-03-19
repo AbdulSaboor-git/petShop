@@ -22,6 +22,12 @@ const handleGet = async (req, res, sellerId) => {
       orderBy: { name: "asc" },
     });
 
+    if (items.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No items found for the given seller." });
+    }
+
     return res.status(200).json({ items });
   } catch (error) {
     console.error(error);
