@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -9,14 +8,14 @@ export default async function handler(req, res) {
       return handleGet(req, res);
     default:
       res.setHeader("Allow", ["GET"]);
-      return res.status(405).end(`Method ${method} Not Allowed`);
+      return res.status(405).json({ message: `Method ${method} Not Allowed` });
   }
 }
 
 const handleGet = async (req, res) => {
   try {
     const items = await prisma.item.findMany({
-      where: { availability: availability.AVAILABLE }, // Use Prisma Enum
+      where: { availability: "AVAILABLE" },
       include: { seller: true, category: true, breed: true },
     });
 

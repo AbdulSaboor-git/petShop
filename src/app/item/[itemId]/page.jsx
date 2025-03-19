@@ -92,7 +92,7 @@ export default function ItemPage({ params }) {
     if (!item) return;
     const fetchAllItems = async () => {
       try {
-        const allItems = await fetch(`/api/shopItems`);
+        const allItems = await fetch(`/api/homeItems`);
         if (!allItems.ok) {
           throw new Error("Failed to fetch items.");
         }
