@@ -68,12 +68,19 @@ export default function HomePage() {
     data: itemsData,
     error: itemsError,
     isLoading: itemsLoading,
-  } = useSWR("/api/homeItems", swrOptions);
+  } = useSWR(
+    typeof window !== "undefined" ? "/api/homeItems" : null,
+    swrOptions
+  );
+
   const {
     data: categoriesBreedsData,
     error: categoriesBreedsError,
     isLoading: categoriesBreedsLoading,
-  } = useSWR("/api/categories_breeds", swrOptions);
+  } = useSWR(
+    typeof window !== "undefined" ? "/api/categories_breeds" : null,
+    swrOptions
+  );
 
   useEffect(() => {
     if (itemsData) {
