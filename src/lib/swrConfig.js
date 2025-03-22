@@ -6,11 +6,8 @@ const fetcher = async (url) => {
 
 export const swrOptions = {
   fetcher,
-  revalidateOnFocus: true, // Don't Re-fetch data when window regains focus
+  revalidateOnFocus: true, // Re-fetch data when window regains focus
   revalidateOnReconnect: true, // Re-fetch when network reconnects
   keepPreviousData: true,
-  dedupingInterval: 60000, //60 seconds
-  shouldRetryOnError: true, // Retry on error
-  errorRetryCount: 3,
-  errorRetryInterval: 5000, // 5 seconds
+  // dedupingInterval: 60000, //60 seconds
 };
