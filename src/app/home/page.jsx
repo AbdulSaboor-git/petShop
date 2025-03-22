@@ -17,8 +17,6 @@ import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import useAuthUser from "@/hooks/authUser";
-import useSWR from "swr";
-import { swrOptions } from "@/lib/swrConfig";
 
 export default function HomePage() {
   const router = useRouter();
@@ -29,9 +27,9 @@ export default function HomePage() {
   const [allItems, setAllItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [breeds, setBreeds] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const [nameHover, setNameHover] = useState(false);
   const { user, userLoading, logout } = useAuthUser();
 
@@ -64,42 +62,31 @@ export default function HomePage() {
     else router.push(`/item/${itemId}?cs=${contactSeller}`);
   }
 
-  const {
-    data: itemsData,
-    error: itemsError,
-    isLoading: itemsLoading,
-  } = useSWR(
-    typeof window !== "undefined" ? "/api/homeItems" : null,
-    swrOptions
-  );
-
-  const {
-    data: categoriesBreedsData,
-    error: categoriesBreedsError,
-    isLoading: categoriesBreedsLoading,
-  } = useSWR(
-    typeof window !== "undefined" ? "/api/categories_breeds" : null,
-    swrOptions
-  );
-
   useEffect(() => {
-    if (itemsData) {
-      setItems(itemsData?.items || []);
-      setAllItems(itemsData?.items || []);
-      setCategories(categoriesBreedsData?.categories || []);
-      setBreeds(categoriesBreedsData?.breeds || []);
-    }
-  }, [itemsData, categoriesBreedsData]);
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(`/api/homeItems`);
+        const response2 = await fetch(`/api/categories_breeds`);
+        if (!response.ok || !response2.ok) {
+          throw new Error("Failed to fetch data.");
+        }
+        const data = await response.json();
+        const data2 = await response2.json();
 
-  const loading = itemsLoading || categoriesBreedsLoading;
-  const error =
-    itemsError || categoriesBreedsError ? "Failed to fetch data." : null;
-
-  useEffect(() => {
+        setItems(data.items);
+        setAllItems(data.items);
+        setCategories(data2.categories);
+        setBreeds(data2.breeds);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (!localStorage.getItem("favorites")) {
-      localStorage.setItem("favorites", JSON.stringify([]));
+      localStorage.setItem("favorites", []);
     }
-    setFavorites(JSON.parse(localStorage.getItem("favorites")));
+    fetchItems();
   }, []);
 
   useEffect(() => {
