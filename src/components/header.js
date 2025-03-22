@@ -124,7 +124,7 @@ export default function Header({ pageOpened }) {
 
   const topBtns = [];
 
-  if (!logedIn)
+  if (!logedIn && !userLoading)
     topBtns.push({
       name: "Login",
       icon: <FaUser size={9.5} />,
@@ -133,9 +133,15 @@ export default function Header({ pageOpened }) {
 
   if (logedIn)
     topBtns.push({
-      name: user ? "Me" : "My Account",
+      name: "Me",
       icon: <MdAccountCircle size={16} />,
       onClick: profileClick,
+    });
+
+  if (userLoading)
+    topBtns.push({
+      name: "Me",
+      icon: <MdAccountCircle size={16} />,
     });
 
   if (logedIn && user?.role === "ADMIN")

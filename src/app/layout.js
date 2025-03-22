@@ -5,32 +5,28 @@ import ReduxProvider from "./reduxProvider";
 import { useEffect } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { ThemeProvider, createTheme } from "@mui/material/styles"; // Import createTheme
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { SWRConfig } from "swr"; // Import SWRConfig
+import { swrOptions } from "@/lib/swrConfig"; // Import global SWR configuration
 
 const inter = Inter({ subsets: ["latin"] });
 
 // Define a theme object
 const theme = createTheme({
   palette: {
-    // Define your color palette here
     mode: "light", // or 'dark'
     primary: {
-      main: "#f97316", // Example primary color
+      main: "#f97316",
     },
-    // Add other palette settings as needed
-  },
-  typography: {
-    // Customize typography if needed
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "none", // Remove uppercase transformation
+          textTransform: "none",
         },
       },
     },
-    // You can override other components here
   },
 });
 
@@ -60,8 +56,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <ReduxProvider>
-          {/* Pass the defined theme to ThemeProvider */}
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            {/* Wrap the app with SWRConfig */}
+            <SWRConfig value={swrOptions}>{children}</SWRConfig>
+          </ThemeProvider>
         </ReduxProvider>
       </body>
     </html>
