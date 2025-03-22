@@ -20,6 +20,7 @@ export default function Profile() {
   const [UserIsSeller, setUserIsSeller] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const { user, userLoading, logout } = useAuthUser();
+  const [rawSearchQuery, setRawSearchQuery] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const router = useRouter();
@@ -54,6 +55,7 @@ export default function Profile() {
   }
 
   const handleSearchQueryChange = (e) => {
+    setRawSearchQuery(e.target.value);
     setSearchQuery(e.target.value.trim());
   };
 
@@ -209,23 +211,23 @@ export default function Profile() {
                                 text-xs md:text-sm focus:outline-none"
                   placeholder="Search in store..."
                   aria-label="Search"
-                  value={searchQuery}
+                  value={rawSearchQuery}
                   onChange={handleSearchQueryChange}
                 />
                 <div
                   className="absolute right-0 top-0 bg-[#9e6e3b] h-full w-10 flex items-center  cursor-pointer text-white"
-                  onClick={() => setSearchQuery("")}
+                  onClick={() =>
+                    handleSearchQueryChange({ target: { value: "" } })
+                  }
                 >
                   <MdSearch
                     className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
-                      searchQuery.trim() == ""
-                        ? "opacity-100"
-                        : "opacity-0 rotate-90"
+                      searchQuery == "" ? "opacity-100" : "opacity-0 rotate-90"
                     }`}
                   />
                   <MdClose
                     className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
-                      searchQuery.trim() !== ""
+                      searchQuery !== ""
                         ? "opacity-100 "
                         : "opacity-0 -rotate-90"
                     }`}
@@ -233,6 +235,11 @@ export default function Profile() {
                 </div>
               </div>
             </div>
+            {searchQuery != "" && (
+              <p className="text-sm font-semibold leading-tight text-gray-700 -mb-3">
+                Serach Results
+              </p>
+            )}
             {searchQuery === "" && featuredItems.length > 0 && (
               <div className="flex flex-col gap-2">
                 <h1 className="font-bold">Featured Products</h1>

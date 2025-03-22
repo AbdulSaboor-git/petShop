@@ -17,6 +17,7 @@ export default function Shop() {
   const [ShowMoreFilters, setShowMoreFilters] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [isOnSale, setIsOnSale] = useState(false);
+  const [rawSearchQuery, setRawSearchQuery] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Use arrays for filtering; "All" is the default selection.
@@ -31,6 +32,7 @@ export default function Shop() {
   const [error, setError] = useState(null);
 
   const handleSearchQueryChange = (e) => {
+    setRawSearchQuery(e.target.value);
     setSearchQuery(e.target.value.trim());
   };
 
@@ -42,7 +44,7 @@ export default function Shop() {
   }
 
   useEffect(() => {
-    if (searchQuery === "") {
+    if (searchQuery.trim() === "") {
       setItems(allItems);
     } else {
       // clearFilters();
@@ -286,23 +288,25 @@ export default function Shop() {
                     text-xs md:text-sm focus:outline-none"
                       placeholder="Search..."
                       aria-label="Search"
-                      value={searchQuery}
+                      value={rawSearchQuery}
                       onChange={handleSearchQueryChange}
                     />
                     <div
                       className="absolute right-0 top-0 bg-[#9e6e3b] h-full w-10 flex items-center  cursor-pointer text-white"
-                      onClick={() => setSearchQuery("")}
+                      onClick={() =>
+                        handleSearchQueryChange({ target: { value: "" } })
+                      }
                     >
                       <MdSearch
                         className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
-                          searchQuery.trim() == ""
+                          searchQuery == ""
                             ? "opacity-100"
                             : "opacity-0 rotate-90"
                         }`}
                       />
                       <MdClose
                         className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
-                          searchQuery.trim() !== ""
+                          searchQuery !== ""
                             ? "opacity-100 "
                             : "opacity-0 -rotate-90"
                         }`}
@@ -559,7 +563,11 @@ export default function Shop() {
               </div>
             }
             {/* Items Section */}
-
+            {searchQuery != "" && (
+              <p className="text-sm font-semibold leading-tight text-gray-700 -mb-3">
+                Serach Results
+              </p>
+            )}
             <div
               className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
                 !items.length &&
