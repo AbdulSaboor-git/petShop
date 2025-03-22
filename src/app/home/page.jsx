@@ -215,7 +215,7 @@ export default function HomePage() {
   const settings2 = {
     dots: false,
     infinite: false,
-    speed: 400,
+    speed: 350,
     slidesToShow: items.length < slidesToShow ? items.length : slidesToShow,
     slidesToScroll: 1,
     arrows: true,
@@ -337,20 +337,19 @@ export default function HomePage() {
                 </div>
               ))}
             </Slider>
-
-            {/* Top Breeds */}
-            <div className="flex flex-col px-6  gap-5">
+            {/* Top Categories */}
+            <div className="flex flex-col px-6 gap-5">
               <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
-                Top Breeds
+                Top Categories
               </div>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
-                {breeds.map(
-                  (breed, i) =>
-                    breed.items.length != 0 && (
+                {categories.map(
+                  (categ, i) =>
+                    categ.items.length != 0 && (
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i % 3 == 1
+                          i % 2 == 1
                             ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
                             : "bg-gradient-to-br from-[#252525] to-[#111111]"
                         }`}
@@ -358,28 +357,28 @@ export default function HomePage() {
                         {/* Absolute positioned text container with gradient overlay */}
                         <div
                           className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
-                            i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
-                          }  from-[#9e6e3b]/40 via-transparent to-black/40`}
+                            i % 2 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                          }  from-[#9e6e3b6d] via-transparent to-[#000000d0]`}
                         >
                           <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
-                            {breed.name.toUpperCase()}
+                            {categ.name.toUpperCase()}
                           </h2>
                           <button
                             onClick={() =>
-                              shopClick("All", breed.name, false, "default")
+                              shopClick(categ.name, "All", false, "default")
                             }
                             className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                           >
                             VIEW MORE
                           </button>
                         </div>
-                        <div className="relative z-10 flex-shrink-0 ml-auto">
+                        <div className="relative z-20 flex-shrink-0 ml-auto">
                           <img
                             src={
-                              breedImages.find((image) => image.id === breed.id)
+                              categImages.find((image) => image.id === categ.id)
                                 ?.image || defaultPic
                             }
-                            alt={breed.name}
+                            alt={categ.name}
                             className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
                           />
                         </div>
@@ -422,7 +421,7 @@ export default function HomePage() {
             )}
 
             {/* Most Valuable Section */}
-            <div className="flex flex-col gap-2 overflow-hidden">
+            <div className="flex flex-col gap-2 overflow-hidden pb-1">
               <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
                 Premium
               </div>
@@ -451,25 +450,24 @@ export default function HomePage() {
                 onClick={() => {
                   shopClick("All", "All", false, "priceDesc");
                 }}
-                className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                className=" bg-white hover:shadow-sm hover:shadow-[#00000084] text-[#926739]  border border-[#926739] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
               >
                 View More
               </button>
             </div>
-
-            {/* Top Categories */}
-            <div className="flex flex-col px-6 gap-5">
+            {/* Top Breeds */}
+            <div className="flex flex-col px-6  gap-5">
               <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
-                Top Categories
+                Top Breeds
               </div>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
-                {categories.map(
-                  (categ, i) =>
-                    categ.items.length != 0 && (
+                {breeds.map(
+                  (breed, i) =>
+                    breed.items.length != 0 && (
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i % 3 == 1
+                          i % 2 == 1
                             ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
                             : "bg-gradient-to-br from-[#252525] to-[#111111]"
                         }`}
@@ -477,28 +475,28 @@ export default function HomePage() {
                         {/* Absolute positioned text container with gradient overlay */}
                         <div
                           className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
-                            i % 3 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
-                          }  from-[#9e6e3b]/40 via-transparent to-black/40`}
+                            i % 2 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                          }  from-[#9e6e3b6d] via-transparent to-[#000000d0]`}
                         >
                           <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
-                            {categ.name.toUpperCase()}
+                            {breed.name.toUpperCase()}
                           </h2>
                           <button
                             onClick={() =>
-                              shopClick(categ.name, "All", false, "default")
+                              shopClick("All", breed.name, false, "default")
                             }
                             className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                           >
                             VIEW MORE
                           </button>
                         </div>
-                        <div className="relative z-10 flex-shrink-0 ml-auto">
+                        <div className="relative z-20 flex-shrink-0 ml-auto">
                           <img
                             src={
-                              categImages.find((image) => image.id === categ.id)
+                              breedImages.find((image) => image.id === breed.id)
                                 ?.image || defaultPic
                             }
-                            alt={categ.name}
+                            alt={breed.name}
                             className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
                           />
                         </div>
@@ -509,7 +507,7 @@ export default function HomePage() {
             </div>
 
             {/* Most Affordable Section */}
-            <div className="flex flex-col gap-2 overflow-hidden">
+            <div className="flex flex-col gap-2 overflow-hidden pb-1">
               <div className="text-xl md:text-2xl px-6 font-extrabold text-[#6e4519]">
                 Most Affordable
               </div>
@@ -538,7 +536,7 @@ export default function HomePage() {
                 onClick={() => {
                   shopClick("All", "All", false, "priceAsc");
                 }}
-                className="bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial text-white  border border-[#9e6e3b] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
+                className="bg-white hover:shadow-sm hover:shadow-[#00000084] text-[#926739]  border border-[#926739] rounded-lg w-fit p-1 px-4 text-sm md:text-base self-center transition-all duration-300"
               >
                 View More
               </button>
