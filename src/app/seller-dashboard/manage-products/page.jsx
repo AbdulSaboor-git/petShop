@@ -176,8 +176,8 @@ export default function ManageProductsPage() {
   const payload = {
     name: name.trim(),
     price: Number(price),
-    discountedPrice:
-      discountedPrice != undefined ? Number(discountedPrice) : "",
+    // discountedPrice:
+    //   discountedPrice != undefined ? Number(discountedPrice) : "",
     description:
       description && description.toString().trim() !== ""
         ? description.trim()
@@ -196,7 +196,7 @@ export default function ManageProductsPage() {
     age: age && age.toString().trim() !== "" ? Number(age) : null,
     availability,
     isfeatured,
-    images, // An array of image URLs
+    images,
     sellerId,
   };
 
@@ -229,7 +229,7 @@ export default function ManageProductsPage() {
       setHeight(data.height || "");
       setAge(data.age || "");
       setAvailability(data.availability || "");
-      setImages(data.images || []); // Existing product images
+      setImages(data.images || []);
     } catch (err) {
       setItemError(err.message);
       showMessage(err.message, false);
@@ -238,7 +238,6 @@ export default function ManageProductsPage() {
     }
   };
 
-  // Handler for adding a product.
   // Handler for adding a product.
   const handleAddProductSubmit = async (e) => {
     e.preventDefault();
@@ -483,7 +482,7 @@ export default function ManageProductsPage() {
                           value={price}
                         />
                       </div>
-                      <div>
+                      {/* <div>
                         <label className="mx-0.5">Discounted Price</label>
                         <input
                           type="number"
@@ -491,7 +490,7 @@ export default function ManageProductsPage() {
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           value={discountedPrice}
                         />
-                      </div>
+                      </div> */}
                       <div>
                         <label className="mx-0.5">Description</label>
                         <textarea
@@ -756,7 +755,7 @@ export default function ManageProductsPage() {
                           min="0"
                         />
                       </div>
-                      <div>
+                      {/* <div>
                         <label className="mx-0.5">Discounted Price</label>
                         <input
                           type="number"
@@ -764,7 +763,7 @@ export default function ManageProductsPage() {
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                           value={discountedPrice}
                         />
-                      </div>
+                      </div> */}
                       <div>
                         <label className="mx-0.5">Description</label>
                         <textarea

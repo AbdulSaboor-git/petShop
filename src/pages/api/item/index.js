@@ -54,11 +54,11 @@ async function handlePost(req, res) {
     const {
       name,
       price,
-      discountedPrice,
+      // discountedPrice,
       description,
       categoryId,
       breedId,
-      sex, // received from front-end; will be mapped to `sex`
+      sex,
       isfeatured,
       nature,
       specifications,
@@ -79,8 +79,8 @@ async function handlePost(req, res) {
       data: {
         name: name.trim(),
         price: Number(price),
-        discountedPrice:
-          discountedPrice !== "" ? Number(discountedPrice) : null,
+        // discountedPrice:
+        //   discountedPrice !== "" ? Number(discountedPrice) : null,
         description: description ? description.trim() : null,
         categoryId: Number(categoryId),
         breedId: breedId ? Number(breedId) : null,
@@ -94,8 +94,8 @@ async function handlePost(req, res) {
         availability: availability || "AVAILABLE",
         images: images, // Expect images as an array of strings (URLs)
         sellerId: Number(sellerId),
-        isDiscounted:
-          discountedPrice != "" && Number(discountedPrice) < Number(price),
+        // isDiscounted:
+        //   discountedPrice != "" && Number(discountedPrice) < Number(price),
       },
     });
 
@@ -124,7 +124,7 @@ async function handlePatch(req, res, productId) {
     const {
       name,
       price,
-      discountedPrice,
+      // discountedPrice,
       description,
       categoryId,
       breedId,
@@ -146,11 +146,11 @@ async function handlePatch(req, res, productId) {
       data: {
         ...(name && { name: name.trim() }),
         ...(price && { price: Number(price) }),
-        ...(discountedPrice !== ""
-          ? {
-              discountedPrice: Number(discountedPrice),
-            }
-          : { discountedPrice: null }),
+        // ...(discountedPrice !== ""
+        //   ? {
+        //       discountedPrice: Number(discountedPrice),
+        //     }
+        //   : { discountedPrice: null }),
         ...(description
           ? { description: description.trim() }
           : { description: null }),
@@ -169,8 +169,8 @@ async function handlePatch(req, res, productId) {
         ...(age ? { age: Number(age) } : { age: null }),
         ...(availability && { availability }),
         ...(images && { images }),
-        isDiscounted:
-          discountedPrice != "" && Number(discountedPrice) < Number(price),
+        // isDiscounted:
+        //   discountedPrice != "" && Number(discountedPrice) < Number(price),
       },
     });
 
