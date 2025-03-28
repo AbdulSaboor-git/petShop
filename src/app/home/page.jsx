@@ -74,7 +74,9 @@ export default function HomePage() {
   );
 
   useEffect(() => {
+    setLoading(true);
     if (itemsError || categoriesError) {
+      setLoading(false);
       setError("Failed to fetch data.");
     }
 
