@@ -35,63 +35,66 @@ export default function SellerDashboardMainPage() {
 
   useEffect(() => {
     if (!sellerId) return;
+
+    let isMounted = true;
+
     const fetchMetricsAndAnalytics = async () => {
       try {
-        // Fetch products data
-        const responseProducts = await fetch(
-          `/api/sellerAllItems?sellerId=${sellerId}`
+        const response = await fetch(
+          `/api/sellerDashboard?sellerId=${sellerId}`
         );
-        if (!responseProducts.ok) {
-          throw new Error("Failed to fetch products.");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch seller metrics.");
         }
-        const dataProducts = await responseProducts.json();
-        const totalProducts = dataProducts.items
-          ? dataProducts.items.length
-          : 0;
 
-        const availableProducts = dataProducts.items.filter(
-          (item) => item.availability === "AVAILABLE"
-        );
-        const totalAvailableProducts = availableProducts.length;
-        const productsSold = totalProducts - totalAvailableProducts;
+        const result = await response.json();
 
-        // Fetch categories and breeds data
-        const responseCatBreed = await fetch(`/api/categories_breeds`);
-        if (!responseCatBreed.ok) {
-          throw new Error("Failed to fetch categories and breeds.");
+        if (result?.success && result?.data) {
+          const { totalItems, availableItems, categCount, breedCount } =
+            result.data;
+
+          const totalProducts = totalItems ?? 0;
+          const totalAvailableProducts = availableItems ?? 0;
+          const productsSold = totalProducts - totalAvailableProducts;
+          const totalCategories = categCount ?? 0;
+          const totalBreeds = breedCount ?? 0;
+
+          if (isMounted) {
+            setMetrics({
+              totalProducts,
+              totalCategories,
+              totalBreeds,
+              totalAvailableProducts,
+              productsSold,
+            });
+          }
+        } else {
+          throw new Error("Invalid response structure.");
         }
-        const dataCatBreed = await responseCatBreed.json();
-        const totalCategories = dataCatBreed.categories
-          ? dataCatBreed.categories.length
-          : 0;
-        const totalBreeds = dataCatBreed.breeds
-          ? dataCatBreed.breeds.length
-          : 0;
-
-        // Update metrics state
-        setMetrics({
-          totalProducts,
-          totalCategories,
-          totalBreeds,
-          totalAvailableProducts,
-          productsSold,
-        });
-
-        // (Optional) Fetch analytics data
-        // const responseAnalytics = await fetch(`/api/seller-analytics`);
-        // if (responseAnalytics.ok) {
-        //   const analyticsData = await responseAnalytics.json();
-        //   setAnalytics(analyticsData);
-        // }
       } catch (err) {
-        setError(err.message);
-        showMessage(err.message, false);
+        if (isMounted) {
+          setError(err.message);
+          showMessage(err.message, false);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchMetricsAndAnalytics();
+
+    // (Optional) Fetch analytics data
+    // const responseAnalytics = await fetch(`/api/seller-analytics`);
+    // if (responseAnalytics.ok) {
+    //   const analyticsData = await responseAnalytics.json();
+    //   setAnalytics(analyticsData);
+    // }
+    return () => {
+      isMounted = false; // Cleanup function to avoid state update on unmount
+    };
   }, [sellerId]);
 
   useEffect(() => {

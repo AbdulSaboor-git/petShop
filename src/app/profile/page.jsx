@@ -93,21 +93,16 @@ export default function Profile() {
       console.log(id + "dsa");
       try {
         const response = await fetch(`/api/user?userId=${id}`);
-        const response2 = await fetch(`/api/allItems?sellerId=${id}`);
 
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || "Failed to fetch user data.");
         }
-        if (!response2.ok) {
-          const errorData2 = await response2.json();
-          throw new Error(errorData2.message || "Failed to fetch items data.");
-        }
+
         const sellerData = await response.json();
-        const itemsData = await response2.json();
         setSeller(sellerData);
-        setItems(itemsData.items);
-        setAllItems(itemsData.items);
+        setItems(sellerData.items);
+        setAllItems(sellerData.items);
       } catch (err) {
         setError(err.message);
       } finally {

@@ -29,7 +29,18 @@ async function handleGet(req, res, userId) {
 
       const user = await prisma.user.findUnique({
         where: { id },
-        include: { items: true },
+        include: {
+          items: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              discountedPrice: true,
+              isDiscounted: true,
+              images: true,
+            },
+          },
+        },
       });
       return user
         ? res.status(200).json(user)
@@ -82,11 +93,9 @@ async function handlePost(req, res) {
     console.error("Error creating user:", error);
 
     if (error.code === "P2002" && error.meta?.target.includes("email")) {
-      return res
-        .status(400)
-        .json({
-          message: "Email already registered. Please use a different email.",
-        });
+      return res.status(400).json({
+        message: "Email already registered. Please use a different email.",
+      });
     }
 
     return res.status(500).json({ message: "Internal Server Error" });

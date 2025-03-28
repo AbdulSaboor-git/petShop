@@ -24,7 +24,6 @@ async function handleGet(req, res, categoryId) {
   try {
     const category = await prisma.category.findUnique({
       where: { id: categoryId },
-      include: { items: true },
     });
 
     if (!category) {

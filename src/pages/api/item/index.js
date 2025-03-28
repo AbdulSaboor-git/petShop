@@ -79,11 +79,10 @@ async function handlePost(req, res) {
       data: {
         name: name.trim(),
         price: Number(price),
-        // discountedPrice:
-        //   discountedPrice !== "" ? Number(discountedPrice) : null,
+        discountedPrice: Number(price),
         description: description ? description.trim() : null,
-        categoryId: Number(categoryId),
-        breedId: breedId ? Number(breedId) : null,
+        category: { connect: { id: Number(categoryId) } },
+        breed: breedId ? { connect: { id: Number(breedId) } } : undefined,
         sex: sex ? sex.trim() : null,
         isfeatured: isfeatured,
         nature: nature ? nature.trim() : null,
@@ -93,16 +92,18 @@ async function handlePost(req, res) {
         age: age ? Number(age) : null,
         availability: availability || "AVAILABLE",
         images: images, // Expect images as an array of strings (URLs)
-        sellerId: Number(sellerId),
-        // isDiscounted:
-        //   discountedPrice != "" && Number(discountedPrice) < Number(price),
+        seller: { connect: { id: Number(sellerId) } }, // ✅ Fix
+        isDiscounted: false,
       },
     });
 
     return res.status(201).json(newProduct);
   } catch (error) {
     console.error("Error creating product:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({
+      error: `Internal Server Error + ${error.message}`,
+      message: error.message,
+    });
   }
 }
 
@@ -138,8 +139,6 @@ async function handlePatch(req, res, productId) {
       availability,
       images,
     } = req.body;
-
-    console.log(discountedPrice);
 
     const updatedProduct = await prisma.item.update({
       where: { id },

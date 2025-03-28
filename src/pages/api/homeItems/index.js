@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Select } from "@mui/material";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -15,8 +16,19 @@ export default async function handler(req, res) {
 const handleGet = async (req, res) => {
   try {
     const items = await prisma.item.findMany({
+      select: {
+        id: true,
+        name: true,
+        breedId: true,
+        categoryId: true,
+        category: { select: { id: true, name: true } },
+        breed: { select: { id: true, name: true } },
+        price: true,
+        discountedPrice: true,
+        isDiscounted: true,
+        images: true,
+      },
       where: { availability: "AVAILABLE" },
-      include: { seller: true, category: true, breed: true },
     });
 
     return res.status(200).json({ items });

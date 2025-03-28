@@ -1,9 +1,9 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
-  const { sellerId } = req.query; // Destructure sellerId from query
-
+  const { sellerId } = req.query;
   switch (method) {
     case "GET":
       return handleGet(req, res, sellerId);
@@ -17,8 +17,12 @@ const handleGet = async (req, res, sellerId) => {
   const id = parseInt(sellerId, 10);
   try {
     const items = await prisma.item.findMany({
+      select: {
+        id: true,
+        name: true,
+        availability: true,
+      },
       where: { sellerId: id },
-      include: { seller: true, category: true, breed: true },
       orderBy: { name: "asc" },
     });
 

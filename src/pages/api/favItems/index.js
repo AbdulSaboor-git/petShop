@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -26,10 +27,21 @@ const handleGet = async (req, res) => {
 
     // Fetch items whose IDs are in the favIds array
     const items = await prisma.item.findMany({
+      select: {
+        id: true,
+        name: true,
+        breedId: true,
+        breed: { select: { id: true, name: true } },
+        seller: { select: { id: true } },
+        price: true,
+        discountedPrice: true,
+        isDiscounted: true,
+        images: true,
+        availability: true,
+      },
       where: {
         id: { in: favIds },
       },
-      include: { seller: true, category: true, breed: true },
     });
 
     const groupedBySeller = items.reduce((acc, item) => {

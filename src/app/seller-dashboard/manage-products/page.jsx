@@ -29,7 +29,7 @@ export default function ManageProductsPage() {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [discountedPrice, setDiscountedPrice] = useState("");
+  // const [discountedPrice, setDiscountedPrice] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [breedId, setBreedId] = useState("");
@@ -101,7 +101,7 @@ export default function ManageProductsPage() {
   function resetForm() {
     setName("");
     setPrice("");
-    setDiscountedPrice("");
+    // setDiscountedPrice("");
     setDescription("");
     setCategoryId("");
     setBreedId("");
@@ -217,7 +217,7 @@ export default function ManageProductsPage() {
       setItem(data);
       setName(data.name || "");
       setPrice(data.price || "");
-      setDiscountedPrice(data.discountedPrice || "");
+      // setDiscountedPrice(data.discountedPrice || "");
       setDescription(data.description || "");
       setCategoryId(data.categoryId || "");
       setBreedId(data.breedId || "");
