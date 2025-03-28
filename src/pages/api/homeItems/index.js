@@ -14,6 +14,10 @@ export default async function handler(req, res) {
 
 const handleGet = async (req, res) => {
   try {
+    res.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
     const items = await prisma.item.findMany({
       where: { availability: "AVAILABLE" },
       include: { seller: true, category: true, breed: true },

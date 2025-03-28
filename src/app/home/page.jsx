@@ -377,7 +377,7 @@ export default function HomePage() {
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
                 {categories.map(
                   (categ, i) =>
-                    categ.items.length != 0 && (
+                    categ._count.items > 0 && (
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
@@ -495,7 +495,7 @@ export default function HomePage() {
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
                 {breeds.map(
                   (breed, i) =>
-                    breed.items.length != 0 && (
+                    breed._count.items > 0 && (
                       <div
                         key={i}
                         className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
