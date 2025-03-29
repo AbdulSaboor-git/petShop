@@ -32,7 +32,7 @@ model item {
   images          String[]
   price           Int
   description     String?
-  discountedPrice Int
+  discountedPrice Int?
   isDiscounted    Boolean      @default(false)
   weight          Float?
   height          Float?
