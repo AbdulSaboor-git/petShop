@@ -290,8 +290,8 @@ export default function ManageProductsPage() {
         throw new Error(errorResponse.message || "Failed to update product.");
       }
       showMessage(`Product "${item.name}" updated successfully!`, true);
-      resetForm();
-      fetchItemsData();
+      await fetchItemsData();
+      await fetchItemData(item.id);
     } catch (err) {
       showMessage(err.message, false);
     }
