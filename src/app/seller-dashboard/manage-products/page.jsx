@@ -24,6 +24,7 @@ export default function ManageProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [item, setItem] = useState(null);
+  const [itemID, setItemId] = useState("");
   const [itemLoading, setItemLoading] = useState(true);
   const [itemError, setItemError] = useState(null);
 
@@ -78,8 +79,9 @@ export default function ManageProductsPage() {
         }
       }
       if (ID && ID != "undefined") {
-        // setItemId([ID]);
+        setItemId(ID);
         fetchItemData(ID);
+        // fetchItemsData();
       }
     }
   }, []);
@@ -115,6 +117,7 @@ export default function ManageProductsPage() {
     setAvailability("");
     setImages([]);
     setItem(null);
+    setItemId("");
     setImageSrc(null);
     setShowCropper(false);
   }
@@ -149,17 +152,17 @@ export default function ManageProductsPage() {
   // Fetch all products, categories, and breeds.
   const fetchItemsData = async () => {
     try {
-      const response = await fetch(`/api/sellerAllItems?sellerId=${sellerId}`);
-      const response2 = await fetch(`/api/categories_breeds`);
-      if (!response.ok || !response2.ok) {
+      const response = await fetch(
+        `/api/manageProductsData?sellerId=${sellerId}`
+      );
+      if (!response.ok) {
         throw new Error("Failed to fetch data.");
       }
       const data = await response.json();
-      const data2 = await response2.json();
 
       setItems(data.items);
-      setCategories(data2.categories);
-      setBreeds(data2.breeds);
+      setCategories(data.categories);
+      setBreeds(data.breeds);
     } catch (err) {
       setError(err.message);
       showMessage(err.message, false);
@@ -202,7 +205,7 @@ export default function ManageProductsPage() {
 
   // Fetch a single product's data using the product API.
   const fetchItemData = async (itemId) => {
-    if (itemId === "null") {
+    if (itemId === "null" || itemId === "") {
       setItem(null);
       resetForm();
       return;
@@ -710,7 +713,7 @@ export default function ManageProductsPage() {
                               fetchItemData(e.target.value);
                             }
                           }}
-                          value={item ? item.id : ""}
+                          value={item ? item.id : itemID}
                         >
                           <option value="null">Select a product</option>
                           {items.map((prod, i) => (
@@ -978,7 +981,7 @@ export default function ManageProductsPage() {
                         onChange={(e) => {
                           fetchItemData(e.target.value);
                         }}
-                        value={item ? item.id : ""}
+                        value={item ? item.id : itemID}
                       >
                         <option value="null">Select a product</option>
                         {items.map((prod, i) => (
