@@ -90,7 +90,6 @@ export default function Profile() {
 
     const fetchData = async () => {
       setLoading(true);
-      console.log(id + "dsa");
       try {
         const response = await fetch(`/api/user?userId=${id}`);
 
