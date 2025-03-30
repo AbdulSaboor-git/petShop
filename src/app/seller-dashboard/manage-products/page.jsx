@@ -748,10 +748,10 @@ export default function ManageProductsPage() {
                           required
                           onChange={(e) => {
                             if (e.target.value) {
-                              e.target.value !== "null" &&
-                                e.target.value !== "" &&
-                                e.target.value !== null;
-                              setItemId(e.target.value);
+                              e.target.value !== "null"
+                                ? e.target.value !== "" &&
+                                  setItemId(e.target.value)
+                                : resetForm();
                             }
                           }}
                           value={item ? item.id : null}
@@ -1023,10 +1023,10 @@ export default function ManageProductsPage() {
                         required
                         onChange={(e) => {
                           if (e.target.value) {
-                            e.target.value !== "null" &&
-                              e.target.value !== "" &&
-                              e.target.value != null;
-                            setItemId(e.target.value);
+                            e.target.value !== "null"
+                              ? e.target.value !== "" &&
+                                setItemId(e.target.value)
+                              : resetForm();
                           }
                         }}
                         value={item ? item.id : null}
