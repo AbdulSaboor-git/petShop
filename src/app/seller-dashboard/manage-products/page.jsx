@@ -85,10 +85,39 @@ export default function ManageProductsPage() {
       if (idParam > 0 && !isNaN(idParam)) {
         // showMessage(idParam + ", " + typeof idParam, true);
         setItemId(idParam);
-        fetchItemData(idParam);
       }
     }
   }, []);
+
+  const fetchItemData = useCallback(async (itemId) => {
+    // showMessage(itemId + ", " + typeof itemId, true);
+    if (!itemId) {
+      // setItem(null);
+      resetForm();
+      return;
+    }
+    setItemLoading(true);
+    setItemError(null);
+    try {
+      const response = await fetch(`/api/item?productId=${itemId}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Product not found");
+      }
+      const data = await response.json();
+      setItem(data);
+    } catch (err) {
+      setItemError("Failed to load product. Please check your connection.");
+      showMessage(err.message, false);
+    } finally {
+      setItemLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!itemID || items.length === 0) return;
+    fetchItemData(itemID);
+  }, [itemID, items, fetchItemData]);
 
   // Form validation states.
   const isAddFormValid =
@@ -226,30 +255,6 @@ export default function ManageProductsPage() {
   };
 
   // Fetch a single product's data using the product API.
-  const fetchItemData = useCallback(async (itemId) => {
-    // showMessage(itemId + ", " + typeof itemId, true);
-    if (!itemId || itemId === "null" || itemId === "") {
-      setItem(null);
-      resetForm();
-      return;
-    }
-    setItemLoading(true);
-    setItemError(null);
-    try {
-      const response = await fetch(`/api/item?productId=${itemId}`);
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Product not found");
-      }
-      const data = await response.json();
-      setItem(data);
-    } catch (err) {
-      setItemError("Failed to load product. Please check your connection.");
-      showMessage(err.message, false);
-    } finally {
-      setItemLoading(false);
-    }
-  }, []);
 
   // Handler for adding a product.
   const handleAddProductSubmit = useCallback(
@@ -334,7 +339,7 @@ export default function ManageProductsPage() {
         }
         setItems(items.filter((i) => i.id !== item.id));
         showMessage(`Product "${item.name}" deleted successfully!`, true);
-        setItem(null);
+        resetForm();
         // await fetchItemsData();
       } catch (err) {
         showMessage(err.message, false);
@@ -745,8 +750,8 @@ export default function ManageProductsPage() {
                             if (e.target.value) {
                               e.target.value !== "null" &&
                                 e.target.value !== "" &&
-                                e.target.value != null;
-                              fetchItemData(e.target.value);
+                                e.target.value !== null;
+                              setItemId(e.target.value);
                             }
                           }}
                           value={item ? item.id : null}
@@ -754,7 +759,7 @@ export default function ManageProductsPage() {
                           <option value="null">Select a product</option>
                           {items.map((prod, i) => (
                             <option key={i} value={prod.id}>
-                              <p className="">{prod.name} </p>
+                              {prod.name}
                               {prod.availability == "UNAVAILABLE" &&
                                 "(unavailable)"}
                             </option>
@@ -1021,7 +1026,7 @@ export default function ManageProductsPage() {
                             e.target.value !== "null" &&
                               e.target.value !== "" &&
                               e.target.value != null;
-                            fetchItemData(e.target.value);
+                            setItemId(e.target.value);
                           }
                         }}
                         value={item ? item.id : null}
