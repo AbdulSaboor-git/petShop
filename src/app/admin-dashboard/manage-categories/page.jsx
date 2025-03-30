@@ -50,7 +50,7 @@ export default function ManageCategoriesPage() {
   // Fetch all categories (from the categories_breeds API)
   const fetchCategoriesData = useCallback(async () => {
     try {
-      const response = await fetch(`/api/categories_breeds`);
+      const response = await fetch(`/api/category`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to fetch categories.");

@@ -75,7 +75,7 @@ export default function ManageBreedsPage() {
   // Fetch all breeds (from categories_breeds API)
   const fetchBreeds = useCallback(async () => {
     try {
-      const response = await fetch(`/api/categories_breeds`);
+      const response = await fetch(`/api/breed`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to fetch breeds.");

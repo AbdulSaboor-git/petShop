@@ -6,9 +6,21 @@ export default async function handler(req, res) {
   switch (method) {
     case "POST":
       return handlePost(req, res);
+    case "GET":
+      return handleGet(req, res);
     default:
-      res.setHeader("Allow", ["POST"]);
+      res.setHeader("Allow", ["GET", "POST"]);
       return res.status(405).end(`Method ${method} Not Allowed`);
+  }
+}
+
+async function handleGet(req, res) {
+  try {
+    const categories = await prisma.category.findMany();
+    return res.status(200).json({ categories });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
