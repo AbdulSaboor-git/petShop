@@ -10,6 +10,7 @@ import Loader from "@/components/loader";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/components/getCroppedImg";
 import { useRouter } from "next/navigation";
+import { set } from "zod";
 
 export default function ManageProductsPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -53,6 +54,7 @@ export default function ManageProductsPage() {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [paramFunction, setParamFunction] = useState("");
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
@@ -69,9 +71,16 @@ export default function ManageProductsPage() {
       const params = new URLSearchParams(window.location.search);
       let functionParam = params.get("function");
       let idParam = params.get("id");
-      if (!idParam || !functionParam) return;
+
+      if (
+        functionParam !== "add" &&
+        functionParam !== "edit" &&
+        functionParam !== "delete"
+      )
+        return;
 
       if (functionParam) {
+        setParamFunction(functionParam);
         if (functionParam === "add") {
           handleAddProduct();
         } else if (functionParam === "edit") {
@@ -277,10 +286,14 @@ export default function ManageProductsPage() {
           const errorResponse = await res.json();
           throw new Error(errorResponse.message || "Failed to add product.");
         }
+        showMessage(`Product "${name}" added successfully!`, true);
+        if (paramFunction !== "") {
+          window.history.back();
+          return;
+        }
+        resetForm();
         const newItem = await res.json();
         setItems([...items, newItem]);
-        resetForm();
-        showMessage(`Product "${name}" added successfully!`, true);
         // await fetchItemsData();
       } catch (err) {
         showMessage(err.message, false);
@@ -310,9 +323,13 @@ export default function ManageProductsPage() {
           const errorResponse = await res.json();
           throw new Error(errorResponse.message || "Failed to update product.");
         }
+        showMessage(`Product "${item.name}" updated successfully!`, true);
+        if (paramFunction !== "") {
+          window.history.back();
+          return;
+        }
         const updatedItem = await res.json();
         setItems(items.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
-        showMessage(`Product "${item.name}" updated successfully!`, true);
         // await fetchItemsData();
       } catch (err) {
         showMessage(err.message, false);
@@ -337,9 +354,14 @@ export default function ManageProductsPage() {
           const errorResponse = await res.json();
           throw new Error(errorResponse.message || "Failed to delete product.");
         }
-        setItems(items.filter((i) => i.id !== item.id));
         showMessage(`Product "${item.name}" deleted successfully!`, true);
+        if (paramFunction !== "") {
+          window.history.back();
+          window.history.back();
+          return;
+        }
         resetForm();
+        setItems(items.filter((i) => i.id !== item.id));
         // await fetchItemsData();
       } catch (err) {
         showMessage(err.message, false);
@@ -431,45 +453,51 @@ export default function ManageProductsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-xl md:2xl font-semibold text-center">
-              Seller Dashboard
-            </h1>
-            <h1 className="font-semibold text-center">Manage Products</h1>
+            {paramFunction === "" && (
+              <div className="flex flex-col gap-4">
+                <h1 className="text-xl md:2xl font-semibold text-center">
+                  Seller Dashboard
+                </h1>
+                <h1 className="font-semibold text-center">Manage Products</h1>
+              </div>
+            )}
 
             {/* Navigation buttons for Add, Edit, Delete */}
             <div className="flex flex-col md:flex-row gap-6 h-fit">
-              <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
-                <button
-                  onClick={handleAddProduct}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
-                    focused === "add"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
-                  }`}
-                >
-                  Add
-                </button>
-                <button
-                  onClick={handleEditProduct}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] hover:text-white flex-1 text-center text-[#9e6e3b] ${
-                    focused === "edit"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
-                  }`}
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={handleDeleteProduct}
-                  className={`p-2 px-4 rounded-xl border border-[#9e6e3b] hover:text-white flex-1 text-center text-[#9e6e3b] ${
-                    focused === "delete"
-                      ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
-                      : "hover:bg-[#c29a6e]"
-                  }`}
-                >
-                  Delete
-                </button>
-              </div>
+              {paramFunction === "" && (
+                <div className="flex flex-row md:flex-col h-fit gap-2 text-sm w-full md:w-fit border-b md:border-b-0 border-[#00000060] pb-6 md:pb-0 md:min-w-[200px]">
+                  <button
+                    onClick={handleAddProduct}
+                    className={`p-2 px-4 rounded-xl border border-[#9e6e3b] text-[#9e6e3b] hover:text-white flex-1 text-center ${
+                      focused === "add"
+                        ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                        : "hover:bg-[#c29a6e]"
+                    }`}
+                  >
+                    Add
+                  </button>
+                  <button
+                    onClick={handleEditProduct}
+                    className={`p-2 px-4 rounded-xl border border-[#9e6e3b] hover:text-white flex-1 text-center text-[#9e6e3b] ${
+                      focused === "edit"
+                        ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                        : "hover:bg-[#c29a6e]"
+                    }`}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={handleDeleteProduct}
+                    className={`p-2 px-4 rounded-xl border border-[#9e6e3b] hover:text-white flex-1 text-center text-[#9e6e3b] ${
+                      focused === "delete"
+                        ? "bg-[#9e6e3b] text-white hover:bg-[#9e6e3b]"
+                        : "hover:bg-[#c29a6e]"
+                    }`}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
               <div className="w-full">
                 {addProduct && (
                   <div className="flex flex-col gap-4 md:max-w-[500px] md:border-l border-[#00000060] md:pl-6">
@@ -484,15 +512,19 @@ export default function ManageProductsPage() {
                         <div className="flex gap-2 text-xs">
                           <button
                             type="reset"
-                            onClick={resetForm}
-                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                            onClick={() => {
+                              paramFunction !== ""
+                                ? window.history.back()
+                                : resetForm();
+                            }}
+                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white  disabled:hover:bg-gray-400 disabled:opacity-60"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
                             disabled={uploading || !isAddFormValid}
-                            className={`p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-green-500`}
+                            className={`p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-60 disabled:hover:bg-green-500`}
                           >
                             Add
                           </button>
@@ -727,15 +759,22 @@ export default function ManageProductsPage() {
                         <div className="flex gap-2 text-xs">
                           <button
                             type="reset"
-                            onClick={resetForm}
-                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                            onClick={() => {
+                              paramFunction !== ""
+                                ? window.history.back()
+                                : resetForm();
+                            }}
+                            disabled={itemLoading}
+                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white  disabled:hover:bg-gray-400 disabled:opacity-60"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
-                            disabled={uploading || !isEditFormValid}
-                            className={`p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-green-500`}
+                            disabled={
+                              uploading || !isEditFormValid || itemLoading
+                            }
+                            className={`p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-60  disabled:hover:bg-green-500`}
                           >
                             Update
                           </button>
@@ -746,6 +785,7 @@ export default function ManageProductsPage() {
                         <select
                           className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full bg-[#9e6e3b2e]"
                           required
+                          disabled={paramFunction !== ""}
                           onChange={(e) => {
                             if (e.target.value) {
                               e.target.value !== "null"
@@ -1003,8 +1043,13 @@ export default function ManageProductsPage() {
                         <div className="flex gap-2 text-xs">
                           <button
                             type="reset"
-                            onClick={resetForm}
-                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                            onClick={() => {
+                              paramFunction !== ""
+                                ? window.history.back()
+                                : resetForm();
+                            }}
+                            disabled={itemLoading}
+                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white disabled:hover:bg-gray-400 disabled:opacity-60"
                           >
                             Cancel
                           </button>
@@ -1021,6 +1066,7 @@ export default function ManageProductsPage() {
                       <select
                         className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         required
+                        disabled={paramFunction !== ""}
                         onChange={(e) => {
                           if (e.target.value) {
                             e.target.value !== "null"
