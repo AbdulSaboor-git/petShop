@@ -26,7 +26,7 @@ export default function ManageProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [item, setItem] = useState(null);
-  const [itemID, setItemId] = useState("");
+  const [itemID, setItemId] = useState(null);
   const [itemLoading, setItemLoading] = useState(true);
   const [itemError, setItemError] = useState(null);
 
@@ -69,6 +69,7 @@ export default function ManageProductsPage() {
       const params = new URLSearchParams(window.location.search);
       let functionParam = params.get("function");
       let idParam = params.get("id");
+      if (!idParam || !functionParam) return;
 
       if (functionParam) {
         if (functionParam === "add") {
@@ -79,10 +80,12 @@ export default function ManageProductsPage() {
           handleDeleteProduct();
         }
       }
-
-      if (idParam && !isNaN(parseInt(idParam, 10))) {
-        setItemId(parseInt(idParam, 10));
-        fetchItemData(parseInt(idParam, 10));
+      // showMessage(idParam + ", " + typeof idParam, true);
+      idParam = parseInt(idParam, 10);
+      if (idParam > 0 && !isNaN(idParam)) {
+        // showMessage(idParam + ", " + typeof idParam, true);
+        setItemId(idParam);
+        fetchItemData(idParam);
       }
     }
   }, []);
@@ -167,7 +170,9 @@ export default function ManageProductsPage() {
 
   // Fetch all products, categories, and breeds.
   const fetchItemsData = useCallback(async () => {
+    // showMessage(sellerId + ", " + typeof sellerId, true);
     if (!sellerId) return;
+
     setLoading(true);
     try {
       const response = await fetch(
@@ -221,8 +226,9 @@ export default function ManageProductsPage() {
   };
 
   // Fetch a single product's data using the product API.
-  const fetchItemData = async (itemId) => {
-    if (itemId === "null" || itemId === "") {
+  const fetchItemData = useCallback(async (itemId) => {
+    // showMessage(itemId + ", " + typeof itemId, true);
+    if (itemId === "null" || itemId === "" || !itemId) {
       setItem(null);
       resetForm();
       return;
@@ -230,28 +236,23 @@ export default function ManageProductsPage() {
     setItemLoading(true);
     setItemError(null);
     try {
-      try {
-        const response = await fetch(`/api/item?productId=${itemId}`);
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || "Product not found");
-        }
-        const data = await response.json();
-        setItem(data);
-      } catch (err) {
-        setItemError("Failed to load product. Please check your connection.");
-        showMessage(err.message, false);
+      const response = await fetch(`/api/item?productId=${itemId}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Product not found");
       }
+      const data = await response.json();
+      setItem(data);
     } catch (err) {
-      setItemError(err.message);
+      setItemError("Failed to load product. Please check your connection.");
       showMessage(err.message, false);
     } finally {
       setItemLoading(false);
     }
-  };
+  }, []);
 
   // Handler for adding a product.
-  const handleAddProductSubmit = async (e) => {
+  const handleAddProductSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!isAddFormValid) {
       showMessage(
@@ -278,10 +279,10 @@ export default function ManageProductsPage() {
     } catch (err) {
       showMessage(err.message, false);
     }
-  };
+  }, []);
 
   // Handler for editing a product.
-  const handleEditProductSubmit = async (e) => {
+  const handleEditProductSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!isEditFormValid || !item) {
       showMessage(
@@ -307,10 +308,10 @@ export default function ManageProductsPage() {
     } catch (err) {
       showMessage(err.message, false);
     }
-  };
+  }, []);
 
   // Handler for deleting a product.
-  const handleDeleteProductSubmit = async (e) => {
+  const handleDeleteProductSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!item) {
       showMessage("Please select a product to delete.", false);
@@ -331,7 +332,7 @@ export default function ManageProductsPage() {
     } catch (err) {
       showMessage(err.message, false);
     }
-  };
+  }, []);
 
   const removeImage = useCallback((url) => {
     setImages((prevImages) => prevImages.filter((img_url) => img_url !== url));
@@ -645,7 +646,9 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Images*</label>
+                        <label className="mx-0.5">
+                          Images* (Max image size: 3MB)
+                        </label>
                         <input
                           type="file"
                           accept="image/*"
@@ -918,7 +921,9 @@ export default function ManageProductsPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="mx-0.5">Images*</label>
+                        <label className="mx-0.5">
+                          Images* (Max image size: 3MB)
+                        </label>
                         <input
                           type="file"
                           value={""}

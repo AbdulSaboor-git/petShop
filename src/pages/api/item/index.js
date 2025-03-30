@@ -2,7 +2,6 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req, res) {
   const { method } = req;
-  // Expect productId for GET (single product), PATCH, and DELETE.
   const { productId } = req.query;
 
   switch (method) {
@@ -20,30 +19,25 @@ export default async function handler(req, res) {
   }
 }
 
-// GET: If productId is provided, fetch a single product. Otherwise, fetch all.
 async function handleGet(req, res, productId) {
   try {
-    if (productId) {
-      const id = parseInt(productId, 10);
-      if (isNaN(id) || id <= 0) {
-        return res.status(400).json({ message: "Invalid Product ID" });
-      }
-      const product = await prisma.item.findUnique({
-        where: { id },
-        include: { seller: true, category: true, breed: true },
-      });
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      return res.status(200).json(product);
-    } else {
-      const products = await prisma.item.findMany({
-        include: { seller: true, category: true, breed: true },
-      });
-      return res.status(200).json({ products });
+    const id = parseInt(productId, 10);
+    if (isNaN(id) || id <= 0) {
+      return res.status(400).json({ message: "Invalid Product ID" });
     }
+
+    const product = await prisma.item.findUnique({
+      where: { id },
+      include: { seller: true, category: true, breed: true },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json(product);
   } catch (error) {
-    console.error("Error fetching product(s):", error);
+    console.error("Error fetching product:", error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
