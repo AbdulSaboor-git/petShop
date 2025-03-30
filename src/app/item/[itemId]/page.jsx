@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import {
@@ -76,67 +76,70 @@ export default function ItemPage({ params }) {
       }
     };
 
-    // Get favorites from localStorage, if any.
-    const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    } else {
-      // Initialize as an empty array.
-      localStorage.setItem("favorites", JSON.stringify([]));
-      setFavorites([]);
-    }
     fetchItemData();
   }, [itemId]);
 
   useEffect(() => {
-    if (!item) return;
-    const fetchAllItems = async () => {
-      try {
-        const allItems = await fetch(`/api/homeItems`);
-        if (!allItems.ok) {
-          throw new Error("Failed to fetch items.");
-        }
-        const dataItems = await allItems.json();
-        setAllItems(dataItems.items);
-      } catch (err) {
-        setError2(err.message);
-      } finally {
-        setLoading2(false);
-      }
-    };
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites"));
+    if (storedFavorites) {
+      setFavorites(storedFavorites);
+    } else {
+      localStorage.setItem("favorites", JSON.stringify([]));
+    }
+  }, []);
 
-    fetchAllItems();
+  const fetchRelatedItems = useCallback(async () => {
+    if (!item) return;
+    try {
+      const allItems = await fetch(
+        `/api/relatedItems?category=${item.categoryId}&breed=${item.breedId}&sex=${item.sex}&itemId=${item.id}`
+      );
+      if (!allItems.ok) {
+        throw new Error("Failed to fetch related items.");
+      }
+      const dataItems = await allItems.json();
+      setBoughtTogetherItems(dataItems.boughtTogetherItems);
+      setRelatedItems(dataItems.relatedItems);
+    } catch (err) {
+      setError2(err.message);
+    } finally {
+      setLoading2(false);
+    }
   }, [item]);
 
-  //related items effect
   useEffect(() => {
-    if (!item || !item.sex || item.sex === "" || !item.breedId) return;
-    const RelatedItems = allItems
-      .filter(
-        (i) =>
-          i.id !== item.id &&
-          i.sex === item.sex &&
-          i.breedId === item.breedId &&
-          i.categoryId === item.categoryId
-      )
-      .slice(0, 4);
-    setRelatedItems(RelatedItems);
-  }, [allItems, item]);
+    fetchRelatedItems();
+  }, [fetchRelatedItems]);
 
-  // Bought Together Effect
-  useEffect(() => {
-    if (!item || !item.sex || item.sex === "" || !item.breedId) return;
-    const boughtTogether = allItems
-      .filter(
-        (i) =>
-          i.sex &&
-          i.sex != item.sex &&
-          i.breedId === item.breedId &&
-          i.categoryId === item.categoryId
-      )
-      .slice(0, 2);
-    setBoughtTogetherItems(boughtTogether);
-  }, [allItems, item]);
+  //related items effect
+  // useEffect(() => {
+  //   if (!item || !item.sex || item.sex === "" || !item.breedId) return;
+  //   const RelatedItems = allItems
+  //     .filter(
+  //       (i) =>
+  //         i.id !== item.id &&
+  //         i.sex === item.sex &&
+  //         i.breedId === item.breedId &&
+  //         i.categoryId === item.categoryId
+  //     )
+  //     .slice(0, 4);
+  //   setRelatedItems(RelatedItems);
+  // }, [allItems, item]);
+
+  // // Bought Together Effect
+  // useEffect(() => {
+  //   if (!item || !item.sex || item.sex === "" || !item.breedId) return;
+  //   const boughtTogether = allItems
+  //     .filter(
+  //       (i) =>
+  //         i.sex &&
+  //         i.sex != item.sex &&
+  //         i.breedId === item.breedId &&
+  //         i.categoryId === item.categoryId
+  //     )
+  //     .slice(0, 2);
+  //   setBoughtTogetherItems(boughtTogether);
+  // }, [allItems, item]);
 
   const dispatch = useDispatch();
   const showMessage = (msg, state) => {
@@ -168,33 +171,33 @@ export default function ItemPage({ params }) {
   const handleContactSeller = () => {
     setContactSeller(true);
     setTimeout(() => {
-      const offset = 40;
-      const elementPosition = sendOrderRef.current.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+      if (sendOrderRef.current) {
+        const offset = 40;
+        const elementPosition =
+          sendOrderRef.current.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
     }, 100);
   };
 
   // Fetch item data and initialize favorites from localStorage
 
-  const handleFavoriteClick = (ItemId) => {
-    let id;
-    ItemId != 0 ? (id = ItemId) : (id = item?.id);
-    setFavorites((prevFavorites) => {
-      let updatedFavorites;
-      if (prevFavorites.includes(id)) {
-        // Remove item from favorites
-        updatedFavorites = prevFavorites.filter((favId) => favId !== id);
-        showMessage("Removed from favorites", true);
-      } else {
-        // Add item to favorites
-        updatedFavorites = [...prevFavorites, id];
-        showMessage("Added to favorites", true);
-      }
+  const handleFavoriteClick = () => {
+    setFavorites((prev) => {
+      const updatedFavorites = prev.includes(item.id)
+        ? prev.filter((id) => id !== item.id)
+        : [...prev, item.id];
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      showMessage(
+        updatedFavorites.includes(item.id)
+          ? "Added to favorites"
+          : "Removed from favorites",
+        true
+      );
       return updatedFavorites;
     });
   };

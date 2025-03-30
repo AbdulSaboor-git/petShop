@@ -38,6 +38,7 @@ async function handleGet(req, res, userId) {
               discountedPrice: true,
               isDiscounted: true,
               images: true,
+              isfeatured: true,
             },
           },
         },

@@ -3,7 +3,7 @@ import Footer from "@/components/footer";
 import Header from "@/components/header";
 import Loader from "@/components/loader";
 import ProductCard_S from "@/components/productCard_S";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useAuthUser from "@/hooks/authUser";
 import { MdAccountCircle, MdClose, MdSearch } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -31,22 +31,18 @@ export default function Profile() {
     : "";
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const idParam = params.get("acc");
-      if (idParam && idParam != "undefined") {
-        console.log(idParam);
-        setId(idParam);
-      }
+    const params = new URLSearchParams(window.location.search);
+    const idParam = params.get("acc");
+
+    if (idParam && idParam !== "undefined" && idParam !== null) {
+      setId(Number(idParam));
     }
   }, []);
 
   // Set the user as seller if the current user's id matches the id in the URL.
   useEffect(() => {
-    if (user && !userLoading) {
-      setUserIsSeller(user.id == id);
-    } else {
-      setUserIsSeller(false);
+    if (!userLoading) {
+      setUserIsSeller(user?.id === id);
     }
   }, [user, userLoading, id]);
 
@@ -59,37 +55,26 @@ export default function Profile() {
     setSearchQuery(e.target.value.trim());
   };
 
-  useEffect(() => {
-    if (searchQuery === "") {
-      setItems(allItems);
-    } else {
-      const fItems = allItems.filter((item) => {
-        return (
-          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.category?.name &&
-            item.category.name
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())) ||
-          (item.breed?.name &&
-            item.breed.name
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())) ||
-          (item.sex &&
-            item.sex.toLowerCase().includes(searchQuery.toLowerCase()))
-        );
-      });
-      setItems(fItems);
-    }
+  const filteredItems = useMemo(() => {
+    if (searchQuery === "") return allItems;
+    return allItems.filter((item) =>
+      [item.name, item.category?.name, item.breed?.name, item.sex]
+        .filter(Boolean) // Remove null/undefined values
+        .some((val) => val.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
   }, [searchQuery, allItems]);
+
+  useEffect(() => {
+    setItems(filteredItems);
+  }, [filteredItems]);
 
   // Fetch seller and items data based on the id.
   useEffect(() => {
-    if (!user && userLoading) {
-      return;
-    }
+    if (!id || id === "undefined" || (!user && userLoading)) return;
 
     const fetchData = async () => {
       setLoading(true);
+      setError(null);
       try {
         const response = await fetch(`/api/user?userId=${id}`);
 
@@ -99,6 +84,7 @@ export default function Profile() {
         }
 
         const sellerData = await response.json();
+
         setSeller(sellerData);
         setItems(sellerData.items);
         setAllItems(sellerData.items);
@@ -108,21 +94,22 @@ export default function Profile() {
         setLoading(false);
       }
     };
-    if (id && id != "undefined") fetchData();
+    fetchData();
   }, [id, user, userLoading]);
 
   // Filter featured items and create premium items without mutating the original items array.
   useEffect(() => {
-    const fItems = items.filter((item) => item.isfeatured === true);
-    setFeaturedItems(fItems);
+    setFeaturedItems(items.filter((item) => item.isfeatured));
 
-    // Create a shallow copy of items before sorting.
-    const sortedItems = [...items].sort(
-      (a, b) =>
-        (b.isDiscounted ? b.discountedPrice : b.price) -
-        (a.isDiscounted ? a.discountedPrice : a.price)
+    setPremiumItems(
+      [...items]
+        .sort(
+          (a, b) =>
+            (b.isDiscounted ? b.discountedPrice ?? b.price : b.price ?? 0) -
+            (a.isDiscounted ? a.discountedPrice ?? a.price : a.price ?? 0)
+        )
+        .slice(0, 5)
     );
-    setPremiumItems(sortedItems.slice(0, 5));
   }, [items]);
 
   return (

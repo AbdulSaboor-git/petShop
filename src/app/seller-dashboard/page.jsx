@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -32,76 +32,67 @@ export default function SellerDashboardMainPage() {
       })
     );
   };
+  const fetchMetricsAndAnalytics = useCallback(async () => {
+    if (!sellerId) return; // Ensure sellerId exists before making the request
+
+    try {
+      const response = await fetch(`/api/sellerDashboard?sellerId=${sellerId}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch seller metrics.");
+      }
+
+      const result = await response.json();
+
+      if (result?.success && result?.data) {
+        const { totalItems, availableItems, categCount, breedCount } =
+          result.data;
+
+        const totalProducts = totalItems ?? 0;
+        const totalAvailableProducts = availableItems ?? 0;
+        const productsSold = totalProducts - totalAvailableProducts;
+        const totalCategories = categCount ?? 0;
+        const totalBreeds = breedCount ?? 0;
+
+        setMetrics({
+          totalProducts,
+          totalCategories,
+          totalBreeds,
+          totalAvailableProducts,
+          productsSold,
+        });
+      } else {
+        throw new Error("Invalid response structure.");
+      }
+    } catch (err) {
+      setError(err.message);
+      showMessage(err.message, false);
+    } finally {
+      setLoading(false);
+    }
+  }, [sellerId]); //  Add `sellerId` dependency
 
   useEffect(() => {
-    if (!sellerId) return;
+    let isMounted = true; //  Define isMounted inside useEffect
 
-    let isMounted = true;
+    setLoading(true); //  Set loading before making the request
+    fetchMetricsAndAnalytics().finally(() => {
+      if (isMounted) setLoading(false);
+    });
 
-    const fetchMetricsAndAnalytics = async () => {
-      try {
-        const response = await fetch(
-          `/api/sellerDashboard?sellerId=${sellerId}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch seller metrics.");
-        }
-
-        const result = await response.json();
-
-        if (result?.success && result?.data) {
-          const { totalItems, availableItems, categCount, breedCount } =
-            result.data;
-
-          const totalProducts = totalItems ?? 0;
-          const totalAvailableProducts = availableItems ?? 0;
-          const productsSold = totalProducts - totalAvailableProducts;
-          const totalCategories = categCount ?? 0;
-          const totalBreeds = breedCount ?? 0;
-
-          if (isMounted) {
-            setMetrics({
-              totalProducts,
-              totalCategories,
-              totalBreeds,
-              totalAvailableProducts,
-              productsSold,
-            });
-          }
-        } else {
-          throw new Error("Invalid response structure.");
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError(err.message);
-          showMessage(err.message, false);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchMetricsAndAnalytics();
-
-    // (Optional) Fetch analytics data
-    // const responseAnalytics = await fetch(`/api/seller-analytics`);
-    // if (responseAnalytics.ok) {
-    //   const analyticsData = await responseAnalytics.json();
-    //   setAnalytics(analyticsData);
-    // }
     return () => {
-      isMounted = false; // Cleanup function to avoid state update on unmount
+      isMounted = false; // Cleanup function to prevent state updates on unmount
     };
-  }, [sellerId]);
+  }, [fetchMetricsAndAnalytics]); //  Ensure `fetchMetricsAndAnalytics` is re-called when sellerId changes
 
   useEffect(() => {
     if (!userLoading && !user) {
       showMessage("Unauthorized Access", false);
+      setTimeout(() => {
+        router.push("/home");
+      }, 1000);
     }
-  }, [userLoading, user]);
+  }, [userLoading, user, router]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10 min-h-screen">

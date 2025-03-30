@@ -26,12 +26,15 @@ export default function AdminDashboardMainPage() {
   };
 
   useEffect(() => {
-    if (!user && !userLoading) {
-      showMessage("Unauthorized Access", false);
-    } else if (user) {
-      if (user.role != "ADMIN") showMessage("Unauthorized Access", false);
+    if (!userLoading) {
+      if (!user || user.role !== "ADMIN") {
+        showMessage("Unauthorized Access", false);
+        setTimeout(() => {
+          router.push("/home");
+        }, 1000);
+      }
     }
-  }, [userLoading]);
+  }, [user, userLoading, router]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10 min-h-screen">

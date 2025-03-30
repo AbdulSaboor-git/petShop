@@ -1,15 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
+import { useRouter } from "next/navigation";
 
 export default function ManageCategoriesPage() {
   const { user, userLoading } = useAuthUser();
-
+  const router = useRouter();
   // Tab state
   const [focused, setFocused] = useState("add");
   const [addCategory, setAddCategory] = useState(true);
@@ -47,7 +48,7 @@ export default function ManageCategoriesPage() {
   };
 
   // Fetch all categories (from the categories_breeds API)
-  const fetchCategoriesData = async () => {
+  const fetchCategoriesData = useCallback(async () => {
     try {
       const response = await fetch(`/api/categories_breeds`);
       if (!response.ok) {
@@ -63,13 +64,19 @@ export default function ManageCategoriesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Fetch single category details for editing/deleting
   const fetchCategoryData = async (categoryId) => {
     if (categoryId === "null") {
       setSelectedCategory(null);
       resetForm();
+      return;
+    }
+    const existingCategory = categories.find((cat) => cat.id === categoryId);
+    if (existingCategory) {
+      setSelectedCategory(existingCategory);
+      setName(existingCategory.name);
       return;
     }
     setCategoryLoading(true);
@@ -135,9 +142,12 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add category.");
       }
+      const newCategory = await res.json();
+      setCategories([...categories, newCategory]);
+
       showMessage(`Category "${name}" added successfully!`, true);
       resetForm();
-      fetchCategoriesData();
+      // fetchCategoriesData();
     } catch (err) {
       console.error("Error adding category:", err);
       showMessage(err.message, false);
@@ -161,12 +171,18 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update category.");
       }
+      const updatedCategory = await res.json();
+      setCategories(
+        categories.map((cat) =>
+          cat.id === updatedCategory.id ? updatedCategory : cat
+        )
+      );
       showMessage(
         `Category "${selectedCategory.name}" updated successfully!`,
         true
       );
       resetForm();
-      fetchCategoriesData();
+      // fetchCategoriesData();
     } catch (err) {
       console.error("Error updating category:", err);
       showMessage(err.message, false);
@@ -188,9 +204,10 @@ export default function ManageCategoriesPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to delete category.");
       }
+      setCategories(categories.filter((cat) => cat.id !== selectedCategory.id));
       showMessage(`Category "${name}" deleted successfully!`, true);
       resetForm();
-      fetchCategoriesData();
+      // fetchCategoriesData();
     } catch (err) {
       console.error("Error deleting category:", err);
       showMessage(err.message, false);
@@ -199,19 +216,22 @@ export default function ManageCategoriesPage() {
 
   // Fetch categories when user is loaded
   useEffect(() => {
-    if (!userLoading && user) {
+    if (!userLoading && user && categories.length === 0) {
       fetchCategoriesData();
     }
-  }, [userLoading, user]);
+  }, [userLoading, user, fetchCategoriesData]);
 
   // If user is not authorized, show a message.
   useEffect(() => {
-    if (!user && !userLoading) {
-      showMessage("Unauthorized Access", false);
-    } else if (user && user.role != "ADMIN") {
-      showMessage("Unauthorized Access", false);
+    if (!userLoading) {
+      if (!user || user.role !== "ADMIN") {
+        showMessage("Unauthorized Access", false);
+        setTimeout(() => {
+          router.push("/home");
+        }, 1000);
+      }
     }
-  }, [userLoading]);
+  }, [user, userLoading, router]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">

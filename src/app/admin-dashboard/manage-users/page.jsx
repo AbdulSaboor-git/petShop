@@ -9,10 +9,11 @@ import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/components/getCroppedImg";
+import { useRouter } from "next/navigation";
 
 export default function ManageUsersPage() {
   const { user, userLoading, logout } = useAuthUser();
-
+  const router = useRouter();
   const [focused, setFocused] = useState("add");
   const [addUser, setAddUser] = useState(true);
   const [editUser, setEditUser] = useState(false);
@@ -127,27 +128,24 @@ export default function ManageUsersPage() {
   };
 
   // Fetch all products, categories, and breeds.
-  const fetchAllUsersData = async () => {
+  const fetchAllUsersData = useCallback(async () => {
     try {
       const response = await fetch(`/api/user`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch users.");
-      }
+      if (!response.ok) throw new Error("Failed to fetch users.");
       const data = await response.json();
-
       setUsers(data.users);
     } catch (err) {
-      setError(err.message);
       showMessage(err.message, false);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    if (user?.role != "ADMIN") return;
+    if (user?.role === "ADMIN");
     fetchAllUsersData();
-  }, [user]);
+  }, [user, fetchAllUsersData]);
 
   const payload = {
     firstName: firstName.trim(),
@@ -293,7 +291,7 @@ export default function ManageUsersPage() {
   };
 
   // Called when cropping is complete (the cropped area is determined)
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+  const onCropComplete = useCallback((croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
@@ -332,12 +330,15 @@ export default function ManageUsersPage() {
   };
 
   useEffect(() => {
-    if (!user && !userLoading) {
-      showMessage("Unauthorized Access", false);
-    } else if (user && user.role != "ADMIN") {
-      showMessage("Unauthorized Access", false);
+    if (!userLoading) {
+      if (!user || user.role !== "ADMIN") {
+        showMessage("Unauthorized Access", false);
+        setTimeout(() => {
+          router.push("/home");
+        }, 1000);
+      }
     }
-  }, [userLoading]);
+  }, [user, userLoading, router]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">

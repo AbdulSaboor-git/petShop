@@ -79,7 +79,7 @@ async function handlePost(req, res) {
       data: {
         name: name.trim(),
         price: Number(price),
-        discountedPrice: Number(price),
+        discountedPrice: null,
         description: description ? description.trim() : null,
         category: { connect: { id: Number(categoryId) } },
         breed: breedId ? { connect: { id: Number(breedId) } } : undefined,

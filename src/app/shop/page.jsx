@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
@@ -37,10 +37,10 @@ export default function Shop() {
   };
 
   function clearFilters() {
-    setSelectedCategories(["All"]);
-    setSelectedBreeds(["All"]);
-    setOnSale(false);
-    setSortOption("default");
+    setSelectedCategories(() => ["All"]);
+    setSelectedBreeds(() => ["All"]);
+    setOnSale(() => false);
+    setSortOption(() => "default");
   }
 
   useEffect(() => {
@@ -68,26 +68,26 @@ export default function Shop() {
   }, [searchQuery, allItems]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      let categoryParam = params.get("category");
-      let breedParam = params.get("breed");
-      let saleParam = params.get("sale");
-      let sortParam = params.get("sort");
+    if (typeof window === "undefined") return; // Prevent execution during SSR
 
-      if (categoryParam && categoryParam != "undefined") {
-        setSelectedCategories([categoryParam]);
-      }
-      if (breedParam && breedParam != "undefined") {
-        setSelectedBreeds([breedParam]);
-      }
-      if (saleParam === "true" && saleParam != "undefined") {
-        setOnSale(saleParam);
-      }
-      if (sortParam && sortParam != "undefined") {
-        setSortOption(sortParam);
-      }
-    }
+    const searchParams = window.location.search; // Extracted to avoid complex dependencies
+
+    const params = new URLSearchParams(searchParams);
+    const categoryParam = params.get("category");
+    const breedParam = params.get("breed");
+    const saleParam = params.get("sale") === "true"; // Ensure boolean value
+    const sortParam = params.get("sort");
+
+    setSelectedCategories(
+      categoryParam && categoryParam !== "undefined" ? [categoryParam] : ["All"]
+    );
+    setSelectedBreeds(
+      breedParam && breedParam !== "undefined" ? [breedParam] : ["All"]
+    );
+    setOnSale(saleParam);
+    setSortOption(
+      sortParam && sortParam !== "undefined" ? sortParam : "default"
+    );
   }, []);
 
   useEffect(() => {
@@ -103,75 +103,79 @@ export default function Shop() {
 
   const handleFavoriteClick = (itemId) => {
     setFavorites((prevFavorites) => {
-      let updatedFavorites;
-      if (prevFavorites.includes(itemId)) {
-        // Remove item from favorites
-        updatedFavorites = prevFavorites.filter((favId) => favId !== itemId);
-      } else {
-        // Add item to favorites
-        updatedFavorites = [...prevFavorites, itemId];
-      }
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-      return updatedFavorites;
+      const isFavorite = prevFavorites.includes(itemId);
+      return isFavorite
+        ? prevFavorites.filter((favId) => favId !== itemId)
+        : [...prevFavorites, itemId];
     });
   };
 
-  // Fetch items, categories, and breeds.
+  // Automatically sync favorites with localStorage
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const resItems = await fetch(`/api/homeItems`);
-        const resCatBreed = await fetch(`/api/categories_breeds`);
-        if (!resItems.ok || !resCatBreed.ok) {
-          throw new Error("Failed to fetch data.");
-        }
-        const dataItems = await resItems.json();
-        const dataCatBreed = await resCatBreed.json();
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
-        setItems(dataItems.items);
-        setAllItems(dataItems.items);
-        dataItems.items.find((item) => {
-          item.isDiscounted && setIsOnSale(true);
-        });
-        setCategories(dataCatBreed.categories);
-        setBreeds(dataCatBreed.breeds);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  // Fetch items, categories, and breeds.
+  const fetchData = useCallback(async () => {
+    try {
+      const resItems = await fetch(`/api/homeItems`);
+      if (!resItems.ok) {
+        throw new Error("Failed to fetch data.");
       }
-    };
+      const dataItems = await resItems.json();
 
-    fetchData();
+      setItems(dataItems.items);
+      setAllItems(dataItems.items);
+      dataItems.items.some((item) => {
+        item.isDiscounted && setIsOnSale(true);
+      });
+      setCategories(dataItems.categories.filter((c) => c._count.items > 0));
+      setBreeds(dataItems.breeds.filter((b) => b._count.items > 0));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // Whenever the selected filters, onSale toggle, or sorting options change, update the displayed items.
   useEffect(() => {
     if (searchQuery != "") return;
     let filtered = allItems;
 
-    // Filter by category only if "All" is not selected.
-    if (!(selectedCategories.length === 1 && selectedCategories[0] === "All")) {
+    const isFilteringCategories = !(
+      selectedCategories.length === 1 && selectedCategories[0] === "All"
+    );
+    const isFilteringBreeds = !(
+      selectedBreeds.length === 1 && selectedBreeds[0] === "All"
+    );
+
+    if (isFilteringCategories) {
+      const categorySet = new Set(selectedCategories); // Convert to Set for O(1) lookups
       filtered = filtered.filter((item) =>
-        selectedCategories.includes(item.category?.name)
+        categorySet.has(item.category?.name)
       );
     }
 
-    // Filter by breed only if "All" is not selected.
-    if (!(selectedBreeds.length === 1 && selectedBreeds[0] === "All")) {
-      filtered = filtered.filter((item) =>
-        selectedBreeds.includes(item.breed?.name)
-      );
+    if (isFilteringBreeds) {
+      const breedSet = new Set(selectedBreeds); // Convert to Set for O(1) lookups
+      filtered = filtered.filter((item) => breedSet.has(item.breed?.name));
     }
 
     // Filter by onSale flag if active.
     if (onSale) {
       filtered = filtered.filter((item) => item.isDiscounted);
-      filtered.sort(
-        (a, b) =>
-          (((b.price - b.discountedPrice) * 100) / b.price).toFixed(0) -
-          (((a.price - a.discountedPrice) * 100) / a.price).toFixed(0)
-      );
+
+      // Precompute discount percentage to avoid redundant calculations
+      filtered.sort((a, b) => {
+        const discountA = ((a.price - a.discountedPrice) / a.price) * 100;
+        const discountB = ((b.price - b.discountedPrice) / b.price) * 100;
+        return discountB - discountA; // Sort in descending order
+      });
     }
 
     // Sorting: Make a shallow copy before sorting.
@@ -255,15 +259,6 @@ export default function Shop() {
     setSelectedBreeds(newSelected);
   };
 
-  const breedsToShow = breeds.filter((b) => b.items != 0);
-  const categoriesToShow = categories.filter((c) => c.items != 0);
-  // Determine whether to show the breed filter.
-  // We show it if either "All" is selected for categories OR if at least one selected
-  // category is either "Chicken" or "Eggs".
-  // const showBreedFilter =
-  //   selectedCategories.includes("All") ||
-  //   selectedCategories.some((c) => c === "Chicken" || c === "Eggs");
-
   return (
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header pageOpened={"shop"} />
@@ -315,7 +310,7 @@ export default function Shop() {
                   </div>
                   {
                     /* Categories Filter */
-                    categoriesToShow.length > 0 && searchQuery === "" && (
+                    searchQuery === "" && (
                       <div className="w-full overflow-hidden bg-gray-100 lg:bg-transparent p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-500">
                         <div
                           onClick={() =>
@@ -360,7 +355,7 @@ export default function Shop() {
                           >
                             All
                           </button>
-                          {categoriesToShow.map((categ, i) => (
+                          {categories.map((categ, i) => (
                             <button
                               key={i}
                               onClick={() => handleCategoryClick(categ.name)}
@@ -386,7 +381,7 @@ export default function Shop() {
                       </div>
                     )
                   }
-                  {breedsToShow.length > 0 && searchQuery === "" && (
+                  {searchQuery === "" && (
                     <div className="w-full overflow-hidden bg-gray-100 p-3 flex flex-col lg:border lg:border-[#9e6e3b] rounded-xl text-white transition-all duration-300">
                       <div
                         onClick={() =>
@@ -431,7 +426,7 @@ export default function Shop() {
                         >
                           All
                         </button>
-                        {breedsToShow.map((breed, i) => (
+                        {breeds.map((breed, i) => (
                           <button
                             key={i}
                             onClick={() => handleBreedClick(breed.name)}

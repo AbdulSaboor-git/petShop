@@ -9,10 +9,12 @@ import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/components/getCroppedImg";
+import { useRouter } from "next/navigation";
 
 export default function ManageProductsPage() {
   const { user, userLoading, logout } = useAuthUser();
   const sellerId = user?.id;
+  const router = useRouter();
 
   const [focused, setFocused] = useState("add");
   const [addProduct, setAddProduct] = useState(true);
@@ -66,22 +68,21 @@ export default function ManageProductsPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       let functionParam = params.get("function");
-      let idParam = params.get("id") || "undefined";
-      let ID = parseInt(idParam, 10);
+      let idParam = params.get("id");
 
-      if (functionParam && functionParam != "undefined") {
-        if (functionParam == "add") {
+      if (functionParam) {
+        if (functionParam === "add") {
           handleAddProduct();
-        } else if (functionParam == "edit") {
+        } else if (functionParam === "edit") {
           handleEditProduct();
-        } else {
+        } else if (functionParam === "delete") {
           handleDeleteProduct();
         }
       }
-      if (ID && ID != "undefined") {
-        setItemId(ID);
-        fetchItemData(ID);
-        // fetchItemsData();
+
+      if (idParam && !isNaN(parseInt(idParam, 10))) {
+        setItemId(parseInt(idParam, 10));
+        fetchItemData(parseInt(idParam, 10));
       }
     }
   }, []);
@@ -89,16 +90,30 @@ export default function ManageProductsPage() {
   // Form validation states.
   const isAddFormValid =
     name.trim().length >= 3 &&
-    price !== "" &&
     Number(price) > 0 &&
-    categoryId !== "" &&
-    images.length != 0;
-  const isEditFormValid =
-    name.trim().length >= 3 &&
-    price !== "" &&
-    Number(price) > 0 &&
-    categoryId !== "" &&
-    images.length != 0;
+    Number(categoryId) > 0 &&
+    images.length > 0;
+
+  const isEditFormValid = isAddFormValid;
+
+  useEffect(() => {
+    if (!item) return;
+    setName(item.name || "");
+    setPrice(item.price || "");
+    // setDiscountedPrice(data.discountedPrice || "");
+    setDescription(item.description || "");
+    setCategoryId(item.categoryId || "");
+    setBreedId(item.breedId || "");
+    setSex(item.sex || "");
+    setNature(item.nature || "");
+    setSpecifications(item.specifications || "");
+    setIsFeatured(item.isfeatured || false);
+    setWeight(item.weight || "");
+    setHeight(item.height || "");
+    setAge(item.age || "");
+    setAvailability(item.availability || "");
+    setImages(item.images || []);
+  }, [item]);
 
   function resetForm() {
     setName("");
@@ -147,10 +162,13 @@ export default function ManageProductsPage() {
     setDeleteProduct(true);
     setFocused("delete");
     setItem(null);
+    resetForm();
   };
 
   // Fetch all products, categories, and breeds.
-  const fetchItemsData = async () => {
+  const fetchItemsData = useCallback(async () => {
+    if (!sellerId) return;
+    setLoading(true);
     try {
       const response = await fetch(
         `/api/manageProductsData?sellerId=${sellerId}`
@@ -169,12 +187,11 @@ export default function ManageProductsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [sellerId]);
 
   useEffect(() => {
-    if (!sellerId) return;
     fetchItemsData();
-  }, [sellerId]);
+  }, [fetchItemsData]);
 
   const payload = {
     name: name.trim(),
@@ -211,28 +228,20 @@ export default function ManageProductsPage() {
       return;
     }
     setItemLoading(true);
+    setItemError(null);
     try {
-      const response = await fetch(`/api/item?productId=${itemId}`);
-      if (!response.ok) {
-        throw new Error("Product not found");
+      try {
+        const response = await fetch(`/api/item?productId=${itemId}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || "Product not found");
+        }
+        const data = await response.json();
+        setItem(data);
+      } catch (err) {
+        setItemError("Failed to load product. Please check your connection.");
+        showMessage(err.message, false);
       }
-      const data = await response.json();
-      setItem(data);
-      setName(data.name || "");
-      setPrice(data.price || "");
-      // setDiscountedPrice(data.discountedPrice || "");
-      setDescription(data.description || "");
-      setCategoryId(data.categoryId || "");
-      setBreedId(data.breedId || "");
-      setSex(data.sex || "");
-      setNature(data.nature || "");
-      setSpecifications(data.specifications || "");
-      setIsFeatured(data.isfeatured || false);
-      setWeight(data.weight || "");
-      setHeight(data.height || "");
-      setAge(data.age || "");
-      setAvailability(data.availability || "");
-      setImages(data.images || []);
     } catch (err) {
       setItemError(err.message);
       showMessage(err.message, false);
@@ -261,9 +270,11 @@ export default function ManageProductsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add product.");
       }
+      const newItem = await res.json();
+      setItems([...items, newItem]);
       resetForm();
       showMessage(`Product "${name}" added successfully!`, true);
-      fetchItemsData();
+      // await fetchItemsData();
     } catch (err) {
       showMessage(err.message, false);
     }
@@ -289,9 +300,10 @@ export default function ManageProductsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update product.");
       }
+      const updatedItem = await res.json();
+      setItems(items.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
       showMessage(`Product "${item.name}" updated successfully!`, true);
-      await fetchItemsData();
-      await fetchItemData(item.id);
+      // await fetchItemsData();
     } catch (err) {
       showMessage(err.message, false);
     }
@@ -312,22 +324,28 @@ export default function ManageProductsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to delete product.");
       }
+      setItems(items.filter((i) => i.id !== item.id));
       showMessage(`Product "${item.name}" deleted successfully!`, true);
-      fetchItemsData();
       setItem(null);
-      // Optionally, refresh the product list.
+      // await fetchItemsData();
     } catch (err) {
       showMessage(err.message, false);
     }
   };
 
-  function removeImage(url) {
-    setImages(images.filter((img_url) => img_url != url));
-  }
+  const removeImage = useCallback((url) => {
+    setImages((prevImages) => prevImages.filter((img_url) => img_url !== url));
+  }, []);
+
   // Handler for file upload via Cloudinary (unsigned upload).
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (file.size > 3 * 1024 * 1024) {
+      showMessage("File size exceeds 3MB limit.", false);
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result);
@@ -364,7 +382,7 @@ export default function ManageProductsPage() {
         throw new Error(errText);
       }
       const data = await response.json();
-      images.push(data.secure_url);
+      setImages((prevImages) => [...prevImages, data.secure_url]);
       setErrorMsg("");
       setImageSrc(null);
     } catch (error) {
@@ -378,8 +396,11 @@ export default function ManageProductsPage() {
   useEffect(() => {
     if (!userLoading && !user) {
       showMessage("Unauthorized Access", false);
+      setTimeout(() => {
+        router.push("/home");
+      }, 1000);
     }
-  }, [userLoading, user]);
+  }, [userLoading, user, router]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
@@ -455,8 +476,8 @@ export default function ManageProductsPage() {
                           </button>
                           <button
                             type="submit"
-                            disabled={uploading}
-                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                            disabled={uploading || !isAddFormValid}
+                            className={`p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-green-500`}
                           >
                             Add
                           </button>
@@ -696,8 +717,8 @@ export default function ManageProductsPage() {
                           </button>
                           <button
                             type="submit"
-                            disabled={uploading}
-                            className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                            disabled={uploading || !isEditFormValid}
+                            className={`p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:bg-green-500`}
                           >
                             Update
                           </button>

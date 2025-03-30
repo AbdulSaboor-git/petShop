@@ -97,6 +97,7 @@ async function handleDelete(req, res, breedId) {
     // Fetch the breed along with its associated items.
     const existingBreed = await prisma.breed.findUnique({
       where: { id },
+      include: { items: { select: { id: true } } },
     });
     if (!existingBreed) {
       return res.status(404).json({ message: "Breed not found" });

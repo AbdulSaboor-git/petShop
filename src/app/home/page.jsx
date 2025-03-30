@@ -66,17 +66,15 @@ export default function HomePage() {
     const fetchItems = async () => {
       try {
         const response = await fetch(`/api/homeItems`);
-        const response2 = await fetch(`/api/categories_breeds`);
-        if (!response.ok || !response2.ok) {
+        if (!response.ok) {
           throw new Error("Failed to fetch data.");
         }
         const data = await response.json();
-        const data2 = await response2.json();
 
         setItems(data.items);
         setAllItems(data.items);
-        setCategories(data2.categories);
-        setBreeds(data2.breeds);
+        setCategories(data.categories);
+        setBreeds(data.breeds);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -84,56 +82,43 @@ export default function HomePage() {
       }
     };
     if (!localStorage.getItem("favorites")) {
-      localStorage.setItem("favorites", []);
+      localStorage.setItem("favorites", JSON.stringify([]));
     }
     fetchItems();
   }, []);
 
+  const getSlidesConfig = (width) => {
+    if (width < 450) return { slides: 1, center: true };
+    if (width < 640) return { slides: 2, center: false };
+    if (width < 850) return { slides: 3, center: false };
+    if (width < 1050) return { slides: 4, center: false };
+    if (width < 1300) return { slides: 5, center: false };
+    return { slides: 6, center: false };
+  };
+
   useEffect(() => {
     const handleResize = () => {
-      const width = window.innerWidth;
-      if (width < 450) {
-        setSlidesToShow(1);
-        setCenterMode(true);
-      } else if (width < 640) {
-        setSlidesToShow(2);
-        setCenterMode(false);
-      } else if (width < 850) {
-        setSlidesToShow(3);
-        setCenterMode(false);
-      } else if (width < 1050) {
-        setSlidesToShow(4);
-        setCenterMode(false);
-      } else if (width < 1300) {
-        setSlidesToShow(5);
-        setCenterMode(false);
-      } else {
-        setSlidesToShow(6);
-        setCenterMode(false);
-      }
+      const { slides, center } = getSlidesConfig(window.innerWidth);
+      setSlidesToShow(slides);
+      setCenterMode(center);
     };
 
     window.addEventListener("resize", handleResize);
     handleResize();
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const mostValuedItems = allItems
-    .sort(
-      (a, b) =>
-        (b.isDiscounted ? b.discountedPrice : b.price) -
-        (a.isDiscounted ? a.discountedPrice : a.price)
-    )
-    .slice(0, 5);
+  const getSortedItems = (items, order = "desc") =>
+    [...items]
+      .sort((a, b) => {
+        const priceA = a.isDiscounted ? a.discountedPrice : a.price;
+        const priceB = b.isDiscounted ? b.discountedPrice : b.price;
+        return order === "desc" ? priceB - priceA : priceA - priceB;
+      })
+      .slice(0, 5);
 
-  const mostAffordableItems = allItems
-    .sort(
-      (a, b) =>
-        (a.isDiscounted ? a.discountedPrice : a.price) -
-        (b.isDiscounted ? b.discountedPrice : b.price)
-    )
-    .slice(0, 5);
+  const mostValuedItems = getSortedItems(allItems, "desc");
+  const mostAffordableItems = getSortedItems(allItems, "asc");
 
   useEffect(() => {
     const fItems = items.filter((item) => item.isfeatured === true);
@@ -183,19 +168,19 @@ export default function HomePage() {
     }
   }, []);
 
-  const handleFavoriteClick = (itemId) => {
+  const toggleFavorite = (itemId) => {
     setFavorites((prevFavorites) => {
-      let updatedFavorites;
-      if (prevFavorites.includes(itemId)) {
-        // Remove item from favorites
-        updatedFavorites = prevFavorites.filter((favId) => favId !== itemId);
-        showMessage("Item removed from favorites", true);
-      } else {
-        // Add item to favorites
-        updatedFavorites = [...prevFavorites, itemId];
-        showMessage("Item added to favorites", true);
-      }
+      const isFavorite = prevFavorites.includes(itemId);
+      const updatedFavorites = isFavorite
+        ? prevFavorites.filter((favId) => favId !== itemId)
+        : [...prevFavorites, itemId];
+
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+      showMessage(
+        `Item ${isFavorite ? "removed from" : "added to"} favorites`,
+        true
+      );
+
       return updatedFavorites;
     });
   };
@@ -401,7 +386,7 @@ export default function HomePage() {
                         key={i}
                         item={item}
                         favClick={() => {
-                          handleFavoriteClick(item.id);
+                          toggleFavorite(item.id);
                         }}
                         isFav={favorites.includes(item.id)}
                         alt={false}
@@ -433,7 +418,7 @@ export default function HomePage() {
                         key={i}
                         item={item}
                         favClick={() => {
-                          handleFavoriteClick(item.id);
+                          toggleFavorite(item.id);
                         }}
                         isFav={favorites.includes(item.id)}
                         alt={false}
@@ -519,7 +504,7 @@ export default function HomePage() {
                         key={i}
                         item={item}
                         favClick={() => {
-                          handleFavoriteClick(item.id);
+                          toggleFavorite(item.id);
                         }}
                         isFav={favorites.includes(item.id)}
                         alt={false}

@@ -1,16 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
 import { useDispatch } from "react-redux";
 import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
+import { useRouter } from "next/navigation";
 
 export default function ManageBreedsPage() {
   const { user, userLoading } = useAuthUser();
   const dispatch = useDispatch();
-
+  const router = useRouter();
   // UI state for tabs
   const [focused, setFocused] = useState("add");
   const [addBreed, setAddBreed] = useState(true);
@@ -28,8 +29,12 @@ export default function ManageBreedsPage() {
   const [error, setError] = useState(null);
 
   // Form validation
-  const isAddFormValid = name.trim().length >= 1;
-  const isEditFormValid = selectedBreed !== null && name.trim().length >= 1;
+
+  const isAddFormValid = useMemo(() => name.trim().length >= 1, [name]);
+  const isEditFormValid = useMemo(
+    () => selectedBreed !== null && name.trim().length >= 1,
+    [selectedBreed, name]
+  );
 
   // Redux notification helper
   const showMessage = (msg, successState) => {
@@ -68,7 +73,7 @@ export default function ManageBreedsPage() {
   };
 
   // Fetch all breeds (from categories_breeds API)
-  const fetchBreeds = async () => {
+  const fetchBreeds = useCallback(async () => {
     try {
       const response = await fetch(`/api/categories_breeds`);
       if (!response.ok) {
@@ -83,13 +88,19 @@ export default function ManageBreedsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Fetch a single breed's data (for edit and delete forms)
   const fetchBreedData = async (breedId) => {
-    if (breedId === "null") {
+    if (!breedId || breedId === "null") {
       setSelectedBreed(null);
       resetForm();
+      return;
+    }
+    const existingBreed = breeds.find((b) => b.id === breedId);
+    if (existingBreed) {
+      setSelectedBreed(existingBreed);
+      setName(existingBreed.name);
       return;
     }
     setBreedLoading(true);
@@ -112,10 +123,10 @@ export default function ManageBreedsPage() {
 
   // Fetch breeds when user is loaded
   useEffect(() => {
-    if (!userLoading && user) {
+    if (!userLoading && user && breeds.length === 0) {
       fetchBreeds();
     }
-  }, [userLoading, user]);
+  }, [userLoading, user, fetchBreeds]);
 
   // Handler for add breed form submission
   const handleAddBreedSubmit = async (e) => {
@@ -134,9 +145,11 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to add breed.");
       }
+      const newBreed = await res.json();
+      setBreeds([...breeds, newBreed]);
       showMessage(`Breed "${name}" added successfully!`, true);
       resetForm();
-      fetchBreeds();
+      // fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
     }
@@ -159,9 +172,13 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to update breed.");
       }
+      const updatedBreed = await res.json();
+      setBreeds(
+        breeds.map((b) => (b.id === updatedBreed.id ? updatedBreed : b))
+      );
       showMessage(`Breed "${selectedBreed.name}" updated successfully!`, true);
       resetForm();
-      fetchBreeds();
+      // fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
     }
@@ -182,9 +199,10 @@ export default function ManageBreedsPage() {
         const errorResponse = await res.json();
         throw new Error(errorResponse.message || "Failed to delete breed.");
       }
-      showMessage(`Breed "${name}" deleted successfully!`, true);
+      setBreeds(breeds.filter((b) => b.id !== selectedBreed.id));
+      showMessage(`Breed "${selectedBreed.name}" deleted successfully!`, true);
       resetForm();
-      fetchBreeds();
+      // fetchBreeds();
     } catch (err) {
       showMessage(err.message, false);
     }
@@ -192,12 +210,15 @@ export default function ManageBreedsPage() {
 
   // If user is not authorized, show a message.
   useEffect(() => {
-    if (!user && !userLoading) {
-      showMessage("Unauthorized Access", false);
-    } else if (user && user.role != "ADMIN") {
-      showMessage("Unauthorized Access", false);
+    if (!userLoading) {
+      if (!user || user.role !== "ADMIN") {
+        showMessage("Unauthorized Access", false);
+        setTimeout(() => {
+          router.push("/home");
+        }, 1000);
+      }
     }
-  }, [userLoading]);
+  }, [user, userLoading, router]);
 
   return (
     <div className="flex flex-col items-center gap-5 md:gap-10">
@@ -335,7 +356,7 @@ export default function ManageBreedsPage() {
                               setSelectedBreed(null);
                             }
                           }}
-                          value={selectedBreed ? selectedBreed.id : ""}
+                          value={selectedBreed ? selectedBreed.id : "null"}
                         >
                           <option value="null">Select a breed</option>
                           {breeds.map((b) => (
@@ -399,7 +420,7 @@ export default function ManageBreedsPage() {
                               setSelectedBreed(null);
                             }
                           }}
-                          value={selectedBreed ? selectedBreed.id : ""}
+                          value={selectedBreed ? selectedBreed.id : "null"}
                         >
                           <option value="null">Select a breed</option>
                           {breeds.map((b) => (
