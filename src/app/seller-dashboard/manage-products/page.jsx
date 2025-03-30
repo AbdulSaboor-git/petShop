@@ -1023,7 +1023,6 @@ export default function ManageProductsPage() {
                               e.target.value != null;
                             fetchItemData(e.target.value);
                           }
-                          fetchItemData(e.target.value);
                         }}
                         value={item ? item.id : null}
                       >
