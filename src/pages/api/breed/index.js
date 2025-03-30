@@ -53,10 +53,7 @@ async function handlePost(req, res) {
       data: { name: trimmedName },
     });
 
-    return res.status(201).json({
-      message: "Breed created successfully",
-      data: newBreed,
-    });
+    return res.status(201).json(newBreed);
   } catch (error) {
     console.error("Error adding breed:", error);
     return res.status(500).json({ message: "Internal Server Error" });

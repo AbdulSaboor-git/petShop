@@ -135,7 +135,7 @@ export default function ManageProductsPage() {
     setAvailability("");
     setImages([]);
     setItem(null);
-    setItemId("");
+    setItemId(null);
     setImageSrc(null);
     setShowCropper(false);
   }
@@ -228,7 +228,7 @@ export default function ManageProductsPage() {
   // Fetch a single product's data using the product API.
   const fetchItemData = useCallback(async (itemId) => {
     // showMessage(itemId + ", " + typeof itemId, true);
-    if (itemId === "null" || itemId === "" || !itemId) {
+    if (!itemId || itemId === "null" || itemId === "") {
       setItem(null);
       resetForm();
       return;
@@ -252,87 +252,96 @@ export default function ManageProductsPage() {
   }, []);
 
   // Handler for adding a product.
-  const handleAddProductSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    if (!isAddFormValid) {
-      showMessage(
-        "Please fill out all required fields with valid values.",
-        false
-      );
-      return;
-    }
-    try {
-      const res = await fetch("/api/item", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const errorResponse = await res.json();
-        throw new Error(errorResponse.message || "Failed to add product.");
+  const handleAddProductSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!isAddFormValid) {
+        showMessage(
+          "Please fill out all required fields with valid values.",
+          false
+        );
+        return;
       }
-      const newItem = await res.json();
-      setItems([...items, newItem]);
-      resetForm();
-      showMessage(`Product "${name}" added successfully!`, true);
-      // await fetchItemsData();
-    } catch (err) {
-      showMessage(err.message, false);
-    }
-  }, []);
+      try {
+        const res = await fetch("/api/item", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const errorResponse = await res.json();
+          throw new Error(errorResponse.message || "Failed to add product.");
+        }
+        const newItem = await res.json();
+        setItems([...items, newItem]);
+        resetForm();
+        showMessage(`Product "${name}" added successfully!`, true);
+        // await fetchItemsData();
+      } catch (err) {
+        showMessage(err.message, false);
+      }
+    },
+    [isAddFormValid, payload, items, name]
+  );
 
   // Handler for editing a product.
-  const handleEditProductSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    if (!isEditFormValid || !item) {
-      showMessage(
-        "Please select a product and fill out all required fields with valid values.",
-        false
-      );
-      return;
-    }
-    try {
-      const res = await fetch(`/api/item?productId=${item.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const errorResponse = await res.json();
-        throw new Error(errorResponse.message || "Failed to update product.");
+  const handleEditProductSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!isEditFormValid || !item) {
+        showMessage(
+          "Please select a product and fill out all required fields with valid values.",
+          false
+        );
+        return;
       }
-      const updatedItem = await res.json();
-      setItems(items.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
-      showMessage(`Product "${item.name}" updated successfully!`, true);
-      // await fetchItemsData();
-    } catch (err) {
-      showMessage(err.message, false);
-    }
-  }, []);
+      try {
+        const res = await fetch(`/api/item?productId=${item.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const errorResponse = await res.json();
+          throw new Error(errorResponse.message || "Failed to update product.");
+        }
+        const updatedItem = await res.json();
+        setItems(items.map((i) => (i.id === updatedItem.id ? updatedItem : i)));
+        showMessage(`Product "${item.name}" updated successfully!`, true);
+        // await fetchItemsData();
+      } catch (err) {
+        showMessage(err.message, false);
+      }
+    },
+    [items, item, isEditFormValid, payload]
+  );
 
   // Handler for deleting a product.
-  const handleDeleteProductSubmit = useCallback(async (e) => {
-    e.preventDefault();
-    if (!item) {
-      showMessage("Please select a product to delete.", false);
-      return;
-    }
-    try {
-      const res = await fetch(`/api/item?productId=${item.id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const errorResponse = await res.json();
-        throw new Error(errorResponse.message || "Failed to delete product.");
+  const handleDeleteProductSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (!item) {
+        showMessage("Please select a product to delete.", false);
+        return;
       }
-      setItems(items.filter((i) => i.id !== item.id));
-      showMessage(`Product "${item.name}" deleted successfully!`, true);
-      setItem(null);
-      // await fetchItemsData();
-    } catch (err) {
-      showMessage(err.message, false);
-    }
-  }, []);
+      try {
+        const res = await fetch(`/api/item?productId=${item.id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) {
+          const errorResponse = await res.json();
+          throw new Error(errorResponse.message || "Failed to delete product.");
+        }
+        setItems(items.filter((i) => i.id !== item.id));
+        showMessage(`Product "${item.name}" deleted successfully!`, true);
+        setItem(null);
+        // await fetchItemsData();
+      } catch (err) {
+        showMessage(err.message, false);
+      }
+    },
+    [item, items]
+  );
 
   const removeImage = useCallback((url) => {
     setImages((prevImages) => prevImages.filter((img_url) => img_url !== url));
@@ -734,10 +743,13 @@ export default function ManageProductsPage() {
                           required
                           onChange={(e) => {
                             if (e.target.value) {
+                              e.target.value !== "null" &&
+                                e.target.value !== "" &&
+                                e.target.value != null;
                               fetchItemData(e.target.value);
                             }
                           }}
-                          value={item ? item.id : itemID}
+                          value={item ? item.id : null}
                         >
                           <option value="null">Select a product</option>
                           {items.map((prod, i) => (
@@ -1005,9 +1017,15 @@ export default function ManageProductsPage() {
                         className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         required
                         onChange={(e) => {
+                          if (e.target.value) {
+                            e.target.value !== "null" &&
+                              e.target.value !== "" &&
+                              e.target.value != null;
+                            fetchItemData(e.target.value);
+                          }
                           fetchItemData(e.target.value);
                         }}
-                        value={item ? item.id : itemID}
+                        value={item ? item.id : null}
                       >
                         <option value="null">Select a product</option>
                         {items.map((prod, i) => (
