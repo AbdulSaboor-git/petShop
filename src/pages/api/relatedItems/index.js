@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -35,6 +36,8 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
         categoryId,
         breedId: breedId ? breedId : undefined,
         id: { not: currentItemId }, // Exclude current item
+        availability: "AVAILABLE",
+        sex,
       },
       select: {
         id: true,
@@ -56,6 +59,7 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
             breedId: breedId ? breedId : undefined,
             sex: oppositeSex, // Opposite sex only
             id: { not: currentItemId }, // Exclude current item
+            availability: "AVAILABLE",
             NOT: { sex: null }, // Ensure sex is not null
           },
           select: {
