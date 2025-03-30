@@ -24,15 +24,12 @@ const handleGet = async (req, res, sellerId) => {
   }
 
   try {
-    const [totalItems, availableItems, categCount, breedCount] =
-      await Promise.all([
-        prisma.item.count({ where: { sellerId: id } }),
-        prisma.item.count({
-          where: { sellerId: id, availability: "AVAILABLE" },
-        }),
-        prisma.category.count(),
-        prisma.breed.count(),
-      ]);
+    const totalItems = await prisma.item.count({ where: { sellerId: id } });
+    const availableItems = await prisma.item.count({
+      where: { sellerId: id, availability: "AVAILABLE" },
+    });
+    const categCount = await prisma.category.count();
+    const breedCount = await prisma.breed.count();
 
     return res.status(200).json({
       success: true,

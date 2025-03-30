@@ -19,26 +19,26 @@ const handleGet = async (req, res, sellerId) => {
   }
 
   try {
-    // Run all queries in parallel using Promise.all()
-    const [items, categories, breeds] = await Promise.all([
-      prisma.item.findMany({
-        select: {
-          id: true,
-          name: true,
-          availability: true,
-        },
-        where: { sellerId: id },
-        orderBy: { name: "asc" },
-      }),
-      prisma.category.findMany({
-        select: { id: true, name: true },
-        orderBy: { name: "asc" },
-      }),
-      prisma.breed.findMany({
-        select: { id: true, name: true },
-        orderBy: { name: "asc" },
-      }),
-    ]);
+    // Sequential queries instead of Promise.all
+    const items = await prisma.item.findMany({
+      select: {
+        id: true,
+        name: true,
+        availability: true,
+      },
+      where: { sellerId: id },
+      orderBy: { name: "asc" },
+    });
+
+    const categories = await prisma.category.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+
+    const breeds = await prisma.breed.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
 
     return res.status(200).json({ items, categories, breeds });
   } catch (error) {

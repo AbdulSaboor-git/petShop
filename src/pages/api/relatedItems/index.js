@@ -29,50 +29,47 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
   }
 
   try {
-    // **Run queries in parallel using Promise.all()**
-    const [relatedItems, boughtTogetherItems] = await Promise.all([
-      // Fetch related items (same category, same breed, EXCLUDE current item)
-      prisma.item.findMany({
-        where: {
-          categoryId,
-          breedId: breedId ? breedId : undefined,
-          id: { not: currentItemId }, // Exclude current item
-        },
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          images: true,
-          availability: true,
-          sex: true,
-        },
-        orderBy: { createdAt: "desc" },
-        take: 4,
-      }),
+    // Sequential queries instead of Promise.all
+    const relatedItems = await prisma.item.findMany({
+      where: {
+        categoryId,
+        breedId: breedId ? breedId : undefined,
+        id: { not: currentItemId }, // Exclude current item
+      },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        images: true,
+        availability: true,
+        sex: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 4,
+    });
 
-      // Fetch bought together items ONLY if the current item has a sex
-      sex
-        ? prisma.item.findMany({
-            where: {
-              categoryId,
-              breedId: breedId ? breedId : undefined,
-              sex: oppositeSex, // Opposite sex only
-              id: { not: currentItemId }, // Exclude current item
-              NOT: { sex: null }, // Ensure sex is not null
-            },
-            select: {
-              id: true,
-              name: true,
-              price: true,
-              images: true,
-              availability: true,
-              sex: true,
-            },
-            orderBy: { createdAt: "desc" },
-            take: 2,
-          })
-        : [], // If sex is null, return empty array
-    ]);
+    // Fetch bought together items ONLY if the current item has a sex
+    const boughtTogetherItems = sex
+      ? await prisma.item.findMany({
+          where: {
+            categoryId,
+            breedId: breedId ? breedId : undefined,
+            sex: oppositeSex, // Opposite sex only
+            id: { not: currentItemId }, // Exclude current item
+            NOT: { sex: null }, // Ensure sex is not null
+          },
+          select: {
+            id: true,
+            name: true,
+            price: true,
+            images: true,
+            availability: true,
+            sex: true,
+          },
+          orderBy: { createdAt: "desc" },
+          take: 2,
+        })
+      : []; // If sex is null, return empty array
 
     return res.status(200).json({ relatedItems, boughtTogetherItems });
   } catch (error) {
