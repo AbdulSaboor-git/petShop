@@ -4,7 +4,7 @@ import { SiFacebook, SiGoogleplay, SiYoutube } from "react-icons/si";
 
 export default function Footer() {
   const date = new Date();
-  const logoLink = "/logo.jpg";
+  const logoLink = "/logo.png";
   // const logoLink =
   //   "https://lh3.googleusercontent.com/pw/AP1GczN9HraQsHh0pJ0YoBThzcS0tY_-uk5zyQquRDFTVgpN6peh1An56u-fUREcdmwVRl0gE_E7MGnSXH_Zsj-fjMW8nIFHQ8lKIep5Xwi6TKKsPZa7kyQLrqofq3dw8994xfpRNfHIjbG257eM0pMU9f4U=w658-h263-s-no-gm";
 
@@ -13,11 +13,7 @@ export default function Footer() {
       <div className="flex flex-col justify-center w-full max-w-[1200px]">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 justify-center md:justify-evenly items-center md:items-end w-full p-4 px-2 md:px-6 ">
           <div className="flex flex-col items-center justify-center md:pb-3">
-            <img
-              src={logoLink}
-              alt="logo"
-              className="h-[60px] md:h-[90px] rounded-full"
-            />
+            <img src={logoLink} alt="logo" className="h-[60px] md:h-[90px] " />
           </div>
           <div className="flex flex-col min-w-[90%] md:min-w-fit md:w-auto justify-center gap-4 text-[var(--text-prim)] text-[12px] md:text-[14px] ">
             <div className="flex gap-6 md:gap-32 justify-center">

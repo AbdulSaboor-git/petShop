@@ -20,6 +20,7 @@ import LoginForm from "./loginForm";
 import useAuthUser from "@/hooks/authUser";
 
 export default function Header({ pageOpened }) {
+  const logoLink = "/logo.png";
   const [logedIn, setLogedIn] = useState(false);
   const { user, userLoading } = useAuthUser();
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -54,8 +55,6 @@ export default function Header({ pageOpened }) {
       return () => clearTimeout(timer);
     }
   }, [showLoginForm]);
-
-  const logoLink = "/logo.jpg";
 
   const toggleShowLoginForm = () => {
     setShowLoginForm((prev) => !prev);
@@ -214,7 +213,7 @@ export default function Header({ pageOpened }) {
                   width={550}
                   height={550}
                   quality={100}
-                  className="w-auto h-[100px] rounded-full transition-all ease-in-out"
+                  className="w-auto h-[100px] transition-all ease-in-out"
                 />
               </div>
             </div>
@@ -227,7 +226,7 @@ export default function Header({ pageOpened }) {
                     width={550}
                     height={550}
                     quality={100}
-                    className="w-auto h-[80px] lg:h-[100px] rounded-full transition-all ease-in-out"
+                    className="w-auto h-[80px] lg:h-[100px] transition-all ease-in-out"
                   />
                 </div>
               ) : (
