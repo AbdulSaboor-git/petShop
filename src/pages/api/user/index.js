@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -39,7 +40,10 @@ async function handleGet(req, res, userId) {
               isDiscounted: true,
               images: true,
               isfeatured: true,
+              specifications: true,
+              availability: true,
             },
+            // where: { availability: "AVAILABLE" },
           },
         },
       });

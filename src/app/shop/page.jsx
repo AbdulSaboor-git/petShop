@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import ProductCardAlt from "@/components/productCardAlt";
@@ -43,29 +43,24 @@ export default function Shop() {
     setSortOption(() => "default");
   }
 
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setItems(allItems);
-    } else {
-      // clearFilters();
-      const fItems = allItems.filter((item) => {
-        return (
-          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (item.category?.name &&
-            item.category.name
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())) ||
-          (item.breed?.name &&
-            item.breed.name
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())) ||
-          (item.sex &&
-            item.sex.toLowerCase().includes(searchQuery.toLowerCase()))
-        );
-      });
-      setItems(fItems);
-    }
+  const filteredItemsTemp = useMemo(() => {
+    if (searchQuery === "") return allItems;
+    return allItems.filter((item) =>
+      [
+        item.name,
+        item.category?.name,
+        item.breed?.name,
+        item.sex,
+        item.specifications,
+      ]
+        .filter(Boolean) // Remove null/undefined values
+        .some((val) => val.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
   }, [searchQuery, allItems]);
+
+  useEffect(() => {
+    setItems(filteredItemsTemp);
+  }, [filteredItemsTemp]);
 
   useEffect(() => {
     if (typeof window === "undefined") return; // Prevent execution during SSR
@@ -272,7 +267,7 @@ export default function Shop() {
             {error}
           </div>
         ) : (
-          <div className="flex flex-col w-full lg:flex-row gap-6 transition-all duration-500">
+          <div className="flex flex-col w-full lg:flex-row gap-6 transition-all duration-500 lg:mt-20">
             {
               <div className="border-none lg:pr-6 border-r border-[#00000060] w-full lg:w-[27%] transition-all duration-500">
                 <div className="flex flex-col w-full items-end gap-3 transition-all duration-500">
@@ -287,7 +282,7 @@ export default function Shop() {
                       onChange={handleSearchQueryChange}
                     />
                     <div
-                      className="absolute right-0 top-0 bg-[#9e6e3b] h-full w-10 flex items-center  cursor-pointer text-white"
+                      className="absolute right-0 top-0 bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] h-full w-10 flex items-center  cursor-pointer text-white"
                       onClick={() =>
                         handleSearchQueryChange({ target: { value: "" } })
                       }
@@ -558,33 +553,35 @@ export default function Shop() {
               </div>
             }
             {/* Items Section */}
-            {searchQuery != "" && (
-              <p className="text-sm font-semibold leading-tight text-gray-700 -mb-3">
-                Serach Results
-              </p>
-            )}
-            <div
-              className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                !items.length &&
-                "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-              }`}
-            >
-              {items.length ? (
-                items.map((item, i) => (
-                  <ProductCardAlt
-                    key={i}
-                    item={item}
-                    favClick={() => {
-                      handleFavoriteClick(item.id);
-                    }}
-                    isFav={favorites.includes(item.id)}
-                  />
-                ))
-              ) : (
-                <div className="text-xs md:text-sm text-gray-500 p-2">
-                  No items found.
-                </div>
+            <div className="flex flex-col gap-3">
+              {searchQuery != "" && (
+                <p className="text-sm lg:text-base font-semibold leading-tight text-gray-700 mx-0.5">
+                  Serach Results
+                </p>
               )}
+              <div
+                className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                  !items.length &&
+                  "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                }`}
+              >
+                {items.length ? (
+                  items.map((item, i) => (
+                    <ProductCardAlt
+                      key={i}
+                      item={item}
+                      favClick={() => {
+                        handleFavoriteClick(item.id);
+                      }}
+                      isFav={favorites.includes(item.id)}
+                    />
+                  ))
+                ) : (
+                  <div className="text-xs md:text-sm text-gray-500 p-2">
+                    No items found.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

@@ -186,18 +186,19 @@ export default function ItemPage({ params }) {
 
   // Fetch item data and initialize favorites from localStorage
 
-  const handleFavoriteClick = () => {
-    setFavorites((prev) => {
-      const updatedFavorites = prev.includes(item.id)
-        ? prev.filter((id) => id !== item.id)
-        : [...prev, item.id];
+  const handleFavoriteClick = (itemId) => {
+    setFavorites((prevFavorites) => {
+      let updatedFavorites;
+      if (prevFavorites.includes(itemId)) {
+        // Remove item from favorites
+        updatedFavorites = prevFavorites.filter((favId) => favId !== itemId);
+        showMessage("Item removed from favorites", true);
+      } else {
+        // Add item to favorites
+        updatedFavorites = [...prevFavorites, itemId];
+        showMessage("Item added to favorites", true);
+      }
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-      showMessage(
-        updatedFavorites.includes(item.id)
-          ? "Added to favorites"
-          : "Removed from favorites",
-        true
-      );
       return updatedFavorites;
     });
   };
@@ -368,7 +369,7 @@ export default function ItemPage({ params }) {
                     <MdMessage /> Seller{" "}
                   </button>
                   <button
-                    onClick={() => handleFavoriteClick(0)}
+                    onClick={() => handleFavoriteClick(item.id)}
                     disabled={item.availability != "AVAILABLE"}
                     className={`border  border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full transition-all duration-300  ${
                       favorites.includes(item.id)

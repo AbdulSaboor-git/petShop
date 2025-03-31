@@ -28,6 +28,7 @@ const handleGet = async (req, res) => {
         discountedPrice: true,
         isDiscounted: true,
         images: true,
+        specifications: true,
       },
       where: { availability: "AVAILABLE" },
     });

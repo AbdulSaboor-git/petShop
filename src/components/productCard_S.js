@@ -24,16 +24,22 @@ export default function ProductCardAlt({ item, alt }) {
       } overflow-hidden transition-all duration-300 ease-in-out relative rounded-xl`}
     >
       {/* Product Image */}
-      <div className="relative w-full pt-[100%]">
+      <div className="relative w-full pt-[100%] bg-red-100">
         <img
           src={item.images[0] || defaultPic}
           alt={name}
           draggable="false"
-          className="absolute top-0 left-0 w-full h-full object-cover bg-transparent"
+          className={`absolute top-0 left-0 w-full h-full object-cover bg-transparent ${
+            item.availability === "AVAILABLE" ? "opacity-100" : "opacity-60 "
+          }`}
         />
       </div>
 
-      <div className="flex flex-col gap-1 p-2 px-3 relative">
+      <div
+        className={`flex flex-col gap-1 p-2 px-3 relative ${
+          item.availability !== "AVAILABLE" && "text-red-800 opacity-75"
+        }`}
+      >
         <div className="text-xs font-normal flex gap-1 items-center justify-start">
           {item.isDiscounted && (
             <MdDiscount size={16} className="text-green-600" />
@@ -47,7 +53,7 @@ export default function ProductCardAlt({ item, alt }) {
           )}
 
           <p
-            className="text-[11px] md:text-xs truncate leading-tight tracking-tight"
+            className={`text-[11px] md:text-xs truncate leading-tight tracking-tight `}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
