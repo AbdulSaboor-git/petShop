@@ -6,6 +6,7 @@ import ProductCardAlt from "@/components/productCardAlt";
 import { MdClose, MdSearch } from "react-icons/md";
 import { RiArrowDownSLine } from "react-icons/ri";
 import Loader from "@/components/loader";
+import { showMessage } from "@/hooks/useMessage";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -87,7 +88,7 @@ export default function Shop() {
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
+    if (storedFavorites && storedFavorites !== "undefined") {
       setFavorites(JSON.parse(storedFavorites));
     } else {
       // Initialize as an empty array.
@@ -99,6 +100,10 @@ export default function Shop() {
   const handleFavoriteClick = (itemId) => {
     setFavorites((prevFavorites) => {
       const isFavorite = prevFavorites.includes(itemId);
+      showMessage(
+        `Item ${isFavorite ? "removed from" : "added to"} favorites`,
+        true
+      );
       return isFavorite
         ? prevFavorites.filter((favId) => favId !== itemId)
         : [...prevFavorites, itemId];

@@ -3,8 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
+import { showMessage } from "@/hooks/useMessage";
 import Loader from "@/components/loader";
 import { useRouter } from "next/navigation";
 
@@ -30,16 +29,6 @@ export default function ManageCategoriesPage() {
   // Basic form validations
   const isAddFormValid = name.trim().length >= 1;
   const isEditFormValid = selectedCategory !== null && name.trim().length >= 1;
-
-  const dispatch = useDispatch();
-  const showMessage = (msg, successState) => {
-    dispatch(
-      triggerNotification({
-        msg,
-        success: successState,
-      })
-    );
-  };
 
   // Helper: Reset form fields
   const resetForm = () => {

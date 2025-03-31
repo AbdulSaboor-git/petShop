@@ -3,14 +3,13 @@ import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
+import { showMessage } from "@/hooks/useMessage";
 import Loader from "@/components/loader";
 import { useRouter } from "next/navigation";
 
 export default function ManageBreedsPage() {
   const { user, userLoading } = useAuthUser();
-  const dispatch = useDispatch();
+
   const router = useRouter();
   // UI state for tabs
   const [focused, setFocused] = useState("add");
@@ -35,11 +34,6 @@ export default function ManageBreedsPage() {
     () => selectedBreed !== null && name.trim().length >= 1,
     [selectedBreed, name]
   );
-
-  // Redux notification helper
-  const showMessage = (msg, successState) => {
-    dispatch(triggerNotification({ msg, success: successState }));
-  };
 
   // Reset form fields
   const resetForm = () => {

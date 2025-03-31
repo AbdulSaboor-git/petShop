@@ -247,7 +247,7 @@ export default function Profile() {
                     <input
                       id="available-filter"
                       type="checkbox"
-                      className=" cursor-pointer"
+                      className=" cursor-pointer accent-[#9e6e3b]"
                       onChange={toggleAvailableFilter}
                     />
                   </div>

@@ -4,8 +4,6 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { FaMinus } from "react-icons/fa";
 import useAuthUser from "@/hooks/authUser";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "@/components/getCroppedImg";
@@ -55,16 +53,6 @@ export default function ManageProductsPage() {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [paramFunction, setParamFunction] = useState("");
-
-  const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
-    dispatch(
-      triggerNotification({
-        msg: msg,
-        success: state,
-      })
-    );
-  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {

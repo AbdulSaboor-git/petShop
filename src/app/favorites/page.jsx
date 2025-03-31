@@ -5,10 +5,9 @@ import Footer from "@/components/footer";
 import FavItem from "./components/fav-item";
 import Order from "@/components/order";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
 import { MdStore } from "react-icons/md";
 import { RiArrowRightSLine } from "react-icons/ri";
+import { showMessage } from "@/hooks/useMessage";
 
 export default function Favourites() {
   const [groupedFavorites, setGroupedFavorites] = useState([]); // grouped by seller (from API)
@@ -20,16 +19,6 @@ export default function Favourites() {
   const router = useRouter();
   const [checkout, setCheckout] = useState(false);
   const orderConfirmationRef = useRef(null);
-  const dispatch = useDispatch();
-
-  const showMessage = (msg, success) => {
-    dispatch(
-      triggerNotification({
-        msg,
-        success,
-      })
-    );
-  };
 
   function shopClick() {
     router.push(`/shop`);
@@ -51,7 +40,7 @@ export default function Favourites() {
 
   useEffect(() => {
     const storedFavoriteIds = localStorage.getItem("favorites");
-    if (storedFavoriteIds) {
+    if (storedFavoriteIds && storedFavoriteIds !== "undefined") {
       try {
         const parsedIds = JSON.parse(storedFavoriteIds);
         setFavoriteIds(parsedIds);
@@ -225,7 +214,7 @@ export default function Favourites() {
             </div>
             <button
               onClick={shopClick}
-              className="text-sm md:text-base w-fit rounded-lg bg-gradient-to-br from-orange-500 via-orange-500 to-orange-600 text-white p-1 px-3"
+              className="text-sm md:text-base w-fit rounded-lg bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-600 text-white p-1 px-3"
             >
               Shop Now
             </button>

@@ -13,8 +13,7 @@ import Header from "@/components/header";
 import { FaHeart, FaShieldAlt } from "react-icons/fa";
 import ProductCard from "@/components/productCard";
 import Footer from "@/components/footer";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
+import { showMessage } from "@/hooks/useMessage";
 import Loader from "@/components/loader";
 import useAuthUser from "@/hooks/authUser";
 
@@ -36,16 +35,6 @@ export default function HomePage() {
   const defaultPic = "https://i.sstatic.net/5ykYD.png";
   let categImages = [];
   let breedImages = [];
-
-  const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
-    dispatch(
-      triggerNotification({
-        msg: msg,
-        success: state,
-      })
-    );
-  };
 
   function handleAddClick() {
     router.push(`seller-dashboard/manage-products?function=add`);
@@ -159,7 +148,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem("favorites");
-    if (storedFavorites) {
+    if (storedFavorites && storedFavorites !== "undefined") {
       setFavorites(JSON.parse(storedFavorites));
     } else {
       // Initialize as an empty array.

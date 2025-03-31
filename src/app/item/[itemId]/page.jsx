@@ -12,8 +12,7 @@ import {
 } from "react-icons/md";
 import ItemGallery from "./components/itemGallery";
 import Order from "@/components/order";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
+import { showMessage } from "@/hooks/useMessage";
 import Loader from "@/components/loader";
 import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productCard";
@@ -140,16 +139,6 @@ export default function ItemPage({ params }) {
   //     .slice(0, 2);
   //   setBoughtTogetherItems(boughtTogether);
   // }, [allItems, item]);
-
-  const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
-    dispatch(
-      triggerNotification({
-        msg: msg,
-        success: state,
-      })
-    );
-  };
 
   function shopClick(categFilter, breedFilter, saleFilter, sortFilter) {
     router.push(

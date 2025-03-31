@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
-import { useDispatch } from "react-redux";
-import { triggerNotification } from "@/redux/notificationThunk";
 import Loader from "@/components/loader";
 
 export default function SellerDashboardMainPage() {
@@ -23,15 +21,6 @@ export default function SellerDashboardMainPage() {
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  const dispatch = useDispatch();
-  const showMessage = (msg, state) => {
-    dispatch(
-      triggerNotification({
-        msg: msg,
-        success: state,
-      })
-    );
-  };
   const fetchMetricsAndAnalytics = useCallback(async () => {
     if (!sellerId) return; // Ensure sellerId exists before making the request
 
