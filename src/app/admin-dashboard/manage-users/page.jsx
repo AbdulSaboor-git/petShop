@@ -576,14 +576,23 @@ export default function ManageUsersPage() {
                             <button
                               type="reset"
                               onClick={resetForm}
-                              className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                              disabled={
+                                uploading ||
+                                selectedUserLoading ||
+                                !selectedUser
+                              }
+                              className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white disabled:hover:bg-gray-400 disabled:opacity-60"
                             >
                               Cancel
                             </button>
                             <button
                               type="submit"
-                              disabled={uploading || selectedUserLoading}
-                              className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white"
+                              disabled={
+                                uploading ||
+                                selectedUserLoading ||
+                                !selectedUser
+                              }
+                              className="p-1.5 px-4 rounded-xl border bg-green-500 hover:bg-green-600 text-white disabled:opacity-60  disabled:hover:bg-green-500"
                             >
                               Update
                             </button>
@@ -778,7 +787,8 @@ export default function ManageUsersPage() {
                           <button
                             type="reset"
                             onClick={resetForm}
-                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white"
+                            disabled={!selectedUser || selectedUserLoading}
+                            className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white disabled:hover:bg-gray-400 disabled:opacity-60"
                           >
                             Cancel
                           </button>

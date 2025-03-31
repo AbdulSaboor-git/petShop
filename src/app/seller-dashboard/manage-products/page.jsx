@@ -1062,7 +1062,7 @@ export default function ManageProductsPage() {
                           </button>
                         </div>
                       </div>
-                      <label>Select Product</label>
+                      <label>Product</label>
                       <select
                         className="p-2 px-4 mt-0.5 rounded-xl border border-[#9e6e3b] w-full"
                         required
