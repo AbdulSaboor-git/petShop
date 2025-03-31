@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
 import Loader from "@/components/loader";
+import { showMessage } from "@/hooks/useMessage";
 
 export default function SellerDashboardMainPage() {
   const { user, userLoading, logout } = useAuthUser();
