@@ -233,17 +233,6 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="flex flex-col gap-20 -mt-5 md:-mt-0">
-            {/*Add item btn */}
-            {user && (
-              <button
-                onClick={handleAddClick}
-                className="text-white text-xl md:text-2xl flex items-center justify-center fixed bottom-5 right-5 
-              bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] hover:bg-gradient-radial 
-              h-12 md:h-14 aspect-square rounded-full z-50 shadow-md shadow-[#0000003e]"
-              >
-                <MdAdd />
-              </button>
-            )}
             {/* Random Items Slider */}
             <Slider {...settings} className="">
               {featuredItems.map((item, index) => (
