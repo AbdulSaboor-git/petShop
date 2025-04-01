@@ -16,19 +16,23 @@ export default async function handler(req, res) {
 const handleGet = async (req, res) => {
   try {
     // Sequential database queries instead of Promise.all
-    const items = await prisma.item.findMany({
+    const fetchedItems = await prisma.item.findMany({
       select: {
         id: true,
         name: true,
         breedId: true,
+        breed: { select: { id: true, name: true } },
         categoryId: true,
         category: { select: { id: true, name: true } },
-        breed: { select: { id: true, name: true } },
+        sellerId: true,
+        seller: { select: { id: true, firstName: true, lastName: true } },
         price: true,
         discountedPrice: true,
         isDiscounted: true,
         images: true,
         specifications: true,
+        createdAt: true,
+        updatedAt: true,
       },
       where: { availability: "AVAILABLE" },
     });
@@ -51,6 +55,7 @@ const handleGet = async (req, res) => {
       orderBy: { name: "asc" },
     });
 
+    const items = fetchedItems.sort(() => Math.random() - 0.5);
     return res.status(200).json({ items, categories, breeds });
   } catch (error) {
     console.error("Error fetching data:", error);

@@ -86,6 +86,13 @@ export default function Favourites() {
 
     setSelectedItems((prev) => {
       const isSelected = prev.some((i) => i.id === item.id);
+
+      if (selectedSellerId !== sellerId) {
+        setSelectedSellerId(sellerId);
+        // Reset selection if switching to a different seller
+        return [item];
+      }
+
       const updatedItems = isSelected
         ? prev.filter((i) => i.id !== item.id) //  Remove item if already selected
         : [...prev, item];
@@ -97,17 +104,18 @@ export default function Favourites() {
 
   // Handler for "Select All" within a seller group.
   const handleSelectAllForSeller = (sellerId, items) => {
+    const availableItems = items.filter((i) => i.availability === "AVAILABLE");
     setCheckout(false);
     if (
       selectedSellerId === sellerId &&
-      selectedItems.length === items.length
+      selectedItems.length === availableItems.length
     ) {
       // All items already selected, so deselect them.
       setSelectedSellerId(null);
       setSelectedItems([]);
     } else {
       setSelectedSellerId(sellerId);
-      setSelectedItems(items);
+      setSelectedItems(availableItems);
     }
   };
 
@@ -164,16 +172,20 @@ export default function Favourites() {
                 <div className="flex items-center justify-center gap-4 ">
                   <input
                     type="checkbox"
-                    className="accent-orange-600 size-4 "
+                    id="selectAll"
+                    className="accent-orange-600 size-4 cursor-pointer"
                     checked={
                       selectedSellerId === group.seller.id &&
-                      selectedItems.length === group.items.length
+                      selectedItems.length ===
+                        group.items.filter(
+                          (i) => i.availability === "AVAILABLE"
+                        ).length
                     }
                     onChange={() =>
                       handleSelectAllForSeller(group.seller.id, group.items)
                     }
                   />
-                  {group.length > 1 ? (
+                  {groupedFavorites.length > 1 ? (
                     <div
                       onClick={() => profileClick(group.seller.id)}
                       className="flex gap-2 text-gray-600 items-center text-sm md:text-base font-semibold cursor-pointer hover:text-orange-800"
@@ -183,9 +195,12 @@ export default function Favourites() {
                       <RiArrowRightSLine />
                     </div>
                   ) : (
-                    <p className="text-gray-600 text-sm md:text-base">
+                    <label
+                      htmlFor="selectAll"
+                      className="text-gray-600 text-sm md:text-base cursor-pointer"
+                    >
                       Select All
-                    </p>
+                    </label>
                   )}
                 </div>
               </div>

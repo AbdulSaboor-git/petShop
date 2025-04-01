@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Category } from "@mui/icons-material";
 import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
@@ -42,7 +43,12 @@ async function handleGet(req, res, userId) {
               isfeatured: true,
               specifications: true,
               availability: true,
+              categoryId: true,
+              category: { select: { id: true, name: true } },
+              breedId: true,
+              breed: { select: { id: true, name: true } },
             },
+
             // where: { availability: "AVAILABLE" },
           },
         },

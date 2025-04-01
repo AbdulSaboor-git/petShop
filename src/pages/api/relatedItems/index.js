@@ -47,8 +47,8 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
         availability: true,
         sex: true,
       },
-      orderBy: { createdAt: "desc" },
       take: 4,
+      skip: randomSkip,
     });
 
     // Fetch bought together items ONLY if the current item has a sex
@@ -70,8 +70,8 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
             availability: true,
             sex: true,
           },
-          orderBy: { createdAt: "desc" },
           take: 2,
+          skip: randomSkip,
         })
       : []; // If sex is null, return empty array
 

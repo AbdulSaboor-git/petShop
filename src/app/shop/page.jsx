@@ -53,6 +53,8 @@ export default function Shop() {
         item.breed?.name,
         item.sex,
         item.specifications,
+        item.seller?.firstName,
+        item.seller?.lastName,
       ]
         .filter(Boolean) // Remove null/undefined values
         .some((val) => val.toLowerCase().includes(searchQuery.toLowerCase()))

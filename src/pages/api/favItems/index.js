@@ -32,7 +32,7 @@ const handleGet = async (req, res) => {
         name: true,
         breedId: true,
         breed: { select: { id: true, name: true } },
-        seller: { select: { id: true } },
+        seller: { select: { id: true, firstName: true, lastName: true } },
         price: true,
         discountedPrice: true,
         isDiscounted: true,

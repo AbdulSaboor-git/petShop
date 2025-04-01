@@ -128,15 +128,16 @@ export default function Profile() {
   useEffect(() => {
     setFeaturedItems(items.filter((item) => item.isfeatured));
 
-    setPremiumItems(
-      [...items]
-        .sort(
-          (a, b) =>
-            (b.isDiscounted ? b.discountedPrice ?? b.price : b.price ?? 0) -
-            (a.isDiscounted ? a.discountedPrice ?? a.price : a.price ?? 0)
-        )
-        .slice(0, 5)
-    );
+    items.length > 7 &&
+      setPremiumItems(
+        [...items]
+          .sort(
+            (a, b) =>
+              (b.isDiscounted ? b.discountedPrice ?? b.price : b.price ?? 0) -
+              (a.isDiscounted ? a.discountedPrice ?? a.price : a.price ?? 0)
+          )
+          .slice(0, 5)
+      );
   }, [items]);
 
   const toggleAvailableFilter = (e) => {
