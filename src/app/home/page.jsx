@@ -218,7 +218,7 @@ export default function HomePage() {
     centerMode: centerMode,
     centerPadding: "70px",
   };
-
+  let index = 0;
   return (
     <div className="flex flex-col items-center gap-10">
       <Header pageOpened={"home"} />
@@ -306,48 +306,52 @@ export default function HomePage() {
                 Top Categories
               </div>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
-                {categories.map(
-                  (categ, i) =>
-                    categ._count.items > 0 && (
+                {categories.map((categ) => {
+                  if (categ._count.items === 0) return null; // Skip items with count 0
+
+                  const isEven = index % 2 === 0;
+                  index++;
+
+                  return (
+                    <div
+                      key={index}
+                      className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
+                        isEven
+                          ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
+                          : "bg-gradient-to-br from-[#252525] to-[#111111]"
+                      }`}
+                    >
+                      {/* Absolute positioned text container with gradient overlay */}
                       <div
-                        key={i}
-                        className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i % 2 == 1
-                            ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
-                            : "bg-gradient-to-br from-[#252525] to-[#111111]"
-                        }`}
+                        className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
+                          isEven ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                        }  from-[#9e6e3b6d] via-transparent to-[#000000d0]`}
                       >
-                        {/* Absolute positioned text container with gradient overlay */}
-                        <div
-                          className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
-                            i % 2 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
-                          }  from-[#9e6e3b6d] via-transparent to-[#000000d0]`}
+                        <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
+                          {categ.name.toUpperCase()}
+                        </h2>
+                        <button
+                          onClick={() =>
+                            shopClick(categ.name, "All", false, "default")
+                          }
+                          className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                         >
-                          <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
-                            {categ.name.toUpperCase()}
-                          </h2>
-                          <button
-                            onClick={() =>
-                              shopClick(categ.name, "All", false, "default")
-                            }
-                            className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
-                          >
-                            VIEW MORE
-                          </button>
-                        </div>
-                        <div className="relative z-20 flex-shrink-0 ml-auto">
-                          <img
-                            src={
-                              categImages.find((image) => image.id === categ.id)
-                                ?.image || defaultPic
-                            }
-                            alt={categ.name}
-                            className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
-                          />
-                        </div>
+                          VIEW MORE
+                        </button>
                       </div>
-                    )
-                )}
+                      <div className="relative z-20 flex-shrink-0 ml-auto">
+                        <img
+                          src={
+                            categImages.find((image) => image.id === categ.id)
+                              ?.image || defaultPic
+                          }
+                          alt={categ.name}
+                          className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -424,48 +428,51 @@ export default function HomePage() {
                 Top Breeds
               </div>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2 justify-center">
-                {breeds.map(
-                  (breed, i) =>
-                    breed._count.items > 0 && (
+                {breeds.map((breed) => {
+                  if (breed._count.items === 0) return null; // Skip items with count 0
+
+                  const isEven = index % 2 === 0;
+                  index++;
+                  return (
+                    <div
+                      key={index}
+                      className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
+                        isEven
+                          ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
+                          : "bg-gradient-to-br from-[#252525] to-[#111111]"
+                      }`}
+                    >
+                      {/* Absolute positioned text container with gradient overlay */}
                       <div
-                        key={i}
-                        className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden ${
-                          i % 2 == 1
-                            ? "bg-gradient-to-br from-[#9e6e3b] to-[#6c4922]"
-                            : "bg-gradient-to-br from-[#252525] to-[#111111]"
-                        }`}
+                        className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
+                          isEven ? "bg-gradient-to-t" : "bg-gradient-to-b"
+                        }  from-[#9e6e3b6d] via-transparent to-[#000000d0]`}
                       >
-                        {/* Absolute positioned text container with gradient overlay */}
-                        <div
-                          className={`absolute inset-0 z-20 flex flex-col justify-center pl-6 pr-40 ${
-                            i % 2 == 1 ? "bg-gradient-to-t" : "bg-gradient-to-b"
-                          }  from-[#9e6e3b6d] via-transparent to-[#000000d0]`}
+                        <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
+                          {breed.name.toUpperCase()}
+                        </h2>
+                        <button
+                          onClick={() =>
+                            shopClick("All", breed.name, false, "default")
+                          }
+                          className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
                         >
-                          <h2 className="text-white text-[21px] md:text-2xl font-extrabold tracking-wide break-words">
-                            {breed.name.toUpperCase()}
-                          </h2>
-                          <button
-                            onClick={() =>
-                              shopClick("All", breed.name, false, "default")
-                            }
-                            className="mt-4 self-start text-xs md:text-sm border-2 py-2 px-4 transition-colors duration-300 bg-[#f0f0f0] text-[#5c3a15] hover:scale-105 rounded-md"
-                          >
-                            VIEW MORE
-                          </button>
-                        </div>
-                        <div className="relative z-20 flex-shrink-0 ml-auto">
-                          <img
-                            src={
-                              breedImages.find((image) => image.id === breed.id)
-                                ?.image || defaultPic
-                            }
-                            alt={breed.name}
-                            className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
-                          />
-                        </div>
+                          VIEW MORE
+                        </button>
                       </div>
-                    )
-                )}
+                      <div className="relative z-20 flex-shrink-0 ml-auto">
+                        <img
+                          src={
+                            breedImages.find((image) => image.id === breed.id)
+                              ?.image || defaultPic
+                          }
+                          alt={breed.name}
+                          className="w-[120px]  md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
