@@ -220,7 +220,11 @@ export default function HomePage() {
   };
   let index = 0;
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div
+      className={`flex flex-col items-center gap-10 ${
+        loading && "overflow-hidden max-h-screen "
+      }`}
+    >
       <Header pageOpened={"home"} />
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
