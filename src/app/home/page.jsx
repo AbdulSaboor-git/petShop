@@ -54,21 +54,21 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchItems = async () => {
-      // try {
-      //   const response = await fetch(`/api/homeItems`);
-      //   if (!response.ok) {
-      //     throw new Error("Failed to fetch data.");
-      //   }
-      //   const data = await response.json();
-      //   setItems(data.items);
-      //   setAllItems(data.items);
-      //   setCategories(data.categories);
-      //   setBreeds(data.breeds);
-      // } catch (err) {
-      //   setError(err.message);
-      // } finally {
-      //   setLoading(false);
-      // }
+      try {
+        const response = await fetch(`/api/homeItems`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data.");
+        }
+        const data = await response.json();
+        setItems(data.items);
+        setAllItems(data.items);
+        setCategories(data.categories);
+        setBreeds(data.breeds);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
     if (!localStorage.getItem("favorites")) {
       localStorage.setItem("favorites", JSON.stringify([]));
