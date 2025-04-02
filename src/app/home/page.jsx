@@ -16,6 +16,7 @@ import Footer from "@/components/footer";
 import { showMessage } from "@/hooks/useMessage";
 import Loader from "@/components/loader";
 import useAuthUser from "@/hooks/authUser";
+import HomeLoader from "./loader/homeLoader";
 
 export default function HomePage() {
   const router = useRouter();
@@ -53,22 +54,21 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchItems = async () => {
-      try {
-        const response = await fetch(`/api/homeItems`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data.");
-        }
-        const data = await response.json();
-
-        setItems(data.items);
-        setAllItems(data.items);
-        setCategories(data.categories);
-        setBreeds(data.breeds);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+      // try {
+      //   const response = await fetch(`/api/homeItems`);
+      //   if (!response.ok) {
+      //     throw new Error("Failed to fetch data.");
+      //   }
+      //   const data = await response.json();
+      //   setItems(data.items);
+      //   setAllItems(data.items);
+      //   setCategories(data.categories);
+      //   setBreeds(data.breeds);
+      // } catch (err) {
+      //   setError(err.message);
+      // } finally {
+      //   setLoading(false);
+      // }
     };
     if (!localStorage.getItem("favorites")) {
       localStorage.setItem("favorites", JSON.stringify([]));
@@ -225,7 +225,7 @@ export default function HomePage() {
       <div className="max-w-[1400px] w-full p-0 m-0 md:px-6">
         {loading ? (
           <div className="h-screen">
-            <Loader />
+            <HomeLoader />
           </div>
         ) : error ? (
           <div className="h-screen text-sm md:text-base text-gray-500 mx-6 p-2 self-start">

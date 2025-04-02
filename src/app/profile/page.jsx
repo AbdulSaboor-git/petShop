@@ -223,66 +223,70 @@ export default function Profile() {
                 </div>
               )}
             </div>
-            {UserIsSeller && (
-              <button
-                onClick={addProductClick}
-                className="text-white text-xs md:text-sm  flex items-center justify-center gap-2 self-center md:self-end px-5 py-2
-                           bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] hover:bg-gradient-radial 
+            <div className="flex flex-col gap-7 items-center justify-center md:flex-row w-full md:justify-between">
+              {UserIsSeller && (
+                <button
+                  onClick={addProductClick}
+                  className="text-white text-xs md:text-sm  flex items-center justify-center gap-2 self-center md:self-end px-5 py-2
+                bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] hover:bg-gradient-radial 
                            rounded-2xl "
-              >
-                <p>Add Product</p>
-                <MdAdd size={15} />
-              </button>
-            )}
-            <div className="flex flex-col gap-2 mb-2 -mt-2">
-              <div className="flex justify-between items-center mx-0.5">
-                <strong>Search</strong>
-                {UserIsSeller && (
-                  <div className="flex items-center gap-2 text-xs md:text-sm ">
-                    <label
-                      htmlFor="available-filter"
-                      className=" cursor-pointer"
-                    >
-                      Show Available
-                    </label>
-                    <input
-                      id="available-filter"
-                      type="checkbox"
-                      className=" cursor-pointer accent-[#9e6e3b]"
-                      onChange={toggleAvailableFilter}
+                >
+                  <p>Add Product</p>
+                  <MdAdd size={15} />
+                </button>
+              )}
+              <div className="flex flex-col gap-2  w-full md:max-w-[450px] md:self-end">
+                <div className="flex justify-between items-center mx-0.5">
+                  <strong>Search</strong>
+                  {UserIsSeller && (
+                    <div className="flex items-center gap-2 text-xs md:text-sm ">
+                      <label
+                        htmlFor="available-filter"
+                        className=" cursor-pointer"
+                      >
+                        Show Available Only
+                      </label>
+                      <input
+                        id="available-filter"
+                        type="checkbox"
+                        className=" cursor-pointer accent-[#9e6e3b]"
+                        onChange={toggleAvailableFilter}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative w-full bg-white border border-[#9e6e3b] rounded-xl overflow-hidden">
+                  <input
+                    type="input"
+                    className="w-full p-3 rounded-xl pr-12
+                                text-xs md:text-sm focus:outline-none"
+                    placeholder="Search in store..."
+                    aria-label="Search"
+                    value={rawSearchQuery}
+                    onChange={handleSearchQueryChange}
+                  />
+                  <div
+                    className="absolute right-0 top-0 bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] h-full w-10 flex items-center  cursor-pointer text-white"
+                    onClick={() =>
+                      handleSearchQueryChange({ target: { value: "" } })
+                    }
+                  >
+                    <MdSearch
+                      className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
+                        searchQuery == ""
+                          ? "opacity-100"
+                          : "opacity-0 rotate-90"
+                      }`}
+                    />
+                    <MdClose
+                      className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
+                        searchQuery !== ""
+                          ? "opacity-100 "
+                          : "opacity-0 -rotate-90"
+                      }`}
                     />
                   </div>
-                )}
-              </div>
-
-              <div className="relative w-full md:max-w-[350px] md:self-end bg-white border border-[#9e6e3b] rounded-xl overflow-hidden">
-                <input
-                  type="input"
-                  className="w-full p-3 rounded-xl pr-12
-                                text-xs md:text-sm focus:outline-none"
-                  placeholder="Search in store..."
-                  aria-label="Search"
-                  value={rawSearchQuery}
-                  onChange={handleSearchQueryChange}
-                />
-                <div
-                  className="absolute right-0 top-0 bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] h-full w-10 flex items-center  cursor-pointer text-white"
-                  onClick={() =>
-                    handleSearchQueryChange({ target: { value: "" } })
-                  }
-                >
-                  <MdSearch
-                    className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
-                      searchQuery == "" ? "opacity-100" : "opacity-0 rotate-90"
-                    }`}
-                  />
-                  <MdClose
-                    className={`absolute h-full w-fit p-2.5 transition-all duration-300 ${
-                      searchQuery !== ""
-                        ? "opacity-100 "
-                        : "opacity-0 -rotate-90"
-                    }`}
-                  />
                 </div>
               </div>
             </div>

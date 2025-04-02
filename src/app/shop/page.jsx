@@ -361,16 +361,16 @@ export default function Shop() {
                             <button
                               key={i}
                               onClick={() => handleCategoryClick(categ.name)}
-                              className={`rounded-full w-fit lg:w-full overflow-hidden font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                              className={`rounded-full w-fit lg:w-full overflow-hidden font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 lg:px-0 ${
                                 selectedCategories.includes(categ.name)
-                                  ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                                  ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6 lg:pr-0"
                                   : "text-[#9e562b]  bg-white lg:bg-[#9e6e3b] "
                               }`}
                             >
-                              <div className="relative flex items-center">
+                              <div className="relative">
                                 {categ.name}
                                 <MdClose
-                                  className={`text-white ${
+                                  className={`text-white lg:hidden ${
                                     !selectedCategories.includes(categ.name)
                                       ? " opacity-0 -right-[8px] pointer-events-none"
                                       : "opacity-100 -right-[18px]  pointer-events-auto"
@@ -432,16 +432,16 @@ export default function Shop() {
                           <button
                             key={i}
                             onClick={() => handleBreedClick(breed.name)}
-                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 lg:px-0 ${
                               selectedBreeds.includes(breed.name)
-                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6 lg:pr-0"
                                 : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
                             }`}
                           >
                             <div className="relative">
                               {breed.name}
                               <MdClose
-                                className={`text-white ${
+                                className={`text-white lg:hidden${
                                   !selectedBreeds.includes(breed.name)
                                     ? " opacity-0 -right-[8px] pointer-events-none"
                                     : "opacity-100 -right-[18px]  pointer-events-auto"
