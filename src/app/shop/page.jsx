@@ -265,11 +265,7 @@ export default function Shop() {
     <div className="flex flex-col gap-4 lg:gap-6 items-center ">
       <Header pageOpened={"shop"} />
       <div className="flex flex-col items-center justify-center max-w-[1400px] w-full px-5">
-        {loading ? (
-          <div className="h-screen pt-6">
-            <Loader />
-          </div>
-        ) : error ? (
+        {error ? (
           <div className="h-screen text-sm md:text-base text-gray-500 p-2  self-start">
             {error}
           </div>
@@ -357,28 +353,29 @@ export default function Shop() {
                           >
                             All
                           </button>
-                          {categories.map((categ, i) => (
-                            <button
-                              key={i}
-                              onClick={() => handleCategoryClick(categ.name)}
-                              className={`rounded-full w-fit lg:w-full overflow-hidden font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 lg:px-0 ${
-                                selectedCategories.includes(categ.name)
-                                  ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6 lg:pr-0"
-                                  : "text-[#9e562b]  bg-white lg:bg-[#9e6e3b] "
-                              }`}
-                            >
-                              <div className="relative">
-                                {categ.name}
-                                <MdClose
-                                  className={`text-white lg:hidden ${
-                                    !selectedCategories.includes(categ.name)
-                                      ? " opacity-0 -right-[8px] pointer-events-none"
-                                      : "opacity-100 -right-[18px]  pointer-events-auto"
-                                  } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
-                                />
-                              </div>
-                            </button>
-                          ))}
+                          {!loading &&
+                            categories.map((categ, i) => (
+                              <button
+                                key={i}
+                                onClick={() => handleCategoryClick(categ.name)}
+                                className={`rounded-full w-fit lg:w-full overflow-hidden font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 lg:px-0 ${
+                                  selectedCategories.includes(categ.name)
+                                    ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6 lg:pr-0"
+                                    : "text-[#9e562b]  bg-white lg:bg-[#9e6e3b] "
+                                }`}
+                              >
+                                <div className="relative">
+                                  {categ.name}
+                                  <MdClose
+                                    className={`text-white lg:hidden ${
+                                      !selectedCategories.includes(categ.name)
+                                        ? " opacity-0 -right-[8px] pointer-events-none"
+                                        : "opacity-100 -right-[18px]  pointer-events-auto"
+                                    } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
+                                  />
+                                </div>
+                              </button>
+                            ))}
                         </div>
                       </div>
                     )
@@ -428,28 +425,29 @@ export default function Shop() {
                         >
                           All
                         </button>
-                        {breeds.map((breed, i) => (
-                          <button
-                            key={i}
-                            onClick={() => handleBreedClick(breed.name)}
-                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 lg:px-0 ${
-                              selectedBreeds.includes(breed.name)
-                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6 lg:pr-0"
-                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                            }`}
-                          >
-                            <div className="relative">
-                              {breed.name}
-                              <MdClose
-                                className={`text-white lg:hidden${
-                                  !selectedBreeds.includes(breed.name)
-                                    ? " opacity-0 -right-[8px] pointer-events-none"
-                                    : "opacity-100 -right-[18px]  pointer-events-auto"
-                                } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
-                              />
-                            </div>
-                          </button>
-                        ))}
+                        {!loading &&
+                          breeds.map((breed, i) => (
+                            <button
+                              key={i}
+                              onClick={() => handleBreedClick(breed.name)}
+                              className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 lg:px-0 ${
+                                selectedBreeds.includes(breed.name)
+                                  ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6 lg:pr-0"
+                                  : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                              }`}
+                            >
+                              <div className="relative">
+                                {breed.name}
+                                <MdClose
+                                  className={`text-white lg:hidden${
+                                    !selectedBreeds.includes(breed.name)
+                                      ? " opacity-0 -right-[8px] pointer-events-none"
+                                      : "opacity-100 -right-[18px]  pointer-events-auto"
+                                  } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
+                                />
+                              </div>
+                            </button>
+                          ))}
                       </div>
                     </div>
                   )}
@@ -480,25 +478,27 @@ export default function Shop() {
                             : "opacity-100 translate-y-0 scale-y-100 max-h-[120px] lg:max-h-screen mt-2 lg:pb-3"
                         }`}
                       >
-                        <button
-                          onClick={() => setOnSale((prev) => !prev)}
-                          className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
-                            onSale
-                              ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
-                              : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
-                          }`}
-                        >
-                          <div className="relative">
-                            On Sale
-                            <MdClose
-                              className={`text-white ${
-                                !onSale
-                                  ? " opacity-0 -right-[8px] pointer-events-none"
-                                  : "opacity-100 -right-[18px]  pointer-events-auto"
-                              } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
-                            />
-                          </div>{" "}
-                        </button>
+                        {!loading && (
+                          <button
+                            onClick={() => setOnSale((prev) => !prev)}
+                            className={`rounded-full w-fit lg:w-full font-normal border border-[#9e6e3b] lg:border-0 text-xs lg:text-base  lg:text-white p-1 px-3 ${
+                              onSale
+                                ? "bg-[#9e6e3b] text-white lg:bg-[#644422] pr-6"
+                                : "text-[#9e562b] bg-white lg:bg-[#9e6e3b] "
+                            }`}
+                          >
+                            <div className="relative">
+                              On Sale
+                              <MdClose
+                                className={`text-white ${
+                                  !onSale
+                                    ? " opacity-0 -right-[8px] pointer-events-none"
+                                    : "opacity-100 -right-[18px]  pointer-events-auto"
+                                } absolute  top-[2.5px] lg:hidden transition-all duration-300`}
+                              />
+                            </div>{" "}
+                          </button>
+                        )}
                       </div>
                     </div>
                   )}
@@ -559,37 +559,41 @@ export default function Shop() {
                 </div>
               </div>
             }
-            {/* Items Section */}
-            <div className="flex flex-col gap-3">
-              {searchQuery != "" && (
-                <p className="text-sm lg:text-base font-semibold leading-tight text-gray-700 mx-0.5">
-                  Serach Results
-                </p>
-              )}
-              <div
-                className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
-                  !items.length &&
-                  "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
-                }`}
-              >
-                {items.length ? (
-                  items.map((item, i) => (
-                    <ProductCardAlt
-                      key={i}
-                      item={item}
-                      favClick={() => {
-                        handleFavoriteClick(item.id);
-                      }}
-                      isFav={favorites.includes(item.id)}
-                    />
-                  ))
-                ) : (
-                  <div className="text-xs md:text-sm text-gray-500 p-2">
-                    No items found.
-                  </div>
+
+            {!loading ? (
+              <div className="flex flex-col gap-3">
+                {searchQuery != "" && (
+                  <p className="text-sm lg:text-base font-semibold leading-tight text-gray-700 mx-0.5">
+                    Serach Results
+                  </p>
                 )}
+                <div
+                  className={`grid h-fit grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 ${
+                    !items.length &&
+                    "min-w-[320px] sm:min-w-[480px] md:min-w-[640px] xl:min-w-[800px]"
+                  }`}
+                >
+                  {items.length ? (
+                    items.map((item, i) => (
+                      <ProductCardAlt
+                        key={i}
+                        item={item}
+                        favClick={() => {
+                          handleFavoriteClick(item.id);
+                        }}
+                        isFav={favorites.includes(item.id)}
+                      />
+                    ))
+                  ) : (
+                    <div className="text-xs md:text-sm text-gray-500 p-2">
+                      No items found.
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              <Loader />
+            )}
           </div>
         )}
       </div>

@@ -250,11 +250,11 @@ export default function Header({ pageOpened }) {
                   <button
                     key={i}
                     className={`flex gap-2 items-center justify-center py-1 px-4 lg:py-1.5 lg:px-5 text-xs lg:text-sm rounded-full border border-solid
-                      border-[#9e6e3b] hover:shadow-sm hover:shadow-[#61401c]
+                       hover:shadow-sm hover:shadow-[#61401c]
                       ${
                         btn.isSelected
-                          ? "bg-gradient-to-br to-[#442b0f] via-[#5d3c17] from-[#906434] text-white"
-                          : "bg-white text-[#61401c]"
+                          ? "bg-gradient-to-br border-transparent to-[#442b0f] via-[#5d3c17] from-[#906434] text-white"
+                          : "bg-white text-[#61401c] border-[#9e6e3b]"
                       }
                   `}
                     onClick={btn.clickEvent}
