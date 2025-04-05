@@ -17,6 +17,7 @@ import { showMessage } from "@/hooks/useMessage";
 import Loader from "@/components/loader";
 import useAuthUser from "@/hooks/authUser";
 import SliderLoader from "./loaders/slider";
+import CategoriesLoader from "./loaders/categories";
 
 export default function HomePage() {
   const router = useRouter();
@@ -304,31 +305,19 @@ export default function HomePage() {
                 ))
               )}
             </Slider>
+
             {/* Top Categories */}
-            <div className="flex flex-col px-6 gap-5">
-              {loading ? (
-                <div className="text-xl md:text-2xl font-extrabold max-w-fit bg-gradient-to-br from-gray-300 via-gray-100 to-gray-300  text-transparent animate-pulse rounded-full">
-                  Top Categories
-                </div>
-              ) : (
+            {loading ? (
+              <CategoriesLoader />
+            ) : (
+              <div className="flex flex-col px-6 gap-5">
                 <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                   Top Categories
                 </div>
-              )}
-              <div
-                className={`grid grid-cols-1 gap-2 md:grid-cols-2 justify-center `}
-              >
-                {loading ? (
-                  <div
-                    className={`relative flex items-center justify-between p-8 rounded-xl  transition-transform duration-300 overflow-hidden  
-                      bg-gradient-to-br from-gray-300 via-gray-100 to-gray-300  text-transparent animate-pulse`}
-                  >
-                    <div className="relative z-20 flex-shrink-0 ml-auto">
-                      <div className="w-[120px] md:w-44 aspect-square object-cover rounded-lg mix-blend-multiply opacity-90" />
-                    </div>
-                  </div>
-                ) : (
-                  categories.map((categ) => {
+                <div
+                  className={`grid grid-cols-1 gap-2 md:grid-cols-2 justify-center `}
+                >
+                  {categories.map((categ) => {
                     if (categ._count.items === 0) return null;
 
                     const isEven = index % 2 === 0;
@@ -373,10 +362,10 @@ export default function HomePage() {
                         </div>
                       </div>
                     );
-                  })
-                )}
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* On Sale Slider */}
             {discountedItems.length != 0 && (
@@ -447,7 +436,9 @@ export default function HomePage() {
               </div>
             )}
 
-            {!loading && (
+            {loading ? (
+              <CategoriesLoader />
+            ) : (
               <div className="flex flex-col px-6  gap-5">
                 <div className="text-xl md:text-2xl font-extrabold text-[#6e4519]">
                   Top Breeds
