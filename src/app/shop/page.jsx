@@ -7,6 +7,7 @@ import { MdClose, MdSearch } from "react-icons/md";
 import { RiArrowDownSLine } from "react-icons/ri";
 import Loader from "@/components/loader";
 import { showMessage } from "@/hooks/useMessage";
+import ShopLoader from "./loader/shopLoader";
 
 export default function Shop() {
   const [items, setItems] = useState([]);
@@ -592,7 +593,7 @@ export default function Shop() {
                 </div>
               </div>
             ) : (
-              <Loader />
+              <ShopLoader />
             )}
           </div>
         )}

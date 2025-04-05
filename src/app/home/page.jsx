@@ -528,45 +528,44 @@ export default function HomePage() {
                 </button>
               </div>
             )}
-            {!loading && (
-              <div className="px-6">
-                <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-gradient-radial from-[#9e6e3b]  to-[#5e3f1d] text-white p-10 rounded-xl ">
-                  <div className="flex flex-col items-center text-center justify-center gap-1">
-                    <div className="flex flex-col gap-0.5 items-center">
-                      <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
-                      <p className="text-base md:text-lg font-extrabold">
-                        Perfect Health
-                      </p>
-                    </div>
-                    <p className="text-xs md:text-sm">
-                      We provide pets with perfect health
+
+            <div className="px-6">
+              <div className="flex flex-col md:flex-row justify-evenly gap-16 bg-gradient-radial from-[#9e6e3b]  to-[#5e3f1d] text-white p-10 rounded-xl ">
+                <div className="flex flex-col items-center text-center justify-center gap-1">
+                  <div className="flex flex-col gap-0.5 items-center">
+                    <FaHeart className="w-16 h-16 md:w-20 md:h-20" />
+                    <p className="text-base md:text-lg font-extrabold">
+                      Perfect Health
                     </p>
                   </div>
-                  <div className="flex flex-col items-center text-center justify-center gap-1">
-                    <div className="flex flex-col gap-0.5 items-center">
-                      <FaShieldAlt className="w-16 h-16 md:w-20 md:h-20" />
-                      <p className="text-base md:text-lg font-extrabold">
-                        High Immunity
-                      </p>
-                    </div>
-                    <p className="text-xs md:text-sm">
-                      We ensure high immunity for a long and happy life
+                  <p className="text-xs md:text-sm">
+                    We provide pets with perfect health
+                  </p>
+                </div>
+                <div className="flex flex-col items-center text-center justify-center gap-1">
+                  <div className="flex flex-col gap-0.5 items-center">
+                    <FaShieldAlt className="w-16 h-16 md:w-20 md:h-20" />
+                    <p className="text-base md:text-lg font-extrabold">
+                      High Immunity
                     </p>
                   </div>
-                  <div className="flex flex-col items-center text-center justify-center gap-1">
-                    <div className="flex flex-col gap-0.5 items-center">
-                      <MdDiscount className="w-16 h-16 md:w-20 md:h-20" />
-                      <p className="text-base md:text-lg font-extrabold">
-                        Huge Discounts
-                      </p>
-                    </div>
-                    <p className="text-xs md:text-sm">
-                      Get exclusive offers and great discounts
+                  <p className="text-xs md:text-sm">
+                    We ensure high immunity for a long and happy life
+                  </p>
+                </div>
+                <div className="flex flex-col items-center text-center justify-center gap-1">
+                  <div className="flex flex-col gap-0.5 items-center">
+                    <MdDiscount className="w-16 h-16 md:w-20 md:h-20" />
+                    <p className="text-base md:text-lg font-extrabold">
+                      Huge Discounts
                     </p>
                   </div>
+                  <p className="text-xs md:text-sm">
+                    Get exclusive offers and great discounts
+                  </p>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>
