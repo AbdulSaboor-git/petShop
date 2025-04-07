@@ -110,7 +110,9 @@ Thank you.`;
     setNameError("");
     setAddressError("");
     setContactError("");
-    setOrderItems(Items);
+    setTimeout(() => {
+      setOrderItems(Items);
+    }, 500);
   };
 
   // Handler for placing an order via WhatsApp.
@@ -182,16 +184,16 @@ Thank you.`;
                       {item.isDiscounted ? item.discountedPrice : item.price}
                     </p>
                   </div>
-                  <div
-                    onClick={() => {
-                      orderItems?.length > 1
-                        ? handleRemove(item.id)
-                        : closeOrder();
-                    }}
-                    className="p-2 rounded-full cursor-pointer hover:text-red-600"
-                  >
-                    <MdRemove />
-                  </div>
+                  {orderItems?.length > 1 && (
+                    <div
+                      onClick={() => {
+                        handleRemove(item.id);
+                      }}
+                      className="p-2 rounded-full cursor-pointer hover:text-red-600"
+                    >
+                      <MdRemove />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}

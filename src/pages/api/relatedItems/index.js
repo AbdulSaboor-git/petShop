@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { availability } from "@prisma/client";
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -12,6 +11,13 @@ export default async function handler(req, res) {
 
   return handleGet(req, res, category, breed, sex, itemId);
 }
+
+const shuffleArray = (array) => {
+  return array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+};
 
 const handleGet = async (req, res, category, breed, sex, itemId) => {
   const categoryId = parseInt(category, 10);
@@ -30,12 +36,11 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
   }
 
   try {
-    // Sequential queries instead of Promise.all
-    const relatedItems = await prisma.item.findMany({
+    const relatedRaw = await prisma.item.findMany({
       where: {
         categoryId,
         breedId: breedId ? breedId : undefined,
-        id: { not: currentItemId }, // Exclude current item
+        id: { not: currentItemId },
         availability: "AVAILABLE",
         sex,
       },
@@ -47,33 +52,33 @@ const handleGet = async (req, res, category, breed, sex, itemId) => {
         availability: true,
         sex: true,
       },
-      take: 4,
-      skip: randomSkip,
     });
 
-    // Fetch bought together items ONLY if the current item has a sex
-    const boughtTogetherItems = sex
-      ? await prisma.item.findMany({
-          where: {
-            categoryId,
-            breedId: breedId ? breedId : undefined,
-            sex: oppositeSex, // Opposite sex only
-            id: { not: currentItemId }, // Exclude current item
-            availability: "AVAILABLE",
-            NOT: { sex: null }, // Ensure sex is not null
-          },
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            images: true,
-            availability: true,
-            sex: true,
-          },
-          take: 2,
-          skip: randomSkip,
-        })
-      : []; // If sex is null, return empty array
+    const relatedItems = shuffleArray(relatedRaw).slice(0, 4); // Shuffle and pick 4
+
+    const boughtTogetherRaw =
+      sex && oppositeSex
+        ? await prisma.item.findMany({
+            where: {
+              categoryId,
+              breedId: breedId ? breedId : undefined,
+              sex: oppositeSex,
+              id: { not: currentItemId },
+              availability: "AVAILABLE",
+              NOT: { sex: null },
+            },
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              images: true,
+              availability: true,
+              sex: true,
+            },
+          })
+        : [];
+
+    const boughtTogetherItems = shuffleArray(boughtTogetherRaw).slice(0, 2);
 
     return res.status(200).json({ relatedItems, boughtTogetherItems });
   } catch (error) {

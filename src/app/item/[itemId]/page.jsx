@@ -161,7 +161,7 @@ export default function ItemPage({ params }) {
     setContactSeller(true);
     setTimeout(() => {
       if (sendOrderRef.current) {
-        const offset = 40;
+        const offset = 20;
         const elementPosition =
           sendOrderRef.current.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - offset;
@@ -420,6 +420,21 @@ export default function ItemPage({ params }) {
               </div>
             </div>
 
+            {/* Contact Seller Section */}
+            <div
+              ref={sendOrderRef}
+              className={`flex items-center justify-center ${
+                contactSeller
+                  ? "opacity-100 h-full py-5 mt-2"
+                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
+              } transition-all duration-500`}
+            >
+              <Order
+                Items={[item]}
+                closeOrderPage={() => setContactSeller(false)}
+              />
+            </div>
+
             {/* bought together Items Section */}
             {boughtTogetherItems.length != 0 && (
               <div className="flex flex-col gap-3 text-sm md:text-base">
@@ -469,20 +484,7 @@ export default function ItemPage({ params }) {
                 </div>
               </div>
             )}
-            {/* Contact Seller Section */}
-            <div
-              ref={sendOrderRef}
-              className={`flex items-center justify-center ${
-                contactSeller
-                  ? "opacity-100 h-full py-5 mt-2"
-                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
-              } transition-all duration-500`}
-            >
-              <Order
-                Items={[item]}
-                closeOrderPage={() => setContactSeller(false)}
-              />
-            </div>
+
             {/* imagess section */}
             <div className="text-sm md:text-base ">
               <strong>Images</strong>

@@ -8,7 +8,7 @@ export default function SliderLoader() {
       <div className="flex flex-col bg-gray-200 md:flex-row mx-3 mb-2 p-10 px-12 md:px-16 items-center justify-evenly gap-6 md:gap-10 rounded-xl  transition-transform duration-300 shadow-md ">
         <div className="flex md:w-[50%] flex-col gap-6 w-full md:max-w-[400px]">
           <div className="relative">
-            <h2 className="text-lg md:text-2xl text-center md:text-left font-extrabold truncate mx-[40px] md:mx-0 bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400  text-transparent animate-pulse rounded-full">
+            <h2 className="text-lg md:text-2xl text-center md:text-left font-extrabold truncate mx-[5%] md:mx-0 bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400  text-transparent animate-pulse rounded-full">
               Loading123
             </h2>
             <div className="pt-2 text-base md:text-lg ">
