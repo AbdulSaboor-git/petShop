@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import ProductCard from "@/components/productCard";
 import useAuthUser from "@/hooks/authUser";
 import { RiArrowRightSLine } from "react-icons/ri";
+import ItemGalleryLoader from "./components/ItemGalleryLoader";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -198,11 +199,7 @@ export default function ItemPage({ params }) {
     <div className="flex flex-col items-center gap-7 md:gap-10">
       <Header />
       <div className="flex flex-col gap-10 max-w-[1200px] w-full px-4">
-        {loading ? (
-          <div className="h-screen">
-            <Loader />
-          </div>
-        ) : error ? (
+        {error ? (
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             {error}
           </div>
@@ -211,12 +208,12 @@ export default function ItemPage({ params }) {
             <div className="flex flex-col justify-start md:flex-row w-full gap-4">
               {/* Image Section */}
               <div className="flex flex-col gap-2 md:gap-3 w-full md:w-2/3 md:max-w-[500px]">
-                <ItemGallery item={item} />
+                {loading ? <ItemGalleryLoader /> : <ItemGallery item={item} />}
               </div>
 
               {/* Product Details Section */}
               <div className="flex flex-col h-auto md:w-2/3 md:max-w-1/3 md:px-4 gap-2.5 md:gap-4 text-gray-700">
-                {item.isDiscounted && (
+                {item?.isDiscounted && (
                   <p className="text-green-600 text-xs md:text-sm font-semibold mx-1">
                     {Math.round(
                       100 - (item?.discountedPrice / item?.price) * 100
@@ -224,153 +221,208 @@ export default function ItemPage({ params }) {
                     % Discount
                   </p>
                 )}
-                <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
-                  <div className="flex justify-between gap-4 items-center">
-                    <p className="text-base md:text-xl font-bold ">
-                      {item?.name}
-                    </p>
+                {loading ? (
+                  <div className="flex flex-col gap-2.5 md:gap-4">
+                    <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0 flex flex-col gap-1">
+                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
+                        ITEM NAME HEHE...jkasdnak jk
+                      </p>
+                      <p className="animate-pulse text-transparent text-sm md:text-base rounded-full bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 w-fit">
+                        breed name
+                      </p>
+                      <div className="animate-pulse text-sm md:text-base font-Maston tracking-wider font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full w-fit">
+                        Rs. 000000
+                      </div>
+                    </div>
+                    <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0 flex flex-col gap-1">
+                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
+                        ITEM NAME HEHE...jkasdnak jk
+                      </p>
+                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
+                        ITEM NAME HEHE...jkasdnak jk
+                      </p>
+                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
+                        ITEM NAME HEHE...jkasdnak jk
+                      </p>
+                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
+                        ITEM NAME HEHE...jkasdnak jk
+                      </p>
+                    </div>
+                    <div className="mt-5 flex flex-col gap-2">
+                      <p className="animate-pulse w-fit text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
+                        ITEM NAME HEHE...
+                      </p>
+                      <div className="h-52 bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 animate-pulse w-full rounded-2xl"></div>
+                    </div>
+                    <div className="mt-5 w-full max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start">
+                      <img
+                        src={defaultPic}
+                        alt="seller img"
+                        draggable="false"
+                        className="rounded-xl border p-1 bg-white border-gray-300 w-16 md:w-[70px] object-cover aspect-square overflow-hidden"
+                      />
+                      <div className="w-full flex gap-2 justify-between items-center">
+                        <div className="font-semibold rounded-full   text-sm text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 truncate">
+                          Seller Name jkasnosak
+                        </div>
+                        <div className="flex gap-1">
+                          <MdStore size={18} />
+                          <RiArrowRightSLine size={18} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2.5 md:gap-4">
+                    <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
+                      <div className="flex justify-between gap-4 items-center">
+                        <p className="text-base md:text-xl font-bold ">
+                          {item?.name}
+                        </p>
 
-                    {user && user?.id == item.sellerId && (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handleEdit}
-                          className=" bg-green-600 hover:bg-green-700 text-white p-1 px-3 rounded-md"
-                        >
-                          <MdEdit />
-                        </button>
-                        <button
-                          onClick={handleDelete}
-                          className=" bg-red-500 hover:bg-red-600 text-white p-1 px-3 rounded-md"
-                        >
-                          <MdDelete />
-                        </button>
+                        {user && user?.id == item?.sellerId && (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={handleEdit}
+                              className=" bg-green-600 hover:bg-green-700 text-white p-1 px-3 rounded-md"
+                            >
+                              <MdEdit />
+                            </button>
+                            <button
+                              onClick={handleDelete}
+                              className=" bg-red-500 hover:bg-red-600 text-white p-1 px-3 rounded-md"
+                            >
+                              <MdDelete />
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  {item?.breed && (
-                    <p className="text-slate-600 text-sm md:text-base">
-                      {item?.breed?.name}
-                    </p>
-                  )}
-                  <div className="text-xl md:text-3xl font-Maston tracking-wider font-bold text-orange-600">
-                    {!item?.isDiscounted && (
-                      <p>
-                        <span className="text-sm"> Rs. </span>
-                        {item?.price}
-                      </p>
-                    )}
-                    {item?.isDiscounted && (
-                      <div className="flex flex-row gap-3 items-baseline">
-                        <p>
-                          <span className="text-sm"> Rs. </span>
-                          {item?.discountedPrice}
+                      {item?.breed && (
+                        <p className="text-slate-600 text-sm md:text-base">
+                          {item?.breed?.name}
                         </p>
-                        <p className="font-normal text-xs md:text-sm line-through decoration-gray-400 text-gray-500">
-                          Rs. {item?.price}
-                        </p>
+                      )}
+                      <div className="text-xl md:text-3xl font-Maston tracking-wider font-bold text-orange-600">
+                        {!item?.isDiscounted && (
+                          <p>
+                            <span className="text-sm"> Rs. </span>
+                            {item?.price}
+                          </p>
+                        )}
+                        {item?.isDiscounted && (
+                          <div className="flex flex-row gap-3 items-baseline">
+                            <p>
+                              <span className="text-sm"> Rs. </span>
+                              {item?.discountedPrice}
+                            </p>
+                            <p className="font-normal text-xs md:text-sm line-through decoration-gray-400 text-gray-500">
+                              Rs. {item?.price}
+                            </p>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
+                    <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
+                      <ul className="text-sm md:text-base ">
+                        <p className="font-bold">
+                          Category:{" "}
+                          <span className="font-normal text-slate-600">
+                            {item?.category.name}
+                          </span>
+                        </p>
+                        {item?.height && (
+                          <p className="font-bold">
+                            Height:{" "}
+                            <span className="font-normal text-slate-600">
+                              {item?.height} cm
+                            </span>
+                          </p>
+                        )}
+                        {item?.weight && (
+                          <p className="font-bold">
+                            Weight:{" "}
+                            <span className="font-normal text-slate-600">
+                              {item?.weight} g
+                            </span>
+                          </p>
+                        )}
+                        {item?.age && (
+                          <p className="font-bold">
+                            Age:{" "}
+                            <span className="font-normal text-slate-600">
+                              {item?.age < 1
+                                ? item.age * 10 + " months"
+                                : item.age + " years"}
+                            </span>
+                          </p>
+                        )}
+                        {item?.sex && (
+                          <p className="font-bold">
+                            Gender:{" "}
+                            <span className="font-normal text-slate-600">
+                              {item?.sex}
+                            </span>
+                          </p>
+                        )}
+                        {item?.nature && (
+                          <p className="font-bold">
+                            Nature:{" "}
+                            <span className="font-normal text-slate-600">
+                              {item?.nature}
+                            </span>
+                          </p>
+                        )}
+                        {item?.specifications && (
+                          <p className="font-bold">
+                            Specification:{" "}
+                            <span className="font-normal text-slate-600">
+                              {item?.specifications}
+                            </span>
+                          </p>
+                        )}
+                        <p className="font-bold">
+                          Availability:{" "}
+                          <span
+                            className={`font-normal ${
+                              item?.availability === "AVAILABLE"
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {item?.availability === "AVAILABLE"
+                              ? "Available"
+                              : "Not Available"}
+                          </span>
+                        </p>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
-                  <ul className="text-sm md:text-base ">
-                    <p className="font-bold">
-                      Category:{" "}
-                      <span className="font-normal text-slate-600">
-                        {item?.category.name}
-                      </span>
-                    </p>
-                    {item?.height && (
-                      <p className="font-bold">
-                        Height:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.height} cm
-                        </span>
-                      </p>
-                    )}
-                    {item?.weight && (
-                      <p className="font-bold">
-                        Weight:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.weight} g
-                        </span>
-                      </p>
-                    )}
-                    {item?.age && (
-                      <p className="font-bold">
-                        Age:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.age < 1
-                            ? item.age * 10 + " months"
-                            : item.age + " years"}
-                        </span>
-                      </p>
-                    )}
-                    {item?.sex && (
-                      <p className="font-bold">
-                        Gender:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.sex}
-                        </span>
-                      </p>
-                    )}
-                    {item?.nature && (
-                      <p className="font-bold">
-                        Nature:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.nature}
-                        </span>
-                      </p>
-                    )}
-                    {item?.specifications && (
-                      <p className="font-bold">
-                        Specification:{" "}
-                        <span className="font-normal text-slate-600">
-                          {item?.specifications}
-                        </span>
-                      </p>
-                    )}
-                    <p className="font-bold">
-                      Availability:{" "}
-                      <span
-                        className={`font-normal ${
-                          item?.availability === "AVAILABLE"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {item?.availability === "AVAILABLE"
-                          ? "Available"
-                          : "Not Available"}
-                      </span>
-                    </p>
-                  </ul>
-                </div>
+                )}
                 <div className="fixed z-10 bottom-0 left-0 p-3 px-4 md:p-0 backdrop-blur-lg  w-full md:static md:w-auto flex flex-row gap-2 text-sm md:text-base">
                   <button
-                    disabled={item.availability != "AVAILABLE"}
+                    disabled={item?.availability != "AVAILABLE"}
                     onClick={handleContactSeller}
                     className={`flex gap-2 items-center justify-center text-white py-2 px-4 rounded-xl w-full bg-gradient-to-br from-[#9e6e3b] via-[#855b2e] to-[#52371a] hover:bg-gradient-radial transition-all duration-300 ${
-                      item.availability != "AVAILABLE" &&
+                      item?.availability != "AVAILABLE" &&
                       "cursor-not-allowed hover:bg-gradient-to-br opacity-60"
                     }`}
                   >
                     <MdMessage /> Seller{" "}
                   </button>
                   <button
-                    onClick={() => handleFavoriteClick(item.id)}
-                    disabled={item.availability != "AVAILABLE"}
+                    onClick={() => handleFavoriteClick(item?.id)}
+                    disabled={item?.availability != "AVAILABLE"}
                     className={`border  border-orange-600 text-orange-600 py-2 px-4 rounded-xl w-full transition-all duration-300  ${
-                      favorites.includes(item.id)
+                      favorites.includes(item?.id)
                         ? "bg-gradient-to-br hover:bg-gradient-radial from-orange-500 via-orange-500 to-orange-600 text-white"
                         : "bg-gradient-to-b hover:bg-gradient-radial from-white via-white to-orange-100"
                     }
                     ${
-                      item.availability != "AVAILABLE" &&
+                      item?.availability != "AVAILABLE" &&
                       "cursor-not-allowed  hover:bg-gradient-to-b opacity-60"
                     }`}
                   >
-                    {favorites.includes(item.id) ? (
+                    {favorites.includes(item?.id) ? (
                       <div className="flex items-center justify-center gap-1">
                         Added to{" "}
                         <MdFavorite className="text-[16px] md:text-[18px]" />
@@ -385,7 +437,7 @@ export default function ItemPage({ params }) {
                 </div>
               </div>
             </div>
-            {item?.description && (
+            {!loading && item?.description && (
               <div className="text-sm md:text-base ">
                 <strong>Description</strong>
                 <div className="mt-2 formatted-text text-justify">
@@ -395,48 +447,52 @@ export default function ItemPage({ params }) {
             )}
 
             {/* seller details section */}
-            <div
-              onClick={() => profileClick(item.sellerId)}
-              className="w-full cursor-pointer hover:text-orange-900 max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start"
-            >
-              <img
-                src={
-                  item.seller.profilePicture
-                    ? item.seller.profilePicture
-                    : defaultPic
-                }
-                alt="seller img"
-                draggable="false"
-                className="rounded-xl border p-1 bg-white border-gray-300 w-16 md:w-[70px] object-cover aspect-square overflow-hidden"
-              />
-              <div className="w-full flex  gap-2 justify-between items-center">
-                <div className="font-semibold text-sm truncate">
-                  {item.seller.firstName} {item.seller.lastName}
-                </div>
-                <div className="flex gap-1">
-                  <MdStore size={18} />
-                  <RiArrowRightSLine size={18} />
+            {!loading && (
+              <div
+                onClick={() => profileClick(item.sellerId)}
+                className="w-full cursor-pointer hover:text-orange-900 max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start"
+              >
+                <img
+                  src={
+                    item?.seller.profilePicture
+                      ? item.seller.profilePicture
+                      : defaultPic
+                  }
+                  alt="seller img"
+                  draggable="false"
+                  className="rounded-xl border p-1 bg-white border-gray-300 w-16 md:w-[70px] object-cover aspect-square overflow-hidden"
+                />
+                <div className="w-full flex  gap-2 justify-between items-center">
+                  <div className="font-semibold text-sm truncate">
+                    {item?.seller.firstName} {item?.seller.lastName}
+                  </div>
+                  <div className="flex gap-1">
+                    <MdStore size={18} />
+                    <RiArrowRightSLine size={18} />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Contact Seller Section */}
-            <div
-              ref={sendOrderRef}
-              className={`flex items-center justify-center ${
-                contactSeller
-                  ? "opacity-100 h-full py-5 mt-2"
-                  : "opacity-0 h-0 scale-y-105 pointer-events-none"
-              } transition-all duration-500`}
-            >
-              <Order
-                Items={[item]}
-                closeOrderPage={() => setContactSeller(false)}
-              />
-            </div>
+            {!loading && (
+              <div
+                ref={sendOrderRef}
+                className={`flex items-center justify-center ${
+                  contactSeller
+                    ? "opacity-100 h-full py-5 mt-2"
+                    : "opacity-0 h-0 scale-y-105 pointer-events-none"
+                } transition-all duration-500`}
+              >
+                <Order
+                  Items={[item]}
+                  closeOrderPage={() => setContactSeller(false)}
+                />
+              </div>
+            )}
 
             {/* bought together Items Section */}
-            {boughtTogetherItems.length != 0 && (
+            {!loading && boughtTogetherItems.length != 0 && (
               <div className="flex flex-col gap-3 text-sm md:text-base">
                 <strong>Perfect Match</strong>
 
@@ -461,7 +517,7 @@ export default function ItemPage({ params }) {
             )}
 
             {/* Related Items Section */}
-            {relatedItems.length != 0 && !loading2 && (
+            {!loading && relatedItems.length != 0 && !loading2 && (
               <div className="flex flex-col gap-3 text-sm md:text-base">
                 <strong>Related Items</strong>
 
@@ -486,20 +542,22 @@ export default function ItemPage({ params }) {
             )}
 
             {/* imagess section */}
-            <div className="text-sm md:text-base ">
-              <strong>Images</strong>
-              <div className="mt-2 flex w-full gap-2 flex-wrap">
-                {item.images.map((img, i) => (
-                  <div key={i} className="w-full max-w-sm">
-                    <img
-                      src={img}
-                      alt="item image"
-                      className="w-full rounded-lg"
-                    />
-                  </div>
-                ))}
+            {!loading && (
+              <div className="text-sm md:text-base ">
+                <strong>Images</strong>
+                <div className="mt-2 flex w-full gap-2 flex-wrap">
+                  {item?.images.map((img, i) => (
+                    <div key={i} className="w-full max-w-sm">
+                      <img
+                        src={img}
+                        alt="item image"
+                        className="w-full rounded-lg"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>

@@ -27,7 +27,7 @@ export default function Favourites() {
   const handleCheckout = () => {
     setCheckout(true);
     setTimeout(() => {
-      const offset = 40;
+      const offset = 10;
       const elementPosition =
         orderConfirmationRef.current.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;

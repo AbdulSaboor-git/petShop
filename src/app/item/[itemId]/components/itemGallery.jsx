@@ -36,13 +36,6 @@ const ItemGallery = ({ item }) => {
     <div className="flex flex-col gap-2 md:gap-3 w-full">
       {/* Main Image Slider */}
       <div className="relative">
-        {/* Show loading spinner or placeholder until image loads */}
-        {loading && (
-          <div className="absolute inset-0 flex justify-center items-center bg-gray-100">
-            Loading...
-          </div>
-        )}
-
         <Slider
           {...settings}
           ref={sliderRef}

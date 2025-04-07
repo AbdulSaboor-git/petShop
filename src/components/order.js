@@ -169,25 +169,25 @@ Thank you.`;
                 className="flex gap-4 items-center w-full border bg-gray-100 p-2 rounded-lg md:min-w-[400px]"
               >
                 <img
-                  src={item.images[0]}
-                  alt={item.name}
+                  src={item?.images[0]}
+                  alt={item?.name}
                   className="w-16 object-cover aspect-square rounded-lg cursor-pointer"
                 />
                 <div className="flex flex-1 gap-2 items-center justify-between">
                   <div className="text-[13px] flex flex-col items-start gap-[1px]">
                     <h3 className="font-bold cursor-pointer leading-tight  tracking-tight line-clamp-2 text-left ">
-                      {item.name}
+                      {item?.name}
                     </h3>
-                    <p className="text-xs text-gray-600">{item.breed?.name}</p>
+                    <p className="text-xs text-gray-600">{item?.breed?.name}</p>
                     <p className="text-xs text-green-600">
                       Rs.{" "}
-                      {item.isDiscounted ? item.discountedPrice : item.price}
+                      {item?.isDiscounted ? item?.discountedPrice : item?.price}
                     </p>
                   </div>
                   {orderItems?.length > 1 && (
                     <div
                       onClick={() => {
-                        handleRemove(item.id);
+                        handleRemove(item?.id);
                       }}
                       className="p-2 rounded-full cursor-pointer hover:text-red-600"
                     >
