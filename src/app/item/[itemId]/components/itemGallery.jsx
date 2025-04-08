@@ -26,6 +26,7 @@ const ItemGallery = ({ item }) => {
     centerPadding: "0",
     slidesToShow: 1,
     speed: 500,
+    touchThreshold: 20,
     focusOnSelect: false,
     arrows: false, // Optional, for turning off default arrows
     draggable: true, // Enable dragging for desktop

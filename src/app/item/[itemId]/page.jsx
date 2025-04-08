@@ -19,6 +19,7 @@ import ProductCard from "@/components/productCard";
 import useAuthUser from "@/hooks/authUser";
 import { RiArrowRightSLine } from "react-icons/ri";
 import ItemGalleryLoader from "./components/ItemGalleryLoader";
+import DetailsLoader from "./components/detailsLoader";
 
 export default function ItemPage({ params }) {
   const itemId = params.itemId;
@@ -148,14 +149,10 @@ export default function ItemPage({ params }) {
   }
 
   function handleEdit() {
-    router.push(
-      `/seller-dashboard/manage-products/?function=edit&id=${itemId}`
-    );
+    router.push(`/seller-dashboard/manage-products/edit?id=${itemId}`);
   }
   function handleDelete() {
-    router.push(
-      `/seller-dashboard/manage-products/?function=delete&id=${itemId}`
-    );
+    router.push(`/seller-dashboard/manage-products/delete?id=${itemId}`);
   }
 
   const handleContactSeller = () => {
@@ -222,56 +219,7 @@ export default function ItemPage({ params }) {
                   </p>
                 )}
                 {loading ? (
-                  <div className="flex flex-col gap-2.5 md:gap-4">
-                    <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0 flex flex-col gap-1">
-                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
-                        ITEM NAME HEHE...jkasdnak jk
-                      </p>
-                      <p className="animate-pulse text-transparent text-sm md:text-base rounded-full bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 w-fit">
-                        breed name
-                      </p>
-                      <div className="animate-pulse text-sm md:text-base font-Maston tracking-wider font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full w-fit">
-                        Rs. 000000
-                      </div>
-                    </div>
-                    <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0 flex flex-col gap-1">
-                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
-                        ITEM NAME HEHE...jkasdnak jk
-                      </p>
-                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
-                        ITEM NAME HEHE...jkasdnak jk
-                      </p>
-                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
-                        ITEM NAME HEHE...jkasdnak jk
-                      </p>
-                      <p className="animate-pulse w-fit text-sm md:text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
-                        ITEM NAME HEHE...jkasdnak jk
-                      </p>
-                    </div>
-                    <div className="mt-5 flex flex-col gap-2">
-                      <p className="animate-pulse w-fit text-base font-bold text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 rounded-full">
-                        ITEM NAME HEHE...
-                      </p>
-                      <div className="h-52 bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 animate-pulse w-full rounded-2xl"></div>
-                    </div>
-                    <div className="mt-5 w-full max-w-[400px] transition-all duration-300 bg-gray-100 p-2 rounded-2xl flex gap-3 items-center justify-start">
-                      <img
-                        src={defaultPic}
-                        alt="seller img"
-                        draggable="false"
-                        className="rounded-xl border p-1 bg-white border-gray-300 w-16 md:w-[70px] object-cover aspect-square overflow-hidden"
-                      />
-                      <div className="w-full flex gap-2 justify-between items-center">
-                        <div className="font-semibold rounded-full   text-sm text-transparent bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 truncate">
-                          Seller Name jkasnosak
-                        </div>
-                        <div className="flex gap-1">
-                          <MdStore size={18} />
-                          <RiArrowRightSLine size={18} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  DetailsLoader()
                 ) : (
                   <div className="flex flex-col gap-2.5 md:gap-4">
                     <div className="bg-gray-100 p-3 px-4 rounded-2xl md:bg-transparent md:p-0">
@@ -394,6 +342,26 @@ export default function ItemPage({ params }) {
                               : "Not Available"}
                           </span>
                         </p>
+                        {user &&
+                          (user?.id == item?.sellerId ||
+                            user?.role === "ADMIN") && (
+                            <p className="font-bold">
+                              Date Added:{" "}
+                              <span className="font-normal text-slate-600">
+                                {new Date(item?.createdAt).toLocaleString()}
+                              </span>
+                            </p>
+                          )}
+                        {user &&
+                          (user?.id == item?.sellerId ||
+                            user?.role === "ADMIN") && (
+                            <p className="font-bold">
+                              Last Updated:{" "}
+                              <span className="font-normal text-slate-600">
+                                {new Date(item?.updatedAt).toLocaleString()}
+                              </span>
+                            </p>
+                          )}
                       </ul>
                     </div>
                   </div>

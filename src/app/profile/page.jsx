@@ -28,7 +28,7 @@ export default function Profile() {
   const router = useRouter();
 
   const addProductClick = () => {
-    router.push("/seller-dashboard/manage-products?function=add");
+    router.push("/seller-dashboard/manage-products/add");
   };
   // Compute seller's full name only if seller data exists.
   const sellerName = seller

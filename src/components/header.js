@@ -139,8 +139,8 @@ export default function Header({ pageOpened }) {
 
   if (userLoading)
     topBtns.push({
-      name: "Me",
-      icon: <MdAccountCircle size={16} />,
+      name: "Login",
+      icon: <FaUser size={9.5} />,
     });
 
   if (logedIn && user?.role === "ADMIN")
