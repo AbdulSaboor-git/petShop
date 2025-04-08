@@ -77,7 +77,7 @@ export default function DeleteProduct() {
       if (userId != sellerId) return;
 
       try {
-        const res = await fetch(`/api/item?productId=${item.id}`, {
+        const res = await fetch(`/api/item?productId=${itemID}`, {
           method: "DELETE",
         });
         if (!res.ok) {
@@ -87,7 +87,7 @@ export default function DeleteProduct() {
         showMessage(`Product "${item.name}" deleted successfully!`, true);
         setTimeout(() => {
           window.history.back();
-        }, 2000);
+        }, 1500);
       } catch (err) {
         showMessage(err.message, false);
       }
@@ -169,8 +169,8 @@ export default function DeleteProduct() {
             </div>
           </div>
         )}
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }

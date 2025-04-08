@@ -221,7 +221,7 @@ export default function EditProduct() {
         resetForm();
         setTimeout(() => {
           window.history.back();
-        }, 2000);
+        }, 1500);
       } catch (err) {
         showMessage(err.message, false);
       }
@@ -578,8 +578,8 @@ export default function EditProduct() {
             </button>
           </div>
         )}
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }

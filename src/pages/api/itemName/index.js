@@ -18,7 +18,7 @@ async function handleGet(req, res, productId) {
   try {
     const id = parseInt(productId, 10);
     if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ message: "Invalid Product ID" });
+      return res.status(404).json("Invalid Product ID");
     }
 
     const product = await prisma.item.findUnique({
@@ -31,7 +31,7 @@ async function handleGet(req, res, productId) {
     });
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json("Product not found");
     }
 
     return res.status(200).json(product);

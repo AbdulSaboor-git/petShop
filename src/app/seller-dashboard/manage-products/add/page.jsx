@@ -202,7 +202,7 @@ export default function AddProduct() {
         resetForm();
         setTimeout(() => {
           window.history.back();
-        }, 2000);
+        }, 1500);
       } catch (err) {
         showMessage(err.message, false);
       }

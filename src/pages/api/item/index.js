@@ -32,7 +32,7 @@ async function handleGet(req, res, productId) {
     });
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json("Product not found");
     }
 
     return res.status(200).json(product);
