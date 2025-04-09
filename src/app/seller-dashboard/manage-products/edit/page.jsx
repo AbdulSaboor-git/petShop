@@ -1,5 +1,6 @@
 "use client";
 import Footer from "@/components/footer";
+import getCroppedImg from "@/components/getCroppedImg";
 import Header from "@/components/header";
 import Loader from "@/components/loader";
 import useAuthUser from "@/hooks/authUser";
@@ -267,8 +268,8 @@ export default function EditProduct() {
       // Cloudinary accepts data URLs if you prefix them with "data:image/jpeg;base64,"
       formData.append("file", croppedImageDataUrl);
       formData.append("upload_preset", "RoyalAseelFarms");
-      setUploading(true);
       setShowCropper(false);
+      setUploading(true);
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/dlthizgza/upload`,
         { method: "POST", body: formData }
@@ -282,6 +283,7 @@ export default function EditProduct() {
       setErrorMsg("");
       setImageSrc(null);
     } catch (error) {
+      setShowCropper(false);
       console.error("Error cropping/uploading image:", error);
       setErrorMsg("Failed to upload image. Please try again.");
     } finally {
