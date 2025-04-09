@@ -9,7 +9,7 @@ import { showMessage } from "@/hooks/useMessage";
 
 export default function SellerDashboardMainPage() {
   const { user, userLoading, logout } = useAuthUser();
-  const sellerId = user?.id;
+  const userId = user?.id;
   const [metrics, setMetrics] = useState({
     totalProducts: 0,
     totalCategories: 0,
@@ -23,10 +23,11 @@ export default function SellerDashboardMainPage() {
   const router = useRouter();
 
   const fetchMetricsAndAnalytics = useCallback(async () => {
-    if (!sellerId) return; // Ensure sellerId exists before making the request
+    if (!userId) return; // Ensure sellerId exists before making the request
 
     try {
-      const response = await fetch(`/api/sellerDashboard?sellerId=${sellerId}`);
+      setLoading(true);
+      const response = await fetch(`/api/sellerDashboard?sellerId=${userId}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch seller metrics.");
@@ -60,7 +61,7 @@ export default function SellerDashboardMainPage() {
     } finally {
       setLoading(false);
     }
-  }, [sellerId]); //  Add `sellerId` dependency
+  }, [userId]);
 
   useEffect(() => {
     let isMounted = true; //  Define isMounted inside useEffect
@@ -92,10 +93,6 @@ export default function SellerDashboardMainPage() {
           <div className="h-screen text-sm md:text-base text-gray-500 p-2 self-start">
             Unauthorized Access.
           </div>
-        ) : loading ? (
-          <div className="h-screen">
-            <Loader />
-          </div>
         ) : (
           <div className="flex flex-col gap-8 md:gap-4">
             {/* Headings */}
@@ -115,19 +112,31 @@ export default function SellerDashboardMainPage() {
                   Total Products
                 </h2>
                 <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
-                  {metrics.totalProducts}
+                  {loading ? (
+                    <span className="font-bold animate-bounce">...</span>
+                  ) : (
+                    metrics.totalProducts
+                  )}
                 </p>
                 <h2 className="text-base md:text-lg mt-4 font-bold text-green-800">
                   Available Products
                 </h2>
                 <p className="text-2xl md:text-3xl mt-2 text-green-800">
-                  {metrics.totalAvailableProducts}
+                  {loading ? (
+                    <span className="font-bold animate-bounce">...</span>
+                  ) : (
+                    metrics.totalAvailableProducts
+                  )}
                 </p>
                 <h2 className="text-base md:text-lg mt-4 font-bold text-red-800">
                   Products Sold
                 </h2>
                 <p className="text-2xl md:text-3xl mt-2 text-red-800">
-                  {metrics.productsSold}
+                  {loading ? (
+                    <span className="font-bold animate-bounce">...</span>
+                  ) : (
+                    metrics.productsSold
+                  )}
                 </p>
               </div>
               <div className="p-4 border bg-white  rounded-xl shadow text-center">
@@ -135,13 +144,21 @@ export default function SellerDashboardMainPage() {
                   Total Categories
                 </h2>
                 <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
-                  {metrics.totalCategories}
+                  {loading ? (
+                    <span className="font-bold animate-bounce">...</span>
+                  ) : (
+                    metrics.totalCategories
+                  )}
                 </p>
               </div>
               <div className="p-4 border bg-white  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">Total Breeds</h2>
                 <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
-                  {metrics.totalBreeds}
+                  {loading ? (
+                    <span className="font-bold animate-bounce">...</span>
+                  ) : (
+                    metrics.totalBreeds
+                  )}
                 </p>
               </div>
             </div>
