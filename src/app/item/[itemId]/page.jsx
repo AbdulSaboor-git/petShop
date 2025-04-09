@@ -236,12 +236,12 @@ export default function ItemPage({ params }) {
                             >
                               <MdEdit />
                             </button>
-                            <button
+                            {/* <button
                               onClick={handleDelete}
                               className=" bg-red-500 hover:bg-red-600 text-white p-1 px-3 rounded-md"
                             >
                               <MdDelete />
-                            </button>
+                            </button> */}
                           </div>
                         )}
                       </div>

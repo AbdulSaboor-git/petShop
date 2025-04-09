@@ -111,55 +111,55 @@ export default function SellerDashboardMainPage() {
                 <h2 className="text-base md:text-lg font-bold">
                   Total Products
                 </h2>
-                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                <div className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
                   {loading ? (
-                    <span className="font-bold animate-bounce">...</span>
+                    <p className="font-bold animate-bounce">...</p>
                   ) : (
                     metrics.totalProducts
                   )}
-                </p>
+                </div>
                 <h2 className="text-base md:text-lg mt-4 font-bold text-green-800">
                   Available Products
                 </h2>
-                <p className="text-2xl md:text-3xl mt-2 text-green-800">
+                <div className="text-2xl md:text-3xl mt-2 text-green-800">
                   {loading ? (
-                    <span className="font-bold animate-bounce">...</span>
+                    <p className="font-bold animate-bounce">...</p>
                   ) : (
                     metrics.totalAvailableProducts
                   )}
-                </p>
+                </div>
                 <h2 className="text-base md:text-lg mt-4 font-bold text-red-800">
                   Products Sold
                 </h2>
-                <p className="text-2xl md:text-3xl mt-2 text-red-800">
+                <div className="text-2xl md:text-3xl mt-2 text-red-800">
                   {loading ? (
-                    <span className="font-bold animate-bounce">...</span>
+                    <p className="font-bold animate-bounce">...</p>
                   ) : (
                     metrics.productsSold
                   )}
-                </p>
+                </div>
               </div>
               <div className="p-4 border bg-white  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">
                   Total Categories
                 </h2>
-                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                <div className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
                   {loading ? (
-                    <span className="font-bold animate-bounce">...</span>
+                    <p className="font-bold animate-bounce">...</p>
                   ) : (
                     metrics.totalCategories
                   )}
-                </p>
+                </div>
               </div>
               <div className="p-4 border bg-white  rounded-xl shadow text-center">
                 <h2 className="text-base md:text-lg font-bold">Total Breeds</h2>
-                <p className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
+                <div className="text-2xl md:text-3xl mt-2 text-[#9e6e3b]">
                   {loading ? (
-                    <span className="font-bold animate-bounce">...</span>
+                    <p className="font-bold animate-bounce">...</p>
                   ) : (
                     metrics.totalBreeds
                   )}
-                </p>
+                </div>
               </div>
             </div>
 
@@ -169,16 +169,15 @@ export default function SellerDashboardMainPage() {
               {analytics ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs md:text-sm">
-                      <span className="font-semibold">Sales:</span>{" "}
-                      {analytics.sales}
-                    </p>
+                    <div className="text-xs md:text-sm">
+                      <p className="font-semibold">Sales:</p> {analytics.sales}
+                    </div>
                   </div>
                   <div>
-                    <p className="text-xs md:text-sm">
-                      <span className="font-semibold">Visits:</span>{" "}
+                    <div className="text-xs md:text-sm">
+                      <p className="font-semibold">Visits:</p>{" "}
                       {analytics.visits}
-                    </p>
+                    </div>
                   </div>
                   {/* More analytics metrics as needed */}
                 </div>

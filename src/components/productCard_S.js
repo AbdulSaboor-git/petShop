@@ -37,7 +37,7 @@ export default function ProductCardAlt({ item, alt }) {
 
       <div
         className={`flex flex-col gap-1 p-2 px-3 relative ${
-          item.availability !== "AVAILABLE" && "text-red-800 opacity-75"
+          item.availability !== "AVAILABLE" && "opacity-60"
         }`}
       >
         <div className="text-xs font-normal flex gap-1 items-center justify-start">
