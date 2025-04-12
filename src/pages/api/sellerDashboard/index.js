@@ -28,8 +28,14 @@ const handleGet = async (req, res, sellerId) => {
     const availableItems = await prisma.item.count({
       where: { sellerId: id, availability: "AVAILABLE" },
     });
-    const categories = await prisma.category.findMany();
-    const breeds = await prisma.breed.findMany();
+    const categories = await prisma.category.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    const breeds = await prisma.breed.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
 
     return res.status(200).json({
       success: true,

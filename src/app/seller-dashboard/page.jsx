@@ -156,30 +156,27 @@ export default function SellerDashboardMainPage() {
                       {metrics.totalCategories}
                       <button
                         onClick={() => setShowCategories(!showCategories)}
-                        className="p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b2c]"
+                        className="p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b1c]"
                       >
                         View
                       </button>
                       <div
                         className={`flex flex-col gap-[0.7px] items-center justify-center text-sm md:text-base text-gray-700 
-                          border border-[#9e6e3b] rounded-lg overflow-hidden w-full transition-all duration-300 bg-[#9e6e3b]
-                          ${
-                            showCategories
-                              ? "pointer-events-all"
-                              : "pointer-events-none"
-                          }`}
+                          border border-gray-700  rounded-lg overflow-hidden w-full transition-all duration-300 bg-gray-700 
+                          `}
                         style={{
                           height: showCategories
-                            ? `${categories.length * 36}px`
+                            ? `${categories.length * 37}px`
                             : "0px",
                           opacity: showCategories ? 1 : 0,
                           transition: "height 300ms, opacity 300ms",
+                          pointerEvents: showCategories ? "all" : "none",
                         }}
                       >
                         {categories.map((category) => (
                           <div
                             key={category.id}
-                            className={` transition-all duration-300 w-full p-2 bg-white
+                            className={` transition-all duration-300 w-full  p-2 bg-white 
                           ${
                             showCategories
                               ? "text-gray-700"
@@ -205,24 +202,21 @@ export default function SellerDashboardMainPage() {
                       {metrics.totalBreeds}
                       <button
                         onClick={() => setShowBreeds(!showBreeds)}
-                        className="p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b2c]"
+                        className="p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b1c]"
                       >
                         View
                       </button>
                       <div
                         className={`flex flex-col gap-[0.7px] items-center justify-center text-sm md:text-base text-gray-700 
-                      border border-[#9e6e3b] rounded-lg overflow-hidden w-full transition-all duration-300 bg-[#9e6e3b]
-                      ${
-                        showBreeds
-                          ? "pointer-events-all"
-                          : "pointer-events-none"
-                      }`}
+                      border border-gray-700 rounded-lg overflow-hidden w-full transition-all duration-300 bg-gray-700
+                      `}
                         style={{
                           height: showBreeds
-                            ? `${breeds.length * 36}px`
+                            ? `${breeds.length * 36.7}px`
                             : "0px",
                           opacity: showBreeds ? 1 : 0,
                           transition: "height 300ms, opacity 300ms",
+                          pointerEvents: showCategories ? "all" : "none",
                         }}
                       >
                         {breeds.map((breed) => (
