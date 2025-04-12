@@ -304,9 +304,7 @@ export default function AddProduct() {
                         <button
                           type="reset"
                           onClick={() => {
-                            paramFunction !== ""
-                              ? window.history.back()
-                              : resetForm();
+                            window.history.back();
                           }}
                           className=" p-1.5 px-4 rounded-xl border bg-gray-400 hover:bg-gray-500 text-white  disabled:hover:bg-gray-400 disabled:opacity-60"
                         >

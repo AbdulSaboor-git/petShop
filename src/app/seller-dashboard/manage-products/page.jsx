@@ -6,7 +6,7 @@ import useAuthUser from "@/hooks/authUser";
 import { showMessage } from "@/hooks/useMessage";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdAdb, MdAdd, MdDelete, MdEdit } from "react-icons/md";
 
 export default function ManageProducts() {
   const { user, userLoading, logout } = useAuthUser();
@@ -45,6 +45,9 @@ export default function ManageProducts() {
   const handleDeleteClick = (itemId) => {
     router.push(`/seller-dashboard/manage-products/delete?id=${itemId}`);
   };
+  const addProductClick = () => {
+    router.push(`/seller-dashboard/manage-products/add`);
+  };
   const handleItemClick = (itemId) => {
     router.push(`/item/${itemId}`);
   };
@@ -66,6 +69,15 @@ export default function ManageProducts() {
               <h1 className="text-xl text-gray-700 md:2xl font-semibold text-center">
                 Manage Products
               </h1>
+              <button
+                onClick={addProductClick}
+                className="text-white text-xs md:text-sm  flex items-center justify-center gap-2 self-center md:self-end px-5 py-2
+                              bg-gradient-to-br from-[#9e6e3b] to-[#6e4519] hover:bg-gradient-radial 
+                              rounded-2xl "
+              >
+                <p>Add Product</p>
+                <MdAdd size={15} />
+              </button>
               <div className="flex flex-col gap-2 max-w-xl w-full">
                 {loading
                   ? loadingItems.map((i) => (
@@ -73,66 +85,71 @@ export default function ManageProducts() {
                         key={i}
                         className="flex gap-3 items-center justify-between bg-gradient-to-br from-gray-400 via-gray-300 to-gray-400 animate-pulse rounded-xl w-full p-2"
                       >
-                        <div className="h-20"></div>
+                        <div className="h-[104px]"></div>
                       </div>
                     ))
                   : items?.map((item) => (
                       <div
                         key={item.id}
-                        className="flex gap-3 items-center justify-between bg-white rounded-xl w-full p-2"
+                        className="flex flex-col gap-2  bg-white rounded-xl w-full p-2"
                       >
-                        <div className="flex gap-2 items-center justify-start">
-                          <div className="bg-red-100 rounded-md">
-                            <img
+                        <div className="flex gap-3 items-center justify-between">
+                          <div className="flex gap-2 items-center justify-start">
+                            <div className="bg-red-100 rounded-md">
+                              <img
+                                onClick={() => {
+                                  handleItemClick(item.id);
+                                }}
+                                src={item.images[0]}
+                                alt="image"
+                                className={`w-20 min-w-20 max-w-20 aspect-square rounded-md cursor-pointer ${
+                                  item.availability != "AVAILABLE" &&
+                                  "opacity-60"
+                                }`}
+                              />
+                            </div>
+                            <div
                               onClick={() => {
                                 handleItemClick(item.id);
                               }}
-                              src={item.images[0]}
-                              alt="image"
-                              className={`w-20 aspect-square rounded-md cursor-pointer ${
+                              className={`cursor-pointer flex flex-col items-start font-normal text-xs md:text-sm text-gray-700 ${
                                 item.availability != "AVAILABLE" && "opacity-60"
                               }`}
-                            />
+                            >
+                              <h1 className="font-semibold text-sm md:text-base">
+                                {item.name}
+                              </h1>
+                              <h1 className="">{item.breed?.name}</h1>
+                            </div>
                           </div>
-                          <div
-                            onClick={() => {
-                              handleItemClick(item.id);
-                            }}
-                            className={`cursor-pointer flex flex-col items-start font-normal text-xs md:text-sm text-gray-700 ${
-                              item.availability != "AVAILABLE" && "opacity-60"
-                            }`}
-                          >
-                            <h1 className="font-semibold text-sm md:text-base">
-                              {item.name}
-                            </h1>
-                            <h1 className="">{item.breed?.name}</h1>
-                            <h1 className="">
-                              Created at:{" "}
-                              {new Date(item.createdAt).toLocaleDateString()}
-                            </h1>
-                            <h1 className="">
-                              Last updated:{" "}
-                              {new Date(item.updatedAt).toLocaleDateString()}
-                            </h1>
+                          <div className="flex gap-1.5 items-center justify-end ">
+                            <button
+                              onClick={() => {
+                                handleEditClick(item.id);
+                              }}
+                              className="hover:bg-green-500 hover:text-white rounded-lg p-1 aspect-square cursor-pointer transition-colors duration-150"
+                            >
+                              <MdEdit />
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleDeleteClick(item.id);
+                              }}
+                              className="hover:bg-red-500 hover:text-white rounded-lg p-1 aspect-square cursor-pointer transition-colors duration-150"
+                            >
+                              <MdDelete />
+                            </button>
                           </div>
                         </div>
-                        <div className="flex gap-1.5 items-center justify-end ">
-                          <button
-                            onClick={() => {
-                              handleEditClick(item.id);
-                            }}
-                            className="hover:bg-green-500 hover:text-white rounded-lg p-1 aspect-square cursor-pointer transition-colors duration-150"
-                          >
-                            <MdEdit />
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleDeleteClick(item.id);
-                            }}
-                            className="hover:bg-red-500 hover:text-white rounded-lg p-1 aspect-square cursor-pointer transition-colors duration-150"
-                          >
-                            <MdDelete />
-                          </button>
+                        <div className="flex gap-4 items-center justify-between text-xs md:text-sm text-gray-700">
+                          <h1 className="">
+                            Created at:{" "}
+                            {new Date(item.createdAt).toLocaleDateString()}
+                          </h1>
+                          <h1 className="">
+                            Last updated:{" "}
+                            {new Date(item.updatedAt).toLocaleDateString()}
+                          </h1>
                         </div>
                       </div>
                     ))}
