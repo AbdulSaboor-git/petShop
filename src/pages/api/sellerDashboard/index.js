@@ -28,12 +28,12 @@ const handleGet = async (req, res, sellerId) => {
     const availableItems = await prisma.item.count({
       where: { sellerId: id, availability: "AVAILABLE" },
     });
-    const categCount = await prisma.category.count();
-    const breedCount = await prisma.breed.count();
+    const categories = await prisma.category.findMany();
+    const breeds = await prisma.breed.findMany();
 
     return res.status(200).json({
       success: true,
-      data: { totalItems, availableItems, categCount, breedCount },
+      data: { totalItems, availableItems, categories, breeds },
     });
   } catch (error) {
     console.error("Error fetching seller metrics:", error);
