@@ -41,7 +41,13 @@ const handleGet = async (req, res) => {
       select: {
         id: true,
         name: true,
-        _count: { select: { items: true } },
+        _count: {
+          select: {
+            items: {
+              where: { availability: "AVAILABLE" },
+            },
+          },
+        },
       },
       orderBy: { name: "asc" },
     });
@@ -50,7 +56,13 @@ const handleGet = async (req, res) => {
       select: {
         id: true,
         name: true,
-        _count: { select: { items: true } },
+        _count: {
+          select: {
+            items: {
+              where: { availability: "AVAILABLE" },
+            },
+          },
+        },
       },
       orderBy: { name: "asc" },
     });

@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import useAuthUser from "@/hooks/authUser";
 import Loader from "@/components/loader";
 import { showMessage } from "@/hooks/useMessage";
+import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function SellerDashboardMainPage() {
   const { user, userLoading, logout } = useAuthUser();
@@ -154,12 +155,19 @@ export default function SellerDashboardMainPage() {
                   ) : (
                     <div className="flex flex-col gap-2 items-center justify-center transition-all duration-300">
                       {metrics.totalCategories}
-                      <button
-                        onClick={() => setShowCategories(!showCategories)}
-                        className="p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b1c]"
-                      >
-                        View
-                      </button>
+                      {categories.length > 0 && (
+                        <button
+                          onClick={() => setShowCategories(!showCategories)}
+                          className="flex items-center justify-center gap-1 p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b1c]"
+                        >
+                          {showCategories ? "Hide" : "Show"}
+                          <RiArrowDownSLine
+                            className={`${
+                              showCategories && "-rotate-180"
+                            } transition-all duration-300`}
+                          />
+                        </button>
+                      )}
                       <div
                         className={`flex flex-col gap-[0.7px] items-center justify-center text-sm md:text-base text-gray-700 
                           border border-gray-700  rounded-lg overflow-hidden w-full transition-all duration-300 bg-gray-700 
@@ -200,12 +208,19 @@ export default function SellerDashboardMainPage() {
                   ) : (
                     <div className="flex flex-col gap-2 items-center justify-center transition-all duration-300">
                       {metrics.totalBreeds}
-                      <button
-                        onClick={() => setShowBreeds(!showBreeds)}
-                        className="p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b1c]"
-                      >
-                        View
-                      </button>
+                      {breeds.length > 0 && (
+                        <button
+                          onClick={() => setShowBreeds(!showBreeds)}
+                          className="flex items-center justify-center gap-1 p-1.5 px-4 text-xs md:text-base rounded-lg border border-[#9e6e3b] bg-white text-[#9e6e3b] hover:bg-[#9e6e3b1c]"
+                        >
+                          {showBreeds ? "Hide" : "Show"}
+                          <RiArrowDownSLine
+                            className={`${
+                              showBreeds && "-rotate-180"
+                            } transition-all duration-300`}
+                          />
+                        </button>
+                      )}
                       <div
                         className={`flex flex-col gap-[0.7px] items-center justify-center text-sm md:text-base text-gray-700 
                       border border-gray-700 rounded-lg overflow-hidden w-full transition-all duration-300 bg-gray-700
